@@ -1,0 +1,3537 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Suppliers - Management API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Suppliers - Management
+  description: Supplier management endpoints for listing, retrieving, updating supplier data, and bulk operations.
+paths:
+  /public/v1/target/{systemId}/{targetId}/data:
+    put:
+      tags:
+      - Suppliers - Management
+      summary: Update target data.
+      description: "\nUpdate spend data and Code of Conduct status for the specified target.\n\n**Required Permission**: `update_supplier_data`\n    "
+      operationId: updateEdgeData
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+        example: prewave
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+        example: 10422185
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicUpdateEdgeDataPayload'
+        required: true
+      responses:
+        '200':
+          description: Target data updated successfully. Returns the full updated target payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTargetDTO'
+              examples:
+                Updated target example:
+                  summary: Target payload after a successful update
+                  description: Updated target example
+                  value: '{"id":102006215,"name":"Acme Manufacturing Inc","sname":"4990729","logo":"/images/company-img/acme-manufacturing-logo.svg","backgroundPicture":"/images/company-img/acme-manufacturing-bg.jpg","description":"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.","website":"https://www.acme-manufacturing.example.com","location":"Detroit, MI, US","yearFounded":1987,"size":"Large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-manufacturing","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Detroit","countryCode":"US","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":{"id":987654321,"name":"Acme Corporation","sname":"6252001","logo":"/images/company-img/acme-corporation-logo.svg","backgroundPicture":"/images/company-img/acme-corporation-bg.jpg","description":"Global automotive supplier and parent organization of Acme Manufacturing Inc.","website":"https://www.acme-corporation.example.com","location":"Stuttgart, DE","yearFounded":1962,"size":"Very large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-corporation","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Stuttgart","countryCode":"DE","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":{"date":"2018-01-10T09:00:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2019-04-12T14:30:00","_datetype_":"DateTime"},"ordering":0,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":true,"connectionContactsCount":12,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[],"collectionLevel":1,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"}]],"foreignSystems":[{"system":"customer","id":"ACME-CORP-001","source":"SAP"}],"scoreAvail":"Alert","revenue":8500000000,"impact":"Low","hsCode":[{"code":"870810","nshipments":128}],"merged_targets":[]},"industries":[{"id":554433221,"name":"Automotive Manufacturing","sname":null,"logo":null,"backgroundPicture":null,"description":"Industry classification for automotive parts and vehicle component manufacturing.","website":null,"location":"Global","yearFounded":null,"size":null,"screened":true,"screenedStatus":"Screened","linkedInId":null,"type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":1122334,"ctype":"industry","targetTypeId":5195261,"displayName":"Industry","pluralName":"Industries","icon":"fas fa-industry","ordering":10,"priority":1,"connectable":false,"bgColor":"#F0F0F0","textColor":"#333333"},"geo":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":null,"earliestAlert":null,"ordering":null,"disruptionStatusUpdate":null,"own":false,"managed":false,"isPublic":null,"connectionContactsCount":null,"population":null,"following":false,"collectionFollowing":false,"tier":null,"path":[],"collectionLevel":null,"collectionPath":[],"collectionPaths":[],"foreignSystems":[],"scoreAvail":"None","revenue":123.456,"impact":"Low","hsCode":[],"merged_targets":[]}],"monitoredSince":{"date":"2020-03-15T10:30:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2021-06-01T08:00:00","_datetype_":"DateTime"},"ordering":1,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":false,"connectionContactsCount":3,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[{"id":987654321,"name":"Acme Corporation","customName":null,"latestRequest":null,"foreignSystems":[{"number":"ACME-CORP-001","source":"SAP","existingEdgeId":null}]},{"id":102006215,"name":"Acme Manufacturing Inc","customName":null,"latestRequest":null,"foreignSystems":[{"number":"SUPPLIER001","source":"SAP","existingEdgeId":null}]}],"collectionLevel":2,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],[{"id":55,"name":"North America"},{"id":108,"name":"Automotive"}]],"foreignSystems":[{"system":"customer","id":"SUPPLIER001","source":"SAP"},{"system":"supplier","id":"ACME-MFG-42","source":"Excel"}],"scoreAvail":"Peer","revenue":1250000000,"impact":"Low","hsCode":[{"code":"870899","nshipments":42},{"code":"401110","nshipments":15}],"merged_targets":[102001100]}'
+        '404':
+          description: Target not found or no permission to access it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Target not found:
+                  description: Target not found
+                  value: '{"code":"resource_not_found","message":"Target not found: systemId=customer, targetId=INVALID_ID","solution":"Verify target ID and system ID are correct"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/target/targets/bulk-fetch:
+    post:
+      tags:
+      - Suppliers - Management
+      summary: Bulk fetch detailed target information by target IDs
+      description: 'Fetch detailed information for multiple targets at once, including name, supplier identifiers, and other target details.
+
+        This endpoint supports both Prewave internal target IDs and foreign system mappings for maximum flexibility.
+
+
+        **Required Permission**: `access_public_target`
+
+
+        **Performance impact**: Medium (depends on batch size)
+
+
+        **Use cases**:
+
+        - Get target details for multiple suppliers at once
+
+        - Resolve foreign system IDs to Prewave target information
+
+        - Bulk data synchronization and integration
+
+
+        **Request format**:
+
+        - Use `targetIds` for Prewave internal target IDs: `[101, 102, 103]`
+
+        - Use `foreignTargets` for foreign system mappings: `[{"systemId": "customer", "targetId": "SUPPLIER001"}]`
+
+        - Both fields are optional, but at least one must be provided
+
+
+        **Response format**:
+
+        - `targets`: Successfully fetched targets with full details (same as individual target endpoint)
+
+        - `errors`: Failed lookups with specific error reasons (NOT_FOUND, ACCESS_DENIED, etc.)
+
+
+        **Error handling**:
+
+        - Individual target errors are returned in the `errors` field, not as HTTP errors
+
+        - Empty results are valid (empty `targets` list)
+
+        - Permission checks are performed per target'
+      operationId: bulkFetchTargets
+      requestBody:
+        description: Request payload containing target IDs to fetch
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicBulkFetchTargetsRequest'
+            examples:
+              Internal IDs only:
+                summary: Fetch targets using Prewave internal IDs
+                description: Internal IDs only
+                value:
+                  targetIds:
+                  - 101
+                  - 102
+                  - 103
+              Foreign system mappings:
+                summary: Fetch targets using foreign system IDs
+                description: Foreign system mappings
+                value:
+                  foreignTargets:
+                  - systemId: customer
+                    targetId: SUPPLIER001
+                  - systemId: prewave
+                    targetId: '12345'
+              Mixed request:
+                summary: Fetch targets using both internal and foreign IDs
+                description: Mixed request
+                value: '{"targetIds":[101,102,103],"foreignTargets":[{"systemId":"customer","targetId":"SUPPLIER001"},{"systemId":"prewave","targetId":"102006215"}],"isValid":true}'
+        required: true
+      responses:
+        '200':
+          description: Bulk fetch completed successfully. Check the response for successful targets and any errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicBulkFetchTargetsResponse'
+              examples:
+                Successful response:
+                  summary: Response with successful targets and errors
+                  description: Successful response
+                  value: '{"targets":[{"id":102006215,"name":"Acme Manufacturing Inc","sname":"4990729","logo":"/images/company-img/acme-manufacturing-logo.svg","backgroundPicture":"/images/company-img/acme-manufacturing-bg.jpg","description":"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.","website":"https://www.acme-manufacturing.example.com","location":"Detroit, MI, US","yearFounded":1987,"size":"Large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-manufacturing","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Detroit","countryCode":"US","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":{"id":987654321,"name":"Acme Corporation","sname":"6252001","logo":"/images/company-img/acme-corporation-logo.svg","backgroundPicture":"/images/company-img/acme-corporation-bg.jpg","description":"Global automotive supplier and parent organization of Acme Manufacturing Inc.","website":"https://www.acme-corporation.example.com","location":"Stuttgart, DE","yearFounded":1962,"size":"Very large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-corporation","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Stuttgart","countryCode":"DE","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":{"date":"2018-01-10T09:00:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2019-04-12T14:30:00","_datetype_":"DateTime"},"ordering":0,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":true,"connectionContactsCount":12,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[],"collectionLevel":1,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"}]],"foreignSystems":[{"system":"customer","id":"ACME-CORP-001","source":"SAP"}],"scoreAvail":"Alert","revenue":8500000000,"impact":"Low","hsCode":[{"code":"870810","nshipments":128}],"merged_targets":[]},"industries":[{"id":554433221,"name":"Automotive Manufacturing","sname":null,"logo":null,"backgroundPicture":null,"description":"Industry classification for automotive parts and vehicle component manufacturing.","website":null,"location":"Global","yearFounded":null,"size":null,"screened":true,"screenedStatus":"Screened","linkedInId":null,"type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":1122334,"ctype":"industry","targetTypeId":5195261,"displayName":"Industry","pluralName":"Industries","icon":"fas fa-industry","ordering":10,"priority":1,"connectable":false,"bgColor":"#F0F0F0","textColor":"#333333"},"geo":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":null,"earliestAlert":null,"ordering":null,"disruptionStatusUpdate":null,"own":false,"managed":false,"isPublic":null,"connectionContactsCount":null,"population":null,"following":false,"collectionFollowing":false,"tier":null,"path":[],"collectionLevel":null,"collectionPath":[],"collectionPaths":[],"foreignSystems":[],"scoreAvail":"None","revenue":123.456,"impact":"Low","hsCode":[],"merged_targets":[]}],"monitoredSince":{"date":"2020-03-15T10:30:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2021-06-01T08:00:00","_datetype_":"DateTime"},"ordering":1,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":false,"connectionContactsCount":3,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[{"id":987654321,"name":"Acme Corporation","customName":null,"latestRequest":null,"foreignSystems":[{"number":"ACME-CORP-001","source":"SAP","existingEdgeId":null}]},{"id":102006215,"name":"Acme Manufacturing Inc","customName":null,"latestRequest":null,"foreignSystems":[{"number":"SUPPLIER001","source":"SAP","existingEdgeId":null}]}],"collectionLevel":2,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],[{"id":55,"name":"North America"},{"id":108,"name":"Automotive"}]],"foreignSystems":[{"system":"customer","id":"SUPPLIER001","source":"SAP"},{"system":"supplier","id":"ACME-MFG-42","source":"Excel"}],"scoreAvail":"Peer","revenue":1250000000,"impact":"Low","hsCode":[{"code":"870899","nshipments":42},{"code":"401110","nshipments":15}],"merged_targets":[102001100]},{"id":101,"name":"Beta Components Ltd","sname":"2643743","logo":"/images/company-img/beta-components-logo.svg","backgroundPicture":null,"description":"Supplier of precision machined metal components.","website":"https://www.beta-components.example.com","location":"London, GB","yearFounded":2005,"size":"Medium","screened":true,"screenedStatus":"Pending","linkedInId":"beta-components","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"London","countryCode":"GB","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":null,"earliestAlert":null,"ordering":null,"disruptionStatusUpdate":null,"own":false,"managed":false,"isPublic":false,"connectionContactsCount":1,"population":null,"following":false,"collectionFollowing":false,"tier":null,"path":[],"collectionLevel":null,"collectionPath":[],"collectionPaths":[],"foreignSystems":[{"system":"customer","id":"BETA-101","source":"SAP"}],"scoreAvail":"SSA","revenue":45000000,"impact":"Low","hsCode":[{"code":"732690","nshipments":8}],"merged_targets":[]}],"errors":[{"targetId":102,"systemId":null,"systemTargetId":null,"reason":"ACCESS_DENIED"},{"targetId":null,"systemId":"customer","systemTargetId":"UNKNOWN_SUPPLIER","reason":"NOT_FOUND"}]}'
+        '400':
+          description: Invalid request - neither targetIds nor foreignTargets provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/target/{systemId}/{targetId}:
+    get:
+      tags:
+      - Suppliers - Management
+      summary: Get detailed information about a target.
+      description: "\nRetrieve detailed information about a target identified by system ID and target ID.\n\n**Required Permission**: `access_public_target`\n\n**Performance impact**: Low\n    "
+      operationId: target
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+        example: prewave
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+        example: 10422185
+      responses:
+        '200':
+          description: Successfully retrieved target details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTargetDTO'
+              examples:
+                Target detail example:
+                  summary: Sample target response with foreign system mappings
+                  description: Target detail example
+                  value: '{"id":102006215,"name":"Acme Manufacturing Inc","sname":"4990729","logo":"/images/company-img/acme-manufacturing-logo.svg","backgroundPicture":"/images/company-img/acme-manufacturing-bg.jpg","description":"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.","website":"https://www.acme-manufacturing.example.com","location":"Detroit, MI, US","yearFounded":1987,"size":"Large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-manufacturing","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Detroit","countryCode":"US","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":{"id":987654321,"name":"Acme Corporation","sname":"6252001","logo":"/images/company-img/acme-corporation-logo.svg","backgroundPicture":"/images/company-img/acme-corporation-bg.jpg","description":"Global automotive supplier and parent organization of Acme Manufacturing Inc.","website":"https://www.acme-corporation.example.com","location":"Stuttgart, DE","yearFounded":1962,"size":"Very large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-corporation","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Stuttgart","countryCode":"DE","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":{"date":"2018-01-10T09:00:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2019-04-12T14:30:00","_datetype_":"DateTime"},"ordering":0,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":true,"connectionContactsCount":12,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[],"collectionLevel":1,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"}]],"foreignSystems":[{"system":"customer","id":"ACME-CORP-001","source":"SAP"}],"scoreAvail":"Alert","revenue":8500000000,"impact":"Low","hsCode":[{"code":"870810","nshipments":128}],"merged_targets":[]},"industries":[{"id":554433221,"name":"Automotive Manufacturing","sname":null,"logo":null,"backgroundPicture":null,"description":"Industry classification for automotive parts and vehicle component manufacturing.","website":null,"location":"Global","yearFounded":null,"size":null,"screened":true,"screenedStatus":"Screened","linkedInId":null,"type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":1122334,"ctype":"industry","targetTypeId":5195261,"displayName":"Industry","pluralName":"Industries","icon":"fas fa-industry","ordering":10,"priority":1,"connectable":false,"bgColor":"#F0F0F0","textColor":"#333333"},"geo":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":null,"earliestAlert":null,"ordering":null,"disruptionStatusUpdate":null,"own":false,"managed":false,"isPublic":null,"connectionContactsCount":null,"population":null,"following":false,"collectionFollowing":false,"tier":null,"path":[],"collectionLevel":null,"collectionPath":[],"collectionPaths":[],"foreignSystems":[],"scoreAvail":"None","revenue":123.456,"impact":"Low","hsCode":[],"merged_targets":[]}],"monitoredSince":{"date":"2020-03-15T10:30:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2021-06-01T08:00:00","_datetype_":"DateTime"},"ordering":1,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":false,"connectionContactsCount":3,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[{"id":987654321,"name":"Acme Corporation","customName":null,"latestRequest":null,"foreignSystems":[{"number":"ACME-CORP-001","source":"SAP","existingEdgeId":null}]},{"id":102006215,"name":"Acme Manufacturing Inc","customName":null,"latestRequest":null,"foreignSystems":[{"number":"SUPPLIER001","source":"SAP","existingEdgeId":null}]}],"collectionLevel":2,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"},{"id":108,"name":"Automotive"}],[{"id":55,"name":"North America"},{"id":108,"name":"Automotive"}]],"foreignSystems":[{"system":"customer","id":"SUPPLIER001","source":"SAP"},{"system":"supplier","id":"ACME-MFG-42","source":"Excel"}],"scoreAvail":"Peer","revenue":1250000000,"impact":"Low","hsCode":[{"code":"870899","nshipments":42},{"code":"401110","nshipments":15}],"merged_targets":[102001100]}'
+        '404':
+          description: Target not found or no permission to access it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Target not found:
+                  description: Target not found
+                  value: '{"code":"resource_not_found","message":"Target not found: systemId=customer, targetId=INVALID_ID","solution":"Verify target ID and system ID are correct"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/target/{systemId}/{targetId}/parents:
+    get:
+      tags:
+      - Suppliers - Management
+      summary: Get the parents of the target as a list.
+      description: "\nRetrieve parent targets for the specified target.\n\n**Required Permission**: `access_public_target_parents`\n\n**Performance impact**: Low\n    "
+      operationId: targetParents
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+        example: prewave
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+        example: 10422185
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Successfully retrieved parent targets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicTargetDTO'
+              examples:
+                Target parents example:
+                  summary: Sample list of parent targets
+                  description: Target parents example
+                  value: '[{"id":987654321,"name":"Acme Corporation","sname":"6252001","logo":"/images/company-img/acme-corporation-logo.svg","backgroundPicture":"/images/company-img/acme-corporation-bg.jpg","description":"Global automotive supplier and parent organization of Acme Manufacturing Inc.","website":"https://www.acme-corporation.example.com","location":"Stuttgart, DE","yearFounded":1962,"size":"Very large","screened":true,"screenedStatus":"Screened","linkedInId":"acme-corporation","type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":972417,"ctype":"company","targetTypeId":5195261,"displayName":"Site Group","pluralName":"Site Groups","icon":"fas fa-building","ordering":0,"priority":0,"connectable":true,"bgColor":"#E8F4FD","textColor":"#1A365D"},"geo":{"geometry":null,"properties":{"name":"Stuttgart","countryCode":"DE","alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[{"id":554433221,"name":"Automotive Manufacturing","sname":null,"logo":null,"backgroundPicture":null,"description":"Industry classification for automotive parts and vehicle component manufacturing.","website":null,"location":"Global","yearFounded":null,"size":null,"screened":true,"screenedStatus":"Screened","linkedInId":null,"type":{"id":5195261,"type":"organization","displayName":"Site Group","pluralName":"Site Groups","ordering":0,"scoring":"Alert"},"ctype":{"id":1122334,"ctype":"industry","targetTypeId":5195261,"displayName":"Industry","pluralName":"Industries","icon":"fas fa-industry","ordering":10,"priority":1,"connectable":false,"bgColor":"#F0F0F0","textColor":"#333333"},"geo":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"geoShape":{"geometry":null,"properties":{"name":null,"countryCode":null,"alertCount":null,"boundingBox":null},"type":"Feature"},"parents":[],"organization":null,"industries":[],"monitoredSince":null,"earliestAlert":null,"ordering":null,"disruptionStatusUpdate":null,"own":false,"managed":false,"isPublic":null,"connectionContactsCount":null,"population":null,"following":false,"collectionFollowing":false,"tier":null,"path":[],"collectionLevel":null,"collectionPath":[],"collectionPaths":[],"foreignSystems":[],"scoreAvail":"None","revenue":123.456,"impact":"Low","hsCode":[],"merged_targets":[]}],"monitoredSince":{"date":"2018-01-10T09:00:00","_datetype_":"DateTime"},"earliestAlert":{"date":"2019-04-12T14:30:00","_datetype_":"DateTime"},"ordering":0,"disruptionStatusUpdate":null,"own":true,"managed":true,"isPublic":true,"connectionContactsCount":12,"population":null,"following":true,"collectionFollowing":true,"tier":null,"path":[],"collectionLevel":1,"collectionPath":[{"id":42,"name":"Tier-1 Suppliers"}],"collectionPaths":[[{"id":42,"name":"Tier-1 Suppliers"}]],"foreignSystems":[{"system":"customer","id":"ACME-CORP-001","source":"SAP"}],"scoreAvail":"Alert","revenue":8500000000,"impact":"Low","hsCode":[{"code":"870810","nshipments":128}],"merged_targets":[]}]'
+        '404':
+          description: Target not found or no permission to access it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Target not found:
+                  description: Target not found
+                  value: '{"code":"resource_not_found","message":"Target not found: systemId=customer, targetId=INVALID_ID","solution":"Verify target ID and system ID are correct"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/suppliers:
+    get:
+      tags:
+      - Suppliers - Management
+      summary: Get all suppliers of the customer
+      description: "⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v2 Supplier Management API. Please migrate to the new endpoints:\n\n### Replacement Endpoints\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/suppliers` | `GET /public/v2/suppliers/sites` | List all suppliers |\n| `GET /public/v1/target/prewave/{targetId}` | `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}` | Get detailed supplier by ID |\n\n---\n\n## Why Migrate?\n\nThe v2 API provides significant improvements:\n\n### 1. Simplified Response Structure\n- **v1**: Returns complex `PublicTargetDTO` with 30+ fields including nested objects (parents, industries, collections, etc.)\n- **v2**: Returns `PublicSupplierV2DTO` with only essential fields:\n  - `prewaveTargetId` (Int)\n  - `name` (String)\n  - `address` (String?)\n  - `city` (String?)\n  - `countryCode` (String?)\n  - `supplierIds` (List<PublicSupplierIdentifierId>)\n\n**Example v2 Response:**\n```json\n{\n  \"content\": [\n    {\n      \"prewaveTargetId\": 102006215,\n      \"name\": \"Acme Corporation\",\n      \"address\": \"123 Main St, Vienna, Austria\",\n      \"city\": \"Vienna\",\n      \"countryCode\": \"AT\",\n      \"supplierIds\": [\n        {\"id\": \"SUP-12345\", \"source\": \"SAP\"}\n      ]\n    }\n  ]\n}\n```\n\n### 2. Better Documentation\n- Comprehensive examples for all endpoints\n- Detailed error response documentation\n- Clear parameter descriptions\n- Migration guidance and best practices\n\n### 3. Improved Consistency\n- Fixed alphabetical ordering (by name, then by ID) for deterministic pagination\n- Consistent response structure across all endpoints\n- Predictable behavior for integrations\n\n### 4. Target ID Stability Guidance\n- Clear documentation about when target IDs may change\n- Best practices for synchronization\n- Guidance on handling target merges\n\n### 5. Full CRUD Operations\n- `POST /public/v2/suppliers/sites` - Create suppliers\n- `DELETE /public/v2/suppliers/sites` - Deactivate suppliers\n- `GET /public/v2/suppliers/sites/pending` - Track pending creations\n\n### 6. Better Performance\n- Optimized database queries\n- Reduced response payload size (typically 60-80% smaller)\n- Faster response times\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Update List Endpoint\n**Before:**\n```http\nGET /public/v1/suppliers?page=0&size=20\n```\n\n**After:**\n```http\nGET /public/v2/suppliers/sites?page=0&size=20\n```\n\n### Step 2: Update Response Parsing\n**Before:** Parse complex `PublicTargetDTO` with nested structures\n\n**After:** Parse simplified `PublicSupplierV2DTO` with flat structure\n\n### Step 3: Understand Sites vs Site-Groups\n⚠️ **Important**: The v2 endpoint returns **only sites** (physical locations), not site-groups.\n\n- **v1**: Included both sites and site-groups\n- **v2**: Includes only sites (physical locations with addresses)\n- **Result**: Total count may be lower in v2\n\nIf you need site-group information, you may need to adjust your integration logic or contact support for guidance.\n\n### Step 4: Get Detailed Information (if needed)\nIf you need detailed supplier information, use the v2 search endpoint:\n```http\nGET /public/v2/suppliers/sites/find-by-identifier?prewaveId={prewaveTargetId}\n```\n\n---\n\n## Breaking Changes\n\n1. **Response Structure**: The response structure is completely different. You'll need to update your response parsing logic.\n2. **Field Names**: Some field names have changed (e.g., `id` → `prewaveTargetId`).\n3. **Removed Fields**: Many fields from v1 are not available in the list endpoint (use the detail endpoint if needed).\n4. **Query Parameters**: The `hasNumber` parameter is not available in v2. Filter by supplier identifiers in your application logic if needed.\n5. **Sites vs Site-Groups**:\n   - **v1**: Returns both **sites** (physical locations/branches with addresses) and **site-groups** (general company owners without specific addresses)\n   - **v2**: Returns **only sites** (physical locations/branches with addresses). Site-groups are excluded\n   - **Impact**: The total number of elements returned by v2 may be **lower** than v1 because site-groups are excluded\n   - **Why**: The v2 API focuses on physical supplier locations (sites) which are more relevant for most integrations\n\n---\n\n**Required Permission**: `ACCESS_PUBLIC_SUPPLIERS`\n\n**Performance Impact**: Medium\n\nFor detailed migration examples and API reference, see the v2 Supplier Management API documentation."
+      operationId: suppliers
+      parameters:
+      - name: hasNumber
+        in: query
+        description: If true, only suppliers that have at least one Supplier Information Number are returned. If false, only suppliers that do not have a Supplier Information Number are returned. If not provided, all suppliers are returned.
+        required: false
+        schema:
+          type: boolean
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicTargetDTO'
+                  size:
+                    type: integer
+                    format: int32
+                  number:
+                    type: integer
+                    format: int32
+                  totalElements:
+                    type: integer
+                    format: int32
+                  totalPages:
+                    type: integer
+                    format: int32
+                  numberOfElements:
+                    type: integer
+                    format: int32
+                  first:
+                    type: boolean
+                  last:
+                    type: boolean
+                  empty:
+                    type: boolean
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+      deprecated: true
+components:
+  schemas:
+    TargetForeignSystemDTO:
+      required:
+      - id
+      - system
+      type: object
+      properties:
+        system:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        source:
+          type: string
+          nullable: true
+          example: null
+      example: null
+    PermissionDTO:
+      required:
+      - authority
+      - limits
+      type: object
+      properties:
+        authority:
+          type: string
+          example: null
+        limits:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    InfotagTypeDTO:
+      required:
+      - active
+      - display
+      - ordering
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+        active:
+          type: boolean
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        display:
+          type: boolean
+          example: null
+      example: null
+    PublicBulkFetchTargetsRequest:
+      required:
+      - isValid
+      type: object
+      properties:
+        targetIds:
+          type: array
+          description: List of Prewave internal target IDs to fetch
+          nullable: true
+          example:
+          - 101
+          - 102
+          - 103
+          items:
+            type: integer
+            description: List of Prewave internal target IDs to fetch
+            format: int32
+            example: null
+        foreignTargets:
+          type: array
+          description: List of foreign system target mappings to fetch
+          nullable: true
+          example:
+          - systemId: customer
+            targetId: SUPPLIER001
+          items:
+            $ref: '#/components/schemas/PublicForeignTargetId'
+        isValid:
+          type: boolean
+          example: null
+      example: null
+    InfotagDTO:
+      required:
+      - id
+      - isTarget
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          $ref: '#/components/schemas/InfotagTypeDTO'
+        value:
+          type: string
+          nullable: true
+          example: null
+        svalue:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        numValue:
+          type: number
+          nullable: true
+          example: null
+        priority:
+          type: string
+          description: Obsolete
+          nullable: true
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type: string
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        isTarget:
+          type: boolean
+          example: null
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    InfotagGroup:
+      required:
+      - id
+      - name
+      - ordering
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    RiskAnalysis:
+      required:
+      - approvedForReport
+      - collectionIds
+      - date
+      - diModel
+      - id
+      - impactT80
+      - isArchived
+      - locks
+      - name
+      - periodFrom
+      - periodTo
+      - perspective
+      - reason
+      - regularity
+      - riskT80
+      - scope
+      - scopingCountryShare
+      - targetType
+      - tiern
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        perspective:
+          $ref: '#/components/schemas/PerspectiveDTO'
+        targetType:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        periodFrom:
+          type: string
+          format: date
+          example: null
+        periodTo:
+          type: string
+          format: date
+          example: null
+        date:
+          type: string
+          format: date
+          example: null
+        riskT80:
+          type: integer
+          format: int32
+          example: null
+        impactT80:
+          type: number
+          format: double
+          example: null
+        diModel:
+          type: string
+          enum:
+          - Direct
+          - Parent
+          - Auto
+          example: null
+        locks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskAnalysisLock'
+          example: null
+        isArchived:
+          type: boolean
+          example: null
+        regularity:
+          type: string
+          enum:
+          - Regular
+          - Adhoc
+          example: null
+        reason:
+          type: array
+          items:
+            type: string
+            enum:
+            - InternalDecisions
+            - ExternalFactors
+            - SubstantiatedKnowledge
+            - ChangeNewProducts
+            - ChangeNewAreas
+            - Other
+            example: null
+          example: null
+        specificOccasion:
+          type: string
+          nullable: true
+          example: null
+        approvedForReport:
+          type: boolean
+          example: null
+        findings:
+          type: string
+          nullable: true
+          example: null
+        scope:
+          type: string
+          enum:
+          - OwnBusinessArea
+          - Suppliers
+          - Customers
+          example: null
+        type:
+          $ref: '#/components/schemas/RiskAnalysisType'
+        tiern:
+          type: boolean
+          example: null
+        countryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        industryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        purchaseVolumeThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        collectionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        scopingCountryShare:
+          type: number
+          format: double
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    RiskAnalysisType:
+      required:
+      - availablePerspectives
+      - hideDetails
+      - products
+      - recommended
+      - scoping
+      - tierNAnalysisEnabled
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Default
+          - LkSG
+          - Norwegian Transparancy Act
+          - CSDDD (Beta)
+          - EU Battery Regulation
+          example: null
+        hideDetails:
+          type: boolean
+          example: null
+        recommended:
+          type: boolean
+          example: null
+        tierNAnalysisEnabled:
+          type: boolean
+          example: null
+        scoping:
+          type: boolean
+          example: null
+        products:
+          type: boolean
+          example: null
+        component:
+          type: string
+          nullable: true
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
+        perspectiveId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        availablePerspectives:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        countryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        industryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        purchaseVolumeThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+      example: null
+    DeliverySettingTypeDTO:
+      required:
+      - displayName
+      - frequency
+      - inherited
+      - minPriority
+      - ordering
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Feed
+          - EmailRealtime
+          - EmailDaily
+          - EmailWeekly
+          example: null
+        displayName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        frequency:
+          type: string
+          example: null
+        minPriority:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        inherited:
+          type: boolean
+          example: null
+      example: null
+    PublicForeignTargetId:
+      required:
+      - systemId
+      - targetId
+      type: object
+      properties:
+        systemId:
+          type: string
+          description: Foreign system identifier (e.g., 'SAP', 'prewave')
+          example: SAP
+        targetId:
+          type: string
+          description: Target ID in the foreign system
+          example: SUPPLIER001
+      description: List of foreign system target mappings to fetch
+      example:
+      - systemId: customer
+        targetId: SUPPLIER001
+    RoleTypeDTO:
+      required:
+      - displayName
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+      example: null
+    RoleDTO:
+      required:
+      - id
+      - permissions
+      - roleName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/RoleTypeDTO'
+          example: null
+        roleName:
+          type: string
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionDTO'
+          example: null
+      example: null
+    TargetRequestTypeStatusDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        status:
+          type: string
+          nullable: true
+          enum:
+          - NONE
+          - PENDING
+          - COMPLETED
+          - REJECTED
+          example: null
+        rejectionReason:
+          type: string
+          nullable: true
+          example: null
+      example: null
+    TeamDTO:
+      required:
+      - id
+      - name
+      - users
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        organizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+          example: null
+      example: null
+    TargetDTO:
+      required:
+      - children
+      - collectionFollowing
+      - collectionPath
+      - collectionPaths
+      - ctype
+      - edges
+      - followerCount
+      - following
+      - foreignSystems
+      - geo
+      - geoShape
+      - hsCodes
+      - id
+      - industries
+      - isAnonymous
+      - managed
+      - maturityAssessment
+      - name
+      - own
+      - parents
+      - path
+      - paths
+      - sanctionStatus
+      - screened
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          nullable: true
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        backgroundPicture:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        website:
+          type: string
+          nullable: true
+          example: null
+        location:
+          type: string
+          nullable: true
+          example: null
+        yearFounded:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        size:
+          type: string
+          nullable: true
+          enum:
+          - Small
+          - Medium
+          - Large
+          - Very large
+          example: null
+        screened:
+          type: boolean
+          example: null
+        maturityAssessment:
+          type: boolean
+          example: null
+        linkedInId:
+          type: string
+          nullable: true
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        ctype:
+          $ref: '#/components/schemas/TargetCTypeDTO'
+        geo:
+          $ref: '#/components/schemas/Geo'
+        geoShape:
+          $ref: '#/components/schemas/Geo'
+        address:
+          type: string
+          nullable: true
+          example: null
+        muted:
+          type: boolean
+          nullable: true
+          example: null
+        hierarchyCustomerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        hierarchyOrganizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        level:
+          type: string
+          nullable: true
+          example: null
+        parents:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        customer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        industries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        monitoredSince:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        earliestAlert:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        followerCount:
+          type: integer
+          format: int32
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        disruptionStatusUpdate:
+          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
+        sustainabilityStatus:
+          type: string
+          nullable: true
+          enum:
+          - NoRisk
+          - AtRisk
+          - RedFlag
+          example: null
+        own:
+          type: boolean
+          example: null
+        managed:
+          type: boolean
+          example: null
+        isPublic:
+          type: boolean
+          nullable: true
+          example: null
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDTO'
+          example: null
+        connection:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Connection'
+          example: null
+        connectionContactsCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        population:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        following:
+          type: boolean
+          example: null
+        collectionFollowing:
+          type: boolean
+          example: null
+        tier:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetRef'
+          example: null
+        paths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/TargetRef'
+            example: null
+          example: null
+        collectionLevel:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        collectionPath:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        collectionPaths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/CollectionRef'
+            example: null
+          example: null
+        foreignSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetForeignSystemDTO'
+          example: null
+        scoreAvail:
+          type: string
+          nullable: true
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        revenue:
+          type: number
+          nullable: true
+          example: null
+        isRevenueEstimated:
+          type: boolean
+          nullable: true
+          example: null
+        actualRevenue:
+          type: number
+          nullable: true
+          example: null
+        revenueAvailability:
+          type: string
+          nullable: true
+          enum:
+          - Unknown
+          - Available
+          example: null
+        hsCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        grievanceUrl:
+          type: string
+          nullable: true
+          example: null
+        sanctionStatus:
+          type: string
+          enum:
+          - DIRECT
+          - INDIRECT
+          - NONE
+          example: null
+        countryScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        industryScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        commodityScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        isAnonymous:
+          type: boolean
+          example: null
+        customName:
+          type: string
+          nullable: true
+          example: null
+        latestRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        public:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    EdgeDTO:
+      required:
+      - active
+      - customerId
+      - derived
+      - fromId
+      - id
+      - mediaSources
+      - numbers
+      - priority
+      - source
+      - toId
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        priority:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        fromId:
+          type: integer
+          format: int32
+          example: null
+        toId:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+        scope:
+          type: string
+          nullable: true
+          enum:
+          - Private
+          - Shared
+          - Public
+          example: null
+        source:
+          type: string
+          description: Source of the supplier relationship edge
+          enum:
+          - Customer
+          - Media
+          - Customs
+          - PrewavePrediction
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        numberHSCodes:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipmentDate:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        probability:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mediaSources:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+        active:
+          type: boolean
+          example: null
+        derived:
+          type: boolean
+          example: null
+        impactData:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/EdgeImpactData'
+          example: null
+        edgeNumbers:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+        numbers:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: null
+          example: null
+      example: null
+    SupplierOnboardingData:
+      required:
+      - customerId
+      - supplierId
+      type: object
+      properties:
+        supplierId:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    UserDTO:
+      required:
+      - firstname
+      - id
+      - lastname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: null
+        firstname:
+          minLength: 1
+          type: string
+          nullable: true
+          example: null
+        lastname:
+          minLength: 1
+          type: string
+          nullable: true
+          example: null
+        department:
+          type: string
+          nullable: true
+          example: null
+        position:
+          type: string
+          nullable: true
+          example: null
+        profilePic:
+          type: string
+          nullable: true
+          example: null
+        customer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        userHash:
+          type: string
+          nullable: true
+          example: null
+        settings:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/UserSettings'
+          example: null
+        activePlan:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PlanDTO'
+          example: null
+        active:
+          type: boolean
+          nullable: true
+          example: null
+        confirmed:
+          type: boolean
+          nullable: true
+          example: null
+        roles:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+          example: null
+        teams:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/TeamDTO'
+          example: null
+        perspective:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        organizations:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        defaultEdgeType:
+          type: string
+          nullable: true
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        language:
+          type: string
+          nullable: true
+          enum:
+          - en
+          - de
+          - fr
+          - it
+          - ch
+          example: null
+        collection:
+          $ref: '#/components/schemas/CollectionDTO'
+        passwordValidUntil:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        riskAnalysis:
+          $ref: '#/components/schemas/RiskAnalysis'
+        phone:
+          type: string
+          nullable: true
+          example: null
+        wechatId:
+          type: string
+          nullable: true
+          example: null
+        peerScoreToggle:
+          type: boolean
+          nullable: true
+          example: null
+        resilienceScoreToggle:
+          type: boolean
+          nullable: true
+          example: null
+      example: null
+    UserSystemAttributes:
+      required:
+      - incognitoOnboarding
+      - onboardingFlowComplete
+      type: object
+      properties:
+        onboardingFlowComplete:
+          type: boolean
+          example: null
+        incognitoOnboarding:
+          type: boolean
+          example: null
+        joinCustomer:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        supplierOnboardingData:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SupplierOnboardingData'
+          example: null
+      example: null
+    PublicBulkFetchError:
+      required:
+      - reason
+      type: object
+      properties:
+        targetId:
+          type: integer
+          description: Prewave internal target ID (if available)
+          format: int32
+          nullable: true
+          example: 101
+        systemId:
+          type: string
+          description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+          nullable: true
+          example: customer
+        systemTargetId:
+          type: string
+          description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+          nullable: true
+          example: SUPPLIER001
+        reason:
+          type: string
+          description: Error reason
+          example: NOT_FOUND
+          enum:
+          - NOT_FOUND
+          - ACCESS_DENIED
+          - INVALID_SYSTEM_ID
+          - SCORE_NOT_AVAILABLE
+          - TARGET_NOT_IN_MEMORY_CACHE
+      description: Failed target lookups with error details
+      example: null
+    Connection:
+      required:
+      - createdAt
+      - customer1Id
+      - customer2Id
+      - initiatorCustomerId
+      - pending
+      - state
+      - targetCustomerId
+      type: object
+      properties:
+        customer1Id:
+          type: integer
+          format: int32
+          example: null
+        customer2Id:
+          type: integer
+          format: int32
+          example: null
+        initiatorCustomerId:
+          type: integer
+          format: int32
+          example: null
+        state:
+          type: string
+          enum:
+          - Confirmed
+          - Rejected
+          - Failed
+          example: null
+        pending:
+          type: boolean
+          example: null
+        initiatorId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        comment:
+          type: string
+          nullable: true
+          example: null
+        email:
+          type: string
+          nullable: true
+          example: null
+        text:
+          type: string
+          nullable: true
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        targetCustomerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    PublicBulkFetchTargetsResponse:
+      required:
+      - errors
+      - targets
+      type: object
+      properties:
+        targets:
+          type: array
+          description: Successfully fetched targets with full details
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        errors:
+          type: array
+          description: Failed target lookups with error details
+          items:
+            $ref: '#/components/schemas/PublicBulkFetchError'
+          example: null
+      example: null
+    DisruptionStatusUpdate:
+      required:
+      - assignedAt
+      - assignmentMethod
+      - status
+      - targetId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        assignedAt:
+          type: string
+          format: date-time
+          example: null
+        assignedBy:
+          $ref: '#/components/schemas/UserDTO'
+        comment:
+          type: string
+          nullable: true
+          example: null
+        continuity:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        impactedParts:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: null
+          example: null
+        forCustomer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        status:
+          $ref: '#/components/schemas/DisruptionStatus'
+        assignmentMethod:
+          type: string
+          enum:
+          - MANUAL
+          - AUTOMATIC
+          example: null
+      example: null
+    PlanLimitDTO:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+          example: null
+        value:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    RiskAnalysisLock:
+      required:
+      - locked
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Form
+          - Suppliers
+          - Matrix
+          - Actions
+          - Scoping
+          - Products
+          example: null
+        locked:
+          type: boolean
+          example: null
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        lockedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    PublicTargetDTO:
+      required:
+      - collectionFollowing
+      - collectionPath
+      - collectionPaths
+      - ctype
+      - following
+      - foreignSystems
+      - geo
+      - geoShape
+      - hsCode
+      - id
+      - industries
+      - managed
+      - mergedTargets
+      - name
+      - own
+      - parents
+      - path
+      - scoreAvail
+      - screened
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave target id
+          format: int32
+          example: 102006215
+        name:
+          type: string
+          description: Name of the Prewave target
+          example: Høyanger
+        sname:
+          type: string
+          description: Geonames Id (see https://geonames.org)
+          nullable: true
+          example: '3191281'
+        logo:
+          type: string
+          description: URL to the logo shown in the target profile
+          nullable: true
+          example: null
+        backgroundPicture:
+          type: string
+          description: URL to the background picture shown in the target profile
+          nullable: true
+          example: null
+        description:
+          type: string
+          description: Description of the Prewave target
+          nullable: true
+          example: Description shown in the target profile
+        website:
+          type: string
+          description: URL to the website shown in the target profile
+          nullable: true
+          example: null
+        location:
+          type: string
+          description: Location of the target
+          nullable: true
+          example: Mistelbach
+        yearFounded:
+          type: integer
+          description: Year the target was founded shown in the target profile
+          format: int32
+          nullable: true
+          example: 1999
+        size:
+          type: string
+          description: Size of the target shown in the target profile
+          nullable: true
+          example: Small
+          enum:
+          - Small
+          - Medium
+          - Large
+          - Very large
+        screened:
+          type: boolean
+          description: Whether the target is screened or not
+          example: true
+        screenedStatus:
+          type: string
+          description: Screening status of the target
+          nullable: true
+          example: Screened
+          enum:
+          - Required
+          - Pending
+          - Screened
+          - NotPossible
+        linkedInId:
+          type: string
+          description: LinkedIn ID of the target
+          nullable: true
+          example: general-motors
+        type:
+          $ref: '#/components/schemas/PublicTargetTypeDTO'
+        ctype:
+          $ref: '#/components/schemas/PublicTargetCTypeDTO'
+        geo:
+          $ref: '#/components/schemas/Geo'
+        geoShape:
+          $ref: '#/components/schemas/Geo'
+        parents:
+          type: array
+          description: List of parent targets
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/PublicTargetDTO'
+        industries:
+          type: array
+          description: List of industries the target belongs to
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        monitoredSince:
+          type: string
+          description: Date the target was monitored since
+          format: date-time
+          nullable: true
+          example: null
+        earliestAlert:
+          type: string
+          description: Date of the earliest alert
+          format: date-time
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          description: Ordering of the target
+          format: int32
+          nullable: true
+          example: null
+        disruptionStatusUpdate:
+          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
+        own:
+          type: boolean
+          description: Whether the target is owned by user customer or not
+          example: null
+        managed:
+          type: boolean
+          description: '`true` if user is target connection contact or target is owned by user customer, `false` otherwise'
+          example: null
+        isPublic:
+          type: boolean
+          description: Whether the target is public or not
+          nullable: true
+          example: null
+        connectionContactsCount:
+          type: integer
+          description: Number of connection contacts of the target
+          format: int32
+          nullable: true
+          example: null
+        population:
+          type: integer
+          description: Population of the target. Generally applies to locations
+          format: int32
+          nullable: true
+          example: null
+        following:
+          type: boolean
+          description: Target resides in "My follows" collection
+          example: null
+        collectionFollowing:
+          type: boolean
+          description: Target resides in any followed collection (including children)
+          example: null
+        tier:
+          type: integer
+          description: Tier of the target (relevant when fetching Tier-N)
+          format: int32
+          nullable: true
+          example: null
+        path:
+          type: array
+          description: Path of the target (relevant when fetching Tier-N)
+          items:
+            $ref: '#/components/schemas/PublicTargetRefExtended'
+          example: null
+        collectionLevel:
+          type: integer
+          description: How deep the target is in the collection hierarchy
+          format: int32
+          nullable: true
+          example: null
+        collectionPath:
+          type: array
+          description: Path of the target in the collection hierarchy
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        collectionPaths:
+          type: array
+          description: Paths of the target in the collection hierarchy
+          items:
+            type: array
+            description: Paths of the target in the collection hierarchy
+            items:
+              $ref: '#/components/schemas/CollectionRef'
+            example: null
+          example: null
+        foreignSystems:
+          type: array
+          description: List of foreign systems the target is connected to
+          items:
+            $ref: '#/components/schemas/PublicTargetForeignSystemDTO'
+          example: null
+        scoreAvail:
+          type: string
+          description: Score availability of the target
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        revenue:
+          type: number
+          description: Revenue of the target
+          nullable: true
+          example: null
+        impact:
+          type: string
+          description: Impact of the target
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        hsCode:
+          type: array
+          description: List of HS Codes of the target
+          items:
+            $ref: '#/components/schemas/PublicHSCode'
+          example: null
+        mergedTargets:
+          type: array
+          description: Target ids of past targets that were merged into this current target
+          items:
+            type: integer
+            description: Target ids of past targets that were merged into this current target
+            format: int32
+            example: null
+          example: null
+        public:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    CollectionRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      description: Paths of the target in the collection hierarchy
+      example: null
+    TargetCTypeDTO:
+      required:
+      - bgColor
+      - connectable
+      - ctype
+      - displayName
+      - icon
+      - id
+      - pluralName
+      - priority
+      - targetTypeId
+      - textColor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        ctype:
+          type: string
+          example: null
+        targetTypeId:
+          type: integer
+          format: int32
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        priority:
+          type: integer
+          format: int32
+          example: null
+        connectable:
+          type: boolean
+          example: null
+        bgColor:
+          type: string
+          example: null
+        textColor:
+          type: string
+          example: null
+      example: null
+    PerspectiveDTO:
+      required:
+      - actualImpactT80
+      - actualRiskT80
+      - commodityMissingScore
+      - countryMissingScore
+      - diModel
+      - eventTypes
+      - groups
+      - id
+      - industryMissingScore
+      - insolvencyLoss
+      - isGlobal
+      - massDisruptionFactor
+      - name
+      - riskModel
+      - sname
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        perspective:
+          type: string
+          nullable: true
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/PerspectiveTypeDTO'
+        isGlobal:
+          type: boolean
+          example: null
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagGroup'
+          example: null
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagDTO'
+          example: null
+        massDisruptionFactor:
+          type: boolean
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        riskModel:
+          type: string
+          enum:
+          - Sustainability
+          - Disruption
+          example: null
+        diModel:
+          type: string
+          enum:
+          - Direct
+          - Parent
+          - Auto
+          example: null
+        riskT80:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        impactT80:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        insolvencyLoss:
+          type: boolean
+          example: null
+        industryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        commodityMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        countryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        actualRiskT80:
+          type: integer
+          format: int32
+          example: null
+        actualImpactT80:
+          type: number
+          format: double
+          example: null
+      example: null
+    TargetRequestInfoDto:
+      required:
+      - targetId
+      type: object
+      properties:
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        validationRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        screeningRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        reportedTargetRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+      example: null
+    PublicUpdateEdgeDataPayload:
+      required:
+      - spendDataMlnEuro
+      - year
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Year that provided spend data applies to
+          format: int32
+          example: 2025
+        spendDataMlnEuro:
+          type: number
+          description: Spend data in millions of euros (e.g., 0.15 for 150,000 euros, 1.5 for 1.5 million euros)
+          format: double
+          example: 0.15
+        cocSigned:
+          type: boolean
+          description: Flag indicating if the supplier is signed by the Code of Conduct (Coc)
+          nullable: true
+          example: false
+      example: null
+    GeoProperties:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          example: null
+        countryCode:
+          type: string
+          nullable: true
+          example: null
+        alertCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        boundingBox:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+      example: null
+    TargetTypeDTO:
+      required:
+      - displayName
+      - id
+      - pluralName
+      - scoring
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        scoring:
+          type: string
+          enum:
+          - Alert
+          - Peer
+          example: null
+      example: null
+    PlanDTO:
+      required:
+      - limits
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        planType:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PlanTypeDTO'
+          example: null
+        name:
+          type: string
+          nullable: true
+          example: null
+        pricePerUser:
+          type: number
+          nullable: true
+          example: null
+        limits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanLimitDTO'
+          example: null
+        validFrom:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        validTo:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    PublicHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          example: null
+        nShipments:
+          type: integer
+          format: int32
+          nullable: true
+          writeOnly: true
+          example: null
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      description: List of HS Codes of the target
+      example: null
+    EdgeImpactData:
+      required:
+      - causalContribution
+      - coc
+      - daysOnHand
+      - deviation
+      - edgeId
+      - stockAtSupplier
+      - stockOnPremise
+      - validFrom
+      - validTo
+      type: object
+      properties:
+        edgeId:
+          type: integer
+          format: int32
+          example: null
+        validFrom:
+          type: string
+          format: date-time
+          example: null
+        validTo:
+          type: string
+          format: date-time
+          example: null
+        purchase:
+          type: number
+          nullable: true
+          example: null
+        actualPurchase:
+          type: number
+          nullable: true
+          example: null
+        diForced:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        di:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        causalContribution:
+          type: boolean
+          example: null
+        bi12:
+          type: number
+          nullable: true
+          example: null
+        coc:
+          type: boolean
+          example: null
+        mttrGrossE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrNetE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrGrossI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrNetI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        stockOnPremise:
+          type: number
+          format: double
+          example: null
+        stockAtSupplier:
+          type: number
+          format: double
+          example: null
+        daysOnHand:
+          type: number
+          format: double
+          example: null
+        deviation:
+          type: string
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+          example: null
+        location:
+          type: string
+          nullable: true
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+          example: null
+        lastConfirmationDate:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        birsInfo:
+          type: string
+          nullable: true
+          example: null
+        biForced:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        bi:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        biEffE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        biEffI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        impact:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: string
+          example: null
+        source:
+          type: string
+          nullable: true
+          example: null
+        existingEdgeId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    PublicTargetCTypeDTO:
+      required:
+      - bgColor
+      - connectable
+      - ctype
+      - displayName
+      - icon
+      - id
+      - pluralName
+      - priority
+      - targetTypeId
+      - textColor
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal id of the target ctype
+          format: int32
+          example: 1234
+        ctype:
+          type: string
+          description: Name of the target ctype
+          example: mine
+        targetTypeId:
+          type: integer
+          description: Identifier of the target ctype
+          format: int32
+          example: 1234
+        displayName:
+          type: string
+          description: Display name of the target ctype
+          example: Mine
+        pluralName:
+          type: string
+          description: Plural name of the target ctype
+          example: Mines
+        icon:
+          type: string
+          description: Icon of the target ctype. Fontawesome icon name. See https://fontawesome.com/icons for more information
+          example: fas fa-mine
+        ordering:
+          type: integer
+          description: Ordering of the target ctype
+          format: int32
+          nullable: true
+          example: null
+        priority:
+          type: integer
+          description: Priority of the target ctype
+          format: int32
+          example: null
+        connectable:
+          type: boolean
+          description: Whether it is possible to connect to targets of this type or not
+          example: null
+        bgColor:
+          type: string
+          description: Background color of the target ctype. Valid CSS color value
+          example: '#ff0000'
+        textColor:
+          type: string
+          description: Text color of the target ctype. Valid CSS color value
+          example: '#ffffff'
+      description: CTypes are what is known as "Facility Types" in the Prewave system (e.g in Network > Filters). They provide a slightly more specific categorization of what the target is. Examples for ctypes are "mine", "factory" etc.
+      example: null
+    UserAttributes:
+      required:
+      - scenarioWelcomeScreenShown
+      type: object
+      properties:
+        scenarioWelcomeScreenShown:
+          type: boolean
+          example: null
+      example: null
+    TierSettingsDTO:
+      required:
+      - logisticsProvider
+      - maxTier
+      - scopePrivate
+      - scopePublic
+      - scopeShared
+      - sourceCustomer
+      - sourceCustoms
+      - sourceMedia
+      - sourcePrewavePrediction
+      - suspectedSuppliers
+      - tier2MinPrio
+      - tier2TargetPrio
+      - tier3PlusMinPrio
+      - tier3PlusTargetPrio
+      type: object
+      properties:
+        maxTier:
+          type: integer
+          format: int32
+          example: null
+        tier2TargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusTargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier2MinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusMinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        scopePrivate:
+          type: boolean
+          example: null
+        scopeShared:
+          type: boolean
+          example: null
+        scopePublic:
+          type: boolean
+          example: null
+        sourceCustoms:
+          type: boolean
+          example: null
+        sourcePrewavePrediction:
+          type: boolean
+          example: null
+        sourceMedia:
+          type: boolean
+          example: null
+        sourceCustomer:
+          type: boolean
+          example: null
+        minShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        probability:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipmentsPeriodFrom:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        lastShipmentsPeriodTo:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        suspectedSuppliers:
+          type: boolean
+          example: null
+        logisticsProvider:
+          type: boolean
+          example: null
+      example: null
+    DisruptionStatus:
+      required:
+      - displayName
+      - icon
+      - id
+      - ordering
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        status:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          example: null
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          example: null
+        sort:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+      example: null
+    HSCode:
+      required:
+      - children
+      - code
+      - level
+      type: object
+      properties:
+        code:
+          type: string
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipment:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        level:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ComplexDisruptionStatusUpdate:
+      required:
+      - customer
+      - general
+      type: object
+      properties:
+        general:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+        customer:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+      description: Disruption status update of the target
+      example: null
+    PlanTypeDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        type:
+          type: string
+          nullable: true
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    PublicTargetTypeDTO:
+      required:
+      - displayName
+      - id
+      - pluralName
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal ID of the target type
+          format: int32
+          example: null
+        type:
+          type: string
+          description: Machine-readable name of the target type
+          example: null
+        displayName:
+          type: string
+          description: Display name of the target type
+          example: null
+        pluralName:
+          type: string
+          description: Plural name of the target type
+          example: null
+        ordering:
+          type: integer
+          description: Ordering of the target type
+          format: int32
+          nullable: true
+          example: null
+        scoring:
+          type: string
+          description: Scoring of the target type
+          nullable: true
+          enum:
+          - Alert
+          - Peer
+          example: null
+      description: Target types are what is known as "Target Type" in the Prewave system (e.g in Network > Filters). They provide a broad categorization of what the target is. Examples for target types are "poi", "organization" etc.
+      example: null
+    PublicTargetRefExtended:
+      required:
+      - foreignSystems
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        customName:
+          type: string
+          nullable: true
+          example: null
+        latestRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        foreignSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+      description: Path of the target (relevant when fetching Tier-N)
+      example: null
+    CommodityFilterId:
+      required:
+      - commodityId
+      - path
+      - treeId
+      type: object
+      properties:
+        treeId:
+          type: integer
+          format: int32
+          example: null
+        commodityId:
+          type: integer
+          format: int32
+          example: null
+        path:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+      example: null
+    CustomerDTO:
+      required:
+      - defaultEdgeType
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        defaultEdgeType:
+          type: string
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        pristine:
+          type: boolean
+          nullable: true
+          example: null
+        confidentialSticker:
+          type: string
+          nullable: true
+          example: null
+        forceDefaultConnectionContact:
+          type: boolean
+          nullable: true
+          example: null
+      example: null
+    UserSettings:
+      required:
+      - _system_
+      - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserAttributes'
+        _system_:
+          $ref: '#/components/schemas/UserSystemAttributes'
+      example: null
+    PublicTargetForeignSystemDTO:
+      required:
+      - id
+      - system
+      type: object
+      properties:
+        system:
+          type: string
+          description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+          example: null
+        id:
+          type: string
+          description: The id in the foreign system
+          example: '1234'
+        source:
+          type: string
+          description: Name of the foreign system
+          nullable: true
+          example: SAP_ARIBA
+      description: List of foreign systems the target is connected to
+      example: null
+    CollectionDTO:
+      required:
+      - children
+      - collectionTreeFilter
+      - commodityFilter
+      - deliverySettingTypes
+      - id
+      - isMonitored
+      - isParentMonitored
+      - lanes
+      - level
+      - name
+      - own
+      - path
+      - scope
+      - tiersEnabled
+      - type
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        uuid:
+          type: string
+          format: uuid
+          example: null
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
+        type:
+          type: string
+          enum:
+          - Default
+          - Commodity
+          - Ariba
+          example: null
+        collection:
+          type: string
+          nullable: true
+          example: null
+        name:
+          type: string
+          example: null
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        deliverySettingTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliverySettingTypeDTO'
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        count:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        isMonitored:
+          type: boolean
+          example: null
+        isParentMonitored:
+          type: boolean
+          example: null
+        own:
+          type: boolean
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        tierSettings:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TierSettingsDTO'
+          example: null
+        collectionTreeFilter:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        userId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        organizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        viewedWithRole:
+          type: string
+          nullable: true
+          enum:
+          - Manager
+          - Editor
+          example: null
+        parentId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+          example: null
+        level:
+          type: integer
+          format: int32
+          example: null
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        commodityFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommodityFilterId'
+          example: null
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        monitored:
+          type: boolean
+          writeOnly: true
+          example: null
+        parentMonitored:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    PerspectiveTypeDTO:
+      required:
+      - displayName
+      - id
+      - ordering
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    TargetRef:
+      required:
+      - edges
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        customName:
+          type: string
+          nullable: true
+          example: null
+        latestRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDTO'
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    Geo:
+      required:
+      - properties
+      - type
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        properties:
+          $ref: '#/components/schemas/GeoProperties'
+        type:
+          type: string
+          example: null
+      description: Geo information for this alert. Only available if includeGeo is set to true.
+      example: null
+    Geometry:
+      type: object
+      additionalProperties: true
+      description: 'GeoJSON-compatible geometry object. Fields follow the GeoJSON spec (https://geojson.org): a `type` string (e.g. `Point`, `Polygon`) and a `coordinates` array.'
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

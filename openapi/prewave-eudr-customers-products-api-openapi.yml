@@ -1,0 +1,2449 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions EUDR - Customers - Products API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: EUDR - Customers - Products
+  description: Allows you to manage customer products, including creating, updating, linking/unlinking products, and deactivating products.
+paths:
+  /public/v2/eudr/customers/products/outbound/{productId}:
+    put:
+      tags:
+      - EUDR - Customers - Products
+      summary: Update an existing outbound product
+      description: "\nUpdate an existing outbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+      operationId: updateOutboundProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The ID of the product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 301
+      requestBody:
+        description: Updated outbound product payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicOutboundProductPayload'
+            examples:
+              Update outbound product:
+                summary: Revised name, reference, and HS code
+                description: Update outbound product
+                value: '{"name":"Oak Dining Table","scientificName":"Quercus robur","reference":"OUT-2025-001","hsCode":"940360","annualRevenue":null,"annualQuantity":null,"unit":null}'
+        required: true
+      responses:
+        '200':
+          description: Product updated successfully.
+        '400':
+          description: Errors if related data not found or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                HS Code not found:
+                  description: HS Code not found
+                  value:
+                    code: hs_code_not_found
+                    message: 'HS code not found: HSCode=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Supplier not found:
+                  description: Supplier not found
+                  value:
+                    code: supplier_not_found
+                    message: 'Supplier not found: ID=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Missing product scientific name:
+                  description: Missing product scientific name
+                  value:
+                    code: missing_wooden_product_scientific_name
+                    message: Missing product scientific name for wooden product
+                    solution: Provide a scientific name for wooden products
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/inbound/{productId}:
+    put:
+      tags:
+      - EUDR - Customers - Products
+      summary: Update an existing inbound product
+      description: "\nUpdate an existing inbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+      operationId: updateInboundProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The ID of the product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 301
+      requestBody:
+        description: Updated inbound product payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicInboundProductPayload'
+            examples:
+              Update inbound product:
+                summary: Revised name, reference, HS code, and supplier
+                description: Update inbound product
+                value: '{"name":"Oak Wood Planks","scientificName":"Quercus robur","reference":"INB-2025-001","hsCode":"440799","annualSpend":null,"annualQuantity":null,"unit":null,"supplierId":102006215}'
+        required: true
+      responses:
+        '200':
+          description: Product updated successfully.
+        '400':
+          description: Errors if related data not found or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                HS Code not found:
+                  description: HS Code not found
+                  value:
+                    code: hs_code_not_found
+                    message: 'HS code not found: HSCode=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Supplier not found:
+                  description: Supplier not found
+                  value:
+                    code: supplier_not_found
+                    message: 'Supplier not found: ID=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Missing product scientific name:
+                  description: Missing product scientific name
+                  value:
+                    code: missing_wooden_product_scientific_name
+                    message: Missing product scientific name for wooden product
+                    solution: Provide a scientific name for wooden products
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/outbound:
+    get:
+      tags:
+      - EUDR - Customers - Products
+      summary: Get a list of outbound products
+      description: "\nRetrieve a paginated list of outbound products for EUDR compliance.\n\nOutbound products are products that your organization sells or distributes.\nEach item includes linked inbound product IDs when BOM relationships exist.\n\n**Use Cases**:\n- List all outbound products\n- Filter products by various criteria\n- Export product data for compliance reporting\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required permission:** `access_public_products`\n        "
+      operationId: findOutboundProducts
+      parameters:
+      - name: ids
+        in: query
+        description: Filter by product IDs. When set, other filters are ignored.
+        required: false
+        schema:
+          type: array
+          description: Filter by product IDs. When set, other filters are ignored.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            description: Filter by product IDs. When set, other filters are ignored.
+            format: int32
+        example:
+        - 1
+        - 2
+        - 3
+      - name: q
+        in: query
+        description: Full text search query for outbound product names, references or linked inbound product names, references or suppliers.
+        required: false
+        schema:
+          type: string
+          description: Full text search query for outbound product names, references or linked inbound product names, references or suppliers.
+          example: soy oil
+        example: soy oil
+      - name: page
+        in: query
+        description: Page number (0-based)
+        required: false
+        schema:
+          type: integer
+          default: 0
+        example: 0
+      - name: size
+        in: query
+        description: Page size
+        required: false
+        schema:
+          type: integer
+          default: 10
+        example: 10
+      responses:
+        '200':
+          description: Paginated list of outbound products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicOutboundProduct'
+                  size:
+                    type: integer
+                    format: int32
+                  number:
+                    type: integer
+                    format: int32
+                  totalElements:
+                    type: integer
+                    format: int32
+                  totalPages:
+                    type: integer
+                    format: int32
+                  numberOfElements:
+                    type: integer
+                    format: int32
+                  first:
+                    type: boolean
+                  last:
+                    type: boolean
+                  empty:
+                    type: boolean
+              examples:
+                Outbound products page:
+                  summary: Outbound products with linked inbound product IDs
+                  description: Outbound products page
+                  value: '{"content":[{"id":101,"customerId":100,"orgId":200,"name":"Oak Dining Table","scientificName":"Quercus robur","reference":"OUT-2025-001","commodity":{"id":1,"name":"Timber"},"hsCode":{"code":"940360","description":"Wooden furniture of a kind used in the dining room","commodityId":1},"inboundProducts":[201,202]},{"id":102,"customerId":100,"orgId":200,"name":"Plywood Cabinet","scientificName":null,"reference":"OUT-2025-002","commodity":{"id":1,"name":"Timber"},"hsCode":{"code":"441510","description":"Plywood, veneered panels and similar laminated wood","commodityId":1},"inboundProducts":[203]}],"pageable":{"pageNumber":0,"pageSize":10,"sort":{"empty":true,"sorted":false,"unsorted":true},"offset":0,"paged":true,"unpaged":false},"totalPages":1,"totalElements":2,"last":true,"size":10,"number":0,"numberOfElements":2,"sort":{"empty":true,"sorted":false,"unsorted":true},"first":true,"empty":false}'
+        '400':
+          description: Invalid pagination or filter parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Invalid page number:
+                  description: Invalid page number
+                  value:
+                    code: invalid_request
+                    message: Page number must be non-negative
+                    solution: Provide a valid page number (0 or greater)
+                Invalid page size:
+                  description: Invalid page size
+                  value:
+                    code: invalid_request
+                    message: Page size must be between 1 and 100
+                    solution: Provide a valid page size
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - EUDR - Customers - Products
+      summary: Create a new outbound product
+      description: "\nCreate a new outbound product for EUDR compliance.\n\nOutbound products represent products that your organization sells or distributes.\nProvide at least `name` and `hsCode`; add `scientificName` and `reference` when available.\n\n**Required permission:** `access_public_products`\n        "
+      operationId: addOutboundProduct
+      requestBody:
+        description: Outbound product creation payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicOutboundProductPayload'
+            examples:
+              Full product:
+                summary: Outbound product with scientific name and reference
+                description: Full product
+                value: '{"name":"Oak Dining Table","scientificName":"Quercus robur","reference":"OUT-2025-001","hsCode":"940360","annualRevenue":null,"annualQuantity":null,"unit":null}'
+              Basic product:
+                summary: Minimum required fields (name and HS code)
+                description: Basic product
+                value: '{"name":"Oak Dining Table","scientificName":null,"reference":null,"hsCode":"940360","annualRevenue":null,"annualQuantity":null,"unit":null}'
+        required: true
+      responses:
+        '200':
+          description: Outbound product created successfully. Returns the ID of the newly created product.
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: ID of newly created product
+              examples:
+                Created product ID:
+                  description: Created product ID
+                  value: '301'
+        '400':
+          description: Errors if related data not found or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                HS Code not found:
+                  description: HS Code not found
+                  value:
+                    code: hs_code_not_found
+                    message: 'HS code not found: HSCode=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Supplier not found:
+                  description: Supplier not found
+                  value:
+                    code: supplier_not_found
+                    message: 'Supplier not found: ID=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Missing product scientific name:
+                  description: Missing product scientific name
+                  value:
+                    code: missing_wooden_product_scientific_name
+                    message: Missing product scientific name for wooden product
+                    solution: Provide a scientific name for wooden products
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/outbound/{productId}/inbound:
+    post:
+      tags:
+      - EUDR - Customers - Products
+      summary: Connect inbound products to an outbound product
+      description: "\nLink one or more inbound products to an outbound product.\n\nThese relationships are used for EUDR compliance tracking and origin request management.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        "
+      operationId: addOutboundInboundProducts
+      parameters:
+      - name: productId
+        in: path
+        description: The ID of the outbound product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 401
+      requestBody:
+        description: List of inbound product IDs to link to the outbound product.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicOutboundInboundProductPayload'
+            examples:
+              Link inbound products:
+                summary: Connect three inbound products to one outbound product
+                description: Link inbound products
+                value: '{"inboundProductIds":[201,202,203]}'
+        required: true
+      responses:
+        '200':
+          description: Inbound products linked successfully.
+        '400':
+          description: Invalid list (duplicates or type mismatch).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '404':
+          description: Outbound or inbound product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '409':
+          description: Inbound product already linked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/inbound:
+    get:
+      tags:
+      - EUDR - Customers - Products
+      summary: Get a list of inbound products
+      description: "\nRetrieve a paginated list of inbound products for EUDR compliance.\n\nInbound products are products that your organization receives from suppliers.\nUse `includeOrigins=true` (default) to include origin information on each product.\n\n**Use Cases**:\n- List all inbound products\n- Filter products by various criteria\n- Review supplier, DDS status, and origin data per product\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required permission:** `access_public_products`\n        "
+      operationId: findInboundProducts
+      parameters:
+      - name: ids
+        in: query
+        description: Filter by product IDs. When set, other filters are ignored.
+        required: false
+        schema:
+          type: array
+          description: Filter by product IDs. When set, other filters are ignored.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            description: Filter by product IDs. When set, other filters are ignored.
+            format: int32
+        example:
+        - 1
+        - 2
+        - 3
+      - name: q
+        in: query
+        description: Full text search query for product names, suppliers  or product references.
+        required: false
+        schema:
+          type: string
+          description: Full text search query for product names, suppliers  or product references.
+          example: soy oil
+        example: soy oil
+      - name: refs
+        in: query
+        description: Filter by product references.
+        required: false
+        schema:
+          type: array
+          description: Filter by product references.
+          example:
+          - Ref123
+          - Ref456
+          items:
+            type: string
+            description: Filter by product references.
+            example: '["Ref123","Ref456"]'
+        example:
+        - Ref123
+        - Ref456
+      - name: las
+        in: query
+        description: Filter by legality assessment status.
+        required: false
+        schema:
+          type: array
+          description: Filter by legality assessment status.
+          example:
+          - Negligible
+          - NotRequired
+          items:
+            type: string
+            description: Filter by legality assessment status.
+            example: '["Negligible","NotRequired"]'
+            enum:
+            - Negligible
+            - NonNegligible
+            - NotRequired
+            - Required
+        example:
+        - Negligible
+        - NotRequired
+      - name: dfs
+        in: query
+        description: Filter by DF status.
+        required: false
+        schema:
+          type: array
+          description: Filter by DF status.
+          example:
+          - Negligible
+          - NotRequired
+          items:
+            type: string
+            description: Filter by DF status.
+            example: '["Negligible","NotRequired"]'
+            enum:
+            - Negligible
+            - NonNegligible
+            - NotRequired
+            - Required
+        example:
+        - Negligible
+        - NotRequired
+      - name: dd
+        in: query
+        description: Filter by DDS status.
+        required: false
+        schema:
+          type: array
+          description: Filter by DDS status.
+          example:
+          - Blocked
+          - Allowed
+          - WaitingForOrigins
+          - Draft
+          items:
+            type: string
+            description: Filter by DDS status.
+            example: '["Blocked","Allowed","WaitingForOrigins","Draft"]'
+            enum:
+            - Blocked
+            - Allowed
+            - WaitingForOrigins
+            - NotRequired
+            - Draft
+            - Submitting
+            - Submitted
+            - Available
+            - SubmissionError
+        example:
+        - Blocked
+        - Allowed
+        - WaitingForOrigins
+        - Draft
+      - name: os
+        in: query
+        description: Filter by origin status.
+        required: false
+        schema:
+          type: string
+          description: Filter by origin status.
+          example: Active
+          enum:
+          - Missing
+          - Active
+        example: Active
+      - name: ors
+        in: query
+        description: Filter by origin request status.
+        required: false
+        schema:
+          type: array
+          description: Filter by origin request status.
+          example:
+          - Requested
+          - Answered
+          items:
+            type: string
+            description: Filter by origin request status.
+            example: '["Requested","Answered"]'
+            enum:
+            - Requested
+            - Delayed
+            - Rejected
+            - Canceled
+            - Answered
+        example:
+        - Requested
+        - Answered
+      - name: orso
+        in: query
+        description: Operator for origin request status filtering. Can be used in combination with 'ors' parameter.
+        required: false
+        schema:
+          type: string
+          description: Operator for origin request status filtering. Can be used in combination with 'ors' parameter.
+          example: in
+        example: in
+      - name: sccas
+        in: query
+        description: Filter by SCCA status.
+        required: false
+        schema:
+          type: array
+          description: Filter by SCCA status.
+          example:
+          - Pending
+          - Derisked
+          items:
+            type: string
+            description: Filter by SCCA status.
+            example: '["Pending","Derisked"]'
+            enum:
+            - Negligible
+            - NonNegligible
+            - Pending
+            - NotRequired
+            - Derisked
+        example:
+        - Pending
+        - Derisked
+      - name: includeOrigins
+        in: query
+        description: Url encoded query parameter for controlling if origins will be included in the response. It allows lighter response in case they are not needed.
+        required: false
+        schema:
+          type: boolean
+          default: true
+        example: false
+      - name: page
+        in: query
+        description: Page number (0-based)
+        required: false
+        schema:
+          type: integer
+          default: 0
+        example: 0
+      - name: size
+        in: query
+        description: Page size
+        required: false
+        schema:
+          type: integer
+          default: 10
+        example: 10
+      responses:
+        '200':
+          description: Paginated list of inbound products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicInboundProduct'
+                  size:
+                    type: integer
+                    format: int32
+                  number:
+                    type: integer
+                    format: int32
+                  totalElements:
+                    type: integer
+                    format: int32
+                  totalPages:
+                    type: integer
+                    format: int32
+                  numberOfElements:
+                    type: integer
+                    format: int32
+                  first:
+                    type: boolean
+                  last:
+                    type: boolean
+                  empty:
+                    type: boolean
+              examples:
+                Inbound products page:
+                  summary: Inbound products with supplier and DDS status details
+                  description: Inbound products page
+                  value: '{"content":[{"id":201,"customerId":100,"orgId":200,"name":"Oak Wood Planks","scientificName":"Quercus robur","reference":"INB-2025-001","commodity":{"id":1,"name":"Timber"},"hsCode":{"code":"440799","description":"Wood sawn or chipped lengthwise, sliced or peeled, of oak","commodityId":1},"annualSpend":null,"annualQuantity":null,"unit":null,"countryRisk":"Low","origins":[],"hasPendingOriginRequest":false,"pendingDFRequest":null,"supplier":{"id":101,"name":"Acme Manufacturing Inc","type":"Manufacturer","location":"Vienna","countryId":14,"references":[{"id":"ERP-12345","source":"erp"}]},"supplierDDS":[],"dfAssessment":null,"ddsStatus":{"status":"Allowed","reason":null},"customerDDS":null,"supplierMaturity":null,"legalityAssessment":null,"active":true,"creatorType":"Customer"},{"id":202,"customerId":100,"orgId":200,"name":"Teak Wood Beams","scientificName":"Tectona grandis","reference":"INB-2025-002","commodity":{"id":1,"name":"Timber"},"hsCode":{"code":"440711","description":"Wood sawn or chipped lengthwise, of teak","commodityId":1},"annualSpend":null,"annualQuantity":null,"unit":null,"countryRisk":"Mid","origins":[],"hasPendingOriginRequest":true,"pendingDFRequest":null,"supplier":{"id":102,"name":"Beta Timber Ltd","type":"Manufacturer","location":"London","countryId":826,"references":[{"id":"ERP-12345","source":"erp"}]},"supplierDDS":[],"dfAssessment":null,"ddsStatus":{"status":"WaitingForOrigins","reason":"PendingOriginRequest"},"customerDDS":null,"supplierMaturity":null,"legalityAssessment":null,"active":true,"creatorType":"Customer"}],"pageable":{"pageNumber":0,"pageSize":10,"sort":{"empty":true,"sorted":false,"unsorted":true},"offset":0,"paged":true,"unpaged":false},"totalPages":1,"totalElements":2,"last":true,"size":10,"number":0,"numberOfElements":2,"sort":{"empty":true,"sorted":false,"unsorted":true},"first":true,"empty":false}'
+        '400':
+          description: Invalid pagination or filter parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Invalid page number:
+                  description: Invalid page number
+                  value:
+                    code: invalid_request
+                    message: Page number must be non-negative
+                    solution: Provide a valid page number (0 or greater)
+                Invalid page size:
+                  description: Invalid page size
+                  value:
+                    code: invalid_request
+                    message: Page size must be between 1 and 100
+                    solution: Provide a valid page size
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - EUDR - Customers - Products
+      summary: Create a new inbound product
+      description: "\nCreate a new inbound product for EUDR compliance.\n\nInbound products represent products that your organization receives from suppliers.\nProvide `name`, `hsCode`, and `supplierId` at minimum.\n\n**Required permission:** `access_public_products`\n        "
+      operationId: addInboundProduct
+      requestBody:
+        description: Inbound product creation payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicInboundProductPayload'
+            examples:
+              Full product:
+                summary: Inbound product with scientific name, reference, and supplier
+                description: Full product
+                value: '{"name":"Oak Wood Planks","scientificName":"Quercus robur","reference":"INB-2025-001","hsCode":"440799","annualSpend":null,"annualQuantity":null,"unit":null,"supplierId":102006215}'
+              Basic product:
+                summary: Minimum required fields
+                description: Basic product
+                value: '{"name":"Oak Wood Planks","scientificName":null,"reference":null,"hsCode":"440799","annualSpend":null,"annualQuantity":null,"unit":null,"supplierId":102006215}'
+        required: true
+      responses:
+        '200':
+          description: Inbound product created successfully. Returns the ID of the newly created product.
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: ID of newly created product
+              examples:
+                Created product ID:
+                  description: Created product ID
+                  value: '301'
+        '400':
+          description: Errors if related data not found or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                HS Code not found:
+                  description: HS Code not found
+                  value:
+                    code: hs_code_not_found
+                    message: 'HS code not found: HSCode=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Supplier not found:
+                  description: Supplier not found
+                  value:
+                    code: supplier_not_found
+                    message: 'Supplier not found: ID=123456'
+                    solution: Check if the identifier provided is correct or create the record first
+                Missing product scientific name:
+                  description: Missing product scientific name
+                  value:
+                    code: missing_wooden_product_scientific_name
+                    message: Missing product scientific name for wooden product
+                    solution: Provide a scientific name for wooden products
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/{productId}:
+    delete:
+      tags:
+      - EUDR - Customers - Products
+      summary: Deactivate a product and its origins
+      description: "\nDeactivate a product and its associated origins.\n\nOnce deactivated, the product is no longer available for active use in EUDR compliance workflows.\n\n**Required permission:** `access_public_products` and `DELETE` on the product\n        "
+      operationId: deactivateProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The ID of the product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 301
+      responses:
+        '200':
+          description: Product deactivated successfully.
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Product not found:
+                  description: Product not found
+                  value:
+                    code: resource_not_found
+                    message: Product with id 123 not found
+                    solution: Verify the product ID
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/outbound/{outboundProductId}/inbound/{inboundProductId}:
+    delete:
+      tags:
+      - EUDR - Customers - Products
+      summary: Disconnect an inbound product from an outbound product
+      description: "\nRemove the link between an inbound product and an outbound product.\n\nThe products themselves are not deleted — only the BOM relationship is removed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        "
+      operationId: removeOutboundInboundProduct
+      parameters:
+      - name: outboundProductId
+        in: path
+        description: The ID of the outbound product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 401
+      - name: inboundProductId
+        in: path
+        description: The ID of the inbound product.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 201
+      responses:
+        '200':
+          description: Product link removed successfully.
+        '404':
+          description: Outbound product, inbound product, or link not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Link not found:
+                  description: Link not found
+                  value:
+                    code: resource_not_found
+                    message: Link between outbound product 101 and inbound product 201 not found
+                    solution: Verify both product IDs and that they are linked
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    PublicOrigin:
+      required:
+      - active
+      - country
+      - createdAt
+      - id
+      - plot
+      - plotAreaHa
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Origin name
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          description: Active status
+          example: null
+        producedAtStart:
+          type: string
+          description: Production start date
+          format: date-time
+          nullable: true
+          example: null
+        producedAtEnd:
+          type: string
+          description: Production end date
+          format: date-time
+          nullable: true
+          example: null
+        producer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProducer'
+          example: null
+        country:
+          $ref: '#/components/schemas/PublicCountry'
+        plot:
+          $ref: '#/components/schemas/PublicFeatureCollection'
+        plotAreaHa:
+          type: number
+          description: Plot area in hectares
+          format: double
+          example: null
+        dds:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProductSupplierDDS'
+          example: null
+        request:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicMinimalOriginRequest'
+          example: null
+        pendingProducerDiscoveryRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProducerDiscoveryRequest'
+          example: null
+        countryRisk:
+          type: string
+          description: Public EUDR risk.
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          example: null
+        pendingDFRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicPendingDFRequest'
+          example: null
+        dfCheck:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheck'
+          example: null
+        dfCheckResult:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheckResult'
+          example: null
+        legalityCheck:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicOriginLegalityCheck'
+          example: null
+        weight:
+          type: number
+          description: Weight, if origin is provided from an origin request with weight
+          nullable: true
+          example: null
+        createdAt:
+          type: string
+          description: Creation date of the origin
+          format: date-time
+          example: null
+        updatedAt:
+          type: string
+          description: Last update date of the origin
+          format: date-time
+          example: null
+      description: List of product's origins
+      example: null
+    PublicOriginRequestRef:
+      required:
+      - id
+      - reference
+      - referenceType
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Request ID
+          format: int32
+          example: null
+        reference:
+          type: string
+          description: Reference label
+          example: null
+        referenceType:
+          type: string
+          description: Public product reference type.
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+          example: null
+      description: References date of the origin request
+      example: null
+    PublicSubmissionError:
+      required:
+      - code
+      - detail
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        detail:
+          type: string
+          description: Human readable details about the error
+          example: null
+        reasons:
+          type: array
+          description: Detailed reasons about the error, if any
+          nullable: true
+          items:
+            type: string
+            description: Detailed reasons about the error, if any
+            example: null
+          example: null
+      description: Details about a submission error, if state is SUBMISSION_ERROR
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicGeometrySchema:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
+          example: null
+        coordinates:
+          type: array
+          description: Geometry coordinates
+          items:
+            type: array
+            description: Geometry coordinates
+            items:
+              type: array
+              description: Geometry coordinates
+              items:
+                type: number
+                description: Geometry coordinates
+                format: double
+                example: null
+              example: null
+            example: null
+          example: null
+      description: Geometry plot object
+      example: null
+    PublicProducerDiscoveryRequest:
+      required:
+      - id
+      - name
+      - originId
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Producer discovery request ID
+          format: int32
+          example: null
+        originId:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Producer name
+          example: null
+        targetId:
+          type: integer
+          description: Producer Target ID
+          format: int32
+          nullable: true
+          example: null
+      description: Pending producer discovery request
+      example: null
+    PublicProductHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: HS code
+          example: '440799'
+        description:
+          type: string
+          description: HS code description
+          nullable: true
+          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
+        commodityId:
+          type: integer
+          description: Commodity ID for the HS code
+          format: int32
+          nullable: true
+          example: 1
+      description: List of HS codes associated with this DDS unit
+      example: null
+    PublicCommodity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Commodity ID
+          format: int32
+          example: 1
+        name:
+          type: string
+          description: Commodity name
+          example: Timber
+      example: null
+    PublicMinimalOriginRequest:
+      required:
+      - createdAt
+      - id
+      - references
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin request ID
+          format: int32
+          example: null
+        createdAt:
+          type: string
+          description: Creation date of the origin request
+          format: date-time
+          example: null
+        status:
+          type: string
+          description: Public origin request status.
+          enum:
+          - Requested
+          - Answered
+          - Rejected
+          - Canceled
+          - Delayed
+          example: null
+        references:
+          type: array
+          description: References date of the origin request
+          items:
+            $ref: '#/components/schemas/PublicOriginRequestRef'
+          example: null
+      description: Origin request references
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    PublicOutboundInboundProductPayload:
+      required:
+      - inboundProductIds
+      type: object
+      properties:
+        inboundProductIds:
+          type: array
+          description: List of inbound product IDs
+          items:
+            type: integer
+            description: List of inbound product IDs
+            format: int32
+            example: null
+          example: null
+      example: null
+    PublicCustomerDDSStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Public DDS status.
+          example: Allowed
+          enum:
+          - Blocked
+          - Allowed
+          - WaitingForOrigins
+          - NotRequired
+          - Draft
+          - Submitting
+          - Submitted
+          - Available
+          - SubmissionError
+        reason:
+          type: string
+          description: Public reason for DDS status.
+          nullable: true
+          example: NoOrigins
+          enum:
+          - NoOrigins
+          - PendingOriginRequest
+          - DFARequired
+          - DFANonNegligible
+          - LARequired
+          - LANonNegligible
+          - DDSCreated
+          - Unknown
+      description: Customer DDS status
+      example: null
+    PublicCountry:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Country ID
+          format: int32
+          example: 14
+        name:
+          type: string
+          description: Country name
+          example: Austria
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Country code in form of ISO 3166-1 alpha-2 code
+          nullable: true
+          example: AT
+        bounds:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+      description: Country where the economic activity is taking place
+      example: null
+    PublicProductSupplierDDS:
+      required:
+      - active
+      - archived
+      - date
+      - id
+      - netWeightInKg
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Supplier DDS ID
+          format: int32
+          example: 201
+        active:
+          type: boolean
+          description: Active status
+          example: true
+        referenceNumber:
+          type: string
+          description: Reference number
+          nullable: true
+          example: EU-REF-12345
+        date:
+          type: string
+          description: DDS date
+          format: date-time
+          example: null
+        netWeightInKg:
+          type: number
+          description: Net Weight in Kg
+          example: 100.5
+        archived:
+          type: boolean
+          description: Archived
+          example: false
+        archiveDate:
+          type: string
+          description: Archive date
+          format: date-time
+          nullable: true
+          example: null
+      description: Supplier DDS
+      example: null
+    PublicDFCheck:
+      required:
+      - checkDate
+      - deforestedArea
+      - numberOfAlerts
+      - pictures
+      - primaryForestArea
+      type: object
+      properties:
+        checkDate:
+          type: string
+          description: Deforestation check date
+          format: date-time
+          example: null
+        primaryForestArea:
+          type: number
+          description: Available forest area in hectares
+          format: double
+          example: null
+        deforestedArea:
+          type: number
+          description: Deforested area in hectares
+          format: double
+          example: null
+        numberOfAlerts:
+          type: integer
+          description: Number of alerts
+          format: int32
+          example: null
+        pictures:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: null
+          example: null
+      description: Result of deforestation check request
+      example: null
+    PublicOutboundProduct:
+      required:
+      - commodity
+      - customerId
+      - hsCode
+      - id
+      - inboundProducts
+      - name
+      - orgId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+        orgId:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        scientificName:
+          type: string
+          nullable: true
+          example: null
+        reference:
+          type: string
+          nullable: true
+          example: null
+        commodity:
+          $ref: '#/components/schemas/PublicCommodity'
+        hsCode:
+          $ref: '#/components/schemas/PublicProductHSCode'
+        inboundProducts:
+          type: array
+          description: List of inbound product IDs associated with the outbound product
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            description: List of inbound product IDs associated with the outbound product
+            format: int32
+            example: null
+      example: null
+    PublicFeature:
+      required:
+      - geometry
+      - properties
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/PublicGeometrySchema'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          example: null
+      example: null
+    PublicInboundProduct:
+      required:
+      - active
+      - commodity
+      - creatorType
+      - customerId
+      - hasPendingOriginRequest
+      - hsCode
+      - id
+      - name
+      - orgId
+      - origins
+      - supplier
+      - supplierDDS
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+        orgId:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        scientificName:
+          type: string
+          nullable: true
+          example: null
+        reference:
+          type: string
+          nullable: true
+          example: null
+        commodity:
+          $ref: '#/components/schemas/PublicCommodity'
+        hsCode:
+          $ref: '#/components/schemas/PublicProductHSCode'
+        annualSpend:
+          type: number
+          description: Annual spend
+          nullable: true
+          example: 10000.0
+          deprecated: true
+        annualQuantity:
+          type: number
+          description: Annual quantity
+          nullable: true
+          example: 500.0
+          deprecated: true
+        unit:
+          type: string
+          description: Quantity unit
+          nullable: true
+          example: kg
+          deprecated: true
+        countryRisk:
+          type: string
+          description: Public EUDR risk.
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          example: null
+        origins:
+          $ref: '#/components/schemas/PublicOrigin'
+        hasPendingOriginRequest:
+          type: boolean
+          description: Indicates if the product has a pending origin request
+          example: false
+        pendingDFRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicPendingDFRequest'
+          example: null
+        supplier:
+          $ref: '#/components/schemas/PublicSupplier'
+        supplierDDS:
+          $ref: '#/components/schemas/PublicProductSupplierDDS'
+        dfAssessment:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDFAssessment'
+          example: null
+        ddsStatus:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicCustomerDDSStatus'
+          example: null
+        customerDDS:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProductCustomerDDS'
+          example: null
+        supplierMaturity:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicSupplierMaturity'
+          example: null
+        legalityAssessment:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicLegalityAssessment'
+          example: null
+        active:
+          type: boolean
+          description: Product active status
+          example: true
+        creatorType:
+          type: string
+          description: Public EUDR user type.
+          example: Customer
+          enum:
+          - Customer
+          - Supplier
+          - Producer
+      example: null
+    Score:
+      required:
+      - risk
+      - value
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+          example: null
+        risk:
+          type: string
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicDFCheckResult:
+      required:
+      - outdated
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Public deforestation status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+        outdated:
+          type: boolean
+          description: Is the check outdated
+          example: null
+      description: Deforestation check result status
+      example: null
+    PublicInboundProductPayload:
+      required:
+      - hsCode
+      - name
+      - supplierId
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product name.
+          example: Wooden Table
+        scientificName:
+          type: string
+          description: Scientific name label.
+          nullable: true
+          example: Quercus robur
+        reference:
+          type: string
+          description: Reference label.
+          nullable: true
+          example: REF-12345
+        hsCode:
+          type: string
+          description: HS code associated with the product. Can be retrieved from the HS code list endpoint.
+          example: '440799'
+        annualSpend:
+          type: number
+          description: Annual spend (EUR).
+          format: decimal
+          nullable: true
+          example: 10000.0
+          deprecated: true
+        annualQuantity:
+          type: number
+          description: Annual quantity.
+          nullable: true
+          example: 100.0
+          deprecated: true
+        unit:
+          type: string
+          description: Quantity unit.
+          nullable: true
+          example: kg
+          deprecated: true
+        supplierId:
+          type: integer
+          description: Target ID of the supplier.
+          format: int32
+          example: 42
+      description: Payload for creating or updating an inbound product. Inherits common product properties and adds annual spend and supplier ID.
+      example: null
+    PublicSupplierMaturity:
+      type: object
+      properties:
+        answerStatus:
+          type: string
+          description: Enum representing possible statuses for a supplier's questionnaire answer in the public API.
+          nullable: true
+          enum:
+          - Requested
+          - InProgress
+          - Good
+          - Critical
+          example: null
+        answerHidden:
+          type: boolean
+          description: True if the answer is hidden due to permission status (e.g., denied or not requested), otherwise false.
+          nullable: true
+          example: null
+      description: Public API payload representing the status of a supplier maturity assessment
+      example: null
+    PublicDDSReference:
+      required:
+      - ddsId
+      - reference
+      - type
+      type: object
+      properties:
+        ddsId:
+          type: integer
+          description: Referenced DDS ID
+          format: int32
+          example: 456
+        reference:
+          type: string
+          description: Reference label
+          example: PO-2025-001
+        type:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: List of DDS references
+      example: null
+    PublicSupplierReference:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Reference ID
+          example: REF-001
+        source:
+          type: string
+          description: Source of the reference
+          nullable: true
+          example: SAP
+      description: Reference information for a supplier. Contains reference ID and source.
+      example: null
+    PublicLegalityAssessment:
+      required:
+      - status
+      type: object
+      properties:
+        minScore:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Score'
+          example: null
+        minScoreAvail:
+          type: string
+          description: Public score availability.
+          nullable: true
+          example: Peer
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+        status:
+          type: string
+          description: Public legality assessment status.
+          example: Negligible
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+      description: Legality assessment result
+      example: null
+    PublicProductCustomerDDS:
+      required:
+      - active
+      - activityType
+      - archived
+      - customerCity
+      - customerCountry
+      - customerName
+      - customerPostalCode
+      - customerStreet
+      - date
+      - eoriNumber
+      - hsCode
+      - id
+      - netWeightInKg
+      - operatorType
+      - productDescription
+      - productName
+      - references
+      - state
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Customer DDS ID
+          format: int32
+          example: 123
+        active:
+          type: boolean
+          description: Active status
+          example: true
+        referenceNumber:
+          type: string
+          description: Reference number
+          nullable: true
+          example: EU-REF-12345
+        date:
+          type: string
+          description: DDS date
+          format: date-time
+          example: null
+        archived:
+          type: boolean
+          description: Archived
+          example: false
+        archiveDate:
+          type: string
+          description: Archive date
+          format: date-time
+          nullable: true
+          example: null
+        eoriNumber:
+          type: string
+          description: EORI number of the customer
+          example: EU123456789
+        customerName:
+          type: string
+          description: Name of the customer as stated on the DDS
+          example: Acme GmbH
+        customerCity:
+          type: string
+          description: City of the customer as stated on the DDS
+          example: Vienna
+        customerPostalCode:
+          type: string
+          description: Postal code of the customer as stated on the DDS
+          example: '1010'
+        customerStreet:
+          type: string
+          description: Street of the customer as stated on the DDS
+          example: Main Street 1
+        customerCountry:
+          $ref: '#/components/schemas/PublicCountry'
+        state:
+          type: string
+          description: Public customer DDS state.
+          example: Available
+          enum:
+          - New
+          - Submitting
+          - Submitted
+          - SubmissionError
+          - Available
+          - Rejected
+          - Cancelled
+          - Withdrawn
+          - Archived
+          - Suspended
+          - Updated
+          - Grouped
+          - Obsolete
+        operatorType:
+          type: string
+          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
+          example: RepresentativeOperator
+          enum:
+          - RepresentativeOperator
+          - Operator
+          - Trader
+        activityType:
+          type: string
+          description: Public activity type.
+          example: Import
+          enum:
+          - Import
+          - Export
+          - Domestic
+          - Trade
+        countryOfActivity:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicCountry'
+          example: null
+        references:
+          $ref: '#/components/schemas/PublicDDSReference'
+        productName:
+          type: string
+          description: Product name label
+          example: Wooden Table
+        productDescription:
+          type: string
+          description: Product description label
+          example: Oak wood table, 2m x 1m
+        netWeightInKg:
+          type: number
+          description: Net Weight in Kg
+          example: 100.5
+        quantity:
+          type: number
+          description: Product quantity (additional info)
+          nullable: true
+          example: 10
+        unit:
+          type: string
+          description: Quantity unit
+          nullable: true
+          example: kg
+        hsCode:
+          type: string
+          description: HS code
+          example: '440799'
+        submissionError:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicSubmissionError'
+          example: null
+      description: Customer DDS
+      example: null
+    PublicPendingDFRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Public deforestation check type.
+          enum:
+          - Basic
+          - Advanced
+          example: null
+      description: Public pending deforestation request details.
+      example: null
+    PublicOriginLegalityCheck:
+      required:
+      - scoreAvail
+      - status
+      type: object
+      properties:
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Score'
+          example: null
+        scoreAvail:
+          type: string
+          description: Public score availability.
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        status:
+          type: string
+          description: Public legality assessment status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+      description: Legality check result
+      example: null
+    PublicFeatureCollection:
+      required:
+      - features
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFeature'
+          example: null
+      description: Plot of the origin
+      example: null
+    PublicDFAssessment:
+      required:
+      - outdated
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Public deforestation status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+        outdated:
+          type: boolean
+          description: Is the assessment outdated
+          example: null
+        checkType:
+          type: string
+          description: Public deforestation check type.
+          nullable: true
+          enum:
+          - Basic
+          - Advanced
+          example: null
+      description: Deforestation assessment result
+      example: null
+    PublicProducer:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Target ID of the producer
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Producer name
+          example: null
+        geo:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+        countryId:
+          type: integer
+          description: Country ID of the producer
+          format: int32
+          nullable: true
+          example: null
+      description: Producer of the origin
+      example: null
+    PublicSupplier:
+      required:
+      - id
+      - name
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Supplier ID
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Supplier name
+          example: Acme Corp
+        type:
+          type: string
+          description: Supplier type
+          example: Manufacturer
+        location:
+          type: string
+          description: Supplier location
+          nullable: true
+          example: Vienna
+        countryId:
+          type: integer
+          description: Country ID of the supplier
+          format: int32
+          nullable: true
+          example: 14
+        references:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicSupplierReference'
+          example: null
+      description: Represents a supplier in the public API. Contains basic supplier information and references.
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicOutboundProductPayload:
+      required:
+      - hsCode
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product name.
+          example: Wooden Table
+        scientificName:
+          type: string
+          description: Scientific name label.
+          nullable: true
+          example: Quercus robur
+        reference:
+          type: string
+          description: Reference label.
+          nullable: true
+          example: REF-12345
+        hsCode:
+          type: string
+          description: HS code associated with the product. Can be retrieved from the HS code list endpoint.
+          example: '440799'
+        annualRevenue:
+          type: number
+          description: Annual revenue (EUR).
+          format: decimal
+          nullable: true
+          example: 15000.0
+          deprecated: true
+        annualQuantity:
+          type: number
+          description: Annual quantity.
+          nullable: true
+          example: 100.0
+          deprecated: true
+        unit:
+          type: string
+          description: Quantity unit.
+          nullable: true
+          example: kg
+          deprecated: true
+      description: Payload for creating or updating an outbound product. Inherits common product properties and adds annual revenue.
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

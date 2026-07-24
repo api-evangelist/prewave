@@ -1,0 +1,1002 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Scores - Target API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Scores - Target
+  description: "\n⚠️ **DEPRECATED** - Target score endpoints. These endpoints are deprecated and will be removed at the end of December 2026. Use `/public/v1/enterprise-export/scores` instead.\n\n**Note**: Responses from these endpoints include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n    "
+paths:
+  /public/v1/target/{systemId}/{targetId}/score:
+    get:
+      tags:
+      - Scores - Target
+      summary: Returns the target score including the overall score and scores for all infotag-groups.
+      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score` | `GET /public/v1/enterprise-export/scores` | Retrieve score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides significant improvements:\n\n### 1. Bulk Operations\n- Retrieve scores for multiple targets in a single request\n- More efficient for large-scale integrations\n\n### 2. Automated Updates\n- Configure scheduled exports that run automatically\n- No need to poll individual endpoints\n\n### 3. Better Performance\n- Optimized for large-scale data retrieval\n- Consistent data calculation timestamps\n\n### 4. Error Handling\n- Detailed error logs for failed calculations\n- Better visibility into data quality issues\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nUse `POST /public/v1/enterprise-export/scores/config` to set up your export configuration:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"collectionIds\": [123, 456],\n  \"targetIds\": [102006215, 101641243],\n  \"perspectiveIds\": [1, 2],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes all the same information as this endpoint, plus additional metadata:\n- Calculation timestamps\n- Risk levels\n- Edge numbers for target identification\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the target score including:\n- Overall target score\n- Scores for all infotag groups\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      operationId: score
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+      - name: perspectiveId
+        in: query
+        description: Id of the perspective, that should be used to calculate the target-score.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: groupId
+        in: query
+        description: Id of the group that items should be returned
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: component
+        in: query
+        description: Filter by score component
+        required: false
+        schema:
+          type: string
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+      - name: subcomponent
+        in: query
+        description: Filter by score subcomponent
+        required: false
+        schema:
+          type: string
+          enum:
+          - CountryScore
+          - IndustryScore
+          - CommodityScore
+          - PublicAlertScore
+          - CustomerAlertScore
+          - InternalScore
+          - TierNIndustryScore
+          - TierNCommodityScore
+          - TargetScore
+      responses:
+        '200':
+          description: Target score successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTargetScore'
+              examples:
+                Score response example:
+                  summary: Sample target score response
+                  description: Score response example
+                  value:
+                    score:
+                      score: 85
+                      riskLevel: LOW
+                    groups:
+                    - id: 1
+                      name: Environmental
+                      score: 90
+                    - id: 2
+                      name: Social
+                      score: 80
+        '404':
+          description: Target not found or no permission to access it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+      deprecated: true
+  /public/v1/target/{systemId}/{targetId}/score/{groupId}:
+    get:
+      tags:
+      - Scores - Target
+      summary: Get the event type scores for a infotag group
+      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score/{groupId}` | `GET /public/v1/enterprise-export/scores` | Retrieve event type scores |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Event type scores when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components (which includes event type scores):\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Event Type Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with event type scores:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `groups` arrays with `eventTypes` when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the event type scores for a specific infotag group, including:\n- Event type information\n- Event type score\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      operationId: scoreEventType
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        description: Id of the group that items should be returned
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: perspectiveId
+        in: query
+        description: Id of the perspective, that should be used to calculate the target-score.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: component
+        in: query
+        description: Filter by score component
+        required: false
+        schema:
+          type: string
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+      - name: subcomponent
+        in: query
+        description: Filter by score subcomponent
+        required: false
+        schema:
+          type: string
+          enum:
+          - CountryScore
+          - IndustryScore
+          - CommodityScore
+          - PublicAlertScore
+          - CustomerAlertScore
+          - InternalScore
+          - TierNIndustryScore
+          - TierNCommodityScore
+          - TargetScore
+      responses:
+        '200':
+          description: Event type scores successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicEventTypeScore'
+              examples:
+                Event type scores response example:
+                  summary: Sample event type scores response
+                  description: Event type scores response example
+                  value:
+                  - eventType:
+                      id: 1
+                      name: Environmental Incident
+                      type: EVENT_TYPE
+                    score:
+                      score: 85
+                      riskLevel: LOW
+        '404':
+          description: Target not found or no permission to access it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+      deprecated: true
+  /public/v1/target/{systemId}/{targetId}/score-history:
+    get:
+      tags:
+      - Scores - Target
+      summary: The historical overall-score of the target for the last months, depending on the defined perspective
+      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-history` | `GET /public/v1/enterprise-export/scores` | Retrieve historical score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Historical score data with calculation timestamps\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nConfigure your export job to include historical data:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": false\n}\n```\n\n### Step 2: Retrieve Historical Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with timestamps:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=100\n```\n\nThe response includes `calculatedAt` timestamps that allow you to track score changes over time.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the historical overall-score of the target for the last months, including:\n- Monthly scores\n- Month-over-month change\n- Year-over-year change\n- Maximum and minimum scores (overall and past year)\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      operationId: scoreHistory
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: query
+        description: Id of the group that items should be returned
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: perspectiveId
+        in: query
+        description: Id of the perspective, that should be used to calculate the target-score.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: component
+        in: query
+        description: Filter by score component
+        required: false
+        schema:
+          type: string
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+      - name: subcomponent
+        in: query
+        description: Filter by score subcomponent
+        required: false
+        schema:
+          type: string
+          enum:
+          - CountryScore
+          - IndustryScore
+          - CommodityScore
+          - PublicAlertScore
+          - CustomerAlertScore
+          - InternalScore
+          - TierNIndustryScore
+          - TierNCommodityScore
+          - TargetScore
+      responses:
+        '200':
+          description: Target score history successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTargetScoreHistory'
+              examples:
+                Score history response example:
+                  summary: Sample target score history response
+                  description: Score history response example
+                  value:
+                    months:
+                    - month: 2024-01
+                      score: 85
+                    - month: 2024-02
+                      score: 87
+                    monthChange: 2
+                    yearChange: 5
+                    max: 95
+                    yearMax: 90
+                    min: 70
+                    yearMin: 75
+        '404':
+          description: Target not found or no permission to access it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+      deprecated: true
+  /public/v1/target/{systemId}/{targetId}/score-components:
+    get:
+      tags:
+      - Scores - Target
+      summary: The current score for a target split up into the scoring components, depending on the defined perspective.
+      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-components` | `GET /public/v1/enterprise-export/scores` | Retrieve score components |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Score components and subcomponents when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Score Components\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with components:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `components` and `subComponents` arrays when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the current score for a target split up into scoring components, including:\n- Component type\n- Component score\n- List of subcomponents with their scores\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n        "
+      operationId: scoreComponents
+      parameters:
+      - name: systemId
+        in: path
+        description: The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are "prewave", "customer", "supplier", "own".
+        required: true
+        schema:
+          type: string
+      - name: targetId
+        in: path
+        description: The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system.
+        required: true
+        schema:
+          type: string
+      - name: perspectiveId
+        in: query
+        description: Id of the perspective, that should be used to calculate the target-score.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: groupId
+        in: query
+        description: Id of the group that items should be returned
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Target score components successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicTargetScoreComponents'
+              examples:
+                Score components response example:
+                  summary: Sample target score components response
+                  description: Score components response example
+                  value:
+                  - component: ENVIRONMENTAL
+                    score:
+                      score: 90
+                      riskLevel: LOW
+                    subcomponents:
+                    - subcomponent: CARBON_FOOTPRINT
+                      score:
+                        score: 88
+                        riskLevel: LOW
+        '404':
+          description: Target not found or no permission to access it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+      deprecated: true
+components:
+  schemas:
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicTargetScoreHistoryData:
+      required:
+      - date
+      - score
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of the score
+          format: date-time
+          example: null
+        score:
+          $ref: '#/components/schemas/PublicScore'
+      description: List of monthly scores
+      example: null
+    PublicTargetScoreSubcomponent:
+      required:
+      - subcomponent
+      type: object
+      properties:
+        subcomponent:
+          type: string
+          description: Score subcomponent of the target
+          enum:
+          - CountryScore
+          - IndustryScore
+          - CommodityScore
+          - PublicAlertScore
+          - CustomerAlertScore
+          - InternalScore
+          - TierNIndustryScore
+          - TierNCommodityScore
+          - TargetScore
+          example: null
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      description: List of target score subcomponents
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    PublicEventTypeScore:
+      required:
+      - eventType
+      type: object
+      properties:
+        eventType:
+          $ref: '#/components/schemas/PublicInfotagDTO'
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      example: null
+    PublicTargetScoreComponents:
+      required:
+      - subcomponents
+      type: object
+      properties:
+        component:
+          type: string
+          description: Score component of the target
+          nullable: true
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+        subcomponents:
+          type: array
+          description: List of target score subcomponents
+          items:
+            $ref: '#/components/schemas/PublicTargetScoreSubcomponent'
+          example: null
+      example: null
+    PublicInfotagDTO:
+      required:
+      - id
+      - type
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          $ref: '#/components/schemas/PublicInfotagTypeDTO'
+        value:
+          type: string
+          example: null
+        svalue:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        numValue:
+          type: number
+          nullable: true
+          example: null
+        priority:
+          type: string
+          nullable: true
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type: string
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicScore:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Score value
+          format: int32
+          nullable: true
+          example: null
+        risk:
+          type: string
+          description: Score risk level
+          nullable: true
+          example: Mid
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+      description: Score of the target subcomponent
+      example: null
+    PublicInfotagTypeDTO:
+      required:
+      - active
+      - display
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+        active:
+          type: boolean
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        display:
+          type: boolean
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicInfotagGroup:
+      required:
+      - id
+      - name
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the infotag group
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Name of the infotag group
+          example: null
+        sname:
+          type: string
+          description: Short name/code of the infotag group
+          example: null
+      example: null
+    PublicTargetScore:
+      required:
+      - groups
+      - score
+      type: object
+      properties:
+        score:
+          $ref: '#/components/schemas/PublicScore'
+        groups:
+          type: array
+          description: List of group scores
+          items:
+            $ref: '#/components/schemas/PublicGroupScore'
+          example: null
+      example: null
+    PublicGroupScore:
+      required:
+      - group
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PublicInfotagGroup'
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      description: List of group scores
+      example: null
+    PublicTargetScoreHistory:
+      required:
+      - max
+      - min
+      - monthChange
+      - months
+      - yearChange
+      - yearMax
+      - yearMin
+      type: object
+      properties:
+        months:
+          type: array
+          description: List of monthly scores
+          items:
+            $ref: '#/components/schemas/PublicTargetScoreHistoryData'
+          example: null
+        monthChange:
+          type: integer
+          description: Change in score from the previous month
+          format: int32
+          example: null
+        yearChange:
+          type: integer
+          description: Change in score from the previous year
+          format: int32
+          example: null
+        max:
+          type: integer
+          description: Maximum score overall
+          format: int32
+          example: null
+        yearMax:
+          type: integer
+          description: Maximum score in the past year
+          format: int32
+          example: null
+        min:
+          type: integer
+          description: Minimum score overall
+          format: int32
+          example: null
+        yearMin:
+          type: integer
+          description: Minimum score in the past year
+          format: int32
+          example: null
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

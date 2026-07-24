@@ -1,0 +1,551 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Users - Roles API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Users - Roles
+  description: 🆕 NEW - API to manage user roles in the public network. Available from February 2026.
+paths:
+  /public/v1/users/{userId}/roles:
+    get:
+      tags:
+      - Users - Roles
+      summary: Retrieve roles assigned to a specific user
+      description: "\n### Overview\nRetrieve all roles currently assigned to a specific user.\n\n### Use Cases\n- **Security Audits**: Verify that users only have the permissions necessary for their current function.\n- **Troubleshooting**: Check if a user's lack of access to a feature is due to missing roles.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n### Getting User ID\n- To find users and their numerical IDs, use the Users Management API:\n  - `GET /public/v1/users` - Retrieve all users with their `id` field.\n- The `id` field in the user response is the `{userId}` used in this endpoint's path parameter.\n\n### Related Operations\n- **Discover Valid Roles**: [GET /public/v1/users/roles/available](#operations-Users_-_Roles-getAvailableRoles)\n- **Add Roles to User**: [POST /public/v1/users/{userId}/roles](#operations-Users_-_Roles-add)\n- **Remove Specific Role**: [DELETE /public/v1/users/{userId}/roles/{roleName}](#operations-Users_-_Roles-delete)\n\n### Required Permission\n`access_public_users`\n    "
+      operationId: read
+      parameters:
+      - name: userId
+        in: path
+        description: The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 4523345
+      responses:
+        '200':
+          description: User roles retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicUserRoleDTO'
+              examples:
+                Assigned Roles:
+                  description: Assigned Roles
+                  value: '[{"id":1,"name":"GRANT_USER_MANAGER_ACCESS","description":"User management role"},{"id":2,"name":"GRANT_TEAM_MANAGER_ACCESS","description":"Team management role"}]'
+        '404':
+          description: Not Found - The specified user does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                User Not Found:
+                  description: User Not Found
+                  value: '{"code":"user_not_found","message":"User with ID 4523345 could not be found."}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - Users - Roles
+      summary: Assign new roles to a user
+      description: "\n### Overview\nAssign one or more roles to an existing user.\n\n### Use Cases\n- **Privilege Escalation**: Grant a user additional management permissions.\n- **Onboarding**: Finalize a user's access setup by adding specific functional roles.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n### Getting User ID\n- To find users and their numerical IDs, use the Users Management API:\n  - `GET /public/v1/users` - Retrieve all users with their `id` field.\n- The `id` field in the user response is the `{userId}` used in this endpoint's path parameter.\n\n### Behavior\n- **Additive**: This operation only adds new roles. It will **not** remove or overwrite existing roles.\n- **Validation**: Every role name provided must be valid and assigned to your organization. If even one role name is invalid, the entire request will fail (atomic operation).\n\n### Workflow Tip\nCall [List Available Roles](#operations-Users_-_Roles-getAvailableRoles) first to ensure you are using correct role names.\n\n### Related Operations\n- **List Current Roles**: [GET /public/v1/users/{userId}/roles](#operations-Users_-_Roles-read)\n- **Remove Role**: [DELETE /public/v1/users/{userId}/roles/{roleName}](#operations-Users_-_Roles-delete)\n\n### Required Permission\n`manage_public_users`\n    "
+      operationId: add
+      parameters:
+      - name: userId
+        in: path
+        description: The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 4523345
+      requestBody:
+        description: List of role identifiers to assign.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            examples:
+              Batch Role Assignment:
+                summary: Adding multiple roles in a single request
+                description: Batch Role Assignment
+                value: '["GRANT_USER_MANAGER_ACCESS","GRANT_TEAM_MANAGER_ACCESS"]'
+        required: true
+      responses:
+        '201':
+          description: Created - Roles successfully added. Returns the full, updated list of user roles.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicUserRoleDTO'
+              examples:
+                Updated Role List:
+                  description: Updated Role List
+                  value: '[{"id":1,"name":"GRANT_USER_MANAGER_ACCESS","description":"User management role"},{"id":2,"name":"GRANT_TEAM_MANAGER_ACCESS","description":"Team management role"},{"id":3,"name":"GRANT_ACTIONS_ACCESS","description":"Action management role"}]'
+        '404':
+          description: Not Found - Either the user ID is invalid or one of the role names provided does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Role Not Found:
+                  summary: Occurs when a role name is misspelled or invalid
+                  description: Role Not Found
+                  value: '{"code":"role_not_found","message":"Role ''UNKNOWN_ROLE'' does not exist."}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/users/roles/available:
+    get:
+      tags:
+      - Users - Roles
+      summary: List all available role definitions
+      description: "\n### Overview\nRetrieve a list of all role names that can be assigned to users within your organization.\n\n### Use Cases\n- **Discovery**: Find out which roles are valid for assignment before calling the Add Roles endpoint.\n- **UI Population**: Populate a dropdown in your internal management tool with valid role names and descriptions.\n\n### Why Use This?\nUse this endpoint to discover valid role identifiers before assigning them. This ensures you only use roles that are active and compatible with your organization's permissions.\n\n### Related Operations\n- **Assign Roles to User**: [POST /public/v1/users/{userId}/roles](#operations-Users_-_Roles-add)\n- **View User's Roles**: [GET /public/v1/users/{userId}/roles](#operations-Users_-_Roles-read)\n- **Onboard New User**: [POST /public/v1/users](#operations-Users-create)\n\n### Required Permission\n`access_public_users`\n    "
+      operationId: getAvailableRoles
+      responses:
+        '200':
+          description: Available roles retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicUserRoleDTO'
+              examples:
+                Assignable Roles List:
+                  summary: Full list of roles available for assignment
+                  description: Assignable Roles List
+                  value: '[{"id":1,"name":"GRANT_USER_MANAGER_ACCESS","description":"Full access to user management features."},{"id":2,"name":"GRANT_TEAM_MANAGER_ACCESS","description":"Ability to create and manage teams."},{"id":3,"name":"GRANT_ACTIONS_ACCESS","description":"Permission to handle action items and alerts."}]'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/users/{userId}/roles/{roleName}:
+    delete:
+      tags:
+      - Users - Roles
+      summary: Revoke a specific role from a user
+      description: "\n### Overview\nRevoke a specific role from an existing user.\n\n### Use Cases\n- **Access Reduction**: Downgrade a user's permissions when they move to a different team or department.\n- **Security**: Remove access that is no longer required as part of the principle of least privilege.\n\n### Identification\n- **userId**: Numerical identifier of the user.\n- **roleName**: The exact string identifier of the role (e.g., `ROLE_USER_MANAGER`).\n\n### Getting User ID\n- To find users and their numerical IDs, use the Users Management API:\n  - `GET /public/v1/users` - Retrieve all users with their `id` field.\n- The `id` field in the user response is the `{userId}` used in this endpoint's path parameter.\n\n### Getting Role Names\n- Discover valid role names via `GET /public/v1/users/roles/available`.\n\n### Related Operations\n- **Add Roles**: [POST /public/v1/users/{userId}/roles](#operations-Users_-_Roles-add)\n- **List All Roles**: [GET /public/v1/users/{userId}/roles](#operations-Users_-_Roles-read)\n\n### Required Permission\n`manage_public_users`\n    "
+      operationId: delete
+      parameters:
+      - name: userId
+        in: path
+        description: The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 4523345
+      - name: roleName
+        in: path
+        description: The exact internal name of the role to remove. Discover valid names via the [Available Roles](#operations-Users_-_Roles-getAvailableRoles) endpoint.
+        required: true
+        schema:
+          type: string
+        example: ROLE_USER_MANAGER
+      responses:
+        '204':
+          description: No Content - Role successfully removed.
+        '404':
+          description: Not Found - User or Role identifier not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Role Not Found:
+                  description: Role Not Found
+                  value: '{"code":"role_not_found","message":"The user does not possess the role ''ROLE_USER_MANAGER''."}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    PublicUserRoleDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

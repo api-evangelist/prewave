@@ -1,0 +1,650 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Collections - Targets API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Collections - Targets
+  description: Public API for managing targets within collections in Prewave's supply chain network.
+paths:
+  /public/v1/collections/{collectionId}/targets:
+    get:
+      tags:
+      - Collections - Targets
+      summary: Get targets in collection
+      description: "\nRetrieve all targets that are currently part of a collection with pagination support.\n\nReturns paginated target references with basic information about each target (ID and name).\nTo get detailed target information, use the targets API with these target IDs.\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `GET /public/v1/collections` - List all collections accessible to you (returns collections with `id` field)\n  - `GET /public/v1/collections/{collectionId}` - Get a specific collection by ID\n- The `id` field in collection responses is the `collectionId` used in this endpoint's path parameter\n\n**Fetching Full Supplier Information:**\n- The `id` field in each target reference is the `prewaveTargetId` (target's `infotag_id`)\n- To fetch comprehensive supplier details, use the Supplier Sites API endpoints:\n  - `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={prewaveTargetId}` - Get detailed supplier information by `prewaveTargetId`\n  - `GET /public/v2/suppliers/sites` - List all suppliers and match by `prewaveTargetId` or supplier identifiers\n- These endpoints provide full supplier information including address, supplier identifiers, screening status, monitoring dates, and more\n\n**Pagination Parameters**:\n- `page` (optional): Page number (0-indexed). Default: 0\n- `size` (optional): Number of items per page. Default: 10\n- `sort` (optional): Sort criteria in the format `property,direction` (e.g., `name,asc` or `id,desc`). Multiple sort criteria can be specified.\n\nThe collection must be accessible to the authenticated user.\n\n**Important: Target ID Stability**\n\n⚠️ **The target `id` (prewaveTargetId) may change** due to target merges or data consolidation. When this happens:\n- The target's collection memberships are automatically moved to the new target\n- **This endpoint will always return the current, correct target `id`** - if a target ID changes, this endpoint will show the new ID, not the old one\n- If you have stored target IDs from previous calls to this endpoint, those IDs may have changed, but calling this endpoint again will return the updated target IDs\n\n\U0001F4A1 **Tip for Integrations:**\n- This endpoint always reflects the current state of target IDs in the collection\n- If you need to track target IDs over time, periodically call this endpoint to get the latest target IDs\n- To find a target by its supplier identifier when the ID has changed, use `GET /public/v2/suppliers/sites` and match by supplier identifiers\n\n**Required Permissions**: `access_collection` and `read` on the collection.\n        "
+      operationId: getCollectionTargets
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the collection
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved paginated target references
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicTargetRef'
+                  size:
+                    type: integer
+                    format: int32
+                  number:
+                    type: integer
+                    format: int32
+                  totalElements:
+                    type: integer
+                    format: int32
+                  totalPages:
+                    type: integer
+                    format: int32
+                  numberOfElements:
+                    type: integer
+                    format: int32
+                  first:
+                    type: boolean
+                  last:
+                    type: boolean
+                  empty:
+                    type: boolean
+              examples:
+                Paginated target references example:
+                  summary: Sample paginated list of target references in collection
+                  description: Paginated target references example
+                  value: '{"content":[{"id":10422185,"name":"Inter Cars SA"},{"id":101641243,"name":"Asmet Sp. z o.o."}],"size":10,"number":0,"totalElements":57,"totalPages":6,"numberOfElements":2}'
+                Empty collection example:
+                  summary: Collection with no targets
+                  description: When a collection has no targets, an empty content array is returned.
+                  value: '{"content":[],"size":10,"number":0,"totalElements":0,"totalPages":0,"numberOfElements":0}'
+        '404':
+          description: Collection not found or not accessible to the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Collection not found:
+                  summary: Collection does not exist or is not accessible
+                  description: Collection not found
+                  value: '{"code":"collection_not_found","message":"Collection not found: ID=99999999"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - Collections - Targets
+      summary: Add targets to collection
+      description: "\nAdd multiple targets (suppliers, customers, etc.) to a collection.\n\nTargets are identified by their unique `prewaveTargetId` (target's `infotag_id`). If a target is already in the collection,\nit will be ignored (no duplicate entries). All target IDs must be valid and accessible to the user.\n\nThis operation is atomic - either all targets are added successfully, or none are added.\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `GET /public/v1/collections` - List all collections accessible to you (returns collections with `id` field)\n  - `GET /public/v1/collections/{collectionId}` - Get a specific collection by ID\n- The `id` field in collection responses is the `collectionId` used in this endpoint's path parameter\n\n**Getting Target IDs (prewaveTargetId):**\n- To get current target IDs, use the Supplier Sites API:\n  - `GET /public/v2/suppliers/sites` - List all suppliers with their current `prewaveTargetId` values\n  - `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={prewaveTargetId}` - Get a specific supplier by `prewaveTargetId`\n- The `prewaveTargetId` field in supplier responses is the target ID used in the request body\n\n**Important: Target ID Stability**\n\n⚠️ **The target `id` (prewaveTargetId) may change** due to target merges or data consolidation. When this happens:\n- The target's edge numbers, edge data, and collection memberships are automatically moved to a new target\n- Using an outdated target ID will result in a `404 Not Found` error\n\n\U0001F4A1 **Best Practice for Integrations:**\n- **Always refresh target IDs** before adding targets to a collection by calling `GET /public/v2/suppliers/sites` to get the latest `prewaveTargetId` values\n- Match suppliers by supplier identifiers (your external system identifiers) rather than storing `prewaveTargetId` values long-term\n- If you receive a `404 Not Found` error, use `GET /public/v2/suppliers/sites` to find the current `prewaveTargetId` by matching your supplier identifiers\n\n**Audit Trail:**\n- All changes are audited for compliance and tracking purposes\n- Every action is recorded in the audit log with:\n  - The user who performed the operation\n  - Timestamp of the operation\n  - Details about which targets were added to the collection\n  - Reference to the public API endpoint used\n\n**Required Permissions**: `manage_collection` and `update` on the collection.\n        "
+      operationId: addTargetsToCollection
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the collection
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      requestBody:
+        description: Array of target IDs (prewaveTargetId values) to add to the collection. Each ID must be a valid `prewaveTargetId` (target's `infotag_id`) accessible to the user. Target IDs can be obtained from `GET /public/v2/suppliers/sites`.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+            examples:
+              Add targets example:
+                summary: Sample request to add targets
+                description: Add targets example
+                value: '[101,102,103,104]'
+              Add single target:
+                summary: Adding a single target to collection
+                description: Add single target
+                value: '[10422185]'
+        required: true
+      responses:
+        '200':
+          description: Targets added to collection successfully. All changes have been audited.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCollectionDTO'
+              examples:
+                Updated collection example:
+                  summary: Collection after adding targets
+                  description: Updated collection example
+                  value: '{"id":123,"uuid":"550e8400-e29b-41d4-a716-446655440000","scope":"User","type":"Default","name":"My Suppliers","count":49,"lanes":true,"tiersEnabled":false,"parentId":null,"children":[],"updatedAt":{"date":"2025-08-25T10:30:00","_datetype_":"DateTime"}}'
+                Collection with existing targets:
+                  summary: Some targets were already in collection
+                  description: If some target IDs were already in the collection, they are ignored and the collection count reflects only newly added targets.
+                  value: '{"id":124,"uuid":"660e8400-e29b-41d4-a716-446655440001","scope":"Customer","type":"Default","name":"Tier 1 Suppliers","count":15,"lanes":false,"tiersEnabled":true,"parentId":100,"children":[],"updatedAt":{"date":"2025-08-25T14:20:00","_datetype_":"DateTime"}}'
+        '400':
+          description: Invalid request - Invalid target IDs, empty request body, or malformed JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Empty request:
+                  summary: Request body is empty or contains no target IDs
+                  description: Empty request
+                  value: '{"code":"invalid_request","message":"Request body cannot be empty","solution":"Provide an array of target IDs"}'
+                Invalid JSON:
+                  summary: Request body is not valid JSON
+                  description: Invalid JSON
+                  value: '{"code":"invalid_request","message":"JSON parse error: Unexpected character","solution":"Fix the request body format"}'
+        '404':
+          description: 'Collection not found or some target IDs are invalid or not accessible. This may occur if: (1) the collection doesn''t exist or is not accessible to your organization, (2) one or more target IDs don''t exist, (3) one or more target IDs are not accessible to your organization, or (4) a target ID has changed due to a target merge (in which case, use GET /public/v2/suppliers/sites to find the new ID by matching supplier identifiers).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Collection not found:
+                  summary: Collection does not exist or is not accessible
+                  description: Collection not found
+                  value: '{"code":"collection_not_found","message":"Collection not found: ID={collectionId}"}'
+                Target ID not found:
+                  summary: One or more target IDs are invalid or have changed
+                  description: If a target ID has changed due to a merge, use GET /public/v2/suppliers/sites to find the current prewaveTargetId by matching your supplier identifiers.
+                  value: '{"code":"resource_not_found","message":"Collection with id {collectionId} not found or access denied"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/collections/{collectionId}/targets/{targetId}:
+    delete:
+      tags:
+      - Collections - Targets
+      summary: Remove target from collection
+      description: "\nRemove a single target from a collection.\n\nThe target is identified by its `prewaveTargetId` (target's `infotag_id`) in the URL path. If the target is not\ncurrently in the collection, the operation will complete successfully without error (idempotent operation).\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `GET /public/v1/collections` - List all collections accessible to you (returns collections with `id` field)\n  - `GET /public/v1/collections/{collectionId}` - Get a specific collection by ID\n- The `id` field in collection responses is the `collectionId` used in this endpoint's path parameter\n\n**Getting Target ID (prewaveTargetId):**\n- To get the current target ID, use the Supplier Sites API or the collection targets endpoint:\n  - `GET /public/v1/collections/{collectionId}/targets` - List all targets in the collection with their current `prewaveTargetId` values\n  - `GET /public/v2/suppliers/sites` - List all suppliers with their current `prewaveTargetId` values\n  - `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={prewaveTargetId}` - Get a specific supplier by `prewaveTargetId`\n- The `id` field in target/supplier responses is the `prewaveTargetId` used in this endpoint's path parameter\n\n**Important: Target ID Stability**\n\n⚠️ **The target `id` (prewaveTargetId) may change** due to target merges or data consolidation. When this happens:\n- The target's edge numbers, edge data, and collection memberships are automatically moved to a new target\n- Using an outdated target ID will result in a `404 Not Found` error\n\n\U0001F4A1 **Best Practice for Integrations:**\n- **Always use current target IDs** when removing targets from collections\n- Use `GET /public/v1/collections/{collectionId}/targets` to get the current target IDs in the collection before removing them\n- Alternatively, use `GET /public/v2/suppliers/sites` to find the current `prewaveTargetId` by matching your supplier identifiers\n- If you receive a `404 Not Found` error, use `GET /public/v2/suppliers/sites` to find the current `prewaveTargetId` by matching your supplier identifiers\n\n**Audit Trail:**\n- All changes are audited for compliance and tracking purposes\n- Every action is recorded in the audit log with:\n  - The user who performed the operation\n  - Timestamp of the operation\n  - Details about which target was removed from the collection\n  - Reference to the public API endpoint used\n\n**Required Permissions**: `manage_collection` and `update` on the collection.\n        "
+      operationId: removeTargetFromCollection
+      parameters:
+      - name: collectionId
+        in: path
+        description: Unique identifier of the collection
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      - name: targetId
+        in: path
+        description: The prewaveTargetId (target's infotag_id) of the target to remove from the collection. This is the same identifier returned in the `id` field when retrieving targets via GET /public/v1/collections/{collectionId}/targets or GET /public/v2/suppliers/sites.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 10422185
+      responses:
+        '204':
+          description: Target removed from collection successfully (or was not in collection). All changes have been audited.
+        '404':
+          description: 'Collection not found, target not found, or not accessible to the user. This may occur if: (1) the collection doesn''t exist or is not accessible to your organization, (2) the target ID doesn''t exist, (3) the target ID is not accessible to your organization, or (4) the target ID has changed due to a target merge (in which case, use GET /public/v2/suppliers/sites to find the new ID by matching supplier identifiers).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Collection not found:
+                  summary: Collection does not exist or is not accessible
+                  description: Collection not found
+                  value: '{"code":"collection_not_found","message":"Collection not found: ID={collectionId}"}'
+                Target ID not found:
+                  summary: Target ID is invalid or has changed
+                  description: If a target ID has changed due to a merge, use GET /public/v2/suppliers/sites to find the current prewaveTargetId by matching your supplier identifiers.
+                  value: '{"code":"resource_not_found","message":"Collection with id {collectionId} not found or access denied"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicCollectionDTO:
+      required:
+      - children
+      - id
+      - lanes
+      - name
+      - scope
+      - tiersEnabled
+      - type
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        uuid:
+          type: string
+          format: uuid
+          example: null
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
+        type:
+          type: string
+          enum:
+          - Default
+          - Commodity
+          - Ariba
+          example: null
+        name:
+          type: string
+          example: null
+        count:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        parentId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCollectionDTO'
+          example: null
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicTargetRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave Target ID
+          format: int32
+          example: 102006215
+        name:
+          type: string
+          description: Target name
+          example: Acme Corporation
+      description: Reference to a target (supplier/site)
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

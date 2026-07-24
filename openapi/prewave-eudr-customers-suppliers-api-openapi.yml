@@ -1,0 +1,785 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions EUDR - Customers - Suppliers API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: EUDR - Customers - Suppliers
+  description: Allows you to search for suppliers, find suppliers by IDs or references, and manage supplier connection contacts.
+paths:
+  /public/v2/eudr/customers/suppliers/{supplierId}/connection-contacts:
+    get:
+      tags:
+      - EUDR - Customers - Suppliers
+      summary: Find supplier connection contacts
+      description: "\nRetrieve connection contacts for a supplier, including contacts added by your organization and contacts added by connected customers.\n\nConnection contacts are contact persons associated with suppliers that can be used for communication\nand relationship management. This endpoint returns all available contacts for the specified supplier,\nregardless of which organization added them.\n\n**Use Cases**:\n- Retrieve contact information for supplier communication\n- View contacts added by other connected customers\n- Manage supplier relationship contacts\n\n**Required permissions:** `access_public_products`, `access_public_conn_contacts`, and `READ` on the target\n        "
+      operationId: findConnectionContacts
+      parameters:
+      - name: supplierId
+        in: path
+        description: Supplier target ID for which connection contacts are to be retrieved.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 102006215
+      responses:
+        '200':
+          description: Successfully retrieved connection contacts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicSupplierConnectionContact'
+              examples:
+                Connection contacts:
+                  summary: Contacts available for the supplier
+                  description: Connection contacts
+                  value: '[{"id":42,"email":"procurement@acme.example.com"},{"id":43,"email":"sustainability@acme.example.com"},{"id":44,"email":null}]'
+                No contacts:
+                  summary: Supplier has no connection contacts yet
+                  description: No contacts
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - EUDR - Customers - Suppliers
+      summary: Create connection contact for own or connected supplier
+      description: "\nCreate a new connection contact for a supplier.\n\nThis endpoint allows you to add contact persons to suppliers for relationship management.\nIf the specified target is not currently a supplier, it will be automatically connected as one.\n\n**Use Cases**:\n- Add contact persons to suppliers\n- Maintain supplier contact information\n- Enable supplier communication\n\n**Required permissions:** `access_public_products`, `access_public_mng_conn_contacts`, and `READ` on the target\n        "
+      operationId: createConnectionContact
+      parameters:
+      - name: supplierId
+        in: path
+        description: Supplier target ID for whom new contacts will be created. If the given target is not a supplier, it will be automatically created as one.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 102006215
+      requestBody:
+        description: Connection contact email address.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicConnectionContactPayload'
+            examples:
+              Create connection contact:
+                summary: Add a contact by email address
+                description: Create connection contact
+                value: '{"email":"new.contact@example.com"}'
+        required: true
+      responses:
+        '200':
+          description: Connection contact created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSupplierConnectionContact'
+              examples:
+                Created connection contact:
+                  summary: Newly created contact with assigned ID
+                  description: Created connection contact
+                  value: '{"id":45,"email":"new.contact@example.com"}'
+        '400':
+          description: Invalid payload (e.g., missing required fields or invalid email format).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Missing required fields:
+                  summary: Required fields missing in payload
+                  description: Missing required fields
+                  value:
+                    code: invalid_request
+                    message: Email is required
+                    solution: Provide all required fields in the payload
+                Invalid email format:
+                  summary: Email format is invalid
+                  description: Invalid email format
+                  value:
+                    code: invalid_request
+                    message: Invalid email format
+                    solution: Provide a valid email address
+        '404':
+          description: Supplier not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Supplier not found:
+                  summary: The specified supplier does not exist
+                  description: Supplier not found
+                  value:
+                    code: not_found
+                    message: Supplier with ID 102006215 not found
+                    solution: Verify the supplier ID
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/suppliers:
+    get:
+      tags:
+      - EUDR - Customers - Suppliers
+      summary: Find suppliers by their IDs or references where at least one of the two parameters must be provided and maximum allowed is 100.
+      description: "\nFind suppliers by providing either a list of target IDs or a list of references. Exactly one of the two parameters must be provided. The maximum number of allowed IDs or references is limited to 100. Returns a list of supplier details for the provided identifiers, including screening status, references, connection contacts, and supplier maturity when available.\n\n**Use Cases**:\n- Look up suppliers by internal target IDs\n- Resolve suppliers by external reference codes\n- Retrieve supplier details for product or compliance workflows\n\n**Required permission:** `access_public_products`\n        "
+      operationId: findSuppliers_1
+      parameters:
+      - name: targetIds
+        in: query
+        description: 'List of supplier target IDs. Must not be provided together with ''refs''. Maximum allowed: 100.'
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 102006215
+      - name: refs
+        in: query
+        description: 'List of supplier references. Must not be provided together with ''targetIds''. Maximum allowed: 100.'
+        required: false
+        schema:
+          type: array
+        example: ERP-12345
+      responses:
+        '200':
+          description: List of suppliers matching the provided IDs or references.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicEUDRSupplier'
+              examples:
+                Suppliers by IDs or references:
+                  summary: Suppliers with references, contacts, and maturity status
+                  description: Suppliers by IDs or references
+                  value: '[{"id":102006215,"name":"Acme Manufacturing Inc","location":"Vienna","isPublic":true,"organization":{"id":200,"name":"Acme Group","location":"Vienna"},"screened":true,"references":[{"id":"ERP-12345","source":"erp"},{"id":"ERP-789","source":"internal"}],"connectionContacts":[{"id":42,"email":"procurement@acme.example.com"},{"id":43,"email":"sustainability@acme.example.com"}],"supplierMaturity":{"answerStatus":"Good","answerHidden":false}},{"id":102006216,"name":"Beta Timber Ltd","location":"London","isPublic":false,"organization":null,"screened":false,"references":[{"id":"REF-001","source":"Manual"}],"connectionContacts":[],"supplierMaturity":null}]'
+                No suppliers found:
+                  summary: None of the provided identifiers matched a supplier
+                  description: No suppliers found
+                  value: []
+        '400':
+          description: 'Invalid parameters: both or neither of targetIds and refs provided, or exceeded maximum allowed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Both parameters provided:
+                  summary: Both targetIds and refs provided
+                  description: Both parameters provided
+                  value:
+                    code: invalid_request
+                    message: Exactly one of targetIds or refs must be provided
+                    solution: Provide either targetIds or refs, but not both
+                Neither parameter provided:
+                  summary: Neither targetIds nor refs provided
+                  description: Neither parameter provided
+                  value:
+                    code: invalid_request
+                    message: At least one of targetIds or refs must be provided
+                    solution: Provide either targetIds or refs parameter
+                Exceeded maximum:
+                  summary: Too many identifiers provided
+                  description: Exceeded maximum
+                  value:
+                    code: invalid_request
+                    message: Maximum allowed identifiers exceeded
+                    solution: Reduce the number of identifiers to the maximum allowed limit
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/suppliers/search:
+    get:
+      tags:
+      - EUDR - Customers - Suppliers
+      summary: 'Search for supplier sites (max results: 100)'
+      description: "\nSearch for supplier sites by a free-text query. Only site-type suppliers are returned.\nThe query must be at least 3 characters long. The maximum number of results is limited to\n100. If the query is too short or no matching supplier type\nis found, an error is returned.\n\n**Use Cases**:\n- Search for suppliers by name or identifier\n- Find supplier sites for product associations\n- Discover available suppliers\n\n**Required permission:** `access_public_products`\n        "
+      operationId: queryPoiTargets
+      parameters:
+      - name: query
+        in: query
+        description: The search string (minimum 3 characters). Used to match supplier names or other identifying information.
+        required: true
+        schema:
+          minLength: 3
+          type: string
+        example: Acme
+      responses:
+        '200':
+          description: List of supplier sites matching the search criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicEUDRTarget'
+              examples:
+                Supplier search results:
+                  summary: Supplier sites matching a free-text query
+                  description: Supplier search results
+                  value: '[{"id":102006215,"name":"Acme Manufacturing Inc","location":"Vienna","isPublic":true,"organization":{"id":200,"name":"Acme Group","location":"Vienna"}},{"id":102006216,"name":"Beta Timber Ltd","location":"London","isPublic":false,"organization":null}]'
+                No matches:
+                  summary: Query returned no supplier sites
+                  description: No matches
+                  value: []
+        '400':
+          description: Query too short or invalid parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Query too short:
+                  summary: Query parameter is less than 3 characters
+                  description: Query too short
+                  value:
+                    code: invalid_request
+                    message: Query must be at least 3 characters long
+                    solution: Provide a query string with at least 3 characters
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    PublicEUDROrganization:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Organization ID
+          format: int32
+          example: 201
+        name:
+          type: string
+          description: Organization name
+          example: Global Supplies Inc.
+        location:
+          type: string
+          description: Organization location
+          nullable: true
+          example: New York
+      description: Organization information for a supplier. Contains organization ID, name, and location.
+      example: null
+    PublicEUDRTarget:
+      required:
+      - id
+      - isPublic
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Supplier ID
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Supplier name
+          example: Acme Corp
+        location:
+          type: string
+          description: Supplier location
+          nullable: true
+          example: Vienna
+        isPublic:
+          type: boolean
+          description: Indicates if the supplier profile is public
+          example: true
+        organization:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicEUDROrganization'
+          example: null
+      description: Public representation of a target. Contains basic target information and associated organization if available.
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    PublicEUDRSupplier:
+      required:
+      - id
+      - isPublic
+      - name
+      - screened
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Supplier ID
+          format: int32
+          example: 101
+        name:
+          type: string
+          description: Supplier name
+          example: Acme Corp
+        location:
+          type: string
+          description: Supplier location
+          nullable: true
+          example: Vienna
+        isPublic:
+          type: boolean
+          description: Indicates if the supplier profile is public
+          example: true
+        organization:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicEUDROrganization'
+          example: null
+        screened:
+          type: boolean
+          description: Indicates if the supplier has been screened or not
+          example: true
+        references:
+          type: array
+          description: List of references associated with the supplier
+          nullable: true
+          items:
+            $ref: '#/components/schemas/PublicSupplierReference'
+          example: null
+        connectionContacts:
+          type: array
+          description: List of connection contacts for the supplier
+          nullable: true
+          items:
+            $ref: '#/components/schemas/PublicSupplierConnectionContact'
+          example: null
+        supplierMaturity:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicSupplierMaturity'
+          example: null
+      description: Public representation of a supplier. Contains detailed supplier information, screening status, references, and connection contacts.
+      example: null
+    PublicSupplierMaturity:
+      type: object
+      properties:
+        answerStatus:
+          type: string
+          description: Enum representing possible statuses for a supplier's questionnaire answer in the public API.
+          nullable: true
+          enum:
+          - Requested
+          - InProgress
+          - Good
+          - Critical
+          example: null
+        answerHidden:
+          type: boolean
+          description: True if the answer is hidden due to permission status (e.g., denied or not requested), otherwise false.
+          nullable: true
+          example: null
+      description: Public API payload representing the status of a supplier maturity assessment
+      example: null
+    PublicSupplierConnectionContact:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the connection contact.
+          format: int32
+          example: 42
+        email:
+          type: string
+          description: Email address of the connection contact. May be null if not provided.
+          format: email
+          nullable: true
+          example: contact@example.com
+      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
+      example: null
+    PublicSupplierReference:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Reference ID
+          example: REF-001
+        source:
+          type: string
+          description: Source of the reference
+          nullable: true
+          example: SAP
+      description: Reference information for a supplier. Contains reference ID and source.
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicConnectionContactPayload:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the connection contact.
+          format: email
+          example: contact@example.com
+      description: Payload for creating or updating a connection contact. Contains the contact's email address.
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

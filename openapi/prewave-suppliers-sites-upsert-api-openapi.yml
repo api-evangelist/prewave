@@ -1,0 +1,1395 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Suppliers - Sites Upsert API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Suppliers - Sites Upsert
+  description: Allows you to create or update sites.
+paths:
+  /public/v1/sites-upsert/process:
+    post:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Force the processing of all pending site upsert requests.
+      description: "\nTrigger processing of all queued site upsert requests. Intended for administrative use.\n\n**Required permission:** `sites_upsert_admin`\n\n**Performance impact:** Medium\n    "
+      operationId: forceProcessing
+      responses:
+        '200':
+          description: Processing triggered successfully
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/sites-upsert/full:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: List all site upsert requests for your organisation.
+      description: '
+
+        List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low
+
+        '
+      operationId: listRequests
+      responses:
+        '200':
+          description: Successfully retrieved site upsert requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicSitesUpsertRequestEntry'
+              examples:
+                Site upsert request list:
+                  summary: Requests in progress and completed
+                  description: Site upsert request list
+                  value: '[{"requestId":"550e8400-e29b-41d4-a716-446655440001","status":"Work in progress","created":"2026-01-15T10:30:00Z"},{"requestId":"550e8400-e29b-41d4-a716-446655440002","status":"Done","created":"2026-01-10T14:00:00Z"}]'
+                No requests:
+                  summary: Organisation has no site upsert requests yet
+                  description: No requests
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Upsert suppliers and their desired collections with a full load.
+      description: '
+
+        Full load means that all sites need to exist in the request payload.
+
+        Existing sites not part of the payload will be removed from the managed collections in this request.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Medium
+
+        '
+      operationId: fullLoad
+      requestBody:
+        description: Full load payload containing all sites that should remain active
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFullSitesUpsertPayload'
+            examples:
+              Full load request:
+                summary: Replace managed sites with the supplied list
+                description: Full load request
+                value: '{"siteData":[{"name":"Acme Manufacturing Inc","countryCode":"DE","locality":"Stuttgart","addressLine":"Industriestrasse 42","postalCode":"70376","industries":[{"industry":"I_AUTOMOTIVE","industryStandard":"MOCK-ISO-42"}],"website":"https://www.acme-manufacturing.example.com","contact":["procurement@acme-manufacturing.example.com"],"yourReference":{"id":"ERP-12345","source":"erp"},"additionalReferences":[{"id":"ACME-VIE-001","source":"erp"}],"connectionType":"Supplier","diImpact":"Mid","biImpact":"Low","priority":"Mid","spendData":500000.0,"collectionNames":["Tier-1 Suppliers","Automotive","Europe"],"externalReferences":[{"externalId":"123456789","system":"duns"}],"postInitScreeningPeriod":3,"impactData":{"year":2025,"bi12MlnEuro":20.0,"grossMttrEMonths":2,"grossMttrIMonths":4,"cocSigned":true,"additionalInformation":"Primary battery assembly supplier"},"safetyStock":{"onPremiseStockLevelMonths":2,"atSupplierLocation":"SameBuilding","atSupplierDeviation":"OnTarget","atSupplierStockLevelMonths":4,"atSupplierLastConfirmedDate":{"date":"2025-11-23","_datetype_":"Date"},"inLogisticChainDaysOnHand":40}},{"name":"Global Parts GmbH","countryCode":"AT","locality":"Vienna","addressLine":"Industriepark 7","postalCode":"1220","industries":null,"website":null,"contact":[],"yourReference":{"id":"ERP-67890","source":"erp"},"additionalReferences":[],"connectionType":"Supplier","diImpact":"Low","biImpact":"Low","priority":null,"spendData":null,"collectionNames":["Tier-2 Suppliers"],"externalReferences":[],"postInitScreeningPeriod":null,"impactData":null,"safetyStock":null}],"purgeOld":true,"dryRun":false}'
+              Full load dry run:
+                summary: Validate the payload without persisting changes
+                description: Full load dry run
+                value: '{"siteData":[{"name":"Acme Manufacturing Inc","countryCode":"DE","locality":"Stuttgart","addressLine":"Industriestrasse 42","postalCode":"70376","industries":[{"industry":"I_AUTOMOTIVE","industryStandard":"MOCK-ISO-42"}],"website":"https://www.acme-manufacturing.example.com","contact":["procurement@acme-manufacturing.example.com"],"yourReference":{"id":"ERP-12345","source":"erp"},"additionalReferences":[{"id":"ACME-VIE-001","source":"erp"}],"connectionType":"Supplier","diImpact":"Mid","biImpact":"Low","priority":"Mid","spendData":500000.0,"collectionNames":["Tier-1 Suppliers","Automotive","Europe"],"externalReferences":[{"externalId":"123456789","system":"duns"}],"postInitScreeningPeriod":3,"impactData":{"year":2025,"bi12MlnEuro":20.0,"grossMttrEMonths":2,"grossMttrIMonths":4,"cocSigned":true,"additionalInformation":"Primary battery assembly supplier"},"safetyStock":{"onPremiseStockLevelMonths":2,"atSupplierLocation":"SameBuilding","atSupplierDeviation":"OnTarget","atSupplierStockLevelMonths":4,"atSupplierLastConfirmedDate":{"date":"2025-11-23","_datetype_":"Date"},"inLogisticChainDaysOnHand":40}},{"name":"Global Parts GmbH","countryCode":"AT","locality":"Vienna","addressLine":"Industriepark 7","postalCode":"1220","industries":null,"website":null,"contact":[],"yourReference":{"id":"ERP-67890","source":"erp"},"additionalReferences":[],"connectionType":"Supplier","diImpact":"Low","biImpact":"Low","priority":null,"spendData":null,"collectionNames":["Tier-2 Suppliers"],"externalReferences":[],"postInitScreeningPeriod":null,"impactData":null,"safetyStock":null}],"purgeOld":true,"dryRun":true}'
+        required: true
+      responses:
+        '200':
+          description: Request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+              examples:
+                Request created:
+                  summary: Use the request ID to poll status and dry-run results
+                  description: Request created
+                  value: '{"requestId":"550e8400-e29b-41d4-a716-446655440001"}'
+        '429':
+          description: API rate limit exceeded
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertValidationFailedResponse'
+              examples:
+                Validation errors:
+                  summary: Per-site validation failures
+                  description: Validation errors
+                  value: '{"validationErrors":[{"yourReference":"ERP-12345","error":"locality must have more than 3 characters"},{"yourReference":"ERP-INVALID","error":"countryCode must be a valid ISO 3166-1 alpha-2 code"}]}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+  /public/v1/sites-upsert/delta:
+    post:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Upsert suppliers and their desired collections with a delta load.
+      description: '
+
+        In contrast to the full load, the delta load only updates the sites in the payload.
+
+        Existing sites not part of the payload will not be removed from managed collections.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Medium
+
+        '
+      operationId: deltaLoad
+      requestBody:
+        description: Delta load payload containing sites to create or update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicDeltaSitesUpsertPayload'
+            examples:
+              Delta load request:
+                summary: Create or update selected sites without removing others
+                description: Delta load request
+                value: '{"siteData":[{"name":"Acme Manufacturing Inc","countryCode":"DE","locality":"Stuttgart","addressLine":"Industriestrasse 42","postalCode":"70376","industries":[{"industry":"I_AUTOMOTIVE","industryStandard":"MOCK-ISO-42"}],"website":"https://www.acme-manufacturing.example.com","contact":["procurement@acme-manufacturing.example.com"],"yourReference":{"id":"ERP-12345","source":"erp"},"additionalReferences":[{"id":"ACME-VIE-001","source":"erp"}],"connectionType":"Supplier","diImpact":"Mid","biImpact":"Low","priority":"Mid","spendData":500000.0,"collectionNames":["Tier-1 Suppliers","Automotive","Europe"],"externalReferences":[{"externalId":"123456789","system":"duns"}],"postInitScreeningPeriod":3,"impactData":{"year":2025,"bi12MlnEuro":20.0,"grossMttrEMonths":2,"grossMttrIMonths":4,"cocSigned":true,"additionalInformation":"Primary battery assembly supplier"},"safetyStock":{"onPremiseStockLevelMonths":2,"atSupplierLocation":"SameBuilding","atSupplierDeviation":"OnTarget","atSupplierStockLevelMonths":4,"atSupplierLastConfirmedDate":{"date":"2025-11-23","_datetype_":"Date"},"inLogisticChainDaysOnHand":40}}],"dryRun":false}'
+        required: true
+      responses:
+        '200':
+          description: Request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+              examples:
+                Request created:
+                  description: Request created
+                  value: '{"requestId":"550e8400-e29b-41d4-a716-446655440001"}'
+        '429':
+          description: API rate limit exceeded
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertValidationFailedResponse'
+              examples:
+                Validation errors:
+                  description: Validation errors
+                  value: '{"validationErrors":[{"yourReference":"ERP-12345","error":"locality must have more than 3 characters"},{"yourReference":"ERP-INVALID","error":"countryCode must be a valid ISO 3166-1 alpha-2 code"}]}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+    delete:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Disable edges to suppliers and remove them from managed collections.
+      description: "\nDeactivate supplier edges identified by your references.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      operationId: deactivateEdges
+      parameters:
+      - name: dryRun
+        in: query
+        description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        description: List of your references to deactivate
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SitesUpsertYourReference'
+            examples:
+              References to deactivate:
+                summary: Supplier references from your ERP or internal systems
+                description: References to deactivate
+                value: '[{"id":"ERP-12345","source":"erp"},{"id":"ERP-LEGACY-99","source":"erp"}]'
+        required: true
+      responses:
+        '200':
+          description: Request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+              examples:
+                Request created:
+                  description: Request created
+                  value: '{"requestId":"550e8400-e29b-41d4-a716-446655440001"}'
+        '429':
+          description: API rate limit exceeded
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestCreatedResponse'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+  /public/v1/sites-upsert/{requestId}/matched-targets:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Get details of matched targets.
+      description: "\nRetrieve targets matched during processing of a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      operationId: getMatchedTargets
+      parameters:
+      - name: requestId
+        in: path
+        description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440001
+      responses:
+        '200':
+          description: Successfully retrieved matched targets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicSitesUpsertMatchedTarget'
+              examples:
+                Matched targets:
+                  summary: Target matched to a submitted site reference
+                  description: Matched targets
+                  value: '[{"targetId":102006215,"name":"Acme Manufacturing Inc","createdAt":{"date":"2026-01-15T11:00:00","_datetype_":"DateTime"},"edgeNumbers":[{"number":"ERP-12345","source":"erp","existingEdgeId":null},{"number":"ACME-VIE-001","source":"erp","existingEdgeId":null}]}]'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/sites-upsert/{requestId}/dry-runs:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Get the list of dry runs for a specific request.
+      description: "\nList dry runs associated with a site upsert request. Use a dry-run ID with the dry-run report endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      operationId: getDryRuns
+      parameters:
+      - name: requestId
+        in: path
+        description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440001
+      responses:
+        '200':
+          description: Successfully retrieved dry runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SitesUpsertDryRunDTO'
+              examples:
+                Dry run list:
+                  summary: Dry runs created for a request
+                  description: Dry run list
+                  value: '[{"requestId":"550e8400-e29b-41d4-a716-446655440001","dryRunId":"660e8400-e29b-41d4-a716-446655440001","time":{"date":"2026-01-15T10:35:00","_datetype_":"DateTime"}}]'
+                No dry runs:
+                  summary: Request has no dry runs yet
+                  description: No dry runs
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/sites-upsert/requests:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: List all site upsert requests for your organisation.
+      description: '
+
+        List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low
+
+        '
+      operationId: listRequests_1
+      responses:
+        '200':
+          description: Successfully retrieved site upsert requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicSitesUpsertRequestEntry'
+              examples:
+                Site upsert request list:
+                  summary: Requests in progress and completed
+                  description: Site upsert request list
+                  value: '[{"requestId":"550e8400-e29b-41d4-a716-446655440001","status":"Work in progress","created":"2026-01-15T10:30:00Z"},{"requestId":"550e8400-e29b-41d4-a716-446655440002","status":"Done","created":"2026-01-10T14:00:00Z"}]'
+                No requests:
+                  summary: Organisation has no site upsert requests yet
+                  description: No requests
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/sites-upsert/full/{requestId}:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Get the status of a specific site upsert request.
+      description: "\nRetrieve processing status and per-site outcomes for a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      operationId: fullLoadStatus
+      parameters:
+      - name: requestId
+        in: path
+        description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440001
+      responses:
+        '200':
+          description: Successfully retrieved request status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesUpsertRequestStatusResponse'
+              examples:
+                Request status with mixed site outcomes:
+                  summary: Sites in Done, Work in progress, and Failed states
+                  description: Request status with mixed site outcomes
+                  value: '{"status":"Work in progress","reason":null,"sites":[{"id":1,"yourReference":"ERP-12345","yourReferenceSource":"erp","status":"Done","statusText":null,"prewaveId":102006215},{"id":2,"yourReference":"ERP-67890","yourReferenceSource":"erp","status":"Work in progress","statusText":"Matching supplier in Prewave network","prewaveId":null},{"id":3,"yourReference":"ERP-INVALID","yourReferenceSource":"erp","status":"Failed","statusText":"Country code must be a valid ISO 3166-1 alpha-2 code","prewaveId":null}]}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/sites-upsert/dry-run/{dryRunId}:
+    get:
+      tags:
+      - Suppliers - Sites Upsert
+      summary: Download the dry-run results report.
+      description: "\nDownload an Excel report for a dry run. Obtain the dry-run ID from the `{requestId}/dry-runs` endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      operationId: getDryRunReport
+      parameters:
+      - name: dryRunId
+        in: path
+        description: Dry-run ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 660e8400-e29b-41d4-a716-446655440001
+      responses:
+        '200':
+          description: Excel spreadsheet containing dry-run results
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet: {}
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    SitesUpsertSafetyStockPayload:
+      type: object
+      properties:
+        onPremiseStockLevelMonths:
+          type: integer
+          description: Safety stocks on premise of goods purchased from this supplier
+          format: int32
+          nullable: true
+          example: 2
+        atSupplierLocation:
+          type: string
+          description: The supplier location
+          nullable: true
+          example: SameBuilding
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+        atSupplierDeviation:
+          type: string
+          description: Deviation from the agreed upon Safety Stock
+          nullable: true
+          example: OnTarget
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+        atSupplierStockLevelMonths:
+          type: integer
+          description: Agreed upon safety stock at the supplier
+          format: int32
+          nullable: true
+          example: 4
+        atSupplierLastConfirmedDate:
+          type: string
+          description: Date on which the safety stock level was last confirmed by the supplier.
+          format: date
+          nullable: true
+          example: '2023-11-23'
+        inLogisticChainDaysOnHand:
+          type: integer
+          description: Stock Level currently on the logistics chain to the production facilities.
+          format: int32
+          nullable: true
+          example: 40
+      example: null
+    SitesUpsertDryRunDTO:
+      required:
+      - dryRunId
+      - requestId
+      - time
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
+          example: null
+        dryRunId:
+          type: string
+          description: The ID of the dry run. This ID can be used to retrieve the dry run results.
+          format: uuid
+          example: null
+        time:
+          type: string
+          description: The time when the dry run was created.
+          format: date-time
+          example: null
+      example: null
+    SitesUpsertValidationFailedResponse:
+      required:
+      - validationErrors
+      type: object
+      properties:
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertValidationErrorEntry'
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    SitesUpsertPayloadSiteEntry:
+      required:
+      - addressLine
+      - countryCode
+      - locality
+      - name
+      - yourReference
+      type: object
+      properties:
+        name:
+          type: string
+          description: "The human-readable name for the Site, usually canonical.\n            |The name must refer to an organization that is publicly registered\n            |and carries out its main activity in that specific location."
+          example: null
+        countryCode:
+          type: string
+          description: Alpha-2 ISO Code of the address. See https://www.iso.org/obp/ui for details.
+          example: AT
+        locality:
+          type: string
+          description: "Refers to the city/town portion of the address.\n            |In regions of the world where localities are not well defined or do not fit into this structure well, choose the closest locally instead.\n            |Must have more than 3 characters."
+          example: null
+        addressLine:
+          type: string
+          description: Unstructured address lines describing the lower levels of an address. Usually this is a street name and house number.
+          example: Rothschildplatz 4, 3rd Floor
+        postalCode:
+          type: string
+          description: Postal code of the address. Not all countries use or require postal codes to be present, but where they are used, they may trigger additional validation with other parts of the address.
+          nullable: true
+          example: '1020'
+        industries:
+          type: array
+          description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/SitesUpsertIndustryDefinitionPayload'
+          example: null
+        website:
+          type: string
+          description: The official website for this site, such as the homepage of a business.
+          nullable: true
+          example: https://www.prewave.com
+        contact:
+          type: array
+          description: List of email addresses for the site's contacts to complete self-assessments.
+          nullable: true
+          items:
+            type: string
+            description: List of email addresses for the site's contacts to complete self-assessments.
+            example: null
+          example: null
+        yourReference:
+          $ref: '#/components/schemas/SitesUpsertYourReference'
+        additionalReferences:
+          type: array
+          description: A list of additional references that identify a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
+          items:
+            $ref: '#/components/schemas/SitesUpsertYourReference'
+          default: []
+          example: null
+        connectionType:
+          type: string
+          description: "How the Site is associated with your organization.\n            |For reports and analysis, the connection type functions as a filter within the Prewave platform."
+          example: Supplier
+          default: Supplier
+          enum:
+          - Supplier
+          - Customer
+          - Own
+        diImpact:
+          type: string
+          description: "Your estimated \"Degree of Influence Forced Impact\" on the operation of the site.\n            |Assess your site's risk and prioritize it by determining the level of impact."
+          nullable: true
+          example: Low
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+        biImpact:
+          type: string
+          description: "Your estimated \"Business Interruption Forced Impact\" on the operation of the site.\n            |Assess your site's risk and prioritize it by determining the level of impact."
+          nullable: true
+          example: Low
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+        priority:
+          type: string
+          description: Priority of the alerts for that Site.
+          nullable: true
+          example: Mid
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+        spendData:
+          type: number
+          description: "The total value of the goods and/or services you purchased at that site in EUR per year.\n            |Prewave can automatically evaluate its impact based on the spending data you provide and the total revenue of the site."
+          format: double
+          nullable: true
+          example: 500000.0
+        collectionNames:
+          type: array
+          description: A list of collections in which you want to group your site.
+          nullable: true
+          example:
+          - product group
+          - responsible supplier manager
+          - responsible team
+          - region
+          - product
+          items:
+            type: string
+            description: A list of collections in which you want to group your site.
+            example: '["product group","responsible supplier manager","responsible team","region","product"]'
+        externalReferences:
+          type: array
+          description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/SitesUpsertExternalReferencePayload'
+          example: null
+        postInitScreeningPeriod:
+          type: integer
+          description: "Request a history screening of the site (in years to be screened) to be triggered automatically right after the onboarding.\n             |Additional costs may apply, quota is affected."
+          format: int32
+          nullable: true
+          example: null
+        impactData:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SitesUpsertImpactDataPayload'
+          example: null
+        safetyStock:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SitesUpsertSafetyStockPayload'
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    SitesUpsertExternalReferencePayload:
+      required:
+      - externalId
+      - system
+      type: object
+      properties:
+        externalId:
+          type: string
+          description: The external identifier
+          example: DUNS_123
+        system:
+          type: string
+          description: The external identifier type
+          example: duns
+      description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
+      example: null
+    SitesUpsertRequestCreatedResponse:
+      required:
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: string
+          example: null
+        source:
+          type: string
+          nullable: true
+          example: null
+        existingEdgeId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    SitesUpsertRequestStatusResponse:
+      required:
+      - sites
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        reason:
+          type: string
+          nullable: true
+          example: null
+        sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertSiteStatusEntry'
+          example: null
+      example: null
+    PublicSitesUpsertRequestEntry:
+      required:
+      - created
+      - requestId
+      - status
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
+          example: null
+        status:
+          type: string
+          description: Status of the sites upsert request
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        created:
+          type: string
+          description: The time when the request was created
+          format: date-time
+          example: null
+      example: null
+    PublicSitesUpsertMatchedTarget:
+      required:
+      - createdAt
+      - edgeNumbers
+      - name
+      - targetId
+      type: object
+      properties:
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        edgeNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+      example: null
+    SitesUpsertYourReference:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: A textual identifier that uniquely identifies a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
+          example: ERP-ID-123
+        source:
+          type: string
+          description: An identifier that determines which system the “your_reference” originates. The source could be any ERP system or any internal tool you use to maintain your data
+          nullable: true
+          example: erp
+      example: null
+    PublicDeltaSitesUpsertPayload:
+      required:
+      - dryRun
+      - siteData
+      type: object
+      properties:
+        siteData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
+          example: null
+        dryRun:
+          type: boolean
+          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+          example: null
+      example: null
+    SitesUpsertImpactDataPayload:
+      required:
+      - year
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Year of this impact data
+          format: int32
+          example: 2024
+        bi12MlnEuro:
+          type: number
+          description: The Business Interruption-12 Value is the revenue generated with the products produced with the suppliers goods. It represents the revenue at risk in case this supplier fails to deliver.
+          format: double
+          nullable: true
+          example: 20.0
+        grossMttrEMonths:
+          type: integer
+          description: "Mean time to recovery (mttr) in months in case of an \"elementary loss\" of this suppliers facility.\n            |In other words: \"How long does it take to shift production to another site or another supplier?\" "
+          format: int32
+          nullable: true
+          example: 2
+        grossMttrIMonths:
+          type: integer
+          description: "Mean time to recovery (mttr) in months in case of an \"insolvency loss\" of this suppliers facility.\n            |In other words: \"'\"How long does it take to shift production to another site or another supplier?\" "
+          format: int32
+          nullable: true
+          example: 4
+        cocSigned:
+          type: boolean
+          description: Did this supplier sign our Code of Conduct?
+          nullable: true
+          example: true
+        additionalInformation:
+          type: string
+          description: Additional text information regarding this impact data
+          nullable: true
+          example: null
+      description: Data related to calculating the impact.
+      example: null
+    SitesUpsertSiteStatusEntry:
+      required:
+      - id
+      - status
+      - yourReference
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        yourReference:
+          type: string
+          example: null
+        yourReferenceSource:
+          type: string
+          nullable: true
+          example: null
+        status:
+          type: string
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        statusText:
+          type: string
+          nullable: true
+          example: null
+        prewaveId:
+          type: integer
+          description: If status is "Done" this will reference the site on Prewave
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    SitesUpsertValidationErrorEntry:
+      required:
+      - error
+      - yourReference
+      type: object
+      properties:
+        yourReference:
+          type: string
+          example: null
+        error:
+          type: string
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicFullSitesUpsertPayload:
+      required:
+      - dryRun
+      - siteData
+      type: object
+      properties:
+        siteData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
+          example: null
+        dryRun:
+          type: boolean
+          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+          example: null
+      example: null
+    SitesUpsertIndustryDefinitionPayload:
+      required:
+      - industry
+      - industryStandard
+      type: object
+      properties:
+        industry:
+          type: string
+          description: The industry identifier based on the standard
+          example: I_AUTOMOTIVE
+        industryStandard:
+          type: string
+          description: The industry standard used
+          example: MOCK-ISO-42
+      description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

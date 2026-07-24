@@ -1,0 +1,2130 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions EUDR - Customers - DDS API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: EUDR - Customers - DDS
+  description: 🆕 NEW - Allows you to manage customer Due Diligence Statements (DDS), including creating, updating, submitting, withdrawing customer DDS, and viewing supplier DDS associated with products.
+paths:
+  /public/v2/eudr/customers/customer-dds/{ddsId}:
+    put:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Update a customer DDS for an inbound product
+      description: "\nUpdates an existing customer Due Diligence Statement (DDS) identified by `ddsId`.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Update compliance statements\n- Modify due diligence information\n- Correct DDS data before submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      operationId: updateCustomerDDS
+      parameters:
+      - name: ddsId
+        in: path
+        description: ID of the customer DDS to update.
+        required: true
+        schema:
+          type: integer
+        example: 123
+      requestBody:
+        description: Updated customer DDS payload. Same shape as the create request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicCustomerDDSPayload'
+            examples:
+              Update customer DDS:
+                summary: Revised product measures and references
+                description: Update customer DDS
+                value: '{"eoriNumber":"EU123456789","customerName":"Acme GmbH","customerCity":"Vienna","customerPostalCode":"1010","customerStreet":"Main Street 1","customerCountryId":14,"activityType":"Import","countryOfActivityId":14,"originRequestReferences":[{"reference":["PO-2025-001","PO-2025-002"],"type":"PurchaseOrder"},{"reference":["SHP-2025-042"],"type":"ShipmentNumber"}],"netWeightInKg":1250.75,"quantity":10,"unit":"m3"}'
+        required: true
+      responses:
+        '200':
+          description: Customer DDS updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCustomerDDS'
+              examples:
+                Updated customer DDS:
+                  summary: Customer DDS after a successful update
+                  description: Updated customer DDS
+                  value: '{"id":123,"active":true,"referenceNumber":"EU-REF-12345","verificationNumber":"VER-987654","date":{"date":"2025-09-30T12:00:00","_datetype_":"DateTime"},"archived":false,"archiveDate":null,"origins":[],"eoriNumber":"EU123456789","customerName":"Acme GmbH","customerCity":"Vienna","customerPostalCode":"1010","customerStreet":"Main Street 1","customerCountry":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"state":"Available","operatorType":"RepresentativeOperator","activityType":"Import","countryOfActivity":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"originRequestReferences":[{"ddsId":456,"reference":"PO-2025-001","type":"PurchaseOrder"},{"ddsId":457,"reference":"SHP-2025-042","type":"ShipmentNumber"}],"productName":"Oak Wood Planks","productDescription":"Sawn oak wood planks, 2 m length, kiln-dried","netWeightInKg":1250.75,"quantity":10,"unit":"m3","hsCode":"440799","submissionError":null}'
+        '400':
+          description: Invalid request payload (e.g. missing required fields, invalid values).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Missing field:
+                  description: Missing field
+                  value:
+                    code: invalid_payload
+                    message: Field 'eoriNumber' is required
+                Missing unit for HS code:
+                  description: Missing unit for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit is required for HS code 123456
+                Missing quantity for HS code:
+                  description: Missing quantity for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quanity is required for HS code 123456
+                Unit not supported for HS code:
+                  description: Unit not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit must be omitted because no unit definition exists for HS code 123456
+                Quantity not supported for HS code:
+                  description: Quantity not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quantity must be omitted because no unit definition exists for HS code 123456
+        '404':
+          description: DDS not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    delete:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Delete a customer DDS before successful submission
+      description: "\nDelete a customer Due Diligence Statement (DDS) while it is new or in submission-error state.\n\nThis endpoint permanently removes the specified customer DDS.\nIt cannot be used for DDS entries that have already been submitted or made available.\nUse with caution as this operation cannot be undone.\n\n**Required permission:** `access_public_products` and access to the DDS\n        "
+      operationId: deleteCustomerDDS
+      parameters:
+      - name: ddsId
+        in: path
+        description: ID of the customer DDS to delete.
+        required: true
+        schema:
+          type: integer
+        example: 123
+      responses:
+        '204':
+          description: Customer DDS deleted successfully.
+          content: {}
+        '400':
+          description: Invalid request payload (e.g. missing required fields, invalid values).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Missing field:
+                  description: Missing field
+                  value:
+                    code: invalid_payload
+                    message: Field 'eoriNumber' is required
+                Missing unit for HS code:
+                  description: Missing unit for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit is required for HS code 123456
+                Missing quantity for HS code:
+                  description: Missing quantity for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quanity is required for HS code 123456
+                Unit not supported for HS code:
+                  description: Unit not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit must be omitted because no unit definition exists for HS code 123456
+                Quantity not supported for HS code:
+                  description: Quantity not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quantity must be omitted because no unit definition exists for HS code 123456
+        '404':
+          description: DDS not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/customer-dds/{ddsId}/submission:
+    put:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Submit a customer DDS to TracesNT system
+      description: "\nSubmits the specified customer Due Diligence Statement (DDS) to the TracesNT system for regulatory processing.\nReturns `202 Accepted` if the request is successfully queued for processing.\n\n**Use Cases**:\n- Submit DDS to regulatory system\n- Complete compliance workflow\n- Register DDS with authorities\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      operationId: submitCustomerDDS
+      parameters:
+      - name: ddsId
+        in: path
+        description: ID of the customer DDS to submit.
+        required: true
+        schema:
+          type: integer
+        example: 123
+      responses:
+        '202':
+          description: Request accepted for processing.
+          content: {}
+        '400':
+          description: Invalid request payload (e.g. missing required fields, invalid values).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Missing field:
+                  description: Missing field
+                  value:
+                    code: invalid_payload
+                    message: Field 'eoriNumber' is required
+                Missing unit for HS code:
+                  description: Missing unit for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit is required for HS code 123456
+                Missing quantity for HS code:
+                  description: Missing quantity for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quanity is required for HS code 123456
+                Unit not supported for HS code:
+                  description: Unit not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit must be omitted because no unit definition exists for HS code 123456
+                Quantity not supported for HS code:
+                  description: Quantity not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quantity must be omitted because no unit definition exists for HS code 123456
+        '404':
+          description: DDS not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/{productId}/customer-dds:
+    get:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Fetch customer DDS entries for a product
+      description: "\nReturns all customer Due Diligence Statements (DDS) associated with the given inbound or outbound product.\nOnly accessible if the caller has read permission for the product.\n\n**Use Cases**:\n- View all customer DDS entries for a product\n- Track compliance statements\n- Review DDS history and submission status\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+      operationId: findCustomerDDS
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product for which to fetch customer DDS entries.
+        required: true
+        schema:
+          type: integer
+        example: 301
+      responses:
+        '200':
+          description: List of customer DDS entries for the product.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicCustomerDDS'
+              examples:
+                Customer DDS list:
+                  summary: Multiple customer DDS entries including an available and a submission-error state
+                  description: Customer DDS list
+                  value: '[{"id":123,"active":true,"referenceNumber":"EU-REF-12345","verificationNumber":"VER-987654","date":{"date":"2025-09-30T12:00:00","_datetype_":"DateTime"},"archived":false,"archiveDate":null,"origins":[],"eoriNumber":"EU123456789","customerName":"Acme GmbH","customerCity":"Vienna","customerPostalCode":"1010","customerStreet":"Main Street 1","customerCountry":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"state":"Available","operatorType":"RepresentativeOperator","activityType":"Import","countryOfActivity":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"originRequestReferences":[{"ddsId":456,"reference":"PO-2025-001","type":"PurchaseOrder"},{"ddsId":457,"reference":"SHP-2025-042","type":"ShipmentNumber"}],"productName":"Oak Wood Planks","productDescription":"Sawn oak wood planks, 2 m length, kiln-dried","netWeightInKg":1250.75,"quantity":10,"unit":"m3","hsCode":"440799","submissionError":null},{"id":124,"active":true,"referenceNumber":null,"verificationNumber":null,"date":{"date":"2025-10-05T09:30:00","_datetype_":"DateTime"},"archived":false,"archiveDate":null,"origins":[],"eoriNumber":"EU987654321","customerName":"Beta Trading AG","customerCity":"Zurich","customerPostalCode":"8001","customerStreet":"Bahnhofstrasse 10","customerCountry":{"id":756,"name":"Switzerland","countryCode":"CH","bounds":null},"state":"SubmissionError","operatorType":"RepresentativeOperator","activityType":"Export","countryOfActivity":{"id":756,"name":"Switzerland","countryCode":"CH","bounds":null},"originRequestReferences":[],"productName":"Plywood Panels","productDescription":"Veneered plywood panels for furniture production","netWeightInKg":850.00,"quantity":25,"unit":"NAR","hsCode":"441510","submissionError":{"code":"INVALID_EORI","detail":"The EORI number could not be validated with the regulatory system.","reasons":["EORI number format is invalid","No matching operator record found"]}}]'
+                No customer DDS entries:
+                  summary: Product has no customer DDS yet
+                  description: No customer DDS entries
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+    post:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Create a new customer DDS for an inbound product
+      description: "\nCreates a new customer Due Diligence Statement (DDS) for the specified inbound product.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Create compliance statements for products\n- Document due diligence information\n- Prepare DDS data before regulatory submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+      operationId: addCustomerDDS
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product for which to create the customer DDS.
+        required: true
+        schema:
+          type: integer
+        example: 301
+      requestBody:
+        description: Customer DDS payload with operator details, activity type, product measures, and optional references.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicCustomerDDSPayload'
+            examples:
+              Create customer DDS:
+                summary: Import activity with purchase order and shipment references
+                description: Create customer DDS
+                value: '{"eoriNumber":"EU123456789","customerName":"Acme GmbH","customerCity":"Vienna","customerPostalCode":"1010","customerStreet":"Main Street 1","customerCountryId":14,"activityType":"Import","countryOfActivityId":14,"originRequestReferences":[{"reference":["PO-2025-001","PO-2025-002"],"type":"PurchaseOrder"},{"reference":["SHP-2025-042"],"type":"ShipmentNumber"}],"netWeightInKg":1250.75,"quantity":10,"unit":"m3"}'
+        required: true
+      responses:
+        '200':
+          description: Customer DDS created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCustomerDDS'
+              examples:
+                Created customer DDS:
+                  summary: Newly created DDS in Available state
+                  description: Created customer DDS
+                  value: '{"id":123,"active":true,"referenceNumber":"EU-REF-12345","verificationNumber":"VER-987654","date":{"date":"2025-09-30T12:00:00","_datetype_":"DateTime"},"archived":false,"archiveDate":null,"origins":[],"eoriNumber":"EU123456789","customerName":"Acme GmbH","customerCity":"Vienna","customerPostalCode":"1010","customerStreet":"Main Street 1","customerCountry":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"state":"Available","operatorType":"RepresentativeOperator","activityType":"Import","countryOfActivity":{"id":14,"name":"Austria","countryCode":"AT","bounds":null},"originRequestReferences":[{"ddsId":456,"reference":"PO-2025-001","type":"PurchaseOrder"},{"ddsId":457,"reference":"SHP-2025-042","type":"ShipmentNumber"}],"productName":"Oak Wood Planks","productDescription":"Sawn oak wood planks, 2 m length, kiln-dried","netWeightInKg":1250.75,"quantity":10,"unit":"m3","hsCode":"440799","submissionError":null}'
+        '400':
+          description: Invalid request payload (e.g. missing required fields, invalid values).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Missing field:
+                  description: Missing field
+                  value:
+                    code: invalid_payload
+                    message: Field 'eoriNumber' is required
+                Missing unit for HS code:
+                  description: Missing unit for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit is required for HS code 123456
+                Missing quantity for HS code:
+                  description: Missing quantity for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quanity is required for HS code 123456
+                Unit not supported for HS code:
+                  description: Unit not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Unit must be omitted because no unit definition exists for HS code 123456
+                Quantity not supported for HS code:
+                  description: Quantity not supported for HS code
+                  value:
+                    code: invalid_payload
+                    message: Quantity must be omitted because no unit definition exists for HS code 123456
+        '404':
+          description: DDS not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/customer-dds/{ddsId}/withdraw:
+    post:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Withdraw a submitted customer DDS
+      description: "\nWithdraws a customer Due Diligence Statement (DDS) from the regulatory system.\nThe DDS must be in `Available` state, and the withdrawal must be requested no later than 72 hours after it becomes available.\nThe withdrawal is completed synchronously; a successful response means both the regulatory withdrawal and local state update completed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      operationId: withdrawCustomerDDS
+      parameters:
+      - name: ddsId
+        in: path
+        description: The ID of the DDS statement.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      responses:
+        '204':
+          description: Customer DDS withdrawn successfully.
+          content: {}
+        '400':
+          description: The DDS ID path parameter is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Invalid DDS ID:
+                  description: Invalid DDS ID
+                  value:
+                    code: invalid_request
+                    message: Invalid request
+                    solution: Fix the request
+        '404':
+          description: The customer DDS is missing or inaccessible in Dashboard, or its submission is missing in the regulatory service.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorDTO'
+                - $ref: '#/components/schemas/TracesNtDDSErrorDTO'
+              examples:
+                DDS unavailable in Dashboard:
+                  description: DDS unavailable in Dashboard
+                  value: '{"code":"resource_not_found","message":"Active customer DDS #123 was not found","solution":null}'
+                DDS submission unavailable in regulatory service:
+                  description: DDS submission unavailable in regulatory service
+                  value: '{"message":"DDS submission not found for withdrawal: 123","reasons":[],"solution":"Please try again later.","code":"tracesnt_dds_error"}'
+        '409':
+          description: The customer DDS is not in `Available` state in Dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeErrorDTO'
+              examples:
+                DDS is not available:
+                  description: DDS is not available
+                  value: '{"code":"customer_dds_withdrawal_not_allowed","message":"Customer DDS #123 cannot be withdrawn from state Submitted","solution":null}'
+        '422':
+          description: The regulatory service rejected the withdrawal, for example because the withdrawal window elapsed, the regulatory status is not withdrawable, or required submission identifiers are missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TracesNtDDSErrorDTO'
+              examples:
+                Withdrawal rejected:
+                  description: Withdrawal rejected
+                  value: '{"message":"The regulatory service rejected the DDS withdrawal","reasons":["EUDR-WITHDRAW-ACTIVE-CHECK"],"solution":"Please try again later.","code":"tracesnt_dds_error"}'
+        '502':
+          description: The regulatory system failed to process the withdrawal or returned an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TracesNtDDSErrorDTO'
+              examples:
+                Unexpected regulatory response:
+                  description: Unexpected regulatory response
+                  value: '{"message":"Traces NT returned an unexpected customer DDS withdrawal response","reasons":["Expected id=123 and tracesNtStatus=WITHDRAWN"],"solution":"Please try again later.","code":"tracesnt_dds_error"}'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/products/{productId}/supplier-dds:
+    get:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Fetch supplier DDS entries for a product
+      description: "\nRetrieve all supplier Due Diligence Statements (DDS) associated with the specified product.\n\nThis endpoint returns all supplier DDS entries that have been submitted for the product,\nincluding origin information provided by suppliers in response to origin requests.\n\n**Use Cases**:\n- View supplier DDS responses for a product\n- Track supplier compliance data\n- Review origin information from suppliers\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+      operationId: findSupplierDDS
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product for which to fetch supplier DDS entries.
+        required: true
+        schema:
+          type: integer
+        example: 301
+      responses:
+        '200':
+          description: List of supplier DDS entries for the product.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicProductSupplierDDS'
+              examples:
+                Supplier DDS list:
+                  summary: Active and archived supplier DDS entries
+                  description: Supplier DDS list
+                  value: '[{"id":201,"active":true,"referenceNumber":"EU-SUP-67890","date":{"date":"2025-08-15T14:00:00","_datetype_":"DateTime"},"netWeightInKg":500.25,"archived":false,"archiveDate":null},{"id":202,"active":false,"referenceNumber":"EU-SUP-11111","date":{"date":"2024-11-20T10:00:00","_datetype_":"DateTime"},"netWeightInKg":320.00,"archived":true,"archiveDate":{"date":"2025-01-10T08:00:00","_datetype_":"DateTime"}}]'
+                No supplier DDS entries:
+                  summary: Product has no supplier DDS responses yet
+                  description: No supplier DDS entries
+                  value: []
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/dds-units:
+    get:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Retrieve all available DDS units along with their associated HS codes
+      description: "\nRetrieve reference data for all available DDS units and their associated HS codes.\n\nThis endpoint returns all DDS units that can be used when creating or updating DDS entries,\nalong with the HS codes that are associated with each unit.\n\n**Use Cases**:\n- Get DDS unit reference data before creating a DDS\n- Populate unit selection dropdowns\n- Validate unit and HS code associations\n\n**Required permission:** `access_public_products`\n        "
+      operationId: findDDSUnits
+      responses:
+        '200':
+          description: List of DDS units with associated HS codes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicDDSUnit'
+              examples:
+                DDS units:
+                  summary: Common units with linked HS codes
+                  description: DDS units
+                  value: '[{"unit":"MTQ","hsCodes":[{"code":"440799","description":"Wood sawn or chipped lengthwise, sliced or peeled, of oak","commodityId":1},{"code":"441510","description":"Plywood, veneered panels and similar laminated wood","commodityId":2}],"description":"Cubic metre"},{"unit":"NAR","hsCodes":[{"code":"441510","description":"Plywood, veneered panels and similar laminated wood","commodityId":2}],"description":"Number of items (pieces)"},{"unit":"KSD","hsCodes":[{"code":"0901","description":"Coffee, whether or not roasted or decaffeinated","commodityId":3}],"description":"Kilogram of substance in dry state"}]'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v2/eudr/customers/supplier-dds/{ddsId}:
+    delete:
+      tags:
+      - EUDR - Customers - DDS
+      summary: Delete a supplier DDS and its origins
+      description: "\nDelete a supplier Due Diligence Statement (DDS) and all its associated origin information.\n\nThis endpoint permanently removes the specified supplier DDS and all related origin data.\nUse with caution as this operation cannot be undone.\n\n**Use Cases**:\n- Remove incorrect supplier DDS entries\n- Clean up duplicate DDS data\n- Delete outdated compliance statements\n\n**Required permission:** `access_public_products` and `DELETE` on the DDS\n        "
+      operationId: deleteSupplierDDS
+      parameters:
+      - name: ddsId
+        in: path
+        description: ID of the supplier DDS to delete.
+        required: true
+        schema:
+          type: integer
+        example: 123
+      responses:
+        '200':
+          description: Supplier DDS deleted successfully.
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    CodeErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        ex:
+          type: object
+          properties:
+            cause:
+              type: object
+              properties:
+                stackTrace:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      classLoaderName:
+                        type: string
+                        example: null
+                      moduleName:
+                        type: string
+                        example: null
+                      moduleVersion:
+                        type: string
+                        example: null
+                      methodName:
+                        type: string
+                        example: null
+                      fileName:
+                        type: string
+                        example: null
+                      lineNumber:
+                        type: integer
+                        format: int32
+                        example: null
+                      className:
+                        type: string
+                        example: null
+                      nativeMethod:
+                        type: boolean
+                        example: null
+                    example: null
+                  example: null
+                message:
+                  type: string
+                  example: null
+                suppressed:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      stackTrace:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            classLoaderName:
+                              type: string
+                              example: null
+                            moduleName:
+                              type: string
+                              example: null
+                            moduleVersion:
+                              type: string
+                              example: null
+                            methodName:
+                              type: string
+                              example: null
+                            fileName:
+                              type: string
+                              example: null
+                            lineNumber:
+                              type: integer
+                              format: int32
+                              example: null
+                            className:
+                              type: string
+                              example: null
+                            nativeMethod:
+                              type: boolean
+                              example: null
+                          example: null
+                        example: null
+                      message:
+                        type: string
+                        example: null
+                      localizedMessage:
+                        type: string
+                        example: null
+                    example: null
+                  example: null
+                localizedMessage:
+                  type: string
+                  example: null
+              example: null
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                    example: null
+                  moduleName:
+                    type: string
+                    example: null
+                  moduleVersion:
+                    type: string
+                    example: null
+                  methodName:
+                    type: string
+                    example: null
+                  fileName:
+                    type: string
+                    example: null
+                  lineNumber:
+                    type: integer
+                    format: int32
+                    example: null
+                  className:
+                    type: string
+                    example: null
+                  nativeMethod:
+                    type: boolean
+                    example: null
+                example: null
+              example: null
+            message:
+              type: string
+              example: null
+            suppressed:
+              type: array
+              items:
+                type: object
+                properties:
+                  stackTrace:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classLoaderName:
+                          type: string
+                          example: null
+                        moduleName:
+                          type: string
+                          example: null
+                        moduleVersion:
+                          type: string
+                          example: null
+                        methodName:
+                          type: string
+                          example: null
+                        fileName:
+                          type: string
+                          example: null
+                        lineNumber:
+                          type: integer
+                          format: int32
+                          example: null
+                        className:
+                          type: string
+                          example: null
+                        nativeMethod:
+                          type: boolean
+                          example: null
+                      example: null
+                    example: null
+                  message:
+                    type: string
+                    example: null
+                  localizedMessage:
+                    type: string
+                    example: null
+                example: null
+              example: null
+            localizedMessage:
+              type: string
+              example: null
+          writeOnly: true
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    PublicOrigin:
+      required:
+      - active
+      - country
+      - createdAt
+      - id
+      - plot
+      - plotAreaHa
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Origin name
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          description: Active status
+          example: null
+        producedAtStart:
+          type: string
+          description: Production start date
+          format: date-time
+          nullable: true
+          example: null
+        producedAtEnd:
+          type: string
+          description: Production end date
+          format: date-time
+          nullable: true
+          example: null
+        producer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProducer'
+          example: null
+        country:
+          $ref: '#/components/schemas/PublicCountry'
+        plot:
+          $ref: '#/components/schemas/PublicFeatureCollection'
+        plotAreaHa:
+          type: number
+          description: Plot area in hectares
+          format: double
+          example: null
+        dds:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProductSupplierDDS'
+          example: null
+        request:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicMinimalOriginRequest'
+          example: null
+        pendingProducerDiscoveryRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicProducerDiscoveryRequest'
+          example: null
+        countryRisk:
+          type: string
+          description: Public EUDR risk.
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          example: null
+        pendingDFRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicPendingDFRequest'
+          example: null
+        dfCheck:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheck'
+          example: null
+        dfCheckResult:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheckResult'
+          example: null
+        legalityCheck:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicOriginLegalityCheck'
+          example: null
+        weight:
+          type: number
+          description: Weight, if origin is provided from an origin request with weight
+          nullable: true
+          example: null
+        createdAt:
+          type: string
+          description: Creation date of the origin
+          format: date-time
+          example: null
+        updatedAt:
+          type: string
+          description: Last update date of the origin
+          format: date-time
+          example: null
+      description: List of product's origins
+      example: null
+    PublicOriginRequestRef:
+      required:
+      - id
+      - reference
+      - referenceType
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Request ID
+          format: int32
+          example: null
+        reference:
+          type: string
+          description: Reference label
+          example: null
+        referenceType:
+          type: string
+          description: Public product reference type.
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+          example: null
+      description: References date of the origin request
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicSubmissionError:
+      required:
+      - code
+      - detail
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        detail:
+          type: string
+          description: Human readable details about the error
+          example: null
+        reasons:
+          type: array
+          description: Detailed reasons about the error, if any
+          nullable: true
+          items:
+            type: string
+            description: Detailed reasons about the error, if any
+            example: null
+          example: null
+      description: Details about a submission error, if state is SUBMISSION_ERROR
+      example: null
+    PublicDDSUnit:
+      required:
+      - hsCodes
+      - unit
+      type: object
+      properties:
+        unit:
+          type: string
+          description: Unit of the DDS (e.g., NAR, MTQ, KSD)
+          example: NAR
+        hsCodes:
+          $ref: '#/components/schemas/PublicProductHSCode'
+        description:
+          type: string
+          description: Description of the DDS unit
+          nullable: true
+          example: Cubic meter of sawn wood
+      example: null
+    PublicGeometrySchema:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
+          example: null
+        coordinates:
+          type: array
+          description: Geometry coordinates
+          items:
+            type: array
+            description: Geometry coordinates
+            items:
+              type: array
+              description: Geometry coordinates
+              items:
+                type: number
+                description: Geometry coordinates
+                format: double
+                example: null
+              example: null
+            example: null
+          example: null
+      description: Geometry plot object
+      example: null
+    PublicProductHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: HS code
+          example: '440799'
+        description:
+          type: string
+          description: HS code description
+          nullable: true
+          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
+        commodityId:
+          type: integer
+          description: Commodity ID for the HS code
+          format: int32
+          nullable: true
+          example: 1
+      description: List of HS codes associated with this DDS unit
+      example: null
+    PublicMinimalOriginRequest:
+      required:
+      - createdAt
+      - id
+      - references
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin request ID
+          format: int32
+          example: null
+        createdAt:
+          type: string
+          description: Creation date of the origin request
+          format: date-time
+          example: null
+        status:
+          type: string
+          description: Public origin request status.
+          enum:
+          - Requested
+          - Answered
+          - Rejected
+          - Canceled
+          - Delayed
+          example: null
+        references:
+          type: array
+          description: References date of the origin request
+          items:
+            $ref: '#/components/schemas/PublicOriginRequestRef'
+          example: null
+      description: Origin request references
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    PublicCountry:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Country ID
+          format: int32
+          example: 14
+        name:
+          type: string
+          description: Country name
+          example: Austria
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Country code in form of ISO 3166-1 alpha-2 code
+          nullable: true
+          example: AT
+        bounds:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+      description: Country where the economic activity is taking place
+      example: null
+    PublicProductSupplierDDS:
+      required:
+      - active
+      - archived
+      - date
+      - id
+      - netWeightInKg
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Supplier DDS ID
+          format: int32
+          example: 201
+        active:
+          type: boolean
+          description: Active status
+          example: true
+        referenceNumber:
+          type: string
+          description: Reference number
+          nullable: true
+          example: EU-REF-12345
+        date:
+          type: string
+          description: DDS date
+          format: date-time
+          example: null
+        netWeightInKg:
+          type: number
+          description: Net Weight in Kg
+          example: 100.5
+        archived:
+          type: boolean
+          description: Archived
+          example: false
+        archiveDate:
+          type: string
+          description: Archive date
+          format: date-time
+          nullable: true
+          example: null
+      description: Supplier DDS
+      example: null
+    TracesNtDDSErrorDTO:
+      required:
+      - code
+      - message
+      - reasons
+      - solution
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        reasons:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+        solution:
+          type: string
+          example: null
+        code:
+          type: string
+          enum:
+          - duplicate_key
+          - foreign_key_violation
+          - data_integrity_violation
+          - data_access
+          - database_query_timeout
+          - resource_not_found
+          - invalid_json
+          - parameter_missing
+          - missing_property
+          - invalid_request
+          - record_not_found
+          - credits_off
+          - price_request_not_accepted
+          - microservice_not_configured
+          - microservice_not_available
+          - duplicate_edge_number
+          - duplicate_edge_source
+          - invalid_edge_number
+          - permission_limit_exceeded
+          - permission_limit_value_missing
+          - work_in_progress
+          - http_method_not_supported
+          - ds_exchange_conflict
+          - ds_detailed_update_error
+          - follows_collection_not_found
+          - not_implemented
+          - general_connection_contact_missing
+          - denied_for_private_organization
+          - report_already_fetched
+          - unknown_error
+          - multiple_target_found
+          - graph_not_available_for_non_tier_collection
+          - passed
+          - assertion_failed
+          - error_occured
+          - only_one_active_bafa_report_allowed_per_customer
+          - action_not_found
+          - action_status_not_found
+          - action_update_failed
+          - role_not_found
+          - alert_label_not_found
+          - alert_not_found
+          - customer_not_found
+          - connection_contact_not_found
+          - collection_not_found
+          - edge_not_found
+          - incident_not_found
+          - infotag_not_found
+          - invitation_not_found
+          - perspective_not_found
+          - target_not_found
+          - supplier_not_found
+          - commodity_level_not_found
+          - exposure_analysis_not_found
+          - graph_size_reached
+          - empty_exposure_collection
+          - tier_n_collection_not_found
+          - plan_not_found
+          - team_not_found
+          - user_not_found
+          - geo_json_syntax
+          - answer_blocked
+          - tracesnt_dds_error
+          - customer_dds_withdrawal_not_allowed
+          - origin_request_update_error
+          - hs_code_not_found
+          - unsupported_product_regulation
+          - missing_wooden_product_scientific_name
+          - origin_request_product_unsupported
+          - target_score_not_available
+          - demo_user_not_found
+          - no_customer_for_given_organization
+          - demo_user_already_exists
+          - cache_missing
+          - invalid_group_id
+          - unsupported_component
+          - risk_analysis_has_snapshot
+          - risk_analysis_monitor_quota_exceeded
+          - risk_analysis_already_monitored
+          example: null
+      example: null
+    PublicDFCheck:
+      required:
+      - checkDate
+      - deforestedArea
+      - numberOfAlerts
+      - pictures
+      - primaryForestArea
+      type: object
+      properties:
+        checkDate:
+          type: string
+          description: Deforestation check date
+          format: date-time
+          example: null
+        primaryForestArea:
+          type: number
+          description: Available forest area in hectares
+          format: double
+          example: null
+        deforestedArea:
+          type: number
+          description: Deforested area in hectares
+          format: double
+          example: null
+        numberOfAlerts:
+          type: integer
+          description: Number of alerts
+          format: int32
+          example: null
+        pictures:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: null
+          example: null
+      description: Result of deforestation check request
+      example: null
+    PublicFeature:
+      required:
+      - geometry
+      - properties
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/PublicGeometrySchema'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          example: null
+      example: null
+    PublicDFCheckResult:
+      required:
+      - outdated
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Public deforestation status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+        outdated:
+          type: boolean
+          description: Is the check outdated
+          example: null
+      description: Deforestation check result status
+      example: null
+    Score:
+      required:
+      - risk
+      - value
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+          example: null
+        risk:
+          type: string
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicCustomerDDS:
+      required:
+      - active
+      - activityType
+      - archived
+      - customerCity
+      - customerCountry
+      - customerName
+      - customerPostalCode
+      - customerStreet
+      - date
+      - eoriNumber
+      - hsCode
+      - id
+      - netWeightInKg
+      - operatorType
+      - origins
+      - productDescription
+      - productName
+      - state
+      type: object
+      properties:
+        id:
+          type: integer
+          description: DDS ID
+          format: int32
+          example: null
+        active:
+          type: boolean
+          description: Active status
+          example: null
+        referenceNumber:
+          type: string
+          description: Reference number
+          nullable: true
+          example: null
+        verificationNumber:
+          type: string
+          description: Verification number
+          nullable: true
+          example: null
+        date:
+          type: string
+          description: DDS date
+          format: date-time
+          example: null
+        archived:
+          type: boolean
+          description: Archived
+          example: null
+        archiveDate:
+          type: string
+          description: Archive date
+          format: date-time
+          nullable: true
+          example: null
+        origins:
+          type: array
+          description: List of DDS origins
+          items:
+            $ref: '#/components/schemas/PublicOrigin'
+          example: null
+        eoriNumber:
+          type: string
+          description: EORI number of the customer
+          example: EU123456789
+        customerName:
+          type: string
+          description: Name of the customer as stated on the DDS
+          example: Acme GmbH
+        customerCity:
+          type: string
+          description: City of the customer as stated on the DDS
+          example: Vienna
+        customerPostalCode:
+          type: string
+          description: Postal code of the customer as stated on the DDS
+          example: '1010'
+        customerStreet:
+          type: string
+          description: Street of the customer as stated on the DDS
+          example: Main Street 1
+        customerCountry:
+          $ref: '#/components/schemas/PublicCountry'
+        state:
+          type: string
+          description: Public customer DDS state.
+          example: Available
+          enum:
+          - New
+          - Submitting
+          - Submitted
+          - SubmissionError
+          - Available
+          - Rejected
+          - Cancelled
+          - Withdrawn
+          - Archived
+          - Suspended
+          - Updated
+          - Grouped
+          - Obsolete
+        operatorType:
+          type: string
+          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
+          example: RepresentativeOperator
+          enum:
+          - RepresentativeOperator
+          - Operator
+          - Trader
+        activityType:
+          type: string
+          description: Public activity type.
+          example: Import
+          enum:
+          - Import
+          - Export
+          - Domestic
+          - Trade
+        countryOfActivity:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicCountry'
+          example: null
+        originRequestReferences:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDDSReference'
+          example: null
+        productName:
+          type: string
+          description: Product name label
+          example: Wooden Table
+        productDescription:
+          type: string
+          description: Product description label
+          example: Oak wood table, 2m x 1m
+        netWeightInKg:
+          type: number
+          description: Net Weight in Kg
+          example: 100.5
+        quantity:
+          type: number
+          description: Product quantity (additional info)
+          nullable: true
+          example: 10
+        unit:
+          type: string
+          description: Quantity unit
+          nullable: true
+          example: kg
+        hsCode:
+          type: string
+          description: HS code
+          example: '440799'
+        submissionError:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicSubmissionError'
+          example: null
+      example: null
+    PublicDDSReference:
+      required:
+      - ddsId
+      - reference
+      - type
+      type: object
+      properties:
+        ddsId:
+          type: integer
+          description: Referenced DDS ID
+          format: int32
+          example: 456
+        reference:
+          type: string
+          description: Reference label
+          example: PO-2025-001
+        type:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: List of DDS references
+      example: null
+    PublicOriginLegalityCheck:
+      required:
+      - scoreAvail
+      - status
+      type: object
+      properties:
+        score:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Score'
+          example: null
+        scoreAvail:
+          type: string
+          description: Public score availability.
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        status:
+          type: string
+          description: Public legality assessment status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+      description: Legality check result
+      example: null
+    PublicPendingDFRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Public deforestation check type.
+          enum:
+          - Basic
+          - Advanced
+          example: null
+      description: Public pending deforestation request details.
+      example: null
+    PublicFeatureCollection:
+      required:
+      - features
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFeature'
+          example: null
+      description: Plot of the origin
+      example: null
+    PublicProducer:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Target ID of the producer
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Producer name
+          example: null
+        geo:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+        countryId:
+          type: integer
+          description: Country ID of the producer
+          format: int32
+          nullable: true
+          example: null
+      description: Producer of the origin
+      example: null
+    PublicDDSReferencePayload:
+      required:
+      - reference
+      - type
+      type: object
+      properties:
+        reference:
+          type: array
+          description: Reference labels (e.g. purchase order numbers, shipment numbers).
+          example:
+          - PO-2025-001
+          - PO-2025-002
+          items:
+            type: string
+            description: Reference labels (e.g. purchase order numbers, shipment numbers).
+            example: '["PO-2025-001","PO-2025-002"]'
+        type:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: Reference for a DDS statement, including one or more reference labels and the reference type.
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicCustomerDDSPayload:
+      required:
+      - activityType
+      - customerCity
+      - customerCountryId
+      - customerName
+      - customerPostalCode
+      - customerStreet
+      - eoriNumber
+      - netWeightInKg
+      type: object
+      properties:
+        eoriNumber:
+          type: string
+          description: EORI number of the customer.
+          example: EU123456789
+        customerName:
+          type: string
+          description: Name of the customer as stated on the DDS.
+          example: Acme GmbH
+        customerCity:
+          type: string
+          description: City of the customer as stated on the DDS.
+          example: Vienna
+        customerPostalCode:
+          type: string
+          description: Postal code of the customer as stated on the DDS.
+          example: '1010'
+        customerStreet:
+          type: string
+          description: Street of the customer as stated on the DDS.
+          example: Main Street 1
+        customerCountryId:
+          type: integer
+          description: ID of the customer's home country (see /countries endpoint).
+          format: int32
+          example: 14
+        operatorType:
+          type: string
+          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
+          nullable: true
+          example: RepresentativeOperator
+          deprecated: true
+          enum:
+          - RepresentativeOperator
+          - Operator
+          - Trader
+        activityType:
+          type: string
+          description: Public activity type.
+          example: Import
+          enum:
+          - Import
+          - Export
+          - Domestic
+          - Trade
+        countryOfActivityId:
+          type: integer
+          description: ID of the country where the economic activity is taking place (see /countries endpoint).
+          format: int32
+          nullable: true
+          example: 14
+        originRequestReferences:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PublicDDSReferencePayload'
+          example: null
+        netWeightInKg:
+          type: number
+          description: Net weight of the product in kg.
+          example: 100.5
+        quantity:
+          type: number
+          description: Product quantity (additional info).
+          nullable: true
+          example: 10
+        unit:
+          type: string
+          description: Unit of the quantity (e.g. kg, t, m3).
+          nullable: true
+          example: kg
+      description: Payload for creating or updating a Customer DDS. Contains all required and optional fields for a customer DDS statement, including references and product measures.
+      example: null
+    PublicProducerDiscoveryRequest:
+      required:
+      - id
+      - name
+      - originId
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Producer discovery request ID
+          format: int32
+          example: null
+        originId:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Producer name
+          example: null
+        targetId:
+          type: integer
+          description: Producer Target ID
+          format: int32
+          nullable: true
+          example: null
+      description: Pending producer discovery request
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header

@@ -1,0 +1,3519 @@
+openapi: 3.0.1
+info:
+  title: Public Prewave Actions Exposure API
+  description: 'Documentation of the Public Prewave API.
+
+
+    ## What''s New
+
+
+    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
+
+
+    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
+
+
+    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
+
+    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
+
+    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
+
+
+    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
+
+
+    ### Q2 2026 — Supplier Screening and External Scores
+
+
+    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
+
+
+    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
+
+    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
+
+    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
+
+
+    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
+
+
+    ### Q3 2026 — Scores Webhooks
+
+
+    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
+
+
+    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
+
+    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ### Q4 2026 — Feed V2
+
+
+    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
+
+
+    - **Availability:** Details will be announced before release.
+
+    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
+
+
+    Documentation updates will be provided prior to release.
+
+
+    ---
+
+
+    ## Authentication
+
+    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
+
+    endpoint needs present as a http header.
+
+
+    To pass the token in a request, simply add it as a header-parameter with
+
+    * key = X-Auth-Token
+
+    * value = api-token
+
+
+    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
+
+    ```
+
+    curl --request GET \
+
+    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
+
+    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
+
+    ```
+
+
+    ---
+
+
+    ## Manage API Tokens
+
+
+    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
+
+    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
+
+    your sales-contact at Prewave or contact us via info@prewave.ai
+
+
+    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
+
+    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
+
+
+    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
+
+    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
+
+
+    ---
+
+
+    ## Default Rate Limits
+
+
+    We have two types of default rate limits. For increased access, please contact customer success.
+
+
+    | Type                              | Requests per 10 seconds | Requests per Minute |
+
+    |-----------------------------------|-------------------------|---------------------|
+
+    | GET requests                      | 100                     | 500                 |
+
+    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
+
+
+    '
+  version: '1.0'
+servers:
+- url: https://api.prewave.com
+  description: Production Environment
+security:
+- Token authentication: []
+tags:
+- name: Exposure
+  description: Get exposure analysis graph and targets
+paths:
+  /public/v1/alpha/exposure/target/{targetId}/graph:
+    put:
+      tags:
+      - Exposure
+      summary: Get exposure graph by target id
+      description: '**Performance impact**: Medium'
+      operationId: getExposureGraphByTargetId
+      parameters:
+      - name: targetId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseExposurePayload'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExplorerGraph'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/alpha/exposure/target/{systemId}/{targetId}/graph:
+    put:
+      tags:
+      - Exposure
+      summary: Get exposure graph by foreign system target id
+      description: '**Performance impact**: Medium'
+      operationId: getExposureGraphByForeignSystemTargetId
+      parameters:
+      - name: systemId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseExposurePayload'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExplorerGraph'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/alpha/exposure/{id}:
+    get:
+      tags:
+      - Exposure
+      summary: Get exposure analysis info by exposure analysis id
+      description: '**Performance impact**: Medium'
+      operationId: getExposureAnalysisById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExposureAnalysis'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+  /public/v1/alpha/exposure/{id}/graph:
+    get:
+      tags:
+      - Exposure
+      summary: Get exposure graph by exposure analysis id
+      description: '**Performance impact**: Medium'
+      operationId: getExposureGraphById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ExposureFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExposureGraph'
+        '403':
+          description: '403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessDeniedErrorDTO'
+              examples:
+                Access denied example:
+                  summary: User lacks necessary permissions or authentication
+                  value: "{\n        \"loggedIn\": true,\n        \"code\": \"access_denied\",\n        \"message\": \"Access denied: you don't have necessary permissions to access this resource\",\n        \"solution\": \"Contact support for appropriate permissions\"\n    }"
+        '500':
+          description: 500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              examples:
+                Error - Server Error:
+                  summary: Unexpected server error
+                  value: "{\n        \"code\": \"internal_error\",\n        \"message\": \"An unexpected error occurred\",\n        \"solution\": \"Please try again later or contact support\"\n    }"
+        '429':
+          description: '429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateLimitResponse'
+              examples:
+                Rate limit exceeded example:
+                  summary: API rate limit exceeded
+                  value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
+components:
+  schemas:
+    ExposureReason:
+      required:
+      - name
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Collection
+          - Target
+          - Country
+          - Tariff
+          - ExportRestrictions
+          example: null
+        name:
+          type: string
+          example: null
+      example: null
+    TargetForeignSystemDTO:
+      required:
+      - id
+      - system
+      type: object
+      properties:
+        system:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        source:
+          type: string
+          nullable: true
+          example: null
+      example: null
+    PermissionDTO:
+      required:
+      - authority
+      - limits
+      type: object
+      properties:
+        authority:
+          type: string
+          example: null
+        limits:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    InfotagTypeDTO:
+      required:
+      - active
+      - display
+      - ordering
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+        active:
+          type: boolean
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        display:
+          type: boolean
+          example: null
+      example: null
+    ExposureAnalysis:
+      required:
+      - baseCollections
+      - collectionCommodityFilters
+      - commodityFilter
+      - customerId
+      - date
+      - exposedCollections
+      - exposedCountries
+      - id
+      - maxTiers
+      - name
+      - scopePrivate
+      - scopePublic
+      - scopeShared
+      - sourceCustomer
+      - sourceCustoms
+      - sourceMedia
+      - sourcePrewavePrediction
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        baseCollections:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+          example: null
+        date:
+          type: string
+          format: date-time
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          enum:
+          - Collection
+          - Target
+          - TargetList
+          - Country
+          - Alert
+          - Scenario
+          example: null
+        maxTiers:
+          type: integer
+          format: int32
+          example: null
+        scopePrivate:
+          type: boolean
+          example: null
+        scopeShared:
+          type: boolean
+          example: null
+        scopePublic:
+          type: boolean
+          example: null
+        sourceCustoms:
+          type: boolean
+          example: null
+        sourcePrewavePrediction:
+          type: boolean
+          example: null
+        sourceMedia:
+          type: boolean
+          example: null
+        sourceCustomer:
+          type: boolean
+          example: null
+        minShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        shipmentsPeriodFrom:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        shipmentsPeriodTo:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        minProbability:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        commodityFilter:
+          $ref: '#/components/schemas/CommodityFilter'
+        collectionCommodityFilters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommodityFilter'
+          example: null
+        exposedCollections:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+          example: null
+        exposedCountries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetRef'
+          example: null
+        exposedTarget:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRef'
+          example: null
+        exposedAlertId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        scenarioId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    Data:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+      discriminator:
+        propertyName: type
+      example: null
+    InfotagDTO:
+      required:
+      - id
+      - isTarget
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          $ref: '#/components/schemas/InfotagTypeDTO'
+        value:
+          type: string
+          nullable: true
+          example: null
+        svalue:
+          type: string
+          nullable: true
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        numValue:
+          type: number
+          nullable: true
+          example: null
+        priority:
+          type: string
+          description: Obsolete
+          nullable: true
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type: string
+          nullable: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        isTarget:
+          type: boolean
+          example: null
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    InfotagGroup:
+      required:
+      - id
+      - name
+      - ordering
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          example: null
+        icon:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    CustomerData:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Data'
+      example: null
+    RiskAnalysis:
+      required:
+      - approvedForReport
+      - collectionIds
+      - date
+      - diModel
+      - id
+      - impactT80
+      - isArchived
+      - locks
+      - name
+      - periodFrom
+      - periodTo
+      - perspective
+      - reason
+      - regularity
+      - riskT80
+      - scope
+      - scopingCountryShare
+      - targetType
+      - tiern
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        perspective:
+          $ref: '#/components/schemas/PerspectiveDTO'
+        targetType:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        periodFrom:
+          type: string
+          format: date
+          example: null
+        periodTo:
+          type: string
+          format: date
+          example: null
+        date:
+          type: string
+          format: date
+          example: null
+        riskT80:
+          type: integer
+          format: int32
+          example: null
+        impactT80:
+          type: number
+          format: double
+          example: null
+        diModel:
+          type: string
+          enum:
+          - Direct
+          - Parent
+          - Auto
+          example: null
+        locks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskAnalysisLock'
+          example: null
+        isArchived:
+          type: boolean
+          example: null
+        regularity:
+          type: string
+          enum:
+          - Regular
+          - Adhoc
+          example: null
+        reason:
+          type: array
+          items:
+            type: string
+            enum:
+            - InternalDecisions
+            - ExternalFactors
+            - SubstantiatedKnowledge
+            - ChangeNewProducts
+            - ChangeNewAreas
+            - Other
+            example: null
+          example: null
+        specificOccasion:
+          type: string
+          nullable: true
+          example: null
+        approvedForReport:
+          type: boolean
+          example: null
+        findings:
+          type: string
+          nullable: true
+          example: null
+        scope:
+          type: string
+          enum:
+          - OwnBusinessArea
+          - Suppliers
+          - Customers
+          example: null
+        type:
+          $ref: '#/components/schemas/RiskAnalysisType'
+        tiern:
+          type: boolean
+          example: null
+        countryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        industryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        purchaseVolumeThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        collectionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        scopingCountryShare:
+          type: number
+          format: double
+          example: null
+      example: null
+    ExplorerTarget:
+      required:
+      - commodityIds
+      - id
+      - name
+      - tier
+      - weight
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: int32
+          example: null
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        weight:
+          type: number
+          format: double
+          example: null
+        purchase:
+          type: number
+          nullable: true
+          example: null
+        nShipments:
+          type: integer
+          format: int32
+          nullable: true
+          writeOnly: true
+          example: null
+        exposedSuppliersCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        baseSuppliersCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        commodityIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ExplorerGraph:
+      required:
+      - linkSets
+      - tiers
+      type: object
+      properties:
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExplorerTier'
+          example: null
+        linkSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExplorerLinkSet'
+          example: null
+      example: null
+    Geometry:
+      type: object
+      additionalProperties: true
+      description: 'GeoJSON-compatible geometry object. Fields follow the GeoJSON spec (https://geojson.org): a `type` string (e.g. `Point`, `Polygon`) and a `coordinates` array.'
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    ExplorerLink:
+      required:
+      - from
+      - fromWeight
+      - to
+      - toWeight
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/ExplorerTargetRef'
+        to:
+          $ref: '#/components/schemas/ExplorerTargetRef'
+        fromWeight:
+          type: number
+          format: double
+          example: null
+        toWeight:
+          type: number
+          format: double
+          example: null
+        edgeDetails:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/EdgeDetails'
+          example: null
+      example: null
+    RiskAnalysisType:
+      required:
+      - availablePerspectives
+      - hideDetails
+      - products
+      - recommended
+      - scoping
+      - tierNAnalysisEnabled
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Default
+          - LkSG
+          - Norwegian Transparancy Act
+          - CSDDD (Beta)
+          - EU Battery Regulation
+          example: null
+        hideDetails:
+          type: boolean
+          example: null
+        recommended:
+          type: boolean
+          example: null
+        tierNAnalysisEnabled:
+          type: boolean
+          example: null
+        scoping:
+          type: boolean
+          example: null
+        products:
+          type: boolean
+          example: null
+        component:
+          type: string
+          nullable: true
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
+        perspectiveId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        availablePerspectives:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        countryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        industryScoreThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        purchaseVolumeThreshold:
+          type: number
+          format: double
+          nullable: true
+          example: null
+      example: null
+    DeliverySettingTypeDTO:
+      required:
+      - displayName
+      - frequency
+      - inherited
+      - minPriority
+      - ordering
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Feed
+          - EmailRealtime
+          - EmailDaily
+          - EmailWeekly
+          example: null
+        displayName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        frequency:
+          type: string
+          example: null
+        minPriority:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        inherited:
+          type: boolean
+          example: null
+      example: null
+    RoleTypeDTO:
+      required:
+      - displayName
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+      example: null
+    ExposureCommodity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      example: null
+    RoleDTO:
+      required:
+      - id
+      - permissions
+      - roleName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/RoleTypeDTO'
+          example: null
+        roleName:
+          type: string
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionDTO'
+          example: null
+      example: null
+    TargetRequestTypeStatusDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        status:
+          type: string
+          nullable: true
+          enum:
+          - NONE
+          - PENDING
+          - COMPLETED
+          - REJECTED
+          example: null
+        rejectionReason:
+          type: string
+          nullable: true
+          example: null
+      example: null
+    ExposureGraph:
+      required:
+      - aggregatedStats
+      - baseTargetCount
+      - baseTargets
+      - graph
+      - targets
+      type: object
+      properties:
+        graph:
+          $ref: '#/components/schemas/ExplorerGraph'
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureTarget'
+          example: null
+        baseTargetCount:
+          type: integer
+          format: int32
+          example: null
+        baseTargets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseTarget'
+          example: null
+        aggregatedStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureTargetStat'
+          example: null
+      example: null
+    TeamDTO:
+      required:
+      - id
+      - name
+      - users
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        organizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+          example: null
+      example: null
+    MediaData:
+      required:
+      - mediaSources
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Data'
+      - type: object
+        properties:
+          mediaSources:
+            type: array
+            items:
+              type: string
+              example: null
+            example: null
+        example: null
+      example: null
+    TargetDTO:
+      required:
+      - children
+      - collectionFollowing
+      - collectionPath
+      - collectionPaths
+      - ctype
+      - edges
+      - followerCount
+      - following
+      - foreignSystems
+      - geo
+      - geoShape
+      - hsCodes
+      - id
+      - industries
+      - isAnonymous
+      - managed
+      - maturityAssessment
+      - name
+      - own
+      - parents
+      - path
+      - paths
+      - sanctionStatus
+      - screened
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          nullable: true
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        backgroundPicture:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        website:
+          type: string
+          nullable: true
+          example: null
+        location:
+          type: string
+          nullable: true
+          example: null
+        yearFounded:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        size:
+          type: string
+          nullable: true
+          enum:
+          - Small
+          - Medium
+          - Large
+          - Very large
+          example: null
+        screened:
+          type: boolean
+          example: null
+        maturityAssessment:
+          type: boolean
+          example: null
+        linkedInId:
+          type: string
+          nullable: true
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        ctype:
+          $ref: '#/components/schemas/TargetCTypeDTO'
+        geo:
+          $ref: '#/components/schemas/Geo'
+        geoShape:
+          $ref: '#/components/schemas/Geo'
+        address:
+          type: string
+          nullable: true
+          example: null
+        muted:
+          type: boolean
+          nullable: true
+          example: null
+        hierarchyCustomerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        hierarchyOrganizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        level:
+          type: string
+          nullable: true
+          example: null
+        parents:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        customer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        industries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        monitoredSince:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        earliestAlert:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        followerCount:
+          type: integer
+          format: int32
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        disruptionStatusUpdate:
+          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
+        sustainabilityStatus:
+          type: string
+          nullable: true
+          enum:
+          - NoRisk
+          - AtRisk
+          - RedFlag
+          example: null
+        own:
+          type: boolean
+          example: null
+        managed:
+          type: boolean
+          example: null
+        isPublic:
+          type: boolean
+          nullable: true
+          example: null
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDTO'
+          example: null
+        connection:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Connection'
+          example: null
+        connectionContactsCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        population:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        following:
+          type: boolean
+          example: null
+        collectionFollowing:
+          type: boolean
+          example: null
+        tier:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetRef'
+          example: null
+        paths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/TargetRef'
+            example: null
+          example: null
+        collectionLevel:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        collectionPath:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        collectionPaths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/CollectionRef'
+            example: null
+          example: null
+        foreignSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetForeignSystemDTO'
+          example: null
+        scoreAvail:
+          type: string
+          nullable: true
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        revenue:
+          type: number
+          nullable: true
+          example: null
+        isRevenueEstimated:
+          type: boolean
+          nullable: true
+          example: null
+        actualRevenue:
+          type: number
+          nullable: true
+          example: null
+        revenueAvailability:
+          type: string
+          nullable: true
+          enum:
+          - Unknown
+          - Available
+          example: null
+        hsCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        grievanceUrl:
+          type: string
+          nullable: true
+          example: null
+        sanctionStatus:
+          type: string
+          enum:
+          - DIRECT
+          - INDIRECT
+          - NONE
+          example: null
+        countryScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        industryScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        commodityScoreAvailable:
+          type: boolean
+          nullable: true
+          example: null
+        isAnonymous:
+          type: boolean
+          example: null
+        customName:
+          type: string
+          nullable: true
+          example: null
+        latestRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        public:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    EdgeDTO:
+      required:
+      - active
+      - customerId
+      - derived
+      - fromId
+      - id
+      - mediaSources
+      - numbers
+      - priority
+      - source
+      - toId
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        priority:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        fromId:
+          type: integer
+          format: int32
+          example: null
+        toId:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+        scope:
+          type: string
+          nullable: true
+          enum:
+          - Private
+          - Shared
+          - Public
+          example: null
+        source:
+          type: string
+          description: Source of the supplier relationship edge
+          enum:
+          - Customer
+          - Media
+          - Customs
+          - PrewavePrediction
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        numberHSCodes:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipmentDate:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        probability:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mediaSources:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+        active:
+          type: boolean
+          example: null
+        derived:
+          type: boolean
+          example: null
+        impactData:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/EdgeImpactData'
+          example: null
+        edgeNumbers:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+        numbers:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: null
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type: string
+          nullable: true
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type: string
+          description: Possible solution to the error
+          nullable: true
+          example: null
+      description: Error response
+      example: null
+    Shipment:
+      required:
+      - hscode
+      type: object
+      properties:
+        hscode:
+          type: integer
+          format: int32
+          example: null
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+        lastShipment:
+          type: string
+          format: date
+          nullable: true
+          example: null
+      example: null
+    UserDTO:
+      required:
+      - firstname
+      - id
+      - lastname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: null
+        firstname:
+          minLength: 1
+          type: string
+          nullable: true
+          example: null
+        lastname:
+          minLength: 1
+          type: string
+          nullable: true
+          example: null
+        department:
+          type: string
+          nullable: true
+          example: null
+        position:
+          type: string
+          nullable: true
+          example: null
+        profilePic:
+          type: string
+          nullable: true
+          example: null
+        customer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        userHash:
+          type: string
+          nullable: true
+          example: null
+        settings:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/UserSettings'
+          example: null
+        activePlan:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PlanDTO'
+          example: null
+        active:
+          type: boolean
+          nullable: true
+          example: null
+        confirmed:
+          type: boolean
+          nullable: true
+          example: null
+        roles:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+          example: null
+        teams:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/TeamDTO'
+          example: null
+        perspective:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        organizations:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        defaultEdgeType:
+          type: string
+          nullable: true
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        language:
+          type: string
+          nullable: true
+          enum:
+          - en
+          - de
+          - fr
+          - it
+          - ch
+          example: null
+        collection:
+          $ref: '#/components/schemas/CollectionDTO'
+        passwordValidUntil:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        riskAnalysis:
+          $ref: '#/components/schemas/RiskAnalysis'
+        phone:
+          type: string
+          nullable: true
+          example: null
+        wechatId:
+          type: string
+          nullable: true
+          example: null
+        peerScoreToggle:
+          type: boolean
+          nullable: true
+          example: null
+        resilienceScoreToggle:
+          type: boolean
+          nullable: true
+          example: null
+      example: null
+    UserSystemAttributes:
+      required:
+      - incognitoOnboarding
+      - onboardingFlowComplete
+      type: object
+      properties:
+        onboardingFlowComplete:
+          type: boolean
+          example: null
+        incognitoOnboarding:
+          type: boolean
+          example: null
+        joinCustomer:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        supplierOnboardingData:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/SupplierOnboardingData'
+          example: null
+      example: null
+    ExplorerLinkSet:
+      required:
+      - fromTier
+      - links
+      - toTier
+      type: object
+      properties:
+        fromTier:
+          type: integer
+          format: int32
+          example: null
+        toTier:
+          type: integer
+          format: int32
+          example: null
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExplorerLink'
+          example: null
+      example: null
+    SupplierOnboardingData:
+      required:
+      - customerId
+      - supplierId
+      type: object
+      properties:
+        supplierId:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    Connection:
+      required:
+      - createdAt
+      - customer1Id
+      - customer2Id
+      - initiatorCustomerId
+      - pending
+      - state
+      - targetCustomerId
+      type: object
+      properties:
+        customer1Id:
+          type: integer
+          format: int32
+          example: null
+        customer2Id:
+          type: integer
+          format: int32
+          example: null
+        initiatorCustomerId:
+          type: integer
+          format: int32
+          example: null
+        state:
+          type: string
+          enum:
+          - Confirmed
+          - Rejected
+          - Failed
+          example: null
+        pending:
+          type: boolean
+          example: null
+        initiatorId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        comment:
+          type: string
+          nullable: true
+          example: null
+        email:
+          type: string
+          nullable: true
+          example: null
+        text:
+          type: string
+          nullable: true
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        targetCustomerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    DisruptionStatusUpdate:
+      required:
+      - assignedAt
+      - assignmentMethod
+      - status
+      - targetId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        assignedAt:
+          type: string
+          format: date-time
+          example: null
+        assignedBy:
+          $ref: '#/components/schemas/UserDTO'
+        comment:
+          type: string
+          nullable: true
+          example: null
+        continuity:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        impactedParts:
+          type: array
+          nullable: true
+          items:
+            type: string
+            example: null
+          example: null
+        forCustomer:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        status:
+          $ref: '#/components/schemas/DisruptionStatus'
+        assignmentMethod:
+          type: string
+          enum:
+          - MANUAL
+          - AUTOMATIC
+          example: null
+      example: null
+    BaseExposurePayload:
+      required:
+      - collectionCommodityFilters
+      - commodityFilter
+      - exposedCollectionIds
+      - exposedCountryIds
+      - exposedTargetIds
+      - maxTiers
+      - scopePrivate
+      - scopePublic
+      - scopeShared
+      - sourceCustomer
+      - sourceCustoms
+      - sourceMedia
+      - sourcePrewavePrediction
+      - type
+      type: object
+      properties:
+        maxTiers:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          enum:
+          - Collection
+          - Target
+          - TargetList
+          - Country
+          - Alert
+          - Scenario
+          example: null
+        scopePrivate:
+          type: boolean
+          example: null
+        scopeShared:
+          type: boolean
+          example: null
+        scopePublic:
+          type: boolean
+          example: null
+        sourceCustoms:
+          type: boolean
+          example: null
+        sourcePrewavePrediction:
+          type: boolean
+          example: null
+        sourceMedia:
+          type: boolean
+          example: null
+        sourceCustomer:
+          type: boolean
+          example: null
+        minShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        minProbability:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        shipmentsPeriodFrom:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        shipmentsPeriodTo:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        commodityFilter:
+          $ref: '#/components/schemas/CommodityFilter'
+        collectionCommodityFilters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommodityFilter'
+          example: null
+        exposedCollectionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        exposedTargetIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        exposedTargetId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        exposedCountryIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        exposedAlertId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        scenarioId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    RiskAnalysisLock:
+      required:
+      - locked
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Form
+          - Suppliers
+          - Matrix
+          - Actions
+          - Scoping
+          - Products
+          example: null
+        locked:
+          type: boolean
+          example: null
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        lockedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    PlanLimitDTO:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+          example: null
+        value:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    EdgeDetails:
+      required:
+      - data
+      - id
+      - source
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        source:
+          type: string
+          enum:
+          - Customer
+          - Media
+          - Customs
+          - PrewavePrediction
+          example: null
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerData'
+          - $ref: '#/components/schemas/CustomsData'
+          - $ref: '#/components/schemas/MediaData'
+          - $ref: '#/components/schemas/PredictionData'
+          example: null
+      example: null
+    CollectionRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      description: Paths of the target in the collection hierarchy
+      example: null
+    TargetCTypeDTO:
+      required:
+      - bgColor
+      - connectable
+      - ctype
+      - displayName
+      - icon
+      - id
+      - pluralName
+      - priority
+      - targetTypeId
+      - textColor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        ctype:
+          type: string
+          example: null
+        targetTypeId:
+          type: integer
+          format: int32
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        priority:
+          type: integer
+          format: int32
+          example: null
+        connectable:
+          type: boolean
+          example: null
+        bgColor:
+          type: string
+          example: null
+        textColor:
+          type: string
+          example: null
+      example: null
+    PerspectiveDTO:
+      required:
+      - actualImpactT80
+      - actualRiskT80
+      - commodityMissingScore
+      - countryMissingScore
+      - diModel
+      - eventTypes
+      - groups
+      - id
+      - industryMissingScore
+      - insolvencyLoss
+      - isGlobal
+      - massDisruptionFactor
+      - name
+      - riskModel
+      - sname
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        perspective:
+          type: string
+          nullable: true
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/PerspectiveTypeDTO'
+        isGlobal:
+          type: boolean
+          example: null
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagGroup'
+          example: null
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagDTO'
+          example: null
+        massDisruptionFactor:
+          type: boolean
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        riskModel:
+          type: string
+          enum:
+          - Sustainability
+          - Disruption
+          example: null
+        diModel:
+          type: string
+          enum:
+          - Direct
+          - Parent
+          - Auto
+          example: null
+        riskT80:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        impactT80:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        insolvencyLoss:
+          type: boolean
+          example: null
+        industryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        commodityMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        countryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        actualRiskT80:
+          type: integer
+          format: int32
+          example: null
+        actualImpactT80:
+          type: number
+          format: double
+          example: null
+      example: null
+    ExposureTarget:
+      required:
+      - stats
+      - target
+      type: object
+      properties:
+        target:
+          $ref: '#/components/schemas/ExposureTargetDetails'
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureTargetStat'
+          example: null
+      example: null
+    TargetRequestInfoDto:
+      required:
+      - targetId
+      type: object
+      properties:
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        validationRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        screeningRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        reportedTargetRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+      example: null
+    GeoProperties:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          example: null
+        countryCode:
+          type: string
+          nullable: true
+          example: null
+        alertCount:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        boundingBox:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+      example: null
+    TargetTypeDTO:
+      required:
+      - displayName
+      - id
+      - pluralName
+      - scoring
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        scoring:
+          type: string
+          enum:
+          - Alert
+          - Peer
+          example: null
+      example: null
+    PlanDTO:
+      required:
+      - limits
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        planType:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/PlanTypeDTO'
+          example: null
+        name:
+          type: string
+          nullable: true
+          example: null
+        pricePerUser:
+          type: number
+          nullable: true
+          example: null
+        limits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanLimitDTO'
+          example: null
+        validFrom:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        validTo:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+      example: null
+    ExposureFilter:
+      required:
+      - overviewTiers
+      - riskTargetIds
+      - targetIds
+      type: object
+      properties:
+        overviewTiers:
+          type: integer
+          format: int32
+          example: null
+        query:
+          type: string
+          nullable: true
+          example: null
+        exposedQuery:
+          type: string
+          nullable: true
+          example: null
+        riskTargetIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        targetIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: string
+          example: null
+        source:
+          type: string
+          nullable: true
+          example: null
+        existingEdgeId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    EdgeImpactData:
+      required:
+      - causalContribution
+      - coc
+      - daysOnHand
+      - deviation
+      - edgeId
+      - stockAtSupplier
+      - stockOnPremise
+      - validFrom
+      - validTo
+      type: object
+      properties:
+        edgeId:
+          type: integer
+          format: int32
+          example: null
+        validFrom:
+          type: string
+          format: date-time
+          example: null
+        validTo:
+          type: string
+          format: date-time
+          example: null
+        purchase:
+          type: number
+          nullable: true
+          example: null
+        actualPurchase:
+          type: number
+          nullable: true
+          example: null
+        diForced:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        di:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        causalContribution:
+          type: boolean
+          example: null
+        bi12:
+          type: number
+          nullable: true
+          example: null
+        coc:
+          type: boolean
+          example: null
+        mttrGrossE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrNetE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrGrossI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        mttrNetI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        stockOnPremise:
+          type: number
+          format: double
+          example: null
+        stockAtSupplier:
+          type: number
+          format: double
+          example: null
+        daysOnHand:
+          type: number
+          format: double
+          example: null
+        deviation:
+          type: string
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+          example: null
+        location:
+          type: string
+          nullable: true
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+          example: null
+        lastConfirmationDate:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        birsInfo:
+          type: string
+          nullable: true
+          example: null
+        biForced:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        bi:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        biEffE:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        biEffI:
+          type: number
+          format: double
+          nullable: true
+          example: null
+        impact:
+          type: string
+          nullable: true
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    UserAttributes:
+      required:
+      - scenarioWelcomeScreenShown
+      type: object
+      properties:
+        scenarioWelcomeScreenShown:
+          type: boolean
+          example: null
+      example: null
+    DisruptionStatus:
+      required:
+      - displayName
+      - icon
+      - id
+      - ordering
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        status:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    TierSettingsDTO:
+      required:
+      - logisticsProvider
+      - maxTier
+      - scopePrivate
+      - scopePublic
+      - scopeShared
+      - sourceCustomer
+      - sourceCustoms
+      - sourceMedia
+      - sourcePrewavePrediction
+      - suspectedSuppliers
+      - tier2MinPrio
+      - tier2TargetPrio
+      - tier3PlusMinPrio
+      - tier3PlusTargetPrio
+      type: object
+      properties:
+        maxTier:
+          type: integer
+          format: int32
+          example: null
+        tier2TargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusTargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier2MinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusMinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        scopePrivate:
+          type: boolean
+          example: null
+        scopeShared:
+          type: boolean
+          example: null
+        scopePublic:
+          type: boolean
+          example: null
+        sourceCustoms:
+          type: boolean
+          example: null
+        sourcePrewavePrediction:
+          type: boolean
+          example: null
+        sourceMedia:
+          type: boolean
+          example: null
+        sourceCustomer:
+          type: boolean
+          example: null
+        minShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        probability:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipmentsPeriodFrom:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        lastShipmentsPeriodTo:
+          type: string
+          format: date
+          nullable: true
+          example: null
+        suspectedSuppliers:
+          type: boolean
+          example: null
+        logisticsProvider:
+          type: boolean
+          example: null
+      example: null
+    HSCode:
+      required:
+      - children
+      - code
+      - level
+      type: object
+      properties:
+        code:
+          type: string
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        lastShipment:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        level:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ExposureTargetDetails:
+      required:
+      - baseSupplierCount
+      - exposedDistinctCount
+      - id
+      - name
+      - tier
+      - type
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: int32
+          example: null
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        edgeNumbers:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+        baseSupplierCount:
+          type: integer
+          format: int32
+          example: null
+        exposedDistinctCount:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ExplorerTargetRef:
+      required:
+      - targetId
+      - tier
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: int32
+          example: null
+        targetId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ComplexDisruptionStatusUpdate:
+      required:
+      - customer
+      - general
+      type: object
+      properties:
+        general:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+        customer:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+      description: Disruption status update of the target
+      example: null
+    PlanTypeDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        type:
+          type: string
+          nullable: true
+          example: null
+        displayName:
+          type: string
+          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    BaseTarget:
+      required:
+      - commodities
+      - id
+      - name
+      - riskTargets
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        riskTargets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureRiskTarget'
+          example: null
+        commodities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureCommodity'
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    CommodityFilterId:
+      required:
+      - commodityId
+      - path
+      - treeId
+      type: object
+      properties:
+        treeId:
+          type: integer
+          format: int32
+          example: null
+        commodityId:
+          type: integer
+          format: int32
+          example: null
+        path:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+      example: null
+    ExposureRiskTarget:
+      required:
+      - commodities
+      - commoditySources
+      - id
+      - name
+      - reasons
+      - tier
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        tier:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureReason'
+          example: null
+        commodities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExposureCommodity'
+          example: null
+        commoditySources:
+          type: object
+          additionalProperties:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+              enum:
+              - Customer
+              - Media
+              - Customs
+              - PrewavePrediction
+          example: null
+        numberShipments:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+      example: null
+    CustomerDTO:
+      required:
+      - defaultEdgeType
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        defaultEdgeType:
+          type: string
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        pristine:
+          type: boolean
+          nullable: true
+          example: null
+        confidentialSticker:
+          type: string
+          nullable: true
+          example: null
+        forceDefaultConnectionContact:
+          type: boolean
+          nullable: true
+          example: null
+      example: null
+    UserSettings:
+      required:
+      - _system_
+      - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserAttributes'
+        _system_:
+          $ref: '#/components/schemas/UserSystemAttributes'
+      example: null
+    CollectionDTO:
+      required:
+      - children
+      - collectionTreeFilter
+      - commodityFilter
+      - deliverySettingTypes
+      - id
+      - isMonitored
+      - isParentMonitored
+      - lanes
+      - level
+      - name
+      - own
+      - path
+      - scope
+      - tiersEnabled
+      - type
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        uuid:
+          type: string
+          format: uuid
+          example: null
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
+        type:
+          type: string
+          enum:
+          - Default
+          - Commodity
+          - Ariba
+          example: null
+        collection:
+          type: string
+          nullable: true
+          example: null
+        name:
+          type: string
+          example: null
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        deliverySettingTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliverySettingTypeDTO'
+          example: null
+        logo:
+          type: string
+          nullable: true
+          example: null
+        count:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        isMonitored:
+          type: boolean
+          example: null
+        isParentMonitored:
+          type: boolean
+          example: null
+        own:
+          type: boolean
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        tierSettings:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TierSettingsDTO'
+          example: null
+        collectionTreeFilter:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        userId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        organizationId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        viewedWithRole:
+          type: string
+          nullable: true
+          enum:
+          - Manager
+          - Editor
+          example: null
+        parentId:
+          type: integer
+          format: int32
+          nullable: true
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+          example: null
+        level:
+          type: integer
+          format: int32
+          example: null
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        commodityFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommodityFilterId'
+          example: null
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        monitored:
+          type: boolean
+          writeOnly: true
+          example: null
+        parentMonitored:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    ExplorerTier:
+      required:
+      - targets
+      - tier
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: int32
+          example: null
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExplorerTarget'
+          example: null
+      example: null
+    PerspectiveTypeDTO:
+      required:
+      - displayName
+      - id
+      - ordering
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    PredictionData:
+      required:
+      - probability
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Data'
+      - type: object
+        properties:
+          probability:
+            type: number
+            format: double
+            example: null
+        example: null
+      example: null
+    TargetRef:
+      required:
+      - edges
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        customName:
+          type: string
+          nullable: true
+          example: null
+        latestRequest:
+          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDTO'
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    Geo:
+      required:
+      - properties
+      - type
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        properties:
+          $ref: '#/components/schemas/GeoProperties'
+        type:
+          type: string
+          example: null
+      description: Geo information for this alert. Only available if includeGeo is set to true.
+      example: null
+    CustomsData:
+      required:
+      - nshipments
+      - shipments
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Data'
+      - type: object
+        properties:
+          nshipments:
+            type: integer
+            format: int32
+            example: null
+          shipments:
+            type: array
+            items:
+              $ref: '#/components/schemas/Shipment'
+            example: null
+        example: null
+      example: null
+    CommodityFilter:
+      required:
+      - commodities
+      - logisticsProvider
+      - suspectedSuppliers
+      type: object
+      properties:
+        commodities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommodityFilterId'
+          example: null
+        suspectedSuppliers:
+          type: boolean
+          example: null
+        logisticsProvider:
+          type: boolean
+          example: null
+      example: null
+    ExposureTargetStat:
+      required:
+      - count
+      - tier
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: int32
+          example: null
+        count:
+          type: integer
+          format: int32
+          example: null
+      example: null
+  securitySchemes:
+    Token authentication:
+      type: apiKey
+      description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
+      name: X-Auth-Token
+      in: header
