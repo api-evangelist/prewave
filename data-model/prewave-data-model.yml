@@ -1,0 +1,92 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/prewave-openapi-original.json
+# Entity-relationship graph derived from OpenAPI path parameters, tags, and $ref schemas.
+# Keys observed: systemId+targetId, collectionId, supplierId, productId, ddsId,
+# originRequestId, contactId, actionId, userId, roleName.
+entities:
+  - name: Collection
+    id_param: collectionId
+    schema: CollectionDTO
+    description: A named grouping of supplier targets; carries Tier-N and network settings.
+  - name: Target
+    id_param: targetId (+ systemId for foreign-system refs)
+    schema: BaseTarget
+    description: A supplier/company node in the supply-chain graph; carries alerts, scores, exposure.
+  - name: Supplier (Site)
+    id_param: identifier
+    schema: PublicActionDTO
+    description: A supplier site managed via Supplier Management v2 (create/validate/screen/identifiers).
+  - name: Alert
+    schema: AlertDTO
+    description: A risk/disruption event surfaced against a target via the Feed.
+  - name: Score
+    schema: PerspectiveDTO
+    description: Target risk scores (external, target, enterprise-export), with history and components.
+  - name: Action
+    id_param: actionId
+    schema: PublicActionDTO
+    description: A tracked mitigation action with types and statuses.
+  - name: Disruption
+    description: Supply-chain disruption alerts.
+  - name: EUDRProduct
+    id_param: productId
+    description: Inbound/outbound products for EU Deforestation Regulation due diligence.
+  - name: EUDRDDS
+    id_param: ddsId
+    description: EUDR Due Diligence Statement (customer + supplier).
+  - name: EUDROriginRequest
+    id_param: originRequestId
+    description: Request to a supplier for commodity origin data, answered with a supplier DDS.
+  - name: ConnectionContact
+    id_param: contactId
+    description: Contact person on a supplier connection.
+  - name: User
+    id_param: userId
+    schema: UserDTO
+    description: Platform user with assignable roles.
+  - name: Role
+    id_param: roleName
+    schema: PermissionDTO
+    description: Named role granting permissions to a user.
+relationships:
+  - from: Collection
+    to: Target
+    type: has_many
+    via: targets
+  - from: Target
+    to: Alert
+    type: has_many
+    via: alerts
+  - from: Target
+    to: Score
+    type: has_many
+    via: score/score-history
+  - from: Collection
+    to: Collection
+    type: has_many
+    via: tier-n supplier-graph (multi-tier network)
+  - from: EUDRProduct
+    to: EUDROriginRequest
+    type: has_many
+    via: origin-requests
+  - from: EUDRProduct
+    to: EUDRDDS
+    type: has_many
+    via: customer-dds/supplier-dds
+  - from: EUDROriginRequest
+    to: EUDRDDS
+    type: has_one
+    via: supplier-dds answer
+  - from: Supplier (Site)
+    to: ConnectionContact
+    type: has_many
+    via: connection-contacts
+  - from: User
+    to: Role
+    type: has_many
+    via: roles
+  - from: Action
+    to: Target
+    type: belongs_to
+    via: target

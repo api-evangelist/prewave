@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/prewave-openapi-original.json
+skills:
+  - file: prewave-onboard-suppliers.md
+    name: Onboard and screen suppliers
+    api: openapi/prewave-openapi-original.json
+    operations: [createSupplier, getValidationStatus, requestValidation, requestScreening, getScreeningStatus, findSuppliers]
+  - file: prewave-monitor-risk.md
+    name: Monitor supplier risk alerts and scores
+    api: openapi/prewave-openapi-original.json
+    operations: [alertFeed, targetAlerts, getScoreResults, getExternalScoresForTargetByIdentifier, getAllCollections]
+  - file: prewave-eudr-due-diligence.md
+    name: File EUDR due-diligence statements
+    api: openapi/prewave-openapi-original.json
+    operations: [addOutboundProduct, requestOrigins, findCustomerOriginRequests, addCustomerDDS, submitCustomerDDS, findCustomerDDS]

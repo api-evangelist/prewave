@@ -1,0 +1,324 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+source: openapi/prewave-openapi-original.json
+note: Candidate MCP tool surface derived one-per-operation from the Public Prewave API OpenAPI (non-deprecated
+  operations). No official hosted Prewave MCP server was found.
+server:
+  name: prewave
+  transport: http
+  auth: X-Auth-Token header (Prewave API token)
+tools:
+- name: updateOutboundProduct
+  description: Update an existing outbound product
+  source_operation: openapi/prewave-openapi-original.json#updateOutboundProduct
+- name: updateInboundProduct
+  description: Update an existing inbound product
+  source_operation: openapi/prewave-openapi-original.json#updateInboundProduct
+- name: updateOriginRequest
+  description: Update origin request
+  source_operation: openapi/prewave-openapi-original.json#updateOriginRequest
+- name: closeOriginRequest
+  description: Close origin request
+  source_operation: openapi/prewave-openapi-original.json#closeOriginRequest
+- name: updateCustomerDDS
+  description: Update a customer DDS for an inbound product
+  source_operation: openapi/prewave-openapi-original.json#updateCustomerDDS
+- name: deleteCustomerDDS
+  description: Delete a customer DDS before successful submission
+  source_operation: openapi/prewave-openapi-original.json#deleteCustomerDDS
+- name: submitCustomerDDS
+  description: Submit a customer DDS to TracesNT system
+  source_operation: openapi/prewave-openapi-original.json#submitCustomerDDS
+- name: updateEdgeData
+  description: Update target data.
+  source_operation: openapi/prewave-openapi-original.json#updateEdgeData
+- name: getCollectionById
+  description: Get collection by ID
+  source_operation: openapi/prewave-openapi-original.json#getCollectionById
+- name: updateCollection
+  description: Update an existing collection
+  source_operation: openapi/prewave-openapi-original.json#updateCollection
+- name: deleteCollection
+  description: Deactivate a collection
+  source_operation: openapi/prewave-openapi-original.json#deleteCollection
+- name: getTierNCollectionSettings
+  description: Get tier-n collection settings
+  source_operation: openapi/prewave-openapi-original.json#getTierNCollectionSettings
+- name: updateTierNCollectionSettings
+  description: Update tier-n collection settings
+  source_operation: openapi/prewave-openapi-original.json#updateTierNCollectionSettings
+- name: getExposureGraphByTargetId
+  description: Get exposure graph by target id
+  source_operation: openapi/prewave-openapi-original.json#getExposureGraphByTargetId
+- name: getExposureGraphByForeignSystemTargetId
+  description: Get exposure graph by foreign system target id
+  source_operation: openapi/prewave-openapi-original.json#getExposureGraphByForeignSystemTargetId
+- name: getAllSuppliers
+  description: Get all suppliers
+  source_operation: openapi/prewave-openapi-original.json#getAllSuppliers
+- name: createSupplier
+  description: Create a new supplier
+  source_operation: openapi/prewave-openapi-original.json#createSupplier
+- name: deleteSupplierByIdentifier
+  description: Deactivate a supplier by identifier
+  source_operation: openapi/prewave-openapi-original.json#deleteSupplierByIdentifier
+- name: getValidationStatus
+  description: Get validation status for a supplier
+  source_operation: openapi/prewave-openapi-original.json#getValidationStatus
+- name: requestValidation
+  description: Request validation for a supplier
+  source_operation: openapi/prewave-openapi-original.json#requestValidation
+- name: getScreeningStatus
+  description: Get screening status for a supplier
+  source_operation: openapi/prewave-openapi-original.json#getScreeningStatus
+- name: requestScreening
+  description: Request screening for a supplier
+  source_operation: openapi/prewave-openapi-original.json#requestScreening
+- name: createIdentifier
+  description: Create an identifier for a supplier
+  source_operation: openapi/prewave-openapi-original.json#createIdentifier
+- name: deleteIdentifier
+  description: Delete an identifier for a supplier
+  source_operation: openapi/prewave-openapi-original.json#deleteIdentifier
+- name: findConnectionContactsByIdentifier
+  description: Find supplier connection contacts by identifier
+  source_operation: openapi/prewave-openapi-original.json#findConnectionContactsByIdentifier
+- name: createConnectionContactByIdentifier
+  description: Create connection contact for a supplier by identifier
+  source_operation: openapi/prewave-openapi-original.json#createConnectionContactByIdentifier
+- name: answerOriginRequestWithDDS
+  description: Answer supplier origin request with supplier DDS
+  source_operation: openapi/prewave-openapi-original.json#answerOriginRequestWithDDS
+- name: findConnectionContacts
+  description: Find supplier connection contacts
+  source_operation: openapi/prewave-openapi-original.json#findConnectionContacts
+- name: createConnectionContact
+  description: Create connection contact for own or connected supplier
+  source_operation: openapi/prewave-openapi-original.json#createConnectionContact
+- name: findCustomerDDS
+  description: Fetch customer DDS entries for a product
+  source_operation: openapi/prewave-openapi-original.json#findCustomerDDS
+- name: addCustomerDDS
+  description: Create a new customer DDS for an inbound product
+  source_operation: openapi/prewave-openapi-original.json#addCustomerDDS
+- name: findOutboundProducts
+  description: Get a list of outbound products
+  source_operation: openapi/prewave-openapi-original.json#findOutboundProducts
+- name: addOutboundProduct
+  description: Create a new outbound product
+  source_operation: openapi/prewave-openapi-original.json#addOutboundProduct
+- name: addOutboundInboundProducts
+  description: Connect inbound products to an outbound product
+  source_operation: openapi/prewave-openapi-original.json#addOutboundInboundProducts
+- name: findInboundProducts
+  description: Get a list of inbound products
+  source_operation: openapi/prewave-openapi-original.json#findInboundProducts
+- name: addInboundProduct
+  description: Create a new inbound product
+  source_operation: openapi/prewave-openapi-original.json#addInboundProduct
+- name: requestOrigins
+  description: Bulk request origins for products
+  source_operation: openapi/prewave-openapi-original.json#requestOrigins
+- name: withdrawCustomerDDS
+  description: Withdraw a submitted customer DDS
+  source_operation: openapi/prewave-openapi-original.json#withdrawCustomerDDS
+- name: get
+  description: Search and list users
+  source_operation: openapi/prewave-openapi-original.json#get
+- name: invite
+  description: Invite and onboard a new user
+  source_operation: openapi/prewave-openapi-original.json#invite
+- name: read
+  description: Retrieve roles assigned to a specific user
+  source_operation: openapi/prewave-openapi-original.json#read
+- name: add
+  description: Assign new roles to a user
+  source_operation: openapi/prewave-openapi-original.json#add
+- name: bulkFetchTargets
+  description: Bulk fetch detailed target information by target IDs
+  source_operation: openapi/prewave-openapi-original.json#bulkFetchTargets
+- name: forceProcessing
+  description: Force the processing of all pending site upsert requests.
+  source_operation: openapi/prewave-openapi-original.json#forceProcessing
+- name: listRequests
+  description: List all site upsert requests for your organisation.
+  source_operation: openapi/prewave-openapi-original.json#listRequests
+- name: fullLoad
+  description: Upsert suppliers and their desired collections with a full load.
+  source_operation: openapi/prewave-openapi-original.json#fullLoad
+- name: deltaLoad
+  description: Upsert suppliers and their desired collections with a delta load.
+  source_operation: openapi/prewave-openapi-original.json#deltaLoad
+- name: deactivateEdges
+  description: Disable edges to suppliers and remove them from managed collections.
+  source_operation: openapi/prewave-openapi-original.json#deactivateEdges
+- name: getExternalScoresForTargetByIdentifier
+  description: Get external score history for one supplier
+  source_operation: openapi/prewave-openapi-original.json#getExternalScoresForTargetByIdentifier
+- name: createExternalScoresBulk
+  description: Upload external scores for one or more suppliers
+  source_operation: openapi/prewave-openapi-original.json#createExternalScoresBulk
+- name: getExportConfiguration
+  description: Get Export Configuration
+  source_operation: openapi/prewave-openapi-original.json#getExportConfiguration
+- name: createOrUpdateExportConfiguration
+  description: Create or Update Export Configuration
+  source_operation: openapi/prewave-openapi-original.json#createOrUpdateExportConfiguration
+- name: getAllCollections
+  description: List all collections
+  source_operation: openapi/prewave-openapi-original.json#getAllCollections
+- name: createCollection
+  description: Create a new collection
+  source_operation: openapi/prewave-openapi-original.json#createCollection
+- name: getCollectionTargets
+  description: Get targets in collection
+  source_operation: openapi/prewave-openapi-original.json#getCollectionTargets
+- name: addTargetsToCollection
+  description: Add targets to collection
+  source_operation: openapi/prewave-openapi-original.json#addTargetsToCollection
+- name: getById
+  description: Retrieve detailed user profile
+  source_operation: openapi/prewave-openapi-original.json#getById
+- name: update
+  description: Update user profile and status
+  source_operation: openapi/prewave-openapi-original.json#update
+- name: getPendingSuppliers
+  description: Get pending suppliers
+  source_operation: openapi/prewave-openapi-original.json#getPendingSuppliers
+- name: findSuppliers
+  description: Find suppliers by ID
+  source_operation: openapi/prewave-openapi-original.json#findSuppliers
+- name: getConnectionContact
+  description: Get a connection contact
+  source_operation: openapi/prewave-openapi-original.json#getConnectionContact
+- name: deleteConnectionContact
+  description: Delete a connection contact
+  source_operation: openapi/prewave-openapi-original.json#deleteConnectionContact
+- name: commodityGraph
+  description: Get commodity graph for a collection
+  source_operation: openapi/prewave-openapi-original.json#commodityGraph
+- name: treeCommodityGraph
+  description: Get commodity graph for a commodity tree
+  source_operation: openapi/prewave-openapi-original.json#treeCommodityGraph
+- name: alertFeed
+  description: Get all alerts of the current user's feed (V2)
+  source_operation: openapi/prewave-openapi-original.json#alertFeed
+- name: findSupplierOriginRequests
+  description: Fetch supplier origin requests
+  source_operation: openapi/prewave-openapi-original.json#findSupplierOriginRequests
+- name: findSupplierCustomers
+  description: Fetch supplier customers
+  source_operation: openapi/prewave-openapi-original.json#findSupplierCustomers
+- name: findHSCodes
+  description: Get a list of EUDR related HS Codes
+  source_operation: openapi/prewave-openapi-original.json#findHSCodes
+- name: findCountries
+  description: Get a list of countries
+  source_operation: openapi/prewave-openapi-original.json#findCountries
+- name: findCommodities
+  description: Get a list of EUDR related commodities
+  source_operation: openapi/prewave-openapi-original.json#findCommodities
+- name: findSuppliers_1
+  description: 'Find suppliers by their IDs or references where at least one of the two parameters must
+    be provided and maximum allowed '
+  source_operation: openapi/prewave-openapi-original.json#findSuppliers_1
+- name: queryPoiTargets
+  description: 'Search for supplier sites (max results: 100)'
+  source_operation: openapi/prewave-openapi-original.json#queryPoiTargets
+- name: findSupplierDDS
+  description: Fetch supplier DDS entries for a product
+  source_operation: openapi/prewave-openapi-original.json#findSupplierDDS
+- name: findCustomerOriginRequests
+  description: Fetch customer origin requests per inbound product
+  source_operation: openapi/prewave-openapi-original.json#findCustomerOriginRequests
+- name: findDDSUnits
+  description: Retrieve all available DDS units along with their associated HS codes
+  source_operation: openapi/prewave-openapi-original.json#findDDSUnits
+- name: getAvailableRoles
+  description: List all available role definitions
+  source_operation: openapi/prewave-openapi-original.json#getAvailableRoles
+- name: target
+  description: Get detailed information about a target.
+  source_operation: openapi/prewave-openapi-original.json#target
+- name: targetParents
+  description: Get the parents of the target as a list.
+  source_operation: openapi/prewave-openapi-original.json#targetParents
+- name: targetAlerts
+  description: Get alerts for a specific target
+  source_operation: openapi/prewave-openapi-original.json#targetAlerts
+- name: getMatchedTargets
+  description: Get details of matched targets.
+  source_operation: openapi/prewave-openapi-original.json#getMatchedTargets
+- name: getDryRuns
+  description: Get the list of dry runs for a specific request.
+  source_operation: openapi/prewave-openapi-original.json#getDryRuns
+- name: listRequests_1
+  description: List all site upsert requests for your organisation.
+  source_operation: openapi/prewave-openapi-original.json#listRequests_1
+- name: fullLoadStatus
+  description: Get the status of a specific site upsert request.
+  source_operation: openapi/prewave-openapi-original.json#fullLoadStatus
+- name: getDryRunReport
+  description: Download the dry-run results report.
+  source_operation: openapi/prewave-openapi-original.json#getDryRunReport
+- name: listExternalScoreEventTypes
+  description: List event types for a perspective
+  source_operation: openapi/prewave-openapi-original.json#listExternalScoreEventTypes
+- name: infotags
+  description: Get public feed infotags
+  source_operation: openapi/prewave-openapi-original.json#infotags
+- name: infotagGroups
+  description: Get infotag groups for the current user
+  source_operation: openapi/prewave-openapi-original.json#infotagGroups
+- name: alertFeed_1
+  description: Get all alerts of the current user's feed
+  source_operation: openapi/prewave-openapi-original.json#alertFeed_1
+- name: getScoreResults
+  description: Retrieve Latest Score Results
+  source_operation: openapi/prewave-openapi-original.json#getScoreResults
+- name: getScoreGenerationErrors
+  description: Retrieve Score Generation Errors
+  source_operation: openapi/prewave-openapi-original.json#getScoreGenerationErrors
+- name: findAlerts
+  description: Find alerts on disruption map
+  source_operation: openapi/prewave-openapi-original.json#findAlerts
+- name: getTierNCollectionGraph
+  description: Get tier-n collection supplier graph
+  source_operation: openapi/prewave-openapi-original.json#getTierNCollectionGraph
+- name: getExposureAnalysisById
+  description: Get exposure analysis info by exposure analysis id
+  source_operation: openapi/prewave-openapi-original.json#getExposureAnalysisById
+- name: getExposureGraphById
+  description: Get exposure graph by exposure analysis id
+  source_operation: openapi/prewave-openapi-original.json#getExposureGraphById
+- name: listActions
+  description: List actions
+  source_operation: openapi/prewave-openapi-original.json#listActions
+- name: getActionById
+  description: Get action by ID
+  source_operation: openapi/prewave-openapi-original.json#getActionById
+- name: listActionTypes
+  description: List action types
+  source_operation: openapi/prewave-openapi-original.json#listActionTypes
+- name: getActionTypeById
+  description: Get action type by ID
+  source_operation: openapi/prewave-openapi-original.json#getActionTypeById
+- name: listActionStatusesForType
+  description: List action statuses for type
+  source_operation: openapi/prewave-openapi-original.json#listActionStatusesForType
+- name: deleteSupplierDDS
+  description: Delete a supplier DDS and its origins
+  source_operation: openapi/prewave-openapi-original.json#deleteSupplierDDS
+- name: deactivateProduct
+  description: Deactivate a product and its origins
+  source_operation: openapi/prewave-openapi-original.json#deactivateProduct
+- name: removeOutboundInboundProduct
+  description: Disconnect an inbound product from an outbound product
+  source_operation: openapi/prewave-openapi-original.json#removeOutboundInboundProduct
+- name: delete
+  description: Revoke a specific role from a user
+  source_operation: openapi/prewave-openapi-original.json#delete
+- name: removeTargetFromCollection
+  description: Remove target from collection
+  source_operation: openapi/prewave-openapi-original.json#removeTargetFromCollection

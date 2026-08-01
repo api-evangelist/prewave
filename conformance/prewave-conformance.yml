@@ -1,0 +1,36 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/prewave-openapi-original.json
+# Cross-cutting / industry standards the Public Prewave API conforms to.
+standards:
+  - id: openapi-3.0
+    conforms: true
+    evidence: openapi/prewave-openapi-original.json declares openapi 3.0.1
+  - id: api-key-auth
+    conforms: true
+    evidence: securityScheme "Token authentication" (apiKey, X-Auth-Token header)
+  - id: oauth2
+    conforms: false
+    evidence: no oauth2 securityScheme declared
+  - id: openid-connect
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: errors use custom ErrorDTO envelope, not application/problem+json
+  - id: rfc8594-sunset-header
+    conforms: true
+    evidence: deprecated legacy endpoints return RFC 8594 Sunset headers (changelog Q1 2026)
+  - id: pagination
+    conforms: true
+    evidence: page/size query parameters + Pageable schema
+  - id: idempotency
+    conforms: false
+    evidence: no idempotency-key header/parameter documented
+  - id: eudr
+    conforms: true
+    evidence: EUDR (EU Deforestation Regulation) DDS, origin-request, and product endpoints
+      under /public/v2/eudr for regulatory due-diligence submission
+  - id: lksg-csddd-due-diligence
+    conforms: true
+    evidence: supply-chain due-diligence scoring, exposure, and supplier-graph endpoints aligned
+      to LkSG / CSDDD supply-chain sustainability obligations

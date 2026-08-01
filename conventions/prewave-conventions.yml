@@ -1,0 +1,49 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/prewave-openapi-original.json
+# Cross-cutting request/response semantics for the Public Prewave API.
+# Derived from the OpenAPI (servers, securitySchemes, parameters, responses) and
+# the public Swagger docs at https://dev.prewave.com.
+base_url: https://api.prewave.com
+authentication:
+  style: api-key
+  scheme: Token authentication
+  header: X-Auth-Token
+  token_management: https://www.prewave.com/management/api
+  detail: authentication/prewave-authentication.yml
+idempotency:
+  supported: false
+  notes: The API does not document an idempotency-key header or parameter.
+pagination:
+  style: page-number
+  params:
+    - name: page
+      in: query
+      description: Zero/one-based page index.
+    - name: size
+      in: query
+      description: Page size (items per page).
+  model_schema: Pageable
+versioning:
+  scheme: uri-path
+  versions: [v1, v2, v3]
+  current: v2
+  detail: Newer resources (Suppliers Management, Feed, EUDR) are exposed under /public/v2;
+    graph/alpha endpoints under /public/v1/alpha and /public/v3/alpha.
+  deprecation: lifecycle/prewave-lifecycle.yml
+error_envelope:
+  schema: ErrorDTO
+  fields: [code, message, solution]
+  detail: errors/prewave-error-codes.yml
+rate_limiting:
+  signaled: true
+  status: 429
+  response_schema: ApiRateLimitResponse
+  fields: [error, message, requestLimit, requestCount, limits]
+async_operations:
+  pattern: 202-accepted
+  detail: Supplier Management v2 and Sites Upsert accept batch writes and return 202 Accepted
+    with a Location header pointing at a request-status resource (e.g. /public/v1/sites-upsert/full/{requestId}).
+content_types:
+  request: [application/json]
+  response: [application/json, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]

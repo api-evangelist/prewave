@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: searched
+source: https://dev.prewave.com
+docs: https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates
+versioning:
+  scheme: uri-path
+  versions: [v1, v2, v3]
+  current: v2
+deprecation:
+  policy: RFC 8594 Sunset + Deprecation headers on legacy endpoints.
+  sunset_header: true
+  migration_deadline: '2027-05-31'
+  notes: Legacy v1 Suppliers and Sites-Upsert endpoints are deprecated; developers must migrate
+    to Supplier Management API v2 by 2027-05-31 (extended from 2026-12-31). Deprecated operations
+    return RFC 8594 Sunset headers.
+  changelog: https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates
+sla:
+  status_page: https://status.prewave.com/
+status_page: https://status.prewave.com/
+deprecated_operations:
+  - openapi/prewave-openapi-original.json#suppliers
+  - openapi/prewave-openapi-original.json#findSupplierGraph
+  - openapi/prewave-openapi-original.json#findSupplierGraph_1
+  - openapi/prewave-openapi-original.json#findSupplierGraph_2
+  - openapi/prewave-openapi-original.json#treeGraph
+  - openapi/prewave-openapi-original.json#treeGraph_1
+  - openapi/prewave-openapi-original.json#targets
+  - openapi/prewave-openapi-original.json#commodityGraph_1
+  - openapi/prewave-openapi-original.json#treeCommodityGraph_1
+  - openapi/prewave-openapi-original.json#score
+  - openapi/prewave-openapi-original.json#scoreEventType
+  - openapi/prewave-openapi-original.json#scoreHistory
+  - openapi/prewave-openapi-original.json#scoreComponents

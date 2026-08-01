@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/prewave-openapi-original.json
+workflows:
+  - file: prewave-onboard-and-monitor-supplier.yml
+    workflowId: onboardAndMonitorSupplier
+    title: Onboard and monitor a supplier
+    summary: Create a supplier site, validate and screen it, then read its risk alerts.
+  - file: prewave-eudr-dds-submission.yml
+    workflowId: submitEudrDds
+    title: Submit an EUDR Due Diligence Statement
+    summary: Register an outbound product, request commodity origins, attach a DDS, and submit it.

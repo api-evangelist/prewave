@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Public Prewave API
+  version: 1.0.0
+extends: openapi/prewave-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-network: https://apis.io/prewave
+      x-api-key-management: https://www.prewave.com/management/api
+      x-changelog: https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates
+      x-status-page: https://status.prewave.com/
+      x-error-catalog: errors/prewave-error-codes.yml
+      x-conventions: conventions/prewave-conventions.yml
+  - target: $.info
+    update:
+      x-agentic-access: agentic-access/prewave-agentic-access.yml
+  - target: $.tags
+    update:
+      - name: EUDR - Customers - DDS
+        description: EU Deforestation Regulation Due Diligence Statement lifecycle (customer side).
+      - name: Suppliers - Sites
+        description: Supplier Management v2 - create, validate, screen, and manage supplier sites.

@@ -1,0 +1,75 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/prewave-openapi-original.json
+# Prewave uses a custom JSON error envelope (ErrorDTO), NOT RFC 9457 problem+json.
+format: custom-json
+envelope:
+  schema: ErrorDTO
+  fields:
+    - name: code
+      required: true
+      description: Machine-readable error code string.
+    - name: message
+      required: true
+      description: Human-readable error message.
+    - name: solution
+      required: false
+      nullable: true
+      description: Possible solution / remediation hint for the error.
+rate_limit_envelope:
+  schema: ApiRateLimitResponse
+  fields:
+    - name: error
+      description: Error type identifier (e.g. RateLimitExceeded).
+    - name: message
+      description: Human-readable rate-limit message.
+    - name: requestLimit
+      description: Maximum requests allowed in the current window.
+    - name: requestCount
+      description: Requests made in the current window.
+    - name: limits
+      description: Per-window limit breakdown.
+# HTTP status codes observed across the 117 operations.
+problems:
+  - status: 400
+    schema: ErrorDTO
+    title: Bad Request
+    description: Request validation failed (malformed body, invalid parameters).
+  - status: 400
+    schema: SitesUpsertValidationFailedResponse
+    title: Sites Upsert validation failed
+    description: Bulk supplier sites upsert rejected; validationErrors[] lists per-row failures.
+    source_operation: openapi/prewave-openapi-original.json#fullLoad
+  - status: 403
+    schema: AccessDeniedErrorDTO
+    title: Forbidden
+    description: The API token lacks permission for the requested resource or operation.
+  - status: 404
+    schema: ErrorDTO
+    title: Not Found
+    description: The referenced target, collection, supplier, or resource does not exist.
+  - status: 409
+    schema: ErrorDTO
+    title: Conflict
+    description: The request conflicts with the current state (e.g. duplicate identifier).
+  - status: 422
+    schema: ErrorDTO
+    title: Unprocessable Entity
+    description: Semantically invalid request the server understood but cannot process.
+  - status: 422
+    schema: OriginRequestProductUnsupportedErrorDTO
+    title: Unsupported EUDR product for origin request
+    description: The product referenced by an EUDR origin request is not supported.
+    source_operation: openapi/prewave-openapi-original.json#requestOrigins
+  - status: 429
+    schema: ApiRateLimitResponse
+    title: Too Many Requests
+    description: API rate limit exceeded; reduce request rate. See requestLimit/requestCount.
+  - status: 500
+    schema: ErrorDTO
+    title: Internal Server Error
+    description: Unexpected server-side error.
+  - status: 502
+    schema: ErrorDTO
+    title: Bad Gateway
+    description: Upstream dependency returned an invalid response.

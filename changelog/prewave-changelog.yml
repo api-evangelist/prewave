@@ -1,0 +1,40 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates
+docs: https://docs.prewave.com/
+scheme: quarterly + uri-path versioning (v1/v2/v3)
+current_version: v2
+entries:
+  - date: '2026-06-08'
+    version: Q2 2026
+    title: Supplier Screening and External Scores
+    breaking: false
+    highlights:
+      - Optional post-onboarding screening and validation during the create event.
+      - External Scores batch POST for multiple supplier sites (/public/v1/scores/externals).
+      - Per-site external score history GET and event-type discovery GET
+        (/public/v1/scores/externals/event-types).
+  - date: '2026-03-19'
+    version: Feed API v2
+    title: Feed API v2 available
+    breaking: false
+    highlights:
+      - Feed API v2 (/public/v2/feed) released alongside the v2 alert model.
+  - date: '2026-02-01'
+    version: Q1 2026
+    title: User Management, Connection Contacts, and Actions API
+    breaking: false
+    highlights:
+      - User and role management endpoints (8 endpoints, CRUD).
+      - Supplier connection contacts endpoints (4 endpoints).
+      - New Actions API (6 endpoints for tracking and status management).
+  - date: '2026-01-01'
+    version: Supplier Management API v2
+    title: Supplier Management v2 replaces legacy Sites-Upsert
+    breaking: true
+    highlights:
+      - Supplier Management API v2 (/public/v2/suppliers/sites) with standard REST patterns.
+      - Synchronous responses; 60-80% reduction in payload sizes.
+      - Supplier Identifier Management endpoints introduced.
+      - Legacy v1 Suppliers and Sites-Upsert endpoints deprecated (RFC 8594 Sunset headers);
+        migration deadline 2027-05-31.

@@ -1,0 +1,56 @@
+arazzo: 1.0.1
+info:
+  title: Submit an EUDR Due Diligence Statement
+  version: 1.0.0
+  summary: Register an outbound product, request commodity origins, attach a DDS, and submit it.
+sourceDescriptions:
+  - name: prewave
+    url: ../openapi/prewave-openapi-original.json
+    type: openapi
+workflows:
+  - workflowId: submitEudrDds
+    summary: Register an outbound product, request origins, attach and submit a Due Diligence Statement.
+    inputs:
+      type: object
+      properties:
+        product:
+          type: object
+        originRequest:
+          type: object
+        dds:
+          type: object
+    steps:
+      - stepId: addOutboundProduct
+        operationId: addOutboundProduct
+        requestBody:
+          payload: $inputs.product
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          productId: $response.body#/id
+      - stepId: requestOrigins
+        operationId: requestOrigins
+        requestBody:
+          payload: $inputs.originRequest
+        successCriteria:
+          - condition: $statusCode == 201
+      - stepId: addCustomerDDS
+        operationId: addCustomerDDS
+        parameters:
+          - name: productId
+            in: path
+            value: $steps.addOutboundProduct.outputs.productId
+        requestBody:
+          payload: $inputs.dds
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          ddsId: $response.body#/id
+      - stepId: submitCustomerDDS
+        operationId: submitCustomerDDS
+        parameters:
+          - name: ddsId
+            in: path
+            value: $steps.addCustomerDDS.outputs.ddsId
+        successCriteria:
+          - condition: $statusCode == 200

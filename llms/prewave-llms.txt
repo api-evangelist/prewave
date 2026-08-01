@@ -1,0 +1,36 @@
+# Prewave
+
+> Prewave is an AI-powered supply-chain risk intelligence platform that monitors millions of risk events across languages and networks to give enterprises proactive resilience, sustainability compliance (EUDR, LkSG, CSDDD), and multi-tier supplier transparency. The Public Prewave API exposes suppliers, collections, alerts, risk scores, exposure graphs, EUDR due-diligence, actions, and user management over REST.
+
+## APIs
+- [Public Prewave API (Swagger UI)](https://dev.prewave.com): Interactive reference for the REST API.
+- [OpenAPI 3.0.1 spec](https://api.prewave.com/v3/api-docs): 93 paths / 117 operations, base URL https://api.prewave.com.
+
+## Authentication
+- API token via `X-Auth-Token` header. Generate a token at https://www.prewave.com/management/api.
+
+## Specs & Artifacts
+- [OpenAPI (harvested)](openapi/prewave-openapi-original.json)
+- [Authentication profile](authentication/prewave-authentication.yml)
+- [Conventions](conventions/prewave-conventions.yml)
+- [Error catalog](errors/prewave-error-codes.yml)
+- [Lifecycle & deprecation](lifecycle/prewave-lifecycle.yml)
+- [Changelog](changelog/prewave-changelog.yml)
+- [Data model](data-model/prewave-data-model.yml)
+- [Conformance](conformance/prewave-conformance.yml)
+- [MCP candidate tools](mcp/prewave-mcp.yml)
+- [Agentic access contracts](agentic-access/prewave-agentic-access.yml)
+
+## Docs
+- [Developer docs / help center](https://docs.prewave.com/)
+- [Q1 2026 API changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)
+- [Status page](https://status.prewave.com/)
+- [Trust center](https://trust.prewave.com/)
+
+## Key capabilities
+- Suppliers & Sites (Management v2): create, validate, screen, identifiers.
+- Collections, Tier-N network, and supplier graph.
+- Alerts & Feed (v2), disruptions, risk exposure graphs.
+- Risk scores: target, external, and enterprise export.
+- EUDR: products, origin requests, and Due Diligence Statements.
+- Actions, users, and roles.

@@ -1,0 +1,55 @@
+arazzo: 1.0.1
+info:
+  title: Onboard and monitor a supplier
+  version: 1.0.0
+  summary: Create a supplier site, run validation and screening, then read its risk alerts.
+sourceDescriptions:
+  - name: prewave
+    url: ../openapi/prewave-openapi-original.json
+    type: openapi
+workflows:
+  - workflowId: onboardAndMonitorSupplier
+    summary: Create a supplier site, validate and screen it, then pull its alerts.
+    inputs:
+      type: object
+      properties:
+        supplier:
+          type: object
+        systemId:
+          type: string
+        targetId:
+          type: string
+    steps:
+      - stepId: createSupplier
+        operationId: createSupplier
+        requestBody:
+          payload: $inputs.supplier
+        successCriteria:
+          - condition: $statusCode == 201
+      - stepId: requestValidation
+        operationId: requestValidation
+        successCriteria:
+          - condition: $statusCode == 202
+      - stepId: getValidationStatus
+        operationId: getValidationStatus
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requestScreening
+        operationId: requestScreening
+        successCriteria:
+          - condition: $statusCode == 202
+      - stepId: getScreeningStatus
+        operationId: getScreeningStatus
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: targetAlerts
+        operationId: targetAlerts
+        parameters:
+          - name: systemId
+            in: path
+            value: $inputs.systemId
+          - name: targetId
+            in: path
+            value: $inputs.targetId
+        successCriteria:
+          - condition: $statusCode == 200
