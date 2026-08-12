@@ -381,6 +381,8 @@ apis:
   - type: APIReference
     url: https://dev.prewave.com
 common:
+- type: Overlay
+  url: overlays/prewave-openapi-overlay.yaml
 - type: Website
   url: https://www.prewave.com/
 - type: DeveloperPortal
