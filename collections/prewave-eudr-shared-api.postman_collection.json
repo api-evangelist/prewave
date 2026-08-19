@@ -1,0 +1,730 @@
+{
+  "item": [
+    {
+      "id": "106f5813-8129-432b-9391-7149bcdb95c9",
+      "name": "EUDR - Shared",
+      "description": {
+        "content": "Shared reference data for EUDR, including countries, HS codes, and commodities. Available to both customers and suppliers.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e85f4ee9-03eb-4414-ae7e-a56365305183",
+          "name": "Get a list of EUDR related HS Codes",
+          "request": {
+            "name": "Get a list of EUDR related HS Codes",
+            "description": {
+              "content": "\nRetrieve a list of Harmonized System (HS) codes relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all HS codes that are applicable for EUDR products.\nHS codes are used to classify products for customs and compliance purposes. Each entry includes\nthe code, description, and linked commodity ID when available.\n\n**Use Cases**:\n- Get HS code reference data for products\n- Populate HS code selection dropdowns\n- Validate product classifications\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "shared",
+                "hscodes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "743d2caf-51aa-47f0-a919-88049581d942",
+              "name": "List of EUDR-related HS codes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "hscodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"code\\\":\\\"440799\\\",\\\"description\\\":\\\"Wood sawn or chipped lengthwise, sliced or peeled, of oak\\\",\\\"commodityId\\\":1},{\\\"code\\\":\\\"441510\\\",\\\"description\\\":\\\"Plywood, veneered panels and similar laminated wood\\\",\\\"commodityId\\\":1},{\\\"code\\\":\\\"180100\\\",\\\"description\\\":\\\"Cocoa beans, whole or broken, raw or roasted\\\",\\\"commodityId\\\":2},{\\\"code\\\":\\\"151110\\\",\\\"description\\\":\\\"Crude palm oil\\\",\\\"commodityId\\\":3}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a74a925-452d-454f-8e49-27800fd40a91",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "hscodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49f9a9b3-d672-4f4c-bdd8-c4d66831934e",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "hscodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76cace53-8d72-4da8-9bc2-2860808ac5ba",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "hscodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b65b5be-1714-49d5-a5b9-f7a28089a406",
+          "name": "Get a list of countries",
+          "request": {
+            "name": "Get a list of countries",
+            "description": {
+              "content": "\nRetrieve a list of all available countries for EUDR compliance.\n\nThis endpoint returns reference data containing all countries that can be used in EUDR workflows,\nsuch as product origins, supplier locations, and compliance reporting.\n\n**Use Cases**:\n- Get country reference data for product origins\n- Populate country selection dropdowns\n- Validate country codes\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "shared",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7a2ac2b4-9695-40d7-b446-3f7cdc96769e",
+              "name": "List of countries available for EUDR workflows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},{\\\"id\\\":276,\\\"name\\\":\\\"Germany\\\",\\\"countryCode\\\":\\\"DE\\\",\\\"bounds\\\":null},{\\\"id\\\":826,\\\"name\\\":\\\"United Kingdom\\\",\\\"countryCode\\\":\\\"GB\\\",\\\"bounds\\\":null},{\\\"id\\\":756,\\\"name\\\":\\\"Switzerland\\\",\\\"countryCode\\\":\\\"CH\\\",\\\"bounds\\\":null}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "659cd817-7af5-4570-978a-8a5b07fd5392",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d0fbf76-b2f7-4e03-969d-3cb8da07e3d2",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dc112b1-a042-4005-995e-e6f2c8bb1abf",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "countries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5a11a6b-fd23-419b-8874-d2aca0f2148b",
+          "name": "Get a list of EUDR related commodities",
+          "request": {
+            "name": "Get a list of EUDR related commodities",
+            "description": {
+              "content": "\nRetrieve a list of commodities relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all commodities that are applicable for EUDR products.\nOnly commodities whose names start with \"EUDR \" are included. Commodities are used to categorize\nproducts for compliance and reporting purposes.\n\n**Use Cases**:\n- Get commodity reference data for products\n- Populate commodity selection dropdowns\n- Validate product categorizations\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "shared",
+                "commodities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "83f485e5-2847-47cd-b798-7b995131a611",
+              "name": "List of EUDR-related commodities.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "commodities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":1,\\\"name\\\":\\\"EUDR Wood\\\"},{\\\"id\\\":2,\\\"name\\\":\\\"EUDR Cocoa\\\"},{\\\"id\\\":3,\\\"name\\\":\\\"EUDR Palm Oil\\\"}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d794f6b-f75a-4361-9317-4874386114f6",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "commodities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cdc14923-d3af-456e-a14e-652cc5748f60",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "commodities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6a1e8df-ff75-49e7-9c89-4958f3d99323",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "shared",
+                    "commodities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7ac022e9-ad80-4b58-91db-f7467dbbcbd8",
+    "name": "Public Prewave Actions EUDR - Shared API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

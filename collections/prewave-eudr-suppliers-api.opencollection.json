@@ -1,0 +1,103 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Suppliers API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Suppliers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Answer supplier origin request with supplier DDS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/suppliers/origin-requests/:originRequestId/supplier-dds",
+            "params": [
+              {
+                "name": "originRequestId",
+                "value": "1001",
+                "type": "path",
+                "description": "The ID of the origin request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nAnswer an origin request by providing supplier Due Diligence Statement (DDS) information.\n\nThis endpoint allows suppliers to respond to origin requests by submitting one or more supplier DDS\nentries. Each payload must contain the reference number, verification number, HS code, and product\ndescription as stated in the TracesNT system.\n\n**Use Cases**:\n- Respond to customer origin requests\n- Provide origin information via supplier DDS\n- Submit compliance data for requested products\n\n**Required per"
+        },
+        {
+          "info": {
+            "name": "Fetch supplier origin requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/suppliers/origin-requests",
+            "params": [
+              {
+                "name": "page",
+                "value": "0",
+                "type": "query",
+                "description": "Page number (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "10",
+                "type": "query",
+                "description": "Page size"
+              },
+              {
+                "name": "customerId",
+                "value": "100",
+                "type": "query",
+                "description": "Customer ID"
+              },
+              {
+                "name": "reference",
+                "value": "PO-2025-001",
+                "type": "query",
+                "description": "Origin request reference"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Origin request status"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a paginated list of origin requests received by the supplier.\n\nThis endpoint returns all origin requests that have been sent to the supplier's organization,\nwith optional filtering by customer ID, reference, and status. Each item includes the linked\nproduct, references, supplier DDS references when answered, and origins when available.\n\n**Use Cases**:\n- View all origin requests received\n- Filter requests by customer or status\n- Track request status and responses\n\n**Pagination**:\n- Resu"
+        },
+        {
+          "info": {
+            "name": "Fetch supplier customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/suppliers/customers"
+          },
+          "docs": "\nRetrieve a list of all customers that have products associated with this supplier.\n\nThis endpoint returns all customers that have inbound products linked to the supplier's organization.\nThis information is useful for understanding which customers are requesting origin information.\n\n**Use Cases**:\n- View all customers that have products from this supplier\n- Understand customer relationships\n- Identify active customer connections\n\n**Required permission:** `access_public_eudr_suppliers`\n        "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

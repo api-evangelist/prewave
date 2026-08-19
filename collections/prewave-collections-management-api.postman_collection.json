@@ -1,0 +1,1906 @@
+{
+  "item": [
+    {
+      "id": "8a148577-1871-49c0-acbc-de5b4b2bf65b",
+      "name": "Collections - Management",
+      "description": {
+        "content": "Public API for managing collections in Prewave's supply chain network. Collections are used to organize and group suppliers (targets) in your supply chain.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "37dd85dc-fd96-48a6-b2f0-cc6baccd4e57",
+          "name": "Get collection by ID",
+          "request": {
+            "name": "Get collection by ID",
+            "description": {
+              "content": "\nRetrieve a specific collection by its unique identifier.\n\nThe collection must be accessible to the authenticated user and must be active (not deactivated). This includes:\n- Collections owned by the user\n- Collections shared with the user's teams\n- Organization-wide collections (if user has appropriate permissions)\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `READ` permission on them.\n\n**Response:**\nReturns a collection object with full details including nested child collections. The response includes the same fields as the list endpoint, but with the complete collection tree structure recursively populated. See the `PublicCollectionDTO` schema for complete field definitions.\n\n**Response Details:**\n- The response includes the full collection tree structure with all child collections recursively populated\n- Child collections have the same structure as the parent collection, allowing for nested hierarchies\n- Only active collections are returned (inactive/deactivated collections are filtered out)\n- Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior.\n\n**Required Permissions**: `ACCESS_COLLECTION` and `READ` on the collection.\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8a0f4e2-c29a-43a2-a6ca-065d1602c4ee",
+              "name": "200 OK - Collection found and returned successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":123,\\\"uuid\\\":\\\"550e8400-e29b-41d4-a716-446655440000\\\",\\\"scope\\\":\\\"User\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"European Suppliers\\\",\\\"count\\\":15,\\\"lanes\\\":true,\\\"tiersEnabled\\\":true,\\\"parentId\\\":100,\\\"children\\\":[{\\\"id\\\":124,\\\"uuid\\\":\\\"660e8400-e29b-41d4-a716-446655440001\\\",\\\"scope\\\":\\\"Customer\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"Tier 1 Suppliers\\\",\\\"count\\\":8,\\\"lanes\\\":false,\\\"tiersEnabled\\\":true,\\\"parentId\\\":123,\\\"children\\\":[],\\\"updatedAt\\\":null}],\\\"updatedAt\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1b4222e-7225-4c96-8fd2-6d0876c2eb80",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0c961fe-b4bd-4e92-9892-81e9bf13db83",
+              "name": "404 Not Found - The collection with the specified ID was not found, is inactive (deactivated), or is not accessible to your organization. This may occur if: (1) the collection ID doesn't exist, (2) the collection was deactivated (soft-deleted), (3) the collection was never accessible to your organization, or (4) the collection is inactive and filtered out by the system.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Collection with id 123 not found\\\",\\\"solution\\\":\\\"Verify the collection ID and ensure it belongs to your organization\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "612f635d-b6d6-42c6-adae-0f60f773ed98",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5061f90b-b84c-494e-85b3-cf7c5107cb98",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c9f4e1c-22c1-4023-95b4-8bf59f506bb1",
+          "name": "Update an existing collection",
+          "request": {
+            "name": "Update an existing collection",
+            "description": {
+              "content": "\nUpdate an existing collection's name and lanes settings.\n\nOnly active collections that the user has update permissions for can be modified. Only the collection name and lanes setting can be updated through this endpoint. Other properties like `scope` and `tiersEnabled` cannot be changed after creation.\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `UPDATE` permission on them.\n\n**Request:**\nOnly `name` (required) and `lanes` (optional) fields can be updated. All other fields (`scope`, `tiersEnabled`, `parentId`) cannot be changed through this endpoint. See the `PublicCollectionUpdatePayload` schema for complete field definitions.\n\n**Validation Rules:**\n- Collection names must be unique within the user's scope (duplicate names will result in `409 Conflict`)\n- The collection must exist, be active (not deactivated), and be accessible to the user\n- The user must have `UPDATE` permission on the collection\n- The user must be the collection creator OR have been granted access to the collection\n\n**What happens when you update a collection:**\n\n1. **Collection Update**: The collection's name and/or lanes setting are updated\n2. **Audit Trail**: The update is recorded in the audit log with:\n   - The user who updated the collection\n   - Timestamp of the operation\n   - Previous and new values for changed fields\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection name and lanes updated via Public API\"\n\n**Important Notes:**\n\n- Collection names must be unique within the user's scope - attempting to use a duplicate name will result in `409 Conflict`\n- Only `name` and `lanes` can be updated through this endpoint - all other fields (`scope`, `type`, `tiersEnabled`, `parentId`) are preserved from the existing collection\n- The `scope` and `tiersEnabled` fields are immutable after creation\n- Inactive (deactivated) collections cannot be updated and will return `404 Not Found`\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permissions**: `MANAGE_COLLECTION` and `UPDATE` on the collection.\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lanes\": \"<boolean>\",\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "26236ee2-44ea-4bab-957b-03b2d17cc928",
+              "name": "200 OK - Collection updated successfully. The update has been audited with the comment 'Collection name and lanes updated via Public API'.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":123,\\\"uuid\\\":\\\"550e8400-e29b-41d4-a716-446655440000\\\",\\\"scope\\\":\\\"User\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"Updated Supplier Collection\\\",\\\"count\\\":15,\\\"lanes\\\":false,\\\"tiersEnabled\\\":true,\\\"parentId\\\":100,\\\"children\\\":[],\\\"updatedAt\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54e02ef8-30b9-458b-8f00-74889002040c",
+              "name": "400 Bad Request - Invalid request payload or validation errors. The request body is malformed or contains invalid data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"invalid_request\\\",\\\"message\\\":\\\"Name is required\\\",\\\"solution\\\":\\\"Fix the request\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9be416bb-43b1-47de-80f4-4c477c5f7fbe",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e099a6da-8a4c-4551-b734-acafdb6089bf",
+              "name": "404 Not Found - The collection with the specified ID was not found, is inactive (deactivated), or is not accessible to your organization. This may occur if: (1) the collection ID doesn't exist, (2) the collection was deactivated (soft-deleted), (3) the collection was never accessible to your organization, (4) you don't have update access (you must be the collection creator OR have been granted access), or (5) the collection is inactive and filtered out by the system.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Collection with id 123 not found or access denied\\\",\\\"solution\\\":\\\"Verify the collection ID and ensure you have the required permission on the collection\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60bd081c-ac37-4490-9ff6-df6946e0b3f3",
+              "name": "409 Conflict - A collection with the same name already exists in the user's scope. Collection names must be unique within each scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"duplicate_resource\\\",\\\"message\\\":\\\"Collection with name 'New Supplier Collection' already exists in Customer scope\\\",\\\"solution\\\":\\\"Use a different collection name or a different scope\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4beb0169-ef1a-479a-8bb2-4ef214bf049a",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c91b8c9-f987-4634-b31a-10ab2b42be8c",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Updated Supplier Collection\",\"lanes\":false}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f662335-eae3-4014-9e97-d6f42015befe",
+          "name": "Deactivate a collection",
+          "request": {
+            "name": "Deactivate a collection",
+            "description": {
+              "content": "\nDeactivate (soft delete) an existing collection.\n\nThis operation performs a **soft deletion** by marking the collection as inactive. The collection data remains in the database but is no longer accessible through the API.\n\n**Parameter:**\n- `{collectionId}` (path parameter): The unique identifier of the collection to deactivate.\n\n**What happens when you deactivate a collection:**\n\n1. **Collection Deactivation**: The collection is soft-deleted (marked as inactive)\n2. **API Visibility**: The collection will no longer appear in collection list queries (`GET /public/v1/collections`) or be accessible via `GET /public/v1/collections/{collectionId}`\n3. **Target Relationships**: Target-collection relationships remain in the database, but since the collection is inactive, targets linked to this collection become inaccessible through the API. The targets themselves are not deleted.\n4. **Cleanup**: Collection filters and tree filters associated with the collection are removed\n5. **User Default Collection**: If this collection was set as the user's default collection, it will be cleared\n6. **Audit Trail**: The deactivation is recorded in the audit log with:\n   - The user who deactivated the collection\n   - Timestamp of the operation\n   - Collection details (name, scope, type, ID)\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection deleted via Public API\"\n\n**Important Notes:**\n\n- This is a **soft delete** - the collection is marked as inactive but data remains in the database\n- Deactivated collections are filtered out from all API queries automatically\n- **Only the creator of the collection can deactivate it** - even if you have `DELETE` permission through a role, you must be the collection creator\n- Target-collection relationships remain in the database, but targets become inaccessible through the API since the collection is inactive\n- The targets themselves are not deleted - only the collection becomes inactive\n- The collection cannot be reactivated through this API (no reactivation endpoint is available)\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permissions**:\n- `MANAGE_COLLECTION` permission\n- `DELETE` permission on the collection\n- **You must be the creator of the collection** (collection.userId must match your user ID)\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0360f57e-22ec-4208-88e0-f2b295ee556b",
+              "name": "204 No Content - Collection deactivated successfully. The collection has been soft-deleted (marked as inactive), and the deactivation has been audited with the comment 'Collection deleted via Public API'. The collection will no longer appear in API queries. Target-collection relationships remain in the database but become inaccessible since the collection is inactive.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d16d6fb1-f1d5-447b-b808-60a845a068d2",
+              "name": "400 Bad Request - Invalid request. This status code is returned when the request is malformed or validation fails. This may occur if: (1) the collection cannot be deleted due to validation constraints, (2) the request parameters are invalid, or (3) there are other validation errors preventing the deletion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"message\\\":\\\"Invalid request\\\",\\\"code\\\":\\\"invalid_request\\\",\\\"solution\\\":\\\"Fix the request\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "479d539b-2722-49dd-9fbc-2008d79aada9",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17169aea-b0b0-45d6-9b90-29f71edc4bc4",
+              "name": "404 Not Found - The collection with the specified ID was not found, is inactive (deactivated), or is not accessible to your organization. This may occur if: (1) the collection ID doesn't exist, (2) the collection was deactivated (soft-deleted), (3) the collection was never accessible to your organization, or (4) you don't have read access to the collection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Collection with id 123 not found or access denied\\\",\\\"solution\\\":\\\"Verify the collection ID and ensure you have the required permission on the collection\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53a9114e-07c6-42b5-9f48-5ee6b8b9c8b7",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72ef57d9-a694-4723-9294-be570b770aa0",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e763f115-8d7a-47e1-ac29-fd28ffac7739",
+          "name": "List all collections",
+          "request": {
+            "name": "List all collections",
+            "description": {
+              "content": "\nRetrieve all active collections accessible to the authenticated user with pagination support.\n\nThis endpoint returns collections that the user has read access to, including:\n- User-owned collections (`scope: User`)\n- Customer collections (`scope: Customer`) - organization-wide collections accessible to the user\n- Team-shared collections (via collection roles)\n\n**Note**:\n- Only active (non-deactivated) collections are returned\n- Featured collections (`scope: Featured`) are excluded from this endpoint\n- Inactive (deactivated) collections are automatically filtered out\n\n**Response:**\nReturns a paginated list of collection objects. Each collection includes basic information such as id, uuid, scope, type, name, count, lanes, tiersEnabled, and optional parentId and children fields. See the `PublicCollectionDTO` schema for complete field definitions.\n\n**Note**: Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior. In the list endpoint, `children` arrays are typically empty - use `GET /public/v1/collections/{collectionId}` to retrieve a collection with its full children tree populated.\n\n        **Pagination:**\n        - Results are paginated for efficient data retrieval\n        - Use query parameters to control pagination:\n  - `page`: Page number (0-indexed, default: 0)\n  - `size`: Number of items per page (default: 500)\n        - Results are sorted alphabetically by collection name\n        - Only active collections are included in pagination (inactive/deactivated collections are filtered out)\n\n**Access Control:**\n- Collections are filtered to include only those accessible to you:\n  - Collections owned by you (`scope: User`)\n  - Customer collections accessible to your organization (`scope: Customer`)\n  - Collections where you have been granted access (via collection roles)\n- Featured collections are excluded from this endpoint\n- Inactive (deactivated) collections are automatically excluded\n\n**Required Permission**: `ACCESS_COLLECTION`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Zero-based page index (0..N)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "500",
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e8fe2dbc-8232-49ca-a9bf-4b2d8e9a4710",
+              "name": "200 OK - Successfully retrieved collections",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "500"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"id\\\":123,\\\"uuid\\\":\\\"550e8400-e29b-41d4-a716-446655440000\\\",\\\"scope\\\":\\\"User\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"My Suppliers\\\",\\\"count\\\":45,\\\"lanes\\\":true,\\\"tiersEnabled\\\":false,\\\"parentId\\\":null,\\\"children\\\":[],\\\"updatedAt\\\":null},{\\\"id\\\":124,\\\"uuid\\\":\\\"660e8400-e29b-41d4-a716-446655440001\\\",\\\"scope\\\":\\\"Customer\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"Tier 1 Suppliers\\\",\\\"count\\\":12,\\\"lanes\\\":false,\\\"tiersEnabled\\\":true,\\\"parentId\\\":100,\\\"children\\\":[],\\\"updatedAt\\\":null}],\\\"size\\\":20,\\\"number\\\":0,\\\"totalElements\\\":2,\\\"totalPages\\\":1,\\\"numberOfElements\\\":2}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5389998-e90b-4fd3-b49e-3fcae5726644",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "500"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71d70914-f490-441e-8690-b75f6d277f81",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "500"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1656cca0-9913-45b6-866c-911aa6586944",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "500"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ffed1bab-5d4a-44ea-9cc4-fbba4a81d623",
+          "name": "Create a new collection",
+          "request": {
+            "name": "Create a new collection",
+            "description": {
+              "content": "\nCreate a new collection with the specified properties.\n\nThe collection will be created with \"Customer\" scope by default unless explicitly specified otherwise. All required fields must be provided and will be validated.\n\n**Note**: The collection will be automatically subscribed to your account upon creation, and you will become the collection owner.\n\n**Request:**\nThe request body includes collection name (required) and optional fields for scope, lanes, tiersEnabled, and parentId. See the `PublicCollectionPayload` schema for complete field definitions and validation rules.\n\n**Validation Rules:**\n- Collection names must be unique within the specified scope\n- The `tiersEnabled` field cannot be changed after collection creation\n- The `parentId` field is accepted but currently not used - collection hierarchy is managed internally\n\n**What happens when you create a collection:**\n\n1. **Collection Creation**: A new active collection is created with the specified properties\n2. **User Subscription**: You are automatically subscribed to the collection and become its owner\n3. **User Activity**: For Customer scope collections, the creation is logged in your user activity\n4. **Audit Trail**: The creation is recorded in the audit log with:\n   - The user who created the collection\n   - Timestamp of the operation\n   - Collection details (name, scope, type)\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection created via Public API\"\n\n**Important Notes:**\n\n- Collection names must be unique within the specified scope - attempting to use a duplicate name will result in `409 Conflict`\n- Once created, the `scope` and `tiersEnabled` fields cannot be changed\n- The collection will be empty (no targets) initially - use the Collection Targets API (`POST /public/v1/collections/{collectionId}/targets`) to add suppliers to the collection\n- You automatically become the owner of the collection upon creation\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permission**: `CREATE_COLLECTION`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lanes\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"scope\": \"<string>\",\n  \"tiersEnabled\": \"<boolean>\",\n  \"parentId\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d3bc08e0-a7fa-4021-b38e-996349c6baf3",
+              "name": "201 Created - Collection created successfully. The creation has been audited with the comment 'Collection created via Public API'.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":124,\\\"uuid\\\":\\\"a1b2c3d4-e5f6-7890-1234-567890abcdef\\\",\\\"scope\\\":\\\"Customer\\\",\\\"type\\\":\\\"Default\\\",\\\"name\\\":\\\"New Supplier Collection\\\",\\\"count\\\":0,\\\"lanes\\\":true,\\\"tiersEnabled\\\":false,\\\"parentId\\\":null,\\\"children\\\":[],\\\"updatedAt\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40b3d109-38a5-4048-8c3b-18ba65a8b607",
+              "name": "400 Bad Request - Invalid request payload or validation errors. The request body is malformed or contains invalid data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"invalid_request\\\",\\\"message\\\":\\\"Name is required\\\",\\\"solution\\\":\\\"Fix the request\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cde9eaf-d057-4e72-a149-8e7dad3b4df9",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb567d73-d147-4323-a37b-625f4d1785c3",
+              "name": "409 Conflict - A collection with the same name already exists in the specified scope. Collection names must be unique within each scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"duplicate_resource\\\",\\\"message\\\":\\\"Collection with name 'New Supplier Collection' already exists in Customer scope\\\",\\\"solution\\\":\\\"Use a different collection name or a different scope\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5edcaceb-b82b-4bd5-af9a-2b73547f64b7",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4366848-5757-40f5-b0cf-c2fe820fec35",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"scope\":\"Customer\",\"name\":\"New Supplier Collection\",\"lanes\":true,\"tiersEnabled\":false,\"parentId\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8a256f4a-f21b-40f1-858f-66f252c140a1",
+    "name": "Public Prewave Actions Collections - Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

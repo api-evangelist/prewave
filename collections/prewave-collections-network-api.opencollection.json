@@ -1,0 +1,197 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Collections - Network API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections - Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get tree graph for a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/network/:collectionId/tree-graph",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "commodityIds",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "commodityTreeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "fetchParents",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tierLevel",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections Tier-N API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v2/network/{collectionId}/tree-graph` | `GET /public/"
+        },
+        {
+          "info": {
+            "name": "Get targets for a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/network/:collectionId/targets",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v2/network/{collectionId}/targets` | `GET /public/v1/collect"
+        },
+        {
+          "info": {
+            "name": "Get commodity graph for a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/network/:collectionId/commodity-graph",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a commodity-based network graph for a collection.\n\nThis endpoint returns a graph structure showing how targets in the collection are connected\nthrough commodity relationships. The graph represents supply chain relationships organized\nby commodity/product categories.\n\n**Use Cases**:\n- Analyze commodity-based supply chain networks\n- Visualize relationships organized by product categories\n- Identify commodity-specific supplier connections\n\n**Response Format**:\nReturns an array of tree nod"
+        },
+        {
+          "info": {
+            "name": "Get commodity graph for a commodity tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/network/tree/:commodityTreeId/commodity-graph",
+            "params": [
+              {
+                "name": "commodityTreeId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a commodity-based network graph using a commodity tree ID.\n\nThis endpoint is similar to the collection-based commodity graph endpoint but uses a commodity\ntree ID to identify the collection. The commodity tree represents a hierarchical organization\nof commodity categories.\n\n**Use Cases**:\n- Analyze commodity-based networks using commodity tree identifiers\n- Visualize relationships for specific commodity hierarchies\n- Integrate with systems that use commodity tree IDs\n\n**Response Format"
+        },
+        {
+          "info": {
+            "name": "Get tree graph for a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/network/:collectionId/tree-graph",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "commodityIds",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "commodityTreeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "fetchParents",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tierLevel",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\nRetrieve a hierarchical tree structure showing supplier relationships within a collection.\n\nThis endpoint returns a tree graph representing the supply chain network, showing how suppliers\nare connected through multiple tiers. Each node in the tree represents a target (supplier/customer),\nand edges repre"
+        },
+        {
+          "info": {
+            "name": "Get commodity graph for a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/network/:collectionId/commodity-graph",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v2 Network API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/network/{collectionId}/commodity-graph` | `GET /public/v2/net"
+        },
+        {
+          "info": {
+            "name": "Get commodity graph for a commodity tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/network/tree/:commodityTreeId/commodity-graph",
+            "params": [
+              {
+                "name": "commodityTreeId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v2 Network API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/network/tree/{commodityTreeId}/commodity-graph` | `GET /publi"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

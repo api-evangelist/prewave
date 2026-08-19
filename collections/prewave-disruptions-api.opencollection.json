@@ -1,0 +1,125 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Disruptions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Disruptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find alerts on disruption map",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/disruptions/alerts",
+            "params": [
+              {
+                "name": "collectionIds",
+                "value": "123,456",
+                "type": "query",
+                "description": "Collection IDs to show alerts for. Obtain collection IDs from GET /public/v1/collections. If empty and showAllAlerts is false, no alerts will be returned."
+              },
+              {
+                "name": "showAllAlerts",
+                "value": "false",
+                "type": "query",
+                "description": "If true, show all accessible alerts and ignore the collectionIds parameter. If false, only alerts for the specified collections are returned."
+              },
+              {
+                "name": "countryId",
+                "value": "1",
+                "type": "query",
+                "description": "Country ID to filter alerts by. Obtain country IDs from the infotags endpoint (GET /public/v1/infotags) filtered by location type. Note: Country codes are not currently supported; use country ID instead."
+              },
+              {
+                "name": "includeGeo",
+                "value": "true",
+                "type": "query",
+                "description": "If set to true, the response will include the geo information."
+              },
+              {
+                "name": "bound",
+                "value": "",
+                "type": "query",
+                "description": "Bounding box defining the geographic area to search. Format: bound=xmin,ymin,xmax,ymax. Example: bound=16.0,48.0,16.5,48.5"
+              },
+              {
+                "name": "previousBound",
+                "value": "",
+                "type": "query",
+                "description": "Previous bounding box for incremental updates. Used to optimize queries when updating a map view."
+              },
+              {
+                "name": "industryIds",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tokens",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "poiCTypeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "disruptionStatusId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tiers",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "scopes",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "perspectiveId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "eventTypeId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve alerts displayed on the disruption map filtered by geographic region, collections, and other criteria.\n\nThis endpoint returns alerts that are visible on the disruption map interface, allowing you to query\nalerts by geographic bounding boxes, collections, countries, and various filter criteria.\n\n### Response\nReturns an array of alert objects. Each alert includes basic information (id, uuid, title, timestamps),\nevent grouping, priority and classification details, location/ge"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

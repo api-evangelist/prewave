@@ -1,0 +1,286 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Collections - Tier-N API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections - Tier-N",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get tier-n collection settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/tier-n/settings",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve tier-n configuration for a collection. These settings are used as defaults when calling `GET .../tier-n/data` and can be overridden via query parameters there.\n\n### Related Operations\n- **Data**: [GET /public/v1/collections/{collectionId}/tier-n/data](#operations-Collections_-_Tier-N-getTierNCollectionGraph)\n- **Update**: [PUT /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-updateTierNCollectionSettings)\n\n### Required Permission\n`acc"
+        },
+        {
+          "info": {
+            "name": "Update tier-n collection settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/tier-n/settings",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n### Overview\nUpdate tier-n configuration for a collection. All request fields are optional (partial update). Updated settings become defaults for `GET .../tier-n/data`.\n\n### Validation\n- Collection must exist, be active, and have `tiersEnabled=true`.\n- `maxTier` 1–9 if provided; `probability` 0–100 if provided; dates in YYYY-MM-DD; `shipmentsPeriodFrom` ≤ `shipmentsPeriodTo`.\n\n### Audit\nThe update is recorded with comment \"Tier-n collection settings updated via Public API\".\n\n### Required Permis"
+        },
+        {
+          "info": {
+            "name": "Get a tree-structure of suppliers of the given collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v3/alpha/suppliers/collection/:collectionId/supplier-graph",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "987",
+                "type": "path",
+                "description": "Collection identifier"
+              },
+              {
+                "name": "format",
+                "value": "JSON",
+                "type": "query",
+                "description": "Output format: JSON (default) or CSV"
+              },
+              {
+                "name": "includeHeaderMetadata",
+                "value": "false",
+                "type": "query",
+                "description": "Include metadata as response headers"
+              },
+              {
+                "name": "includeCommodityFilter",
+                "value": "true",
+                "type": "query",
+                "description": "Include commodity filter in the response metadata"
+              },
+              {
+                "name": "includeMediaSources",
+                "value": "false",
+                "type": "query",
+                "description": "Include media source URLs for MEDIA edges"
+              },
+              {
+                "name": "includeShipmentDetails",
+                "value": "false",
+                "type": "query",
+                "description": "Include shipment details where applicable"
+              },
+              {
+                "name": "tier",
+                "value": "2",
+                "type": "query",
+                "description": "Restrict to a specific tier (1..n)"
+              },
+              {
+                "name": "source",
+                "value": "MEDIA",
+                "type": "query",
+                "description": "Restrict to a specific edge source"
+              },
+              {
+                "name": "lastShipment",
+                "value": "2024-01-01",
+                "type": "query",
+                "description": "Only include suppliers with shipments since this date (YYYY-MM-DD)"
+              },
+              {
+                "name": "hsCodes",
+                "value": "847330,940161",
+                "type": "query",
+                "description": "Filter by HS codes"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections Tier-N API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v3/alpha/suppliers/collection/{collectionId}/supplier"
+        },
+        {
+          "info": {
+            "name": "Get tier-n collection supplier graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/tier-n/data",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+              },
+              {
+                "name": "includeCommodityFilter",
+                "value": "true",
+                "type": "query",
+                "description": "Include commodity filter metadata in the response. When true, adds commodity filter information to help understand data scope and filtering applied."
+              },
+              {
+                "name": "includeMediaSources",
+                "value": "false",
+                "type": "query",
+                "description": "Include media source URLs for MEDIA-type relationships. When true, adds `mediaSources` array with URLs used to derive the relationship from news/media sources."
+              },
+              {
+                "name": "includeShipmentDetails",
+                "value": "false",
+                "type": "query",
+                "description": "Include detailed shipment information per HS code. When true, adds `shipments` array with shipment counts and dates broken down by product code."
+              },
+              {
+                "name": "tier",
+                "value": "2",
+                "type": "query",
+                "description": "Restrict results to a specific tier level. Tier 1 = direct suppliers, Tier 2 = suppliers of suppliers, etc. Range: 1-9. If not specified, uses collection's maxTier setting."
+              },
+              {
+                "name": "source",
+                "value": "Customs",
+                "type": "query",
+                "description": "Filter by data source type. Valid values: Customs (shipment data), Media (news/media), Customer (customer data), PrewavePrediction (AI predictions). If not specified, uses all enabled sources."
+              },
+              {
+                "name": "lastShipment",
+                "value": "2024-01-01",
+                "type": "query",
+                "description": "Only include suppliers with shipments since this date. Format: YYYY-MM-DD. Useful for focusing on recent activity and filtering out inactive relationships."
+              },
+              {
+                "name": "hsCodes",
+                "value": "847330,940161",
+                "type": "query",
+                "description": "Filter by specific HS codes (comma-separated). Only relationships involving these product codes will be returned. Example: 847330,940161"
+              },
+              {
+                "name": "maxTier",
+                "value": "4",
+                "type": "query",
+                "description": "Override the maximum tier level for analysis. Higher values may significantly increase response time and data volume. Range: 1-9."
+              },
+              {
+                "name": "scopePrivate",
+                "value": "true",
+                "type": "query",
+                "description": "Override collection setting: include private targets in scope. When true, includes relationships involving private targets (typically internal company data)."
+              },
+              {
+                "name": "scopeShared",
+                "value": "true",
+                "type": "query",
+                "description": "Override collection setting: include shared targets in scope. When true, includes relationships involving shared targets (typically partner/team data)."
+              },
+              {
+                "name": "scopePublic",
+                "value": "false",
+                "type": "query",
+                "description": "Override collection setting: include public targets in scope. When true, includes relationships involving public targets (typically open/public data)."
+              },
+              {
+                "name": "sourceCustomer",
+                "value": "true",
+                "type": "query",
+                "description": "Override collection setting: include customer data sources. When true, includes relationships derived from customer-provided data."
+              },
+              {
+                "name": "sourceCustoms",
+                "value": "true",
+                "type": "query",
+                "description": "Override collection setting: include customs data sources. When true, includes relationships derived from customs/shipment data (most reliable source)."
+              },
+              {
+                "name": "sourceMedia",
+                "value": "false",
+                "type": "query",
+                "description": "Override collection setting: include media data sources. When true, includes relationships derived from media/news sources (may be less reliable)."
+              },
+              {
+                "name": "sourcePrewavePrediction",
+                "value": "true",
+                "type": "query",
+                "description": "Override collection setting: include Prewave prediction data sources. When true, includes AI-predicted relationships with probability scores."
+              },
+              {
+                "name": "minShipments",
+                "value": "10",
+                "type": "query",
+                "description": "Override collection setting: minimum number of shipments required for a relationship to be included. Higher values filter out less established relationships. Range: 0+."
+              },
+              {
+                "name": "probability",
+                "value": "80",
+                "type": "query",
+                "description": "Override collection setting: minimum probability threshold for predicted relationships. Range: 0-100. Higher values return only high-confidence predictions."
+              },
+              {
+                "name": "shipmentsPeriodFrom",
+                "value": "2024-06-01",
+                "type": "query",
+                "description": "Override collection setting: start date for shipment period analysis. Format: YYYY-MM-DD. Only relationships with shipments in this period are considered."
+              },
+              {
+                "name": "shipmentsPeriodTo",
+                "value": "2024-11-30",
+                "type": "query",
+                "description": "Override collection setting: end date for shipment period analysis. Format: YYYY-MM-DD. Only relationships with shipments in this period are considered."
+              },
+              {
+                "name": "suspectedSuppliers",
+                "value": "false",
+                "type": "query",
+                "description": "Override collection setting: include suspected suppliers. When true, includes suppliers flagged as potentially risky or suspicious."
+              },
+              {
+                "name": "logisticsProvider",
+                "value": "false",
+                "type": "query",
+                "description": "Override collection setting: include logistics providers. When true, includes companies that provide logistics services rather than direct suppliers."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve a stream of supplier relationship data for a tier-n enabled collection. Each entry represents a relationship between a customer and supplier at a specific tier level (tier 1 = direct suppliers, tier 2+ = indirect).\n\n### Response Format\n- JSON array of supplier relationship entries (tier, supplierTargetId, customerTargetId, source, and optional probability/mediaSources/nShipments/shipments).\n- Null-valued fields are omitted. Optional fields appear based on query params (e.g"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

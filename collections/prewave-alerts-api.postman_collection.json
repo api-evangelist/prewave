@@ -1,0 +1,2025 @@
+{
+  "item": [
+    {
+      "id": "3a6ea4a1-ccdb-44cb-b3c8-b0b484254a62",
+      "name": "Alerts",
+      "description": {
+        "content": "Endpoints for retrieving alert information from user feeds, disruption maps, and specific targets. Supports filtering by collections, dates, priorities, geographic regions, target identifiers, and other criteria.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f00dc67d-0682-41d3-b074-703f6b21b735",
+          "name": "Get all alerts of the current user's feed (V2)",
+          "request": {
+            "name": "Get all alerts of the current user's feed (V2)",
+            "description": {
+              "content": "\nRetrieve all alerts for targets that are in collections with feed delivery enabled. Results are ordered by newest first. V2 uses the same filtering and feed logic as the Prewave dashboard.\n\n**Response:** A `Page` containing a list of alert objects. Standard pagination fields: `content`, `totalElements`, `totalPages`, `size`, `number`, `first`, `last`. Each alert includes id, title, timestamps (ISO 8601 UTC), event, priority, classification, locations, links, media, primary/mentioned targets, collection paths, and optional geo (see `includeGeo`).\n\n**Pagination:** Use query parameters `page` (0-based index) and `size` (items per page). Default page size is 20 when not specified.\n\n**Required permission:** `access_public_user_feed`\n\n**Note:** Geographic information (`geo`) is only included when `includeGeo=true`. Fields with null values are omitted from the JSON response.\n\n---\n\n## Migration from V1 (`/public/v1/feed`)\n\n### What changed\n\n| Aspect | V1 | V2 |\n|--------|----|----|\n| **URL** | `/public/v1/feed` | `/public/v2/feed` |\n| **Collections** | `collectionId` (singular) | `collectionIds` (plural); same comma-separated IDs |\n| **Date filter** | `from` or `newerThan` (milliseconds) | `from` only; UTC ISO 8601 (e.g. `2024-01-01T00:00:00Z`) |\n| **Omit date** | (varies) | Last **90 days** of data |\n| **Timestamps in response** | Numeric (e.g. milliseconds) | **ISO 8601 strings in UTC** for `createdAt`, `predictedAtStart`, `predictedAtEnd` |\n\n### What is new in V2\n\n- **Tier control:** `minTier` and `maxTier` to include specific supply chain tiers (Tier 1 = direct suppliers, Tier 2 = their suppliers, etc.). Omit both for Tier 1 only (default).\n- **Classification:** `isSituationReport`, `active`, `relevancy` on each alert.\n- **Structured metadata:** `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`—easier to filter and display than the previous `infotags` list.\n- **Context:** `mentionedTargets`, `previousAlerts`, `flagged`, `useCaseDetails` for richer context.\n- **Performance:** V2 is significantly faster than V1—lower latency and higher throughput.\n\n### What is removed in V2\n\n- **`statusId`** — no longer returned.\n- **`infotags`** — use the new structured fields instead: `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`.\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "feed"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "<integer>",
+                  "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. In V1 this was collectionId (singular); same comma-separated IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "<integer>",
+                  "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. In V1 this was collectionId (singular); same comma-separated IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<dateTime>",
+                  "description": "Start of the date range (inclusive). Use UTC ISO 8601 format (e.g. `2024-01-01T00:00:00Z`). If omitted, V2 returns alerts from the last 90 days filtered by `createdAt`. In V1 you could use `newerThan` (milliseconds) or `from`; V2 uses `from` only."
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Perspective ID to filter the feed by. Defaults to the user's default perspective."
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by Allowed values: Low, Mid, High, Critical (comma-separated)."
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by Allowed values: Low, Mid, High, Critical (comma-separated)."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeGeo",
+                  "value": "false",
+                  "description": "If set to true, the response will include the geo information. Set to true when you need coordinates or shapes for mapping."
+                },
+                {
+                  "disabled": false,
+                  "key": "impactLevelIds",
+                  "value": "<integer>",
+                  "description": "Impact level IDs to filter the feed by. Valid IDs depend on your tenant configuration."
+                },
+                {
+                  "disabled": false,
+                  "key": "impactLevelIds",
+                  "value": "<integer>",
+                  "description": "Impact level IDs to filter the feed by. Valid IDs depend on your tenant configuration."
+                },
+                {
+                  "disabled": false,
+                  "key": "minTier",
+                  "value": "1",
+                  "description": "Minimum supply chain tier depth to include (V2 only). Tier 1 = direct suppliers, Tier 2 = their suppliers, etc. Default 1. Must be ≤ maxTier; max value 5."
+                },
+                {
+                  "disabled": false,
+                  "key": "maxTier",
+                  "value": "1",
+                  "description": "Maximum supply chain tier depth to include (V2 only). Tier 1 = direct suppliers, Tier 2 = their suppliers, etc. Default 1. Must be ≥ minTier; max value 5."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f6517952-8593-4b20-ab81-318b9b52275a",
+              "name": "Successfully retrieved alerts",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"id\\\":12345,\\\"uuid\\\":\\\"a1b2c3d4-e5f6-7890-abcd-ef1234567890\\\",\\\"title\\\":\\\"Labor strike begins at Acme Manufacturing Inc\\\",\\\"createdAt\\\":1768473000.000000000,\\\"predictedAtStart\\\":1768456800.000000000,\\\"predictedAtEnd\\\":null,\\\"description\\\":\\\"Workers at Acme Manufacturing Inc began a strike affecting production lines.\\\",\\\"isSituationReport\\\":false,\\\"event\\\":{\\\"uuid\\\":\\\"b2c3d4e5-f6a7-8901-bcde-f23456789012\\\"},\\\"active\\\":true,\\\"relevancy\\\":\\\"Relevant\\\",\\\"locations\\\":[{\\\"id\\\":102006216,\\\"name\\\":\\\"Acme Manufacturing Plant\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":null,\\\"website\\\":null,\\\"location\\\":\\\"Sample City, US\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":null,\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":1,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":null,\\\"scoring\\\":null},\\\"ctype\\\":{\\\"id\\\":1,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":1,\\\"displayName\\\":\\\"Company\\\",\\\"pluralName\\\":\\\"Companies\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":null,\\\"priority\\\":0,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#cccccc\\\",\\\"textColor\\\":\\\"#000000\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":1,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":null,\\\"impact\\\":null,\\\"hsCode\\\":[],\\\"mergedTargets\\\":[]}],\\\"links\\\":[{\\\"id\\\":null,\\\"url\\\":\\\"https://example.com/news/labor-strike-acme-manufacturing\\\",\\\"title\\\":\\\"Labor strike begins at Acme Manufacturing Inc\\\",\\\"description\\\":\\\"Workers at Acme Manufacturing Inc began a strike affecting production lines.\\\",\\\"pictureUrl\\\":null,\\\"originalLang\\\":null,\\\"originalTitle\\\":null,\\\"originalDescription\\\":null}],\\\"media\\\":[],\\\"primaryTargets\\\":[{\\\"target\\\":{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":null,\\\"website\\\":null,\\\"location\\\":\\\"Sample City, US\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":null,\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":1,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":null,\\\"scoring\\\":null},\\\"ctype\\\":{\\\"id\\\":1,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":1,\\\"displayName\\\":\\\"Company\\\",\\\"pluralName\\\":\\\"Companies\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":null,\\\"priority\\\":0,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#cccccc\\\",\\\"textColor\\\":\\\"#000000\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":1,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":null,\\\"impact\\\":null,\\\"hsCode\\\":[],\\\"mergedTargets\\\":[]},\\\"impactLevel\\\":{\\\"id\\\":4222469,\\\"level\\\":\\\"company\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"ordering\\\":10},\\\"impactScore\\\":\\\"High\\\",\\\"priority\\\":\\\"High\\\"}],\\\"mentionedTargets\\\":[{\\\"id\\\":102006217,\\\"name\\\":\\\"Pacific Components Ltd\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":null,\\\"website\\\":null,\\\"location\\\":\\\"Port City, US\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":null,\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":1,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":null,\\\"scoring\\\":null},\\\"ctype\\\":{\\\"id\\\":1,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":1,\\\"displayName\\\":\\\"Company\\\",\\\"pluralName\\\":\\\"Companies\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":null,\\\"priority\\\":0,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#cccccc\\\",\\\"textColor\\\":\\\"#000000\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":2,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":null,\\\"impact\\\":null,\\\"hsCode\\\":[],\\\"mergedTargets\\\":[]}],\\\"priority\\\":\\\"High\\\",\\\"priorityDetails\\\":{\\\"massDisruption\\\":true,\\\"brandMention\\\":false,\\\"rumour\\\":false,\\\"lowPeerRisk\\\":false,\\\"terminates\\\":false},\\\"previousAlerts\\\":[{\\\"alertId\\\":12340,\\\"eventId\\\":5678,\\\"title\\\":\\\"Labor strike announced at Acme Manufacturing Inc\\\",\\\"description\\\":\\\"Union announces planned strike action beginning next week.\\\",\\\"createdAt\\\":1768032000.000000000}],\\\"flagged\\\":{\\\"reason\\\":\\\"Needs review\\\",\\\"comment\\\":\\\"Escalated for supplier risk assessment\\\",\\\"flaggedAt\\\":1768474800.000000000},\\\"useCaseDetails\\\":{\\\"relevant\\\":true,\\\"reason\\\":\\\"Direct tier-1 supplier in monitored collection\\\"},\\\"labels\\\":[{\\\"id\\\":42,\\\"scope\\\":\\\"Customer\\\",\\\"name\\\":\\\"High impact\\\",\\\"bgColor\\\":\\\"#FF5733\\\",\\\"textColor\\\":\\\"#FFFFFF\\\"}],\\\"eventTypes\\\":[{\\\"id\\\":501,\\\"value\\\":\\\"Labor dispute\\\",\\\"svalue\\\":\\\"labor_dispute\\\",\\\"icon\\\":\\\"fa-kit fa-strike\\\"}],\\\"eventTypeGroups\\\":[{\\\"id\\\":10,\\\"name\\\":\\\"Labor and workforce\\\",\\\"sname\\\":\\\"labor_workforce\\\",\\\"eventTypeIds\\\":[501]}],\\\"alertTypes\\\":[{\\\"id\\\":201,\\\"value\\\":\\\"happens\\\",\\\"svalue\\\":\\\"happens\\\",\\\"icon\\\":\\\"fa-kit fa-alert\\\"}],\\\"collectionPath\\\":[{\\\"id\\\":123,\\\"name\\\":\\\"Tier 1 suppliers\\\",\\\"path\\\":[{\\\"id\\\":1,\\\"name\\\":\\\"Supply chain monitoring\\\"},{\\\"id\\\":123,\\\"name\\\":\\\"Tier 1 suppliers\\\"}]}],\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"}}],\\\"pageable\\\":{\\\"pageNumber\\\":0,\\\"pageSize\\\":20,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"offset\\\":0,\\\"paged\\\":true,\\\"unpaged\\\":false},\\\"totalPages\\\":1,\\\"totalElements\\\":1,\\\"last\\\":true,\\\"size\\\":20,\\\"number\\\":0,\\\"numberOfElements\\\":1,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"first\\\":true,\\\"empty\\\":false}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0155a9fc-a4cd-416b-b252-5cc0cdd60389",
+              "name": "Bad Request - Invalid parameters (e.g. invalid date format, tier bounds, or priority values)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"invalid_request\\\",\\\"message\\\":\\\"Email must be a valid email address.\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e60658d2-45c3-4973-b1e9-f78c1b055a0d",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d593bebb-1167-4db7-bba6-5f2da0e55f65",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1be277db-92dc-4c87-a23c-32a50cd99456",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "minTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a2be249-40fa-4566-b4fc-473df2ae71db",
+          "name": "Get alerts for a specific target",
+          "request": {
+            "name": "Get alerts for a specific target",
+            "description": {
+              "content": "\nRetrieve alerts for a specific target identified by system ID and target ID.\n\nThis endpoint returns paginated alerts for a single target, supporting foreign system ID mapping.\nThe target can be identified using Prewave internal IDs or foreign system IDs (e.g., customer,\nsupplier, SAP IDs).\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.\n\n**Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.\n\n**Use Cases**:\n- Monitor alerts for a specific supplier\n- Track alerts for targets identified by external system IDs\n- Filter alerts by priority, date, or perspective\n- Export target-specific alerts for reporting\n\n**Target Identification**:\n- Supports Prewave internal IDs (`systemId=\"prewave\"`)\n- Supports foreign system IDs (e.g., `systemId=\"customer\"`, `systemId=\"supplier\"`)\n- Automatically resolves foreign IDs to Prewave target IDs\n\n**Filtering Options**:\n- **priorities**: Filter by alert priority levels (Low, Mid, High, Critical)\n- **newerThan**: Filter alerts newer than a timestamp (milliseconds)\n- **perspectiveId**: Filter by perspective (defaults to user's perspective)\n- **includeGeo**: Include geographic coordinates in response\n\n**Pagination**:\n- Results are paginated (default: 20 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required Permission**: `access_public_target_feed`\n\n**Performance Impact**: Medium\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "newerThan",
+                  "value": "<long>",
+                  "description": "Only return alerts that are newer than the given timestamp (Timestamp in milliseconds since epoch)"
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by"
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeGeo",
+                  "value": "<boolean>",
+                  "description": "If set to true, the response will include the geo information."
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "The perspective ID to filter the alerts. If not provided, the user's perspective ID will be used."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cab24742-47eb-48d0-a8eb-8fa6f5a7e4f7",
+              "name": "Successfully retrieved target alerts",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"id\\\":12345,\\\"uuid\\\":\\\"a1b2c3d4-e5f6-7890-abcd-ef1234567890\\\",\\\"title\\\":\\\"Insolvency announced at Acme Manufacturing Inc\\\",\\\"createdAt\\\":1704067200000,\\\"predictedAtStart\\\":1703980800000,\\\"predictedAtEnd\\\":1704067199000,\\\"description\\\":\\\"Insolvency announced for Acme Manufacturing Inc on 15-01-2025\\\",\\\"event\\\":{\\\"uuid\\\":\\\"b2c3d4e5-f6a7-8901-bcde-f23456789012\\\"},\\\"statusId\\\":null,\\\"locations\\\":[],\\\"links\\\":[{\\\"id\\\":null,\\\"url\\\":\\\"https://example.com/news/insolvency-acme-manufacturing\\\",\\\"title\\\":\\\"Insolvency announced for Acme Manufacturing Inc\\\",\\\"description\\\":\\\"Insolvency announced for Acme Manufacturing Inc on 15-01-2025\\\",\\\"pictureUrl\\\":null,\\\"originalLang\\\":null,\\\"originalTitle\\\":null,\\\"originalDescription\\\":null}],\\\"media\\\":[],\\\"infotags\\\":[{\\\"id\\\":1001,\\\"type\\\":{\\\"type\\\":\\\"event_type\\\",\\\"active\\\":true,\\\"displayName\\\":\\\"Event Type\\\",\\\"icon\\\":null,\\\"ordering\\\":10001,\\\"display\\\":true},\\\"value\\\":\\\"Insolvency\\\",\\\"svalue\\\":\\\"insolvency\\\",\\\"icon\\\":\\\"fa-kit fa-financial-stress\\\",\\\"numValue\\\":null,\\\"priority\\\":null,\\\"impactScore\\\":null}],\\\"primaryTargets\\\":[{\\\"target\\\":{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":null,\\\"website\\\":null,\\\"location\\\":\\\"Sample City, US\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":null,\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":1,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":null,\\\"scoring\\\":null},\\\"ctype\\\":{\\\"id\\\":1,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":1,\\\"displayName\\\":\\\"Company\\\",\\\"pluralName\\\":\\\"Companies\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":null,\\\"priority\\\":0,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#cccccc\\\",\\\"textColor\\\":\\\"#000000\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":null,\\\"impact\\\":null,\\\"hsCode\\\":[],\\\"mergedTargets\\\":[]},\\\"impactLevel\\\":{\\\"id\\\":4222469,\\\"level\\\":\\\"company\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"ordering\\\":10},\\\"impactScore\\\":null,\\\"priority\\\":\\\"Mid\\\"}],\\\"priority\\\":\\\"Critical\\\",\\\"priorityDetails\\\":{\\\"massDisruption\\\":false,\\\"brandMention\\\":false,\\\"rumour\\\":false,\\\"lowPeerRisk\\\":false,\\\"terminates\\\":false},\\\"collectionPath\\\":[],\\\"geo\\\":null}],\\\"pageable\\\":{\\\"pageNumber\\\":0,\\\"pageSize\\\":20,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"offset\\\":0,\\\"paged\\\":true,\\\"unpaged\\\":false},\\\"totalPages\\\":1,\\\"totalElements\\\":1,\\\"last\\\":true,\\\"size\\\":20,\\\"number\\\":0,\\\"numberOfElements\\\":1,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"first\\\":true,\\\"empty\\\":false}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cf96712-6b33-4eb2-b348-702a81c85da5",
+              "name": "Bad Request - Invalid parameters (e.g., invalid timestamp, invalid priority values)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25fe9e5d-a1a6-4a9c-8cd3-285b1fe9830c",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20a23557-5f91-46fa-a2f4-d6d9004defa0",
+              "name": "Target not found or foreign system ID mapping not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Target not found: systemId=customer, targetId=INVALID_ID\\\",\\\"solution\\\":\\\"Verify target ID and system ID are correct\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cdfac5e-9108-4274-9ec9-3afb51e253b7",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a665dc66-46e5-4042-8df3-15e4359c858a",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "newerThan",
+                      "value": "1705312800000"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2a14fb6-b181-42f6-ad5e-17cab0463eb7",
+          "name": "Get all alerts of the current user's feed",
+          "request": {
+            "name": "Get all alerts of the current user's feed",
+            "description": {
+              "content": "\n## Current Endpoint Behavior\n\nRetrieve all alerts for targets that are in collections with feed delivery enabled.\n\nThis endpoint returns paginated alerts filtered by various criteria. Alerts are returned for targets\nthat belong to collections where feed delivery is enabled. Results are ordered by newest first.\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.\n\n**Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.\n\n**Required Permission**: `access_public_user_feed`\n\n**Performance Impact**: Medium\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "feed"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "collectionId",
+                  "value": "<integer>",
+                  "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. Obtain collection IDs from `GET /public/v1/collections` endpoint."
+                },
+                {
+                  "disabled": false,
+                  "key": "collectionId",
+                  "value": "<integer>",
+                  "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. Obtain collection IDs from `GET /public/v1/collections` endpoint."
+                },
+                {
+                  "disabled": false,
+                  "key": "newerThan",
+                  "value": "<long>",
+                  "description": "⚠️ **DEPRECATED** - Use `from` parameter instead. Only return alerts that are newer than the given timestamp (Timestamp in milliseconds). This parameter is deprecated in favor of ISO 8601 date format."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<dateTime>",
+                  "description": "Only return alerts that are newer than the given date. Use ISO 8601 format (e.g., 2020-12-31T23:59). This parameter replaces the deprecated `newerThan` parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Perspective ID to filter the feed by. Defaults to the user's default perspective. The perspective determines which risk factors and scoring weights are applied to alerts."
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by"
+                },
+                {
+                  "disabled": false,
+                  "key": "priorities",
+                  "value": "<string>",
+                  "description": "List of priorities to filter the feed by"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeGeo",
+                  "value": "<boolean>",
+                  "description": "If set to true, the response will include the geo information."
+                },
+                {
+                  "disabled": false,
+                  "key": "impactLevelIds",
+                  "value": "<integer>",
+                  "description": "Impact level IDs to filter the feed by. Only alerts with these impact levels will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "impactLevelIds",
+                  "value": "<integer>",
+                  "description": "Impact level IDs to filter the feed by. Only alerts with these impact levels will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c46fa0c1-6c1f-4c9c-8188-8fe33e54a51a",
+              "name": "Successfully retrieved alerts",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 12345,\n      \"uuid\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"title\": \"Industry Update happens at Acme Corporation\",\n      \"createdAt\": 1704067200000,\n      \"predictedAtStart\": 1703980800000,\n      \"predictedAtEnd\": 1704067199000,\n      \"description\": \"Acme Corporation is implementing new sustainability measures following industry best practices. The company has announced a comprehensive plan to reduce carbon emissions and improve supply chain transparency.\",\n      \"event\": {\n        \"uuid\": \"b2c3d4e5-f6a7-8901-bcde-f23456789012\"\n      },\n      \"locations\": [],\n      \"links\": [\n        {\n          \"url\": \"https://example.com/news/acme-sustainability-initiative\",\n          \"title\": \"Acme Corporation announces sustainability initiative\",\n          \"description\": \"Acme Corporation has announced a comprehensive plan to reduce carbon emissions and improve supply chain transparency.\"\n        }\n      ],\n      \"media\": [\n        {\n          \"url\": \"/images/twitter-img/example-image.jpg\",\n          \"mimeType\": \"image/jpeg\"\n        }\n      ],\n      \"infotags\": [\n        {\n          \"id\": 1001,\n          \"type\": {\n            \"type\": \"alert_type\",\n            \"active\": false,\n            \"displayName\": \"Alert Status\",\n            \"icon\": \"far fa-bell\",\n            \"ordering\": 1,\n            \"display\": true\n          },\n          \"value\": \"happens / occurs\",\n          \"svalue\": \"happens\"\n        },\n        {\n          \"id\": 2001,\n          \"type\": {\n            \"type\": \"event_type\",\n            \"active\": false,\n            \"displayName\": \"Event Type\",\n            \"ordering\": 10001,\n            \"display\": true\n          },\n          \"value\": \"Industry Update\",\n          \"svalue\": \"industry_update\",\n          \"icon\": \"fas fa-bullhorn\",\n          \"priority\": \"Low\"\n        }\n      ],\n      \"primaryTargets\": [\n        {\n          \"target\": {\n            \"id\": 102006215,\n            \"name\": \"Acme Corporation\",\n            \"logo\": \"/images/company-img/8258b578a63d8e9ea222e66fd6f578b12fa32c14cdb04779fc9d42b215bd2aeb.svg\",\n            \"screened\": false,\n            \"type\": {\n              \"id\": 5195261,\n              \"type\": \"organization\",\n              \"displayName\": \"Site Group\",\n              \"pluralName\": \"\",\n              \"ordering\": 0,\n              \"scoring\": \"Alert\"\n            },\n            \"ctype\": {\n              \"id\": 972417,\n              \"ctype\": \"company\",\n              \"targetTypeId\": 5195261,\n              \"displayName\": \"Site Group\",\n              \"pluralName\": \"\",\n              \"icon\": \"fas fa-building\",\n              \"ordering\": 0,\n              \"priority\": 0,\n              \"connectable\": false,\n              \"bgColor\": \"\",\n              \"textColor\": \"\"\n            },\n            \"geo\": {\n              \"properties\": {},\n              \"type\": \"Feature\"\n            },\n            \"geoShape\": {\n              \"properties\": {},\n              \"type\": \"Feature\"\n            },\n            \"parents\": [],\n            \"industries\": [],\n            \"own\": false,\n            \"managed\": false,\n            \"following\": false,\n            \"collectionFollowing\": false,\n            \"tier\": 1,\n            \"path\": [\n              {\n                \"id\": 102006215,\n                \"name\": \"Acme Corporation\",\n                \"foreignSystems\": []\n              }\n            ],\n            \"collectionPath\": [],\n            \"collectionPaths\": [],\n            \"foreignSystems\": [],\n            \"scoreAvail\": \"None\",\n            \"hsCode\": [],\n            \"merged_targets\": []\n          },\n          \"impactLevel\": {\n            \"id\": 7513328,\n            \"level\": \"tier2\",\n            \"displayName\": \"Tier-2\",\n            \"ordering\": 100\n          },\n          \"priority\": \"Mid\"\n        }\n      ],\n      \"priority\": \"Low\",\n      \"priorityDetails\": {\n        \"massDisruption\": false,\n        \"brandMention\": false,\n        \"rumour\": false,\n        \"lowPeerRisk\": false,\n        \"terminates\": false\n      },\n      \"collectionPath\": [],\n      \"geo\": {\n        \"properties\": {},\n        \"type\": \"Feature\"\n      }\n    }\n  ],\n  \"size\": 20,\n  \"number\": 0,\n  \"totalElements\": 150,\n  \"totalPages\": 8,\n  \"numberOfElements\": 20\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "762459c7-601c-448c-b50c-a3be338165ae",
+              "name": "Bad Request - Invalid parameters (e.g., invalid date format, invalid priority values)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_request\",\n  \"message\": \"Invalid date format for parameter 'from'. Expected ISO 8601 format (e.g., 2020-12-31T23:59)\",\n  \"solution\": \"Use ISO 8601 date format: YYYY-MM-DDTHH:mm\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c22fc3e-0de2-46d2-8c25-69511513a122",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a776533-d8eb-410c-a23f-a897415488b8",
+              "name": "Collection not found or not accessible",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Collection [999] not found\",\n  \"solution\": \"Verify collection IDs using GET /public/v1/collections\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2787e562-7db1-4f9b-9794-28a6477153ad",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb0c9e8c-db01-426f-913c-6705c963b4b2",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "feed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "newerThan",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "priorities",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "impactLevelIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2b8cac04-1459-4ef5-838b-645ba0d67325",
+    "name": "Public Prewave Actions Alerts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

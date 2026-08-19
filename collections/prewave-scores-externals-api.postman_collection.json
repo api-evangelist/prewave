@@ -1,0 +1,1207 @@
+{
+  "item": [
+    {
+      "id": "234d51c5-5f4b-4bf9-875e-d928864c66bf",
+      "name": "Scores - Externals",
+      "description": {
+        "content": "Upload and read custom supplier scores from your systems (e.g. SAP). Bulk upload, list event types, and view history per supplier. Available from June 2026.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7db24cb5-b550-4505-b1af-57170fab3018",
+          "name": "Get external score history for one supplier",
+          "request": {
+            "name": "Get external score history for one supplier",
+            "description": {
+              "content": "\nReturns score history per event type for one supplier. Identify the supplier using query parameters such as supplier ID, customer ID, own site ID, or Prewave ID — the same identifiers you use elsewhere in the public supplier APIs.\n\n**When to use this**\n- Auditing what scores are stored for one supplier after an integration run.\n- Showing score history in a customer-facing report or internal dashboard.\n- Verifying that an upload landed as expected for a given supplier.\n\n**Optional filters**\n- `perspectiveId` — limit results to a specific perspective (defaults to your account’s default).\n- `groupId` — narrow results to a score group when needed.\n\n**If something goes wrong**\n- **400** — No supplier identifier was provided, or more than one supplier matched. Add or refine identifiers (for example include `source`).\n- **404** — No supplier matched the identifiers you sent.\n\n**Required permission:** `access_public_internal_score`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "scores",
+                "externals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "supplierId",
+                  "value": "<string>",
+                  "description": "Supplier ID of the target. Can be combined with customerId, ownId, and/or prewaveId."
+                },
+                {
+                  "disabled": false,
+                  "key": "customerId",
+                  "value": "<string>",
+                  "description": "Customer ID of the target. Can be combined with supplierId, ownId, and/or prewaveId."
+                },
+                {
+                  "disabled": false,
+                  "key": "ownId",
+                  "value": "<string>",
+                  "description": "Own site ID of the target. Can be combined with supplierId, customerId, and/or prewaveId."
+                },
+                {
+                  "disabled": false,
+                  "key": "prewaveId",
+                  "value": "<integer>",
+                  "description": "Prewave ID of the target. Can be combined with supplierId, customerId, and/or ownId."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Optional source system to filter by. Applies to supplierId, customerId, and ownId (not prewaveId)."
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Optional. Perspective to filter scores by. If omitted, your account default is used."
+                },
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<integer>",
+                  "description": "Optional. Score group to filter results by."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "05aea251-b2cd-4342-a80c-86794110eb38",
+              "name": "Score history for the supplier that matched your identifiers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"identifier\\\":{\\\"supplierId\\\":\\\"SAP-12345\\\",\\\"customerId\\\":null,\\\"ownId\\\":null,\\\"prewaveId\\\":null,\\\"source\\\":\\\"SAP\\\"},\\\"scores\\\":[{\\\"group\\\":{\\\"id\\\":10,\\\"name\\\":\\\"Environmental\\\",\\\"sname\\\":\\\"env\\\"},\\\"eventTypeKey\\\":\\\"carbon\\\",\\\"score\\\":{\\\"value\\\":85,\\\"risk\\\":\\\"Low\\\"},\\\"comment\\\":\\\"Q1 2026 sustainability review — improved emissions tracking\\\",\\\"updatedAt\\\":\\\"2026-01-15T10:30:00Z\\\",\\\"validFrom\\\":\\\"2026-01-15T00:00:00Z\\\",\\\"validTo\\\":null,\\\"history\\\":[{\\\"group\\\":{\\\"id\\\":10,\\\"name\\\":\\\"Environmental\\\",\\\"sname\\\":\\\"env\\\"},\\\"eventTypeKey\\\":\\\"carbon\\\",\\\"score\\\":{\\\"value\\\":78,\\\"risk\\\":\\\"Mid\\\"},\\\"comment\\\":\\\"Initial Q4 2025 assessment\\\",\\\"updatedAt\\\":\\\"2025-10-01T09:00:00Z\\\",\\\"validFrom\\\":\\\"2025-10-01T00:00:00Z\\\",\\\"validTo\\\":\\\"2025-12-31T23:59:59Z\\\",\\\"history\\\":[]},{\\\"group\\\":{\\\"id\\\":10,\\\"name\\\":\\\"Environmental\\\",\\\"sname\\\":\\\"env\\\"},\\\"eventTypeKey\\\":\\\"carbon\\\",\\\"score\\\":{\\\"value\\\":82,\\\"risk\\\":\\\"Low\\\"},\\\"comment\\\":\\\"Revised after on-site supplier audit\\\",\\\"updatedAt\\\":\\\"2025-12-15T14:00:00Z\\\",\\\"validFrom\\\":\\\"2026-01-01T00:00:00Z\\\",\\\"validTo\\\":\\\"2026-01-14T23:59:59Z\\\",\\\"history\\\":[]}]},{\\\"group\\\":{\\\"id\\\":20,\\\"name\\\":\\\"Physical Risk\\\",\\\"sname\\\":\\\"physical\\\"},\\\"eventTypeKey\\\":\\\"flood\\\",\\\"score\\\":{\\\"value\\\":42,\\\"risk\\\":\\\"Mid\\\"},\\\"comment\\\":\\\"Primary site located in a medium flood-risk zone\\\",\\\"updatedAt\\\":\\\"2026-02-01T08:00:00Z\\\",\\\"validFrom\\\":\\\"2026-02-01T00:00:00Z\\\",\\\"validTo\\\":null,\\\"history\\\":[]},{\\\"group\\\":{\\\"id\\\":30,\\\"name\\\":\\\"Financial Risk\\\",\\\"sname\\\":\\\"financial\\\"},\\\"eventTypeKey\\\":\\\"credit_risk\\\",\\\"score\\\":{\\\"value\\\":72,\\\"risk\\\":\\\"Mid\\\"},\\\"comment\\\":\\\"Credit rating imported from external risk platform\\\",\\\"updatedAt\\\":\\\"2026-01-20T16:45:00Z\\\",\\\"validFrom\\\":\\\"2026-01-20T00:00:00Z\\\",\\\"validTo\\\":\\\"2026-07-19T23:59:59Z\\\",\\\"history\\\":[]}]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13ed2cf4-df7d-4cac-b54b-302a8b12d1c0",
+              "name": "Supplier could not be identified uniquely — provide at least one identifier or narrow the match (for example with `source`).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce8be326-4a4a-4aed-b794-6f56de512f88",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9373ffb4-f591-4e9e-8bce-824bf27bced0",
+              "name": "No supplier found for the identifiers provided, or you do not have access to that supplier.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c4cefd6-0a06-4359-81a5-9e25494bcaeb",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec0eff86-0dd6-4f1b-8b19-029e67354f74",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "supplierId",
+                      "value": "SAP-12345"
+                    },
+                    {
+                      "key": "customerId",
+                      "value": "CRM-67890"
+                    },
+                    {
+                      "key": "ownId",
+                      "value": "OWN-SITE-01"
+                    },
+                    {
+                      "key": "prewaveId",
+                      "value": "102006215"
+                    },
+                    {
+                      "key": "source",
+                      "value": "SAP"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78097d49-c326-4445-96d4-f6647b13b22b",
+          "name": "Upload external scores for one or more suppliers",
+          "request": {
+            "name": "Upload external scores for one or more suppliers",
+            "description": {
+              "content": "\nUploads scores per supplier and event type. Event types are the risk dimensions you score for a supplier (e.g. Carbon, Flood).\n\n**What you send**\n- A list of suppliers, each with how to find that supplier in Prewave and one or more scores.\n- At most 100 supplier entries in `data` per request.\n- At most 50 score rows per supplier in `scores` (one per event type).\n- Each score needs an event type key (`eventTypeKey`), a value from 1 to 100, and an optional comment.\n\n**Recommended workflow**\n1. Call **List event types for a perspective** to see which event type keys are set up for your perspective.\n2. Send this request with those keys where possible.\n3. Review the response: if `success` is false, open `errors` to see which suppliers or scores failed and why.\n\n**How to read the response**\n- The request is accepted even when some rows fail. Check `success` for an all-clear result.\n- Counters show how many suppliers were received, matched, and saved (`totalCount`, `validCount`, `resolvedCount`, `writtenCount`, `skippedCount`).\n- Problems (unknown supplier, unknown event type key, and similar) are listed in `errors`, not only as an HTTP error.\n\n**Required permission:** `access_public_internal_score`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "scores",
+                "externals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": [\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"identifier\": {\n        \"supplierId\": \"<string>\",\n        \"customerId\": \"<string>\",\n        \"ownId\": \"<string>\",\n        \"prewaveId\": \"<integer>\",\n        \"source\": \"<string>\"\n      },\n      \"scores\": [\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        },\n        {\n          \"eventTypeKey\": \"<string>\",\n          \"scoreValue\": \"<integer>\",\n          \"comment\": \"<string>\"\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "eef3271a-51bb-4eca-8f92-fbfc289ff72c",
+              "name": "Upload finished. Check `success`, the counters, and `errors` to see whether every supplier and score was saved.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"data\":[{\"identifier\":{\"supplierId\":\"SAP-12345\",\"customerId\":null,\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":24,\"comment\":\"Scope 1 and 2 emissions review — Q1 2026\"},{\"eventTypeKey\":\"flood\",\"scoreValue\":5,\"comment\":\"Low flood exposure at primary manufacturing site\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":null,\"ownId\":null,\"prewaveId\":102006215,\"source\":null},\"scores\":[{\"eventTypeKey\":\"credit_risk\",\"scoreValue\":72,\"comment\":\"Credit rating imported from external risk platform\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":\"CRM-67890\",\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":55,\"comment\":null}]}]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"success\\\":true,\\\"totalCount\\\":3,\\\"validCount\\\":3,\\\"resolvedCount\\\":3,\\\"writtenCount\\\":4,\\\"skippedCount\\\":0,\\\"errors\\\":[]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a02b778f-51c8-4b54-b147-672af2882c1d",
+              "name": "The request could not be processed — for example the supplier list was empty, more than 100 suppliers were sent, more than 50 scores were sent for one supplier, a score was outside 1–100, or an event type key was missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"data\":[{\"identifier\":{\"supplierId\":\"SAP-12345\",\"customerId\":null,\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":24,\"comment\":\"Scope 1 and 2 emissions review — Q1 2026\"},{\"eventTypeKey\":\"flood\",\"scoreValue\":5,\"comment\":\"Low flood exposure at primary manufacturing site\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":null,\"ownId\":null,\"prewaveId\":102006215,\"source\":null},\"scores\":[{\"eventTypeKey\":\"credit_risk\",\"scoreValue\":72,\"comment\":\"Credit rating imported from external risk platform\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":\"CRM-67890\",\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":55,\"comment\":null}]}]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eac4094a-a38d-4148-b1df-ce8c9c651371",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"data\":[{\"identifier\":{\"supplierId\":\"SAP-12345\",\"customerId\":null,\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":24,\"comment\":\"Scope 1 and 2 emissions review — Q1 2026\"},{\"eventTypeKey\":\"flood\",\"scoreValue\":5,\"comment\":\"Low flood exposure at primary manufacturing site\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":null,\"ownId\":null,\"prewaveId\":102006215,\"source\":null},\"scores\":[{\"eventTypeKey\":\"credit_risk\",\"scoreValue\":72,\"comment\":\"Credit rating imported from external risk platform\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":\"CRM-67890\",\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":55,\"comment\":null}]}]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a4176cb-3446-439f-8a5e-5826acf30334",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"data\":[{\"identifier\":{\"supplierId\":\"SAP-12345\",\"customerId\":null,\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":24,\"comment\":\"Scope 1 and 2 emissions review — Q1 2026\"},{\"eventTypeKey\":\"flood\",\"scoreValue\":5,\"comment\":\"Low flood exposure at primary manufacturing site\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":null,\"ownId\":null,\"prewaveId\":102006215,\"source\":null},\"scores\":[{\"eventTypeKey\":\"credit_risk\",\"scoreValue\":72,\"comment\":\"Credit rating imported from external risk platform\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":\"CRM-67890\",\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":55,\"comment\":null}]}]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46a73c95-8659-4de5-af76-ce28db6cbdb0",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"data\":[{\"identifier\":{\"supplierId\":\"SAP-12345\",\"customerId\":null,\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":24,\"comment\":\"Scope 1 and 2 emissions review — Q1 2026\"},{\"eventTypeKey\":\"flood\",\"scoreValue\":5,\"comment\":\"Low flood exposure at primary manufacturing site\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":null,\"ownId\":null,\"prewaveId\":102006215,\"source\":null},\"scores\":[{\"eventTypeKey\":\"credit_risk\",\"scoreValue\":72,\"comment\":\"Credit rating imported from external risk platform\"}]},{\"identifier\":{\"supplierId\":null,\"customerId\":\"CRM-67890\",\"ownId\":null,\"prewaveId\":null,\"source\":\"SAP\"},\"scores\":[{\"eventTypeKey\":\"carbon\",\"scoreValue\":55,\"comment\":null}]}]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "89efae5b-3b5a-4d65-85ff-e579c40fb59e",
+          "name": "List event types for a perspective",
+          "request": {
+            "name": "List event types for a perspective",
+            "description": {
+              "content": "\nLists event types configured for a perspective—the risk dimensions you can score (e.g. Carbon, Flood). Use this before a bulk upload so your integration sends event type keys that match what customers see in the product.\n\n**When to use this**\n- Planning a score import: see which event types apply before building the file or API payload.\n- Explaining to stakeholders which risk dimensions external scores can refer to for that perspective.\n- Troubleshooting failed uploads: compare your source data with the keys returned here.\n\n**Typical workflow**\n1. Call this endpoint with a `perspectiveId` your API token can access.\n2. Use the returned `eventTypeKey` values when uploading scores.\n3. If some rows fail on upload, check whether the event type key exists in this list.\n\n**Note:** Upload may still accept event type keys that exist globally but are not listed here. Keys that do not exist at all are reported in the upload response `errors`.\n\n**Required permission:** `access_public_internal_score`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "scores",
+                "externals",
+                "event-types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "(Required) Perspective to list event types for. Use the same perspective as your uploads or reads when possible. Your API token must have access to this perspective."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "82875f92-a91e-4766-b07d-c763af2e814c",
+              "name": "Event types configured for this perspective. Each row includes an event type key (`eventTypeKey`) and a display name.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "5484774"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":101,\\\"eventTypeKey\\\":\\\"carbon\\\",\\\"name\\\":\\\"Carbon\\\"},{\\\"id\\\":102,\\\"eventTypeKey\\\":\\\"flood\\\",\\\"name\\\":\\\"Flood\\\"},{\\\"id\\\":103,\\\"eventTypeKey\\\":\\\"credit_risk\\\",\\\"name\\\":\\\"Credit Risk\\\"},{\\\"id\\\":104,\\\"eventTypeKey\\\":\\\"water_stress\\\",\\\"name\\\":\\\"Water Stress\\\"}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0da561a-62bf-48b6-b6be-0ad142784aa0",
+              "name": "Perspective ID is missing — add `perspectiveId` to the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "5484774"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41997197-bfad-4c6b-bd7d-fbb958f4bdfb",
+              "name": "This perspective is not available for your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "5484774"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "760eb2f2-6e8a-4a54-92f8-f396fe1e7e53",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "5484774"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce103c8b-9d57-484c-aee7-1484bb6d3be7",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "scores",
+                    "externals",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "5484774"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "56a98e08-6bb9-404a-9dd8-1080d8d9c4bd",
+    "name": "Public Prewave Actions Scores - Externals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

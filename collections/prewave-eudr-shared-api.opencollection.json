@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Shared API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Shared",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of EUDR related HS Codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/shared/hscodes"
+          },
+          "docs": "\nRetrieve a list of Harmonized System (HS) codes relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all HS codes that are applicable for EUDR products.\nHS codes are used to classify products for customs and compliance purposes. Each entry includes\nthe code, description, and linked commodity ID when available.\n\n**Use Cases**:\n- Get HS code reference data for products\n- Populate HS code selection dropdowns\n- Validate product classifications\n\n**Required permissions (one "
+        },
+        {
+          "info": {
+            "name": "Get a list of countries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/shared/countries"
+          },
+          "docs": "\nRetrieve a list of all available countries for EUDR compliance.\n\nThis endpoint returns reference data containing all countries that can be used in EUDR workflows,\nsuch as product origins, supplier locations, and compliance reporting.\n\n**Use Cases**:\n- Get country reference data for product origins\n- Populate country selection dropdowns\n- Validate country codes\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        "
+        },
+        {
+          "info": {
+            "name": "Get a list of EUDR related commodities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/shared/commodities"
+          },
+          "docs": "\nRetrieve a list of commodities relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all commodities that are applicable for EUDR products.\nOnly commodities whose names start with \"EUDR \" are included. Commodities are used to categorize\nproducts for compliance and reporting purposes.\n\n**Use Cases**:\n- Get commodity reference data for products\n- Populate commodity selection dropdowns\n- Validate product categorizations\n\n**Required permissions (one of):** `access_public_pr"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1047 @@
+{
+  "item": [
+    {
+      "id": "d3fc3c18-db58-4433-ba23-7ae842e65823",
+      "name": "Disruptions",
+      "description": {
+        "content": "Endpoints for retrieving alerts from the disruption map. Supports filtering by geographic region, collections, countries, and other criteria.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9772544c-e5ad-4d62-8e80-a713cb8cde8e",
+          "name": "Find alerts on disruption map",
+          "request": {
+            "name": "Find alerts on disruption map",
+            "description": {
+              "content": "\n### Overview\nRetrieve alerts displayed on the disruption map filtered by geographic region, collections, and other criteria.\n\nThis endpoint returns alerts that are visible on the disruption map interface, allowing you to query\nalerts by geographic bounding boxes, collections, countries, and various filter criteria.\n\n### Response\nReturns an array of alert objects. Each alert includes basic information (id, uuid, title, timestamps),\nevent grouping, priority and classification details, location/geographic data, source links and media,\ninfotags, primary target information, and collection paths. Unlike paginated endpoints, this endpoint\nreturns all matching alerts in a single array without pagination metadata.\n\n**Note**: Fields with null values are omitted from the JSON response. Geographic information (`geo`)\nis only available if `includeGeo` query parameter is set to `true`.\n\n### Use Cases\n- **Regional monitoring**: Monitor alerts in specific geographic regions.\n- **Pattern analysis**: Analyze disruption patterns by location.\n- **Collection filtering**: Filter alerts by collections and countries.\n- **Integration**: Integrate disruption map data into external systems.\n\n### Geographic Filtering\n- **bound**: Bounding box defining the geographic area to search (format: `bound=xmin,ymin,xmax,ymax`).\n- **previousBound**: Previous bounding box for incremental updates (optional).\n- **countryId**: Filter by country (obtain country IDs from `GET /public/v1/infotags` filtered by location type).\n\n### Collection Filtering\n- **collectionIds**: Filter alerts by specific collections (obtain collection IDs from `GET /public/v1/collections`).\n- **showAllAlerts**: If true, ignore collectionIds and show all accessible alerts.\n\n### Filter Objects\n- **poiFilter**: Filter by Point of Interest (POI) criteria.\n- **alertFilter**: Filter by alert-specific criteria (perspectiveId is required; eventTypeId, industryIds optional).\n\n### Required Permissions\n`access_public_disruption_alerts`, `access_featured_collection`\n\n### Performance Impact\nMedium\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "disruptions",
+                "alerts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "<integer>",
+                  "description": "Collection IDs to show alerts for. Obtain collection IDs from GET /public/v1/collections. If empty and showAllAlerts is false, no alerts will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "<integer>",
+                  "description": "Collection IDs to show alerts for. Obtain collection IDs from GET /public/v1/collections. If empty and showAllAlerts is false, no alerts will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "showAllAlerts",
+                  "value": "<boolean>",
+                  "description": "If true, show all accessible alerts and ignore the collectionIds parameter. If false, only alerts for the specified collections are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "countryId",
+                  "value": "<integer>",
+                  "description": "Country ID to filter alerts by. Obtain country IDs from the infotags endpoint (GET /public/v1/infotags) filtered by location type. Note: Country codes are not currently supported; use country ID instead."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeGeo",
+                  "value": "<boolean>",
+                  "description": "If set to true, the response will include the geo information."
+                },
+                {
+                  "disabled": false,
+                  "key": "bound",
+                  "value": "<integer>",
+                  "description": "Bounding box defining the geographic area to search. Format: bound=xmin,ymin,xmax,ymax. Example: bound=16.0,48.0,16.5,48.5"
+                },
+                {
+                  "disabled": false,
+                  "key": "bound",
+                  "value": "<integer>",
+                  "description": "Bounding box defining the geographic area to search. Format: bound=xmin,ymin,xmax,ymax. Example: bound=16.0,48.0,16.5,48.5"
+                },
+                {
+                  "disabled": false,
+                  "key": "previousBound",
+                  "value": "<integer>",
+                  "description": "Previous bounding box for incremental updates. Used to optimize queries when updating a map view."
+                },
+                {
+                  "disabled": false,
+                  "key": "previousBound",
+                  "value": "<integer>",
+                  "description": "Previous bounding box for incremental updates. Used to optimize queries when updating a map view."
+                },
+                {
+                  "disabled": false,
+                  "key": "industryIds",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "industryIds",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tokens",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tokens",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "poiCTypeId",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "companyId",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "disruptionStatusId",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tiers",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tiers",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "scopes",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "scopes",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "eventTypeId",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "95612683-102e-42b7-81ad-7c3ca730805f",
+              "name": "Successfully retrieved alerts.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":12345,\\\"uuid\\\":\\\"a1b2c3d4-e5f6-7890-abcd-ef1234567890\\\",\\\"title\\\":\\\"Flood happens in Sample City, Sample Region, US (and 10 others)\\\",\\\"createdAt\\\":1704067200000,\\\"predictedAtStart\\\":1703980800000,\\\"predictedAtEnd\\\":1704067199000,\\\"description\\\":\\\"Flood occurred in Sample Region affecting multiple locations.\\\",\\\"event\\\":{\\\"uuid\\\":\\\"b2c3d4e5-f6a7-8901-bcde-f23456789012\\\"},\\\"statusId\\\":null,\\\"locations\\\":[],\\\"links\\\":[{\\\"id\\\":null,\\\"url\\\":\\\"https://example.com/news/flood-sample-region\\\",\\\"title\\\":\\\"Flood affects Sample Region\\\",\\\"description\\\":\\\"Flood occurred in Sample Region affecting multiple locations.\\\",\\\"pictureUrl\\\":null,\\\"originalLang\\\":null,\\\"originalTitle\\\":null,\\\"originalDescription\\\":null}],\\\"media\\\":[],\\\"infotags\\\":[{\\\"id\\\":1001,\\\"type\\\":{\\\"type\\\":\\\"alert_type\\\",\\\"active\\\":false,\\\"displayName\\\":\\\"Alert Status\\\",\\\"icon\\\":\\\"far fa-bell\\\",\\\"ordering\\\":1,\\\"display\\\":true},\\\"value\\\":\\\"happens / occurs\\\",\\\"svalue\\\":\\\"happens\\\",\\\"icon\\\":null,\\\"numValue\\\":null,\\\"priority\\\":null,\\\"impactScore\\\":null},{\\\"id\\\":2001,\\\"type\\\":{\\\"type\\\":\\\"event_type\\\",\\\"active\\\":false,\\\"displayName\\\":\\\"Event Type\\\",\\\"icon\\\":null,\\\"ordering\\\":10001,\\\"display\\\":true},\\\"value\\\":\\\"Flood\\\",\\\"svalue\\\":\\\"flood\\\",\\\"icon\\\":\\\"fas fa-water\\\",\\\"numValue\\\":null,\\\"priority\\\":\\\"High\\\",\\\"impactScore\\\":null}],\\\"primaryTargets\\\":[],\\\"priority\\\":\\\"High\\\",\\\"priorityDetails\\\":{\\\"massDisruption\\\":true,\\\"brandMention\\\":false,\\\"rumour\\\":false,\\\"lowPeerRisk\\\":false,\\\"terminates\\\":false},\\\"collectionPath\\\":[],\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"}}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "546f9dea-e021-46ee-ad5b-5cce57b21cde",
+              "name": "Bad Request - Invalid parameters (e.g., invalid bounding box coordinates, invalid filter format).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"invalid_request\\\",\\\"message\\\":\\\"Invalid bounding box: north must be greater than south\\\",\\\"solution\\\":\\\"Ensure bounding box coordinates are valid (north > south, east > west)\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4cceee74-9fb2-4860-9656-12c7d1314bea",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04a1ed7f-f7f0-483e-8667-404a7fb634b8",
+              "name": "Collection not found or not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Collection [999] not found\\\",\\\"solution\\\":\\\"Verify collection IDs using GET /public/v1/collections\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97b569a8-0010-4065-9212-cf51ec0e47eb",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ce7c84a-8bcf-4e2b-8fb9-6b680f395f36",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "disruptions",
+                    "alerts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "showAllAlerts",
+                      "value": "false"
+                    },
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "includeGeo",
+                      "value": "true"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "previousBound",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "industryIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tokens",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "poiCTypeId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "companyId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "disruptionStatusId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "eventTypeId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "bd03929f-4624-4d0a-845a-af69c30fca50",
+    "name": "Public Prewave Actions Disruptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

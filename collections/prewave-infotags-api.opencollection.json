@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Infotags API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infotags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get public feed infotags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/infotags"
+          },
+          "docs": "\nRetrieve reference infotags used to interpret alert and feed data.\n\nReturns public infotags for the following types: `alert_status`, `event_type`, `risk_level`, `industry`,\nand `location`. Each entry includes the infotag ID, type, optional short code (`svalue`), and display name.\n\n**Use cases**:\n- Resolve infotag IDs and codes when consuming alert feeds\n- Populate filter dropdowns for event types, risk levels, and locations\n- Map short codes to human-readable labels\n\n**Required permission:** `a"
+        },
+        {
+          "info": {
+            "name": "Get infotag groups for the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/infotags/groups"
+          },
+          "docs": "\nRetrieve infotag groups available to the authenticated user.\n\nInfotag groups cluster related event types—for example Environmental or Social—and are used when\nworking with scores, alerts, and feed filters.\n\n**Use cases**:\n- List groups the current user can access\n- Resolve group IDs when filtering alerts or scores by category\n\n**Required permission:** `access_public_infotags`\n\n**Performance impact:** Low\n    "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1939 @@
+{
+  "item": [
+    {
+      "id": "a94fe244-7aaa-47f2-9ba1-ec828c8f3f2b",
+      "name": "Scores - Target",
+      "description": {
+        "content": "\n⚠️ **DEPRECATED** - Target score endpoints. These endpoints are deprecated and will be removed at the end of December 2026. Use `/public/v1/enterprise-export/scores` instead.\n\n**Note**: Responses from these endpoints include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n    ",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a6b32834-cf18-44f4-9c02-f8282f41fb60",
+          "name": "Returns the target score including the overall score and scores for all infotag-groups.",
+          "request": {
+            "name": "Returns the target score including the overall score and scores for all infotag-groups.",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score` | `GET /public/v1/enterprise-export/scores` | Retrieve score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides significant improvements:\n\n### 1. Bulk Operations\n- Retrieve scores for multiple targets in a single request\n- More efficient for large-scale integrations\n\n### 2. Automated Updates\n- Configure scheduled exports that run automatically\n- No need to poll individual endpoints\n\n### 3. Better Performance\n- Optimized for large-scale data retrieval\n- Consistent data calculation timestamps\n\n### 4. Error Handling\n- Detailed error logs for failed calculations\n- Better visibility into data quality issues\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nUse `POST /public/v1/enterprise-export/scores/config` to set up your export configuration:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"collectionIds\": [123, 456],\n  \"targetIds\": [102006215, 101641243],\n  \"perspectiveIds\": [1, 2],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes all the same information as this endpoint, plus additional metadata:\n- Calculation timestamps\n- Risk levels\n- Edge numbers for target identification\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the target score including:\n- Overall target score\n- Scores for all infotag groups\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "score"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Id of the perspective, that should be used to calculate the target-score."
+                },
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<integer>",
+                  "description": "Id of the group that items should be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "component",
+                  "value": "<string>",
+                  "description": "Filter by score component"
+                },
+                {
+                  "disabled": false,
+                  "key": "subcomponent",
+                  "value": "<string>",
+                  "description": "Filter by score subcomponent"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52de2d7c-cd2b-4982-b103-35c6ac583238",
+              "name": "Target score successfully retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"score\": {\n    \"score\": 85,\n    \"riskLevel\": \"LOW\"\n  },\n  \"groups\": [\n    {\n      \"id\": 1,\n      \"name\": \"Environmental\",\n      \"score\": 90\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Social\",\n      \"score\": 80\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "999acc18-87c0-46c5-af95-ae3374808c32",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0cef900d-a555-4653-8bd3-00d09d62125b",
+              "name": "Target not found or no permission to access it",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0875dc0-6a97-445b-bdc7-34b59e015650",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a3cebba-27df-4d6b-a4e6-c7ae72beb632",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8a83d2c4-ac1d-4f67-9ef3-63cd664343d5",
+          "name": "Get the event type scores for a infotag group",
+          "request": {
+            "name": "Get the event type scores for a infotag group",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score/{groupId}` | `GET /public/v1/enterprise-export/scores` | Retrieve event type scores |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Event type scores when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components (which includes event type scores):\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Event Type Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with event type scores:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `groups` arrays with `eventTypes` when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the event type scores for a specific infotag group, including:\n- Event type information\n- Event type score\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Component (optional)\n- Subcomponent (optional)\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "score",
+                ":groupId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Id of the perspective, that should be used to calculate the target-score."
+                },
+                {
+                  "disabled": false,
+                  "key": "component",
+                  "value": "<string>",
+                  "description": "Filter by score component"
+                },
+                {
+                  "disabled": false,
+                  "key": "subcomponent",
+                  "value": "<string>",
+                  "description": "Filter by score subcomponent"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "groupId",
+                  "description": "(Required) Id of the group that items should be returned"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fb87af4b-716e-405b-ad8c-ece56550799d",
+              "name": "Event type scores successfully retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score",
+                    ":groupId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group that items should be returned"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"eventType\": {\n      \"id\": 1,\n      \"name\": \"Environmental Incident\",\n      \"type\": \"EVENT_TYPE\"\n    },\n    \"score\": {\n      \"score\": 85,\n      \"riskLevel\": \"LOW\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c6dfa31-fd0f-4053-82e6-180d1fd68970",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score",
+                    ":groupId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group that items should be returned"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d84a5e49-f39c-4dd7-befa-f100a49459a1",
+              "name": "Target not found or no permission to access it",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score",
+                    ":groupId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group that items should be returned"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d89f3a04-eda9-405a-8b6f-c26183c7bc0e",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score",
+                    ":groupId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group that items should be returned"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9cce772-f70c-4ef4-a481-ef72d42b641e",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score",
+                    ":groupId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group that items should be returned"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2ba7540-fd0e-40f5-b70c-a6cfa4c3550a",
+          "name": "The historical overall-score of the target for the last months, depending on the defined perspective",
+          "request": {
+            "name": "The historical overall-score of the target for the last months, depending on the defined perspective",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-history` | `GET /public/v1/enterprise-export/scores` | Retrieve historical score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Historical score data with calculation timestamps\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nConfigure your export job to include historical data:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": false\n}\n```\n\n### Step 2: Retrieve Historical Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with timestamps:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=100\n```\n\nThe response includes `calculatedAt` timestamps that allow you to track score changes over time.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the historical overall-score of the target for the last months, including:\n- Monthly scores\n- Month-over-month change\n- Year-over-year change\n- Maximum and minimum scores (overall and past year)\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "score-history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<integer>",
+                  "description": "Id of the group that items should be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Id of the perspective, that should be used to calculate the target-score."
+                },
+                {
+                  "disabled": false,
+                  "key": "component",
+                  "value": "<string>",
+                  "description": "Filter by score component"
+                },
+                {
+                  "disabled": false,
+                  "key": "subcomponent",
+                  "value": "<string>",
+                  "description": "Filter by score subcomponent"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d6514dd9-b27b-4596-bfc0-b971fd9c3638",
+              "name": "Target score history successfully retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"months\": [\n    {\n      \"month\": \"2024-01\",\n      \"score\": 85\n    },\n    {\n      \"month\": \"2024-02\",\n      \"score\": 87\n    }\n  ],\n  \"monthChange\": 2,\n  \"yearChange\": 5,\n  \"max\": 95,\n  \"yearMax\": 90,\n  \"min\": 70,\n  \"yearMin\": 75\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f990b0c-4aa6-4c7b-b2d5-ae9b7193144e",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a6e9dff-3899-4b6d-968c-374781592aff",
+              "name": "Target not found or no permission to access it",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f405c69-2fd0-4394-8f98-89ec1da1d734",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54970013-f2c7-4b3a-ad67-79c2e8223bf1",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "component",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subcomponent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e65d5453-ffc7-4634-a9a7-3b649882d73a",
+          "name": "The current score for a target split up into the scoring components, depending on the defined perspective.",
+          "request": {
+            "name": "The current score for a target split up into the scoring components, depending on the defined perspective.",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-components` | `GET /public/v1/enterprise-export/scores` | Retrieve score components |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Score components and subcomponents when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Score Components\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with components:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `components` and `subComponents` arrays when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the current score for a target split up into scoring components, including:\n- Component type\n- Component score\n- List of subcomponents with their scores\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "score-components"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "perspectiveId",
+                  "value": "<integer>",
+                  "description": "Id of the perspective, that should be used to calculate the target-score."
+                },
+                {
+                  "disabled": false,
+                  "key": "groupId",
+                  "value": "<integer>",
+                  "description": "Id of the group that items should be returned"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d527f7c4-1cfd-49d4-abe9-d3c18884d5cc",
+              "name": "Target score components successfully retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-components"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"component\": \"ENVIRONMENTAL\",\n    \"score\": {\n      \"score\": 90,\n      \"riskLevel\": \"LOW\"\n    },\n    \"subcomponents\": [\n      {\n        \"subcomponent\": \"CARBON_FOOTPRINT\",\n        \"score\": {\n          \"score\": 88,\n          \"riskLevel\": \"LOW\"\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "91b354dd-f109-43ac-b879-93f2d8dda39e",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-components"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0843340-84ec-4aa1-be52-876756d6e057",
+              "name": "Target not found or no permission to access it",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-components"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "808dda31-0731-480d-b37e-bb0103aef2b0",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-components"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4f9d938-980b-442a-b8a4-11b27050a07f",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "score-components"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "perspectiveId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "groupId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2fbaf5a3-a604-48eb-bad7-b9def2b4bd54",
+    "name": "Public Prewave Actions Scores - Target API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

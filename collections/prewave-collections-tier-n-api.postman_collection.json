@@ -1,0 +1,2565 @@
+{
+  "item": [
+    {
+      "id": "13f7d276-9de6-4d3f-b229-5b307557ccd7",
+      "name": "Collections - Tier-N",
+      "description": {
+        "content": "Public API for retrieving supplier relationship graphs from tier-n enabled collections.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "31dd66a1-4550-4918-a4c8-d366d34de918",
+          "name": "Get tier-n collection settings",
+          "request": {
+            "name": "Get tier-n collection settings",
+            "description": {
+              "content": "\n### Overview\nRetrieve tier-n configuration for a collection. These settings are used as defaults when calling `GET .../tier-n/data` and can be overridden via query parameters there.\n\n### Related Operations\n- **Data**: [GET /public/v1/collections/{collectionId}/tier-n/data](#operations-Collections_-_Tier-N-getTierNCollectionGraph)\n- **Update**: [PUT /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-updateTierNCollectionSettings)\n\n### Required Permission\n`access_public_supplier_graph`, `access_collection`, and `read` on the collection.\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId",
+                "tier-n",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c1ad640-a764-443c-b398-269ab3b9e4c5",
+              "name": "Successfully retrieved tier-n collection settings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"collectionId\\\":123,\\\"collectionName\\\":\\\"Electronics Supply Chain\\\",\\\"maxTier\\\":3,\\\"targetIds\\\":[101,102,103],\\\"scopePrivate\\\":true,\\\"scopeShared\\\":true,\\\"scopePublic\\\":false,\\\"sourceCustomer\\\":true,\\\"sourceCustoms\\\":true,\\\"sourceMedia\\\":false,\\\"sourcePrewavePrediction\\\":true,\\\"minShipments\\\":5,\\\"probability\\\":75,\\\"shipmentsPeriodFrom\\\":{\\\"date\\\":\\\"2024-01-01\\\",\\\"_datetype_\\\":\\\"Date\\\"},\\\"shipmentsPeriodTo\\\":{\\\"date\\\":\\\"2024-12-31\\\",\\\"_datetype_\\\":\\\"Date\\\"},\\\"suspectedSuppliers\\\":false,\\\"logisticsProvider\\\":false,\\\"commodityFilterTargetIds\\\":[201,202]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c322176-4431-4e53-b6f7-ae855603006d",
+              "name": "Collection is not tier-n enabled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"INVALID_REQUEST\\\",\\\"message\\\":\\\"Only tier-n collections can be used by this endpoint. Collection 123 does not have tiers enabled.\\\",\\\"solution\\\":\\\"Use a collection with tiersEnabled=true\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33c7271d-05fd-4fff-b89c-241bee62c6f2",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "521e7be7-b0df-4f53-85e5-1fd2cf62c463",
+              "name": "Collection not found, inactive, not tier-n enabled, or not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"RESOURCE_NOT_FOUND\\\",\\\"message\\\":\\\"Collection not found: ID=123\\\",\\\"solution\\\":\\\"Check collection ID or verify access permissions\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22478a74-05b4-4175-a1a7-e7d8be7695f7",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ac2ee0f-a9b2-4632-9a72-149d54567bcc",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fcae9c23-653c-4757-9a78-61b8ee504e36",
+          "name": "Update tier-n collection settings",
+          "request": {
+            "name": "Update tier-n collection settings",
+            "description": {
+              "content": "\n### Overview\nUpdate tier-n configuration for a collection. All request fields are optional (partial update). Updated settings become defaults for `GET .../tier-n/data`.\n\n### Validation\n- Collection must exist, be active, and have `tiersEnabled=true`.\n- `maxTier` 1–9 if provided; `probability` 0–100 if provided; dates in YYYY-MM-DD; `shipmentsPeriodFrom` ≤ `shipmentsPeriodTo`.\n\n### Audit\nThe update is recorded with comment \"Tier-n collection settings updated via Public API\".\n\n### Required Permission\n`manage_collection` and `update` on the collection.\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId",
+                "tier-n",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maxTier\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"minShipments\": \"<integer>\",\n  \"probability\": \"<integer>\",\n  \"shipmentsPeriodFrom\": \"<date>\",\n  \"shipmentsPeriodTo\": \"<date>\",\n  \"suspectedSuppliers\": \"<boolean>\",\n  \"logisticsProvider\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "caaaaf50-291f-4c35-a413-c080f5a62d4b",
+              "name": "Tier-n collection settings updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"collectionId\\\":123,\\\"collectionName\\\":\\\"My Tier-N Collection\\\",\\\"maxTier\\\":3,\\\"targetIds\\\":[101,102,103],\\\"scopePrivate\\\":true,\\\"scopeShared\\\":true,\\\"scopePublic\\\":false,\\\"sourceCustomer\\\":true,\\\"sourceCustoms\\\":true,\\\"sourceMedia\\\":false,\\\"sourcePrewavePrediction\\\":true,\\\"minShipments\\\":5,\\\"probability\\\":75,\\\"shipmentsPeriodFrom\\\":{\\\"date\\\":\\\"2024-01-01\\\",\\\"_datetype_\\\":\\\"Date\\\"},\\\"shipmentsPeriodTo\\\":{\\\"date\\\":\\\"2024-12-31\\\",\\\"_datetype_\\\":\\\"Date\\\"},\\\"suspectedSuppliers\\\":false,\\\"logisticsProvider\\\":false,\\\"commodityFilterTargetIds\\\":[201,202]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "502e8b06-c64e-44ac-8c9d-4b51ac7c61c1",
+              "name": "Not tier-n enabled, invalid payload, maxTier/probability out of range, or invalid dates.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"INVALID_REQUEST\\\",\\\"message\\\":\\\"Only tier-n collections can be used by this endpoint. Collection 123 does not have tiers enabled.\\\",\\\"solution\\\":\\\"Use a collection with tiersEnabled=true\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b29db3fb-8526-4daa-981c-017f7e576e76",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0a24de9-859e-439c-90e1-4996c17ce86e",
+              "name": "Collection not found, inactive, not tier-n enabled, or no UPDATE permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"RESOURCE_NOT_FOUND\\\",\\\"message\\\":\\\"Collection not found: ID=123\\\",\\\"solution\\\":\\\"Verify the collection ID and ensure you have UPDATE permission on the collection\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20e938e8-316a-4dbb-84f9-1b726e0fd00f",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fb6ddd2-64f8-46c2-a377-3fb3edcdf864",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"maxTier\":4,\"scopePrivate\":null,\"scopeShared\":null,\"scopePublic\":null,\"sourceCustomer\":null,\"sourceCustoms\":null,\"sourceMedia\":null,\"sourcePrewavePrediction\":null,\"minShipments\":null,\"probability\":null,\"shipmentsPeriodFrom\":null,\"shipmentsPeriodTo\":null,\"suspectedSuppliers\":null,\"logisticsProvider\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b79c2e92-ca88-44f3-abc5-6fbe852c4a34",
+          "name": "Get a tree-structure of suppliers of the given collection",
+          "request": {
+            "name": "Get a tree-structure of suppliers of the given collection",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections Tier-N API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v3/alpha/suppliers/collection/{collectionId}/supplier-graph` | `GET /public/v1/collections/{collectionId}/tier-n/data` | Get collection-based supplier graphs |\n\n---\n\n## Why Migrate?\n\nThe v1 Collections Tier-N API provides significant improvements:\n\n### 1. Enhanced Functionality\n- **v3**: Basic supplier graph with format options\n- **v1**: Advanced filtering through collection settings and query parameters\n- **v1**: Configurable data sources (customs, media, predictions)\n- **v1**: Better control over scope (private, shared, public targets)\n\n### 2. Better Performance\n- **v1**: Optimized queries for large collections\n- **v1**: More efficient data retrieval\n\n### 3. Improved Documentation\n- Comprehensive examples for all endpoints\n- Detailed error response documentation\n- Clear parameter descriptions\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Update Endpoint URL\n\n**Before:**\n```http\nGET /public/v3/alpha/suppliers/collection/123/supplier-graph?format=JSON&tier=2\n```\n\n**After:**\n```http\nGET /public/v1/collections/123/tier-n/data?tier=2\n```\n\n### Step 2: Update Response Parsing\n\n**Before:** Parse `PublicSupplierGraphEntry` structure (v3 format)\n\n**After:** Parse `PublicTierNCollectionGraphEntry` structure (v1 format)\n\n### Step 3: Handle Format Options\n\n**v3**: Supports JSON and CSV via `format` parameter\n\n**v1**: Returns JSON by default. For CSV export, use the response format directly or contact support for CSV export options.\n\n---\n\n**Required Permission**: `ACCESS_PUBLIC_SUPPLIER_GRAPH`\n\n**Performance Impact**: High\n\nFor detailed API reference and examples, see the v1 Collections Tier-N API documentation.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v3",
+                "alpha",
+                "suppliers",
+                "collection",
+                ":collectionId",
+                "supplier-graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>",
+                  "description": "Output format: JSON (default) or CSV"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeHeaderMetadata",
+                  "value": "<boolean>",
+                  "description": "Include metadata as response headers"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeCommodityFilter",
+                  "value": "<boolean>",
+                  "description": "Include commodity filter in the response metadata"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeMediaSources",
+                  "value": "<boolean>",
+                  "description": "Include media source URLs for MEDIA edges"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeShipmentDetails",
+                  "value": "<boolean>",
+                  "description": "Include shipment details where applicable"
+                },
+                {
+                  "disabled": false,
+                  "key": "tier",
+                  "value": "<integer>",
+                  "description": "Restrict to a specific tier (1..n)"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Restrict to a specific edge source"
+                },
+                {
+                  "disabled": false,
+                  "key": "lastShipment",
+                  "value": "<date>",
+                  "description": "Only include suppliers with shipments since this date (YYYY-MM-DD)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hsCodes",
+                  "value": "<string>",
+                  "description": "Filter by HS codes"
+                },
+                {
+                  "disabled": false,
+                  "key": "hsCodes",
+                  "value": "<string>",
+                  "description": "Filter by HS codes"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) Collection identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc26c5af-1450-4bd6-b5b3-5846ced48064",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v3",
+                    "alpha",
+                    "suppliers",
+                    "collection",
+                    ":collectionId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "JSON"
+                    },
+                    {
+                      "key": "includeHeaderMetadata",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "940161"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Collection identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The collection ID",
+                  "key": "X-Collection-Id",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Whether logistics providers are included in the commodity filter",
+                  "key": "X-Commodity-Filter-Logistics-Provider",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "The maximum tier included in the result",
+                  "key": "X-Max-Tier",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Whether suspected suppliers are included in the commodity filter",
+                  "key": "X-Commodity-Filter-Suspected-Suppliers",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Shipment period end date (YYYY-MM-DD)",
+                  "key": "X-Shipments-Period-To",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Comma-separated list of target IDs included in the export",
+                  "key": "X-Target-Ids",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Minimum probability threshold applied",
+                  "key": "X-Min-Probability",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Minimum number of shipments considered",
+                  "key": "X-Min-Shipments",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "The collection name",
+                  "key": "X-Collection-Name",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Comma-separated target IDs to which the commodity filter applies",
+                  "key": "X-Commodity-Filter-Target-Ids",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "Shipment period start date (YYYY-MM-DD)",
+                  "key": "X-Shipments-Period-From",
+                  "value": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"customerId\": 1234,\n    \"source\": \"Customs\",\n    \"supplierId\": 4567,\n    \"tier\": 2,\n    \"probability\": 87,\n    \"mediaSources\": [\n      \"https://example.com/article-1\",\n      \"https://example.com/article-2\"\n    ],\n    \"shipments\": null,\n    \"nshipments\": 2758\n  },\n  {\n    \"customerId\": 1234,\n    \"source\": \"Customs\",\n    \"supplierId\": 4567,\n    \"tier\": 2,\n    \"probability\": 87,\n    \"mediaSources\": [\n      \"https://example.com/article-1\",\n      \"https://example.com/article-2\"\n    ],\n    \"shipments\": null,\n    \"nshipments\": 390\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b3de568-318b-4627-af6f-c184901a8fc2",
+              "name": "Bad Request – invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v3",
+                    "alpha",
+                    "suppliers",
+                    "collection",
+                    ":collectionId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "JSON"
+                    },
+                    {
+                      "key": "includeHeaderMetadata",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "940161"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Collection identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_request\",\n  \"message\": \"Collection not found or you don't have access to it\",\n  \"solution\": \"Verify the collection ID and your permissions\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24cd782e-7efd-4765-97fc-f7a911f60b12",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v3",
+                    "alpha",
+                    "suppliers",
+                    "collection",
+                    ":collectionId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "JSON"
+                    },
+                    {
+                      "key": "includeHeaderMetadata",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "940161"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Collection identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14e65486-7112-4d3d-af91-b542ce329cf7",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v3",
+                    "alpha",
+                    "suppliers",
+                    "collection",
+                    ":collectionId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "JSON"
+                    },
+                    {
+                      "key": "includeHeaderMetadata",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "940161"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Collection identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e3142919-54a0-4ad5-8df2-6826eff135c0",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v3",
+                    "alpha",
+                    "suppliers",
+                    "collection",
+                    ":collectionId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "JSON"
+                    },
+                    {
+                      "key": "includeHeaderMetadata",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "940161"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Collection identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1996e370-7d94-4ee5-ae3e-dd3bcb84e679",
+          "name": "Get tier-n collection supplier graph",
+          "request": {
+            "name": "Get tier-n collection supplier graph",
+            "description": {
+              "content": "\n### Overview\nRetrieve a stream of supplier relationship data for a tier-n enabled collection. Each entry represents a relationship between a customer and supplier at a specific tier level (tier 1 = direct suppliers, tier 2+ = indirect).\n\n### Response Format\n- JSON array of supplier relationship entries (tier, supplierTargetId, customerTargetId, source, and optional probability/mediaSources/nShipments/shipments).\n- Null-valued fields are omitted. Optional fields appear based on query params (e.g. `includeMediaSources`, `includeShipmentDetails`).\n\n### Query Parameters\nAll optional. They override collection defaults from `GET .../tier-n/settings`. Use them to filter (tier, source, hsCodes, dates) or override scope/source settings.\n\n### Performance\n- Filter by `tier`, `source`, or `hsCodes` to reduce response size. Higher `maxTier` increases data volume and response time.\n\n### Related Operations\n- **Settings**: [GET /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-getTierNCollectionSettings)\n- **Update settings**: [PUT /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-updateTierNCollectionSettings)\n\n### Required Permission\n`access_public_supplier_graph`, `access_collection`, and `read` on the collection.\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "collections",
+                ":collectionId",
+                "tier-n",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeCommodityFilter",
+                  "value": "<boolean>",
+                  "description": "Include commodity filter metadata in the response. When true, adds commodity filter information to help understand data scope and filtering applied."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeMediaSources",
+                  "value": "<boolean>",
+                  "description": "Include media source URLs for MEDIA-type relationships. When true, adds `mediaSources` array with URLs used to derive the relationship from news/media sources."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeShipmentDetails",
+                  "value": "<boolean>",
+                  "description": "Include detailed shipment information per HS code. When true, adds `shipments` array with shipment counts and dates broken down by product code."
+                },
+                {
+                  "disabled": false,
+                  "key": "tier",
+                  "value": "<integer>",
+                  "description": "Restrict results to a specific tier level. Tier 1 = direct suppliers, Tier 2 = suppliers of suppliers, etc. Range: 1-9. If not specified, uses collection's maxTier setting."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Filter by data source type. Valid values: Customs (shipment data), Media (news/media), Customer (customer data), PrewavePrediction (AI predictions). If not specified, uses all enabled sources."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastShipment",
+                  "value": "<string>",
+                  "description": "Only include suppliers with shipments since this date. Format: YYYY-MM-DD. Useful for focusing on recent activity and filtering out inactive relationships."
+                },
+                {
+                  "disabled": false,
+                  "key": "hsCodes",
+                  "value": "<string>",
+                  "description": "Filter by specific HS codes (comma-separated). Only relationships involving these product codes will be returned. Example: 847330,940161"
+                },
+                {
+                  "disabled": false,
+                  "key": "maxTier",
+                  "value": "<integer>",
+                  "description": "Override the maximum tier level for analysis. Higher values may significantly increase response time and data volume. Range: 1-9."
+                },
+                {
+                  "disabled": false,
+                  "key": "scopePrivate",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include private targets in scope. When true, includes relationships involving private targets (typically internal company data)."
+                },
+                {
+                  "disabled": false,
+                  "key": "scopeShared",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include shared targets in scope. When true, includes relationships involving shared targets (typically partner/team data)."
+                },
+                {
+                  "disabled": false,
+                  "key": "scopePublic",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include public targets in scope. When true, includes relationships involving public targets (typically open/public data)."
+                },
+                {
+                  "disabled": false,
+                  "key": "sourceCustomer",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include customer data sources. When true, includes relationships derived from customer-provided data."
+                },
+                {
+                  "disabled": false,
+                  "key": "sourceCustoms",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include customs data sources. When true, includes relationships derived from customs/shipment data (most reliable source)."
+                },
+                {
+                  "disabled": false,
+                  "key": "sourceMedia",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include media data sources. When true, includes relationships derived from media/news sources (may be less reliable)."
+                },
+                {
+                  "disabled": false,
+                  "key": "sourcePrewavePrediction",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include Prewave prediction data sources. When true, includes AI-predicted relationships with probability scores."
+                },
+                {
+                  "disabled": false,
+                  "key": "minShipments",
+                  "value": "<integer>",
+                  "description": "Override collection setting: minimum number of shipments required for a relationship to be included. Higher values filter out less established relationships. Range: 0+."
+                },
+                {
+                  "disabled": false,
+                  "key": "probability",
+                  "value": "<integer>",
+                  "description": "Override collection setting: minimum probability threshold for predicted relationships. Range: 0-100. Higher values return only high-confidence predictions."
+                },
+                {
+                  "disabled": false,
+                  "key": "shipmentsPeriodFrom",
+                  "value": "<string>",
+                  "description": "Override collection setting: start date for shipment period analysis. Format: YYYY-MM-DD. Only relationships with shipments in this period are considered."
+                },
+                {
+                  "disabled": false,
+                  "key": "shipmentsPeriodTo",
+                  "value": "<string>",
+                  "description": "Override collection setting: end date for shipment period analysis. Format: YYYY-MM-DD. Only relationships with shipments in this period are considered."
+                },
+                {
+                  "disabled": false,
+                  "key": "suspectedSuppliers",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include suspected suppliers. When true, includes suppliers flagged as potentially risky or suspicious."
+                },
+                {
+                  "disabled": false,
+                  "key": "logisticsProvider",
+                  "value": "<boolean>",
+                  "description": "Override collection setting: include logistics providers. When true, includes companies that provide logistics services rather than direct suppliers."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "collectionId",
+                  "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b2ad85f4-fa5d-457d-b146-d7226773646c",
+              "name": "Successfully retrieved tier-n collection supplier graph.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"tier\\\":1,\\\"supplierTargetId\\\":4567,\\\"customerTargetId\\\":1234,\\\"source\\\":\\\"Customs\\\",\\\"probability\\\":null,\\\"mediaSources\\\":null,\\\"shipments\\\":null,\\\"nshipments\\\":15},{\\\"tier\\\":2,\\\"supplierTargetId\\\":7890,\\\"customerTargetId\\\":4567,\\\"source\\\":\\\"Customs\\\",\\\"probability\\\":null,\\\"mediaSources\\\":null,\\\"shipments\\\":null,\\\"nshipments\\\":8}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e60cbe2-afdc-4095-9590-765fab402a0b",
+              "name": "Collection not tier-n enabled or invalid parameters (e.g. tier/maxTier out of range).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"INVALID_REQUEST\\\",\\\"message\\\":\\\"Only tier-n collections can be used by this endpoint. Collection 123 does not have tiers enabled.\\\",\\\"solution\\\":\\\"Use a collection with tiersEnabled=true\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbb28c29-b371-4a71-bb0f-971b5486f8ee",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49c46d8e-981f-4a99-bf82-e81e970a71b6",
+              "name": "Collection not found, inactive, not tier-n enabled, or not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"RESOURCE_NOT_FOUND\\\",\\\"message\\\":\\\"Collection not found: ID=123\\\",\\\"solution\\\":\\\"Check collection ID or verify access permissions\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7231b8cc-e2e1-4e63-a970-c98d8b475d35",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53eacbd5-ef75-4cde-b08d-b1697be0d561",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "collections",
+                    ":collectionId",
+                    "tier-n",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCommodityFilter",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeMediaSources",
+                      "value": "false"
+                    },
+                    {
+                      "key": "includeShipmentDetails",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "2"
+                    },
+                    {
+                      "key": "source",
+                      "value": "Customs"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "hsCodes",
+                      "value": "847330,940161"
+                    },
+                    {
+                      "key": "maxTier",
+                      "value": "4"
+                    },
+                    {
+                      "key": "scopePrivate",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopeShared",
+                      "value": "true"
+                    },
+                    {
+                      "key": "scopePublic",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourceCustomer",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceCustoms",
+                      "value": "true"
+                    },
+                    {
+                      "key": "sourceMedia",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sourcePrewavePrediction",
+                      "value": "true"
+                    },
+                    {
+                      "key": "minShipments",
+                      "value": "10"
+                    },
+                    {
+                      "key": "probability",
+                      "value": "80"
+                    },
+                    {
+                      "key": "shipmentsPeriodFrom",
+                      "value": "2024-06-01"
+                    },
+                    {
+                      "key": "shipmentsPeriodTo",
+                      "value": "2024-11-30"
+                    },
+                    {
+                      "key": "suspectedSuppliers",
+                      "value": "false"
+                    },
+                    {
+                      "key": "logisticsProvider",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "collectionId",
+                      "description": "(Required) Unique identifier of the tier-n collection. Same as the `id` from GET /public/v1/collections. The collection must have tiersEnabled=true."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "44dd4d5a-6e67-428d-ba2d-96eec597345a",
+    "name": "Public Prewave Actions Collections - Tier-N API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

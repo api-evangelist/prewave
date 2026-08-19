@@ -1,0 +1,4012 @@
+{
+  "item": [
+    {
+      "id": "469e78bf-23d2-41cc-aecf-9b7aa7d8940c",
+      "name": "EUDR - Customers - Products",
+      "description": {
+        "content": "Allows you to manage customer products, including creating, updating, linking/unlinking products, and deactivating products.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1d9cbe9f-0838-4ef7-9435-f3a3c20d2d77",
+          "name": "Update an existing outbound product",
+          "request": {
+            "name": "Update an existing outbound product",
+            "description": {
+              "content": "\nUpdate an existing outbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "outbound",
+                ":productId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) The ID of the product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hsCode\": \"<string>\",\n  \"name\": \"<string>\",\n  \"scientificName\": \"<string>\",\n  \"reference\": \"<string>\",\n  \"annualRevenue\": \"<decimal>\",\n  \"annualQuantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "877a1303-be74-42e7-9018-d5293fd3b91c",
+              "name": "Product updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2dc03cde-af5b-43a4-9f1b-2a0a5098b674",
+              "name": "Errors if related data not found or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"hs_code_not_found\",\n  \"message\": \"HS code not found: HSCode=123456\",\n  \"solution\": \"Check if the identifier provided is correct or create the record first\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d65cd680-ac32-4209-ac63-dea0d974f77b",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e0eb7da-3b90-4bad-a81f-136ed01d3f15",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5bc1b96-4c02-40b3-8846-a98223b0a934",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "652f46f4-3740-4f13-9c97-32fad378a96a",
+          "name": "Update an existing inbound product",
+          "request": {
+            "name": "Update an existing inbound product",
+            "description": {
+              "content": "\nUpdate an existing inbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "inbound",
+                ":productId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) The ID of the product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hsCode\": \"<string>\",\n  \"name\": \"<string>\",\n  \"supplierId\": \"<integer>\",\n  \"scientificName\": \"<string>\",\n  \"reference\": \"<string>\",\n  \"annualSpend\": \"<decimal>\",\n  \"annualQuantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8a326a7b-82e0-4950-ab05-bb613b0344d7",
+              "name": "Product updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "acc5a4c5-c7cf-4b3a-807d-fbeb20f73a03",
+              "name": "Errors if related data not found or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"hs_code_not_found\",\n  \"message\": \"HS code not found: HSCode=123456\",\n  \"solution\": \"Check if the identifier provided is correct or create the record first\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3c01a7d-4a7b-4730-9931-bffe7230b5bd",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45a3fd29-c38a-4f20-8853-d79ceee70383",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "246f4b30-d115-4cea-b5d5-24fc5569e877",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf2d3462-02d6-4843-a9f2-fbe80b079224",
+          "name": "Get a list of outbound products",
+          "request": {
+            "name": "Get a list of outbound products",
+            "description": {
+              "content": "\nRetrieve a paginated list of outbound products for EUDR compliance.\n\nOutbound products are products that your organization sells or distributes.\nEach item includes linked inbound product IDs when BOM relationships exist.\n\n**Use Cases**:\n- List all outbound products\n- Filter products by various criteria\n- Export product data for compliance reporting\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required permission:** `access_public_products`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "outbound"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<integer>",
+                  "description": "Filter by product IDs. When set, other filters are ignored."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<integer>",
+                  "description": "Filter by product IDs. When set, other filters are ignored."
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Full text search query for outbound product names, references or linked inbound product names, references or suppliers."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "05031544-bb53-4be1-b0c7-8bf56a9b076f",
+              "name": "Paginated list of outbound products.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"id\\\":101,\\\"customerId\\\":100,\\\"orgId\\\":200,\\\"name\\\":\\\"Oak Dining Table\\\",\\\"scientificName\\\":\\\"Quercus robur\\\",\\\"reference\\\":\\\"OUT-2025-001\\\",\\\"commodity\\\":{\\\"id\\\":1,\\\"name\\\":\\\"Timber\\\"},\\\"hsCode\\\":{\\\"code\\\":\\\"940360\\\",\\\"description\\\":\\\"Wooden furniture of a kind used in the dining room\\\",\\\"commodityId\\\":1},\\\"inboundProducts\\\":[201,202]},{\\\"id\\\":102,\\\"customerId\\\":100,\\\"orgId\\\":200,\\\"name\\\":\\\"Plywood Cabinet\\\",\\\"scientificName\\\":null,\\\"reference\\\":\\\"OUT-2025-002\\\",\\\"commodity\\\":{\\\"id\\\":1,\\\"name\\\":\\\"Timber\\\"},\\\"hsCode\\\":{\\\"code\\\":\\\"441510\\\",\\\"description\\\":\\\"Plywood, veneered panels and similar laminated wood\\\",\\\"commodityId\\\":1},\\\"inboundProducts\\\":[203]}],\\\"pageable\\\":{\\\"pageNumber\\\":0,\\\"pageSize\\\":10,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"offset\\\":0,\\\"paged\\\":true,\\\"unpaged\\\":false},\\\"totalPages\\\":1,\\\"totalElements\\\":2,\\\"last\\\":true,\\\"size\\\":10,\\\"number\\\":0,\\\"numberOfElements\\\":2,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"first\\\":true,\\\"empty\\\":false}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "259fb9aa-d036-4a14-930f-397485ee72aa",
+              "name": "Invalid pagination or filter parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_request\",\n  \"message\": \"Page number must be non-negative\",\n  \"solution\": \"Provide a valid page number (0 or greater)\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b4bd6ef-4e2e-497d-8e57-1b602f517b80",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4e45110-9aaa-4438-9c3a-88b129faad21",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85fd73fc-a681-4fb6-9da0-8f2b77401e06",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6825bcf6-ee2d-4267-9fea-fe4dc0e4bfb8",
+          "name": "Create a new outbound product",
+          "request": {
+            "name": "Create a new outbound product",
+            "description": {
+              "content": "\nCreate a new outbound product for EUDR compliance.\n\nOutbound products represent products that your organization sells or distributes.\nProvide at least `name` and `hsCode`; add `scientificName` and `reference` when available.\n\n**Required permission:** `access_public_products`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "outbound"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hsCode\": \"<string>\",\n  \"name\": \"<string>\",\n  \"scientificName\": \"<string>\",\n  \"reference\": \"<string>\",\n  \"annualRevenue\": \"<decimal>\",\n  \"annualQuantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "32a475cb-ba05-4921-a90a-9ae7ac69d036",
+              "name": "Outbound product created successfully. Returns the ID of the newly created product.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"301\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5355cd9-00d9-41ee-9cdd-12a9664c0948",
+              "name": "Errors if related data not found or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"hs_code_not_found\",\n  \"message\": \"HS code not found: HSCode=123456\",\n  \"solution\": \"Check if the identifier provided is correct or create the record first\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb80ad6d-196b-40cb-a41f-ba5e172ba5f0",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f37fb38e-5d1f-4697-baa2-49989af5250f",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17683d01-f8ee-4794-94a1-e1b6e94d37cd",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Dining Table\",\"scientificName\":\"Quercus robur\",\"reference\":\"OUT-2025-001\",\"hsCode\":\"940360\",\"annualRevenue\":null,\"annualQuantity\":null,\"unit\":null}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "410e90f5-ec1a-46f0-8c9f-3218e324fd05",
+          "name": "Connect inbound products to an outbound product",
+          "request": {
+            "name": "Connect inbound products to an outbound product",
+            "description": {
+              "content": "\nLink one or more inbound products to an outbound product.\n\nThese relationships are used for EUDR compliance tracking and origin request management.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "outbound",
+                ":productId",
+                "inbound"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) The ID of the outbound product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inboundProductIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9044afcd-280a-4e5c-951c-916e7945d839",
+              "name": "Inbound products linked successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b9e09078-ddcf-42a4-a7e1-d5dc4d80a220",
+              "name": "Invalid list (duplicates or type mismatch).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c8999c3-bd7c-4928-bd41-9ebf0f461df9",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0141d68e-209b-47b0-a6d0-257df9290f1d",
+              "name": "Outbound or inbound product not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e163a62-2a61-4a06-a1d1-a1f55c7c0577",
+              "name": "Inbound product already linked.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e35a941-0fcf-46b1-bdec-a28a2ebd99da",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a416950-b439-4c92-84f5-a0ac60b23de1",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":productId",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the outbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"inboundProductIds\":[201,202,203]}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e77fc3b5-5e48-4df7-bb7f-2360864cc0ca",
+          "name": "Get a list of inbound products",
+          "request": {
+            "name": "Get a list of inbound products",
+            "description": {
+              "content": "\nRetrieve a paginated list of inbound products for EUDR compliance.\n\nInbound products are products that your organization receives from suppliers.\nUse `includeOrigins=true` (default) to include origin information on each product.\n\n**Use Cases**:\n- List all inbound products\n- Filter products by various criteria\n- Review supplier, DDS status, and origin data per product\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required permission:** `access_public_products`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "inbound"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<integer>",
+                  "description": "Filter by product IDs. When set, other filters are ignored."
+                },
+                {
+                  "disabled": false,
+                  "key": "ids",
+                  "value": "<integer>",
+                  "description": "Filter by product IDs. When set, other filters are ignored."
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Full text search query for product names, suppliers  or product references."
+                },
+                {
+                  "disabled": false,
+                  "key": "refs",
+                  "value": "<string>",
+                  "description": "Filter by product references."
+                },
+                {
+                  "disabled": false,
+                  "key": "refs",
+                  "value": "<string>",
+                  "description": "Filter by product references."
+                },
+                {
+                  "disabled": false,
+                  "key": "las",
+                  "value": "<string>",
+                  "description": "Filter by legality assessment status."
+                },
+                {
+                  "disabled": false,
+                  "key": "las",
+                  "value": "<string>",
+                  "description": "Filter by legality assessment status."
+                },
+                {
+                  "disabled": false,
+                  "key": "dfs",
+                  "value": "<string>",
+                  "description": "Filter by DF status."
+                },
+                {
+                  "disabled": false,
+                  "key": "dfs",
+                  "value": "<string>",
+                  "description": "Filter by DF status."
+                },
+                {
+                  "disabled": false,
+                  "key": "dd",
+                  "value": "<string>",
+                  "description": "Filter by DDS status."
+                },
+                {
+                  "disabled": false,
+                  "key": "dd",
+                  "value": "<string>",
+                  "description": "Filter by DDS status."
+                },
+                {
+                  "disabled": false,
+                  "key": "os",
+                  "value": "<string>",
+                  "description": "Filter by origin status."
+                },
+                {
+                  "disabled": false,
+                  "key": "ors",
+                  "value": "<string>",
+                  "description": "Filter by origin request status."
+                },
+                {
+                  "disabled": false,
+                  "key": "ors",
+                  "value": "<string>",
+                  "description": "Filter by origin request status."
+                },
+                {
+                  "disabled": false,
+                  "key": "orso",
+                  "value": "<string>",
+                  "description": "Operator for origin request status filtering. Can be used in combination with 'ors' parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "sccas",
+                  "value": "<string>",
+                  "description": "Filter by SCCA status."
+                },
+                {
+                  "disabled": false,
+                  "key": "sccas",
+                  "value": "<string>",
+                  "description": "Filter by SCCA status."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeOrigins",
+                  "value": "true",
+                  "description": "Url encoded query parameter for controlling if origins will be included in the response. It allows lighter response in case they are not needed."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2d3b9e0-6970-4cd8-a1a3-f7f1e4ecba6d",
+              "name": "Paginated list of inbound products.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref123"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref456"
+                    },
+                    {
+                      "key": "las",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "las",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Blocked"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Allowed"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "WaitingForOrigins"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Draft"
+                    },
+                    {
+                      "key": "os",
+                      "value": "Active"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Requested"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Answered"
+                    },
+                    {
+                      "key": "orso",
+                      "value": "in"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Derisked"
+                    },
+                    {
+                      "key": "includeOrigins",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"id\\\":201,\\\"customerId\\\":100,\\\"orgId\\\":200,\\\"name\\\":\\\"Oak Wood Planks\\\",\\\"scientificName\\\":\\\"Quercus robur\\\",\\\"reference\\\":\\\"INB-2025-001\\\",\\\"commodity\\\":{\\\"id\\\":1,\\\"name\\\":\\\"Timber\\\"},\\\"hsCode\\\":{\\\"code\\\":\\\"440799\\\",\\\"description\\\":\\\"Wood sawn or chipped lengthwise, sliced or peeled, of oak\\\",\\\"commodityId\\\":1},\\\"annualSpend\\\":null,\\\"annualQuantity\\\":null,\\\"unit\\\":null,\\\"countryRisk\\\":\\\"Low\\\",\\\"origins\\\":[],\\\"hasPendingOriginRequest\\\":false,\\\"pendingDFRequest\\\":null,\\\"supplier\\\":{\\\"id\\\":101,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"type\\\":\\\"Manufacturer\\\",\\\"location\\\":\\\"Vienna\\\",\\\"countryId\\\":14,\\\"references\\\":[{\\\"id\\\":\\\"ERP-12345\\\",\\\"source\\\":\\\"erp\\\"}]},\\\"supplierDDS\\\":[],\\\"dfAssessment\\\":null,\\\"ddsStatus\\\":{\\\"status\\\":\\\"Allowed\\\",\\\"reason\\\":null},\\\"customerDDS\\\":null,\\\"supplierMaturity\\\":null,\\\"legalityAssessment\\\":null,\\\"active\\\":true,\\\"creatorType\\\":\\\"Customer\\\"},{\\\"id\\\":202,\\\"customerId\\\":100,\\\"orgId\\\":200,\\\"name\\\":\\\"Teak Wood Beams\\\",\\\"scientificName\\\":\\\"Tectona grandis\\\",\\\"reference\\\":\\\"INB-2025-002\\\",\\\"commodity\\\":{\\\"id\\\":1,\\\"name\\\":\\\"Timber\\\"},\\\"hsCode\\\":{\\\"code\\\":\\\"440711\\\",\\\"description\\\":\\\"Wood sawn or chipped lengthwise, of teak\\\",\\\"commodityId\\\":1},\\\"annualSpend\\\":null,\\\"annualQuantity\\\":null,\\\"unit\\\":null,\\\"countryRisk\\\":\\\"Mid\\\",\\\"origins\\\":[],\\\"hasPendingOriginRequest\\\":true,\\\"pendingDFRequest\\\":null,\\\"supplier\\\":{\\\"id\\\":102,\\\"name\\\":\\\"Beta Timber Ltd\\\",\\\"type\\\":\\\"Manufacturer\\\",\\\"location\\\":\\\"London\\\",\\\"countryId\\\":826,\\\"references\\\":[{\\\"id\\\":\\\"ERP-12345\\\",\\\"source\\\":\\\"erp\\\"}]},\\\"supplierDDS\\\":[],\\\"dfAssessment\\\":null,\\\"ddsStatus\\\":{\\\"status\\\":\\\"WaitingForOrigins\\\",\\\"reason\\\":\\\"PendingOriginRequest\\\"},\\\"customerDDS\\\":null,\\\"supplierMaturity\\\":null,\\\"legalityAssessment\\\":null,\\\"active\\\":true,\\\"creatorType\\\":\\\"Customer\\\"}],\\\"pageable\\\":{\\\"pageNumber\\\":0,\\\"pageSize\\\":10,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"offset\\\":0,\\\"paged\\\":true,\\\"unpaged\\\":false},\\\"totalPages\\\":1,\\\"totalElements\\\":2,\\\"last\\\":true,\\\"size\\\":10,\\\"number\\\":0,\\\"numberOfElements\\\":2,\\\"sort\\\":{\\\"empty\\\":true,\\\"sorted\\\":false,\\\"unsorted\\\":true},\\\"first\\\":true,\\\"empty\\\":false}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f04ca6fa-8bfe-4f4d-852c-096ae39eb04b",
+              "name": "Invalid pagination or filter parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref123"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref456"
+                    },
+                    {
+                      "key": "las",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "las",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Blocked"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Allowed"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "WaitingForOrigins"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Draft"
+                    },
+                    {
+                      "key": "os",
+                      "value": "Active"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Requested"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Answered"
+                    },
+                    {
+                      "key": "orso",
+                      "value": "in"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Derisked"
+                    },
+                    {
+                      "key": "includeOrigins",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_request\",\n  \"message\": \"Page number must be non-negative\",\n  \"solution\": \"Provide a valid page number (0 or greater)\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e23d5963-17a9-4a35-b07f-4203eb804f94",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref123"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref456"
+                    },
+                    {
+                      "key": "las",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "las",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Blocked"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Allowed"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "WaitingForOrigins"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Draft"
+                    },
+                    {
+                      "key": "os",
+                      "value": "Active"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Requested"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Answered"
+                    },
+                    {
+                      "key": "orso",
+                      "value": "in"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Derisked"
+                    },
+                    {
+                      "key": "includeOrigins",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f042f49d-a8e5-4da7-a0d0-7e209a1f3bf0",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref123"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref456"
+                    },
+                    {
+                      "key": "las",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "las",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Blocked"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Allowed"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "WaitingForOrigins"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Draft"
+                    },
+                    {
+                      "key": "os",
+                      "value": "Active"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Requested"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Answered"
+                    },
+                    {
+                      "key": "orso",
+                      "value": "in"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Derisked"
+                    },
+                    {
+                      "key": "includeOrigins",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1005d68-5e16-4dc2-8590-c7e9eff12cb0",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ids",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "2"
+                    },
+                    {
+                      "key": "ids",
+                      "value": "3"
+                    },
+                    {
+                      "key": "q",
+                      "value": "soy oil"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref123"
+                    },
+                    {
+                      "key": "refs",
+                      "value": "Ref456"
+                    },
+                    {
+                      "key": "las",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "las",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "Negligible"
+                    },
+                    {
+                      "key": "dfs",
+                      "value": "NotRequired"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Blocked"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Allowed"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "WaitingForOrigins"
+                    },
+                    {
+                      "key": "dd",
+                      "value": "Draft"
+                    },
+                    {
+                      "key": "os",
+                      "value": "Active"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Requested"
+                    },
+                    {
+                      "key": "ors",
+                      "value": "Answered"
+                    },
+                    {
+                      "key": "orso",
+                      "value": "in"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Pending"
+                    },
+                    {
+                      "key": "sccas",
+                      "value": "Derisked"
+                    },
+                    {
+                      "key": "includeOrigins",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6f1fada7-0e53-4670-9142-e0f1745f142f",
+          "name": "Create a new inbound product",
+          "request": {
+            "name": "Create a new inbound product",
+            "description": {
+              "content": "\nCreate a new inbound product for EUDR compliance.\n\nInbound products represent products that your organization receives from suppliers.\nProvide `name`, `hsCode`, and `supplierId` at minimum.\n\n**Required permission:** `access_public_products`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "inbound"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hsCode\": \"<string>\",\n  \"name\": \"<string>\",\n  \"supplierId\": \"<integer>\",\n  \"scientificName\": \"<string>\",\n  \"reference\": \"<string>\",\n  \"annualSpend\": \"<decimal>\",\n  \"annualQuantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b4e65c49-5a71-4f19-8be9-8855a1084609",
+              "name": "Inbound product created successfully. Returns the ID of the newly created product.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"301\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e47b0cb-4c12-4dd1-b730-08e417cb4ec4",
+              "name": "Errors if related data not found or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"hs_code_not_found\",\n  \"message\": \"HS code not found: HSCode=123456\",\n  \"solution\": \"Check if the identifier provided is correct or create the record first\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "300b1f20-e486-4202-b881-e88ff0fd6203",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10db6cea-e3ab-4827-bc3a-69b94e2167d4",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c133c10-947d-4aa3-a816-70d959448e1a",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "inbound"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Oak Wood Planks\",\"scientificName\":\"Quercus robur\",\"reference\":\"INB-2025-001\",\"hsCode\":\"440799\",\"annualSpend\":null,\"annualQuantity\":null,\"unit\":null,\"supplierId\":102006215}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2dd77b61-3a95-4dab-a080-01fb4f0dc71a",
+          "name": "Deactivate a product and its origins",
+          "request": {
+            "name": "Deactivate a product and its origins",
+            "description": {
+              "content": "\nDeactivate a product and its associated origins.\n\nOnce deactivated, the product is no longer available for active use in EUDR compliance workflows.\n\n**Required permission:** `access_public_products` and `DELETE` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                ":productId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) The ID of the product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a966726c-cbc7-4d9a-ba3c-75bdd2a4d5fc",
+              "name": "Product deactivated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d69158a-eb80-4c2d-b37f-aeebfb8d23b4",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf9b6fce-ce2b-4092-a547-6fa3d823097f",
+              "name": "Product not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Product with id 123 not found\",\n  \"solution\": \"Verify the product ID\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46b1a164-c792-42d6-bd1f-bafb8c6f1315",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98f28771-f127-47a4-82e7-173cc3c85891",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) The ID of the product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "41d03781-1673-469d-b037-59d351a505ac",
+          "name": "Disconnect an inbound product from an outbound product",
+          "request": {
+            "name": "Disconnect an inbound product from an outbound product",
+            "description": {
+              "content": "\nRemove the link between an inbound product and an outbound product.\n\nThe products themselves are not deleted — only the BOM relationship is removed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                "outbound",
+                ":outboundProductId",
+                "inbound",
+                ":inboundProductId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "outboundProductId",
+                  "description": "(Required) The ID of the outbound product."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "inboundProductId",
+                  "description": "(Required) The ID of the inbound product."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "44226a0e-3633-4d05-8979-115116c7905e",
+              "name": "Product link removed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":outboundProductId",
+                    "inbound",
+                    ":inboundProductId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "outboundProductId",
+                      "description": "(Required) The ID of the outbound product."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "inboundProductId",
+                      "description": "(Required) The ID of the inbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "824b5407-2561-410f-a318-b1c308a16c3d",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":outboundProductId",
+                    "inbound",
+                    ":inboundProductId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "outboundProductId",
+                      "description": "(Required) The ID of the outbound product."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "inboundProductId",
+                      "description": "(Required) The ID of the inbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a92a9a4a-32e8-4772-9f06-ad60f72884d7",
+              "name": "Outbound product, inbound product, or link not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":outboundProductId",
+                    "inbound",
+                    ":inboundProductId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "outboundProductId",
+                      "description": "(Required) The ID of the outbound product."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "inboundProductId",
+                      "description": "(Required) The ID of the inbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Link between outbound product 101 and inbound product 201 not found\",\n  \"solution\": \"Verify both product IDs and that they are linked\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a17ad4d-7fcc-4ebd-8361-55d673cfe845",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":outboundProductId",
+                    "inbound",
+                    ":inboundProductId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "outboundProductId",
+                      "description": "(Required) The ID of the outbound product."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "inboundProductId",
+                      "description": "(Required) The ID of the inbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eea5dd00-c75a-4b84-ae93-fb07541d5324",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    "outbound",
+                    ":outboundProductId",
+                    "inbound",
+                    ":inboundProductId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "outboundProductId",
+                      "description": "(Required) The ID of the outbound product."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "inboundProductId",
+                      "description": "(Required) The ID of the inbound product."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5f849f8b-9034-488c-9d97-1a53e5d29d15",
+    "name": "Public Prewave Actions EUDR - Customers - Products API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

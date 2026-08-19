@@ -1,0 +1,197 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Customers - DDS API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Customers - DDS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update a customer DDS for an inbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/customer-dds/:ddsId",
+            "params": [
+              {
+                "name": "ddsId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of the customer DDS to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUpdates an existing customer Due Diligence Statement (DDS) identified by `ddsId`.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Update compliance statements\n- Modify due diligence information\n- Correct DDS data before submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+        },
+        {
+          "info": {
+            "name": "Delete a customer DDS before successful submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/customer-dds/:ddsId",
+            "params": [
+              {
+                "name": "ddsId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of the customer DDS to delete."
+              }
+            ]
+          },
+          "docs": "\nDelete a customer Due Diligence Statement (DDS) while it is new or in submission-error state.\n\nThis endpoint permanently removes the specified customer DDS.\nIt cannot be used for DDS entries that have already been submitted or made available.\nUse with caution as this operation cannot be undone.\n\n**Required permission:** `access_public_products` and access to the DDS\n        "
+        },
+        {
+          "info": {
+            "name": "Submit a customer DDS to TracesNT system",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/customer-dds/:ddsId/submission",
+            "params": [
+              {
+                "name": "ddsId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of the customer DDS to submit."
+              }
+            ]
+          },
+          "docs": "\nSubmits the specified customer Due Diligence Statement (DDS) to the TracesNT system for regulatory processing.\nReturns `202 Accepted` if the request is successfully queued for processing.\n\n**Use Cases**:\n- Submit DDS to regulatory system\n- Complete compliance workflow\n- Register DDS with authorities\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+        },
+        {
+          "info": {
+            "name": "Fetch customer DDS entries for a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/:productId/customer-dds",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "ID of the product for which to fetch customer DDS entries."
+              }
+            ]
+          },
+          "docs": "\nReturns all customer Due Diligence Statements (DDS) associated with the given inbound or outbound product.\nOnly accessible if the caller has read permission for the product.\n\n**Use Cases**:\n- View all customer DDS entries for a product\n- Track compliance statements\n- Review DDS history and submission status\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Create a new customer DDS for an inbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/:productId/customer-dds",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "ID of the product for which to create the customer DDS."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreates a new customer Due Diligence Statement (DDS) for the specified inbound product.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Create compliance statements for products\n- Document due diligence information\n- Prepare DDS data before regulatory submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Withdraw a submitted customer DDS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/customer-dds/:ddsId/withdraw",
+            "params": [
+              {
+                "name": "ddsId",
+                "value": "123",
+                "type": "path",
+                "description": "The ID of the DDS statement."
+              }
+            ]
+          },
+          "docs": "\nWithdraws a customer Due Diligence Statement (DDS) from the regulatory system.\nThe DDS must be in `Available` state, and the withdrawal must be requested no later than 72 hours after it becomes available.\nThe withdrawal is completed synchronously; a successful response means both the regulatory withdrawal and local state update completed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+        },
+        {
+          "info": {
+            "name": "Fetch supplier DDS entries for a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/:productId/supplier-dds",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "ID of the product for which to fetch supplier DDS entries."
+              }
+            ]
+          },
+          "docs": "\nRetrieve all supplier Due Diligence Statements (DDS) associated with the specified product.\n\nThis endpoint returns all supplier DDS entries that have been submitted for the product,\nincluding origin information provided by suppliers in response to origin requests.\n\n**Use Cases**:\n- View supplier DDS responses for a product\n- Track supplier compliance data\n- Review origin information from suppliers\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Retrieve all available DDS units along with their associated HS codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/dds-units"
+          },
+          "docs": "\nRetrieve reference data for all available DDS units and their associated HS codes.\n\nThis endpoint returns all DDS units that can be used when creating or updating DDS entries,\nalong with the HS codes that are associated with each unit.\n\n**Use Cases**:\n- Get DDS unit reference data before creating a DDS\n- Populate unit selection dropdowns\n- Validate unit and HS code associations\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Delete a supplier DDS and its origins",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/supplier-dds/:ddsId",
+            "params": [
+              {
+                "name": "ddsId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of the supplier DDS to delete."
+              }
+            ]
+          },
+          "docs": "\nDelete a supplier Due Diligence Statement (DDS) and all its associated origin information.\n\nThis endpoint permanently removes the specified supplier DDS and all related origin data.\nUse with caution as this operation cannot be undone.\n\n**Use Cases**:\n- Remove incorrect supplier DDS entries\n- Clean up duplicate DDS data\n- Delete outdated compliance statements\n\n**Required permission:** `access_public_products` and `DELETE` on the DDS\n        "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Exposure API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exposure",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get exposure graph by target id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v1/alpha/exposure/target/:targetId/graph",
+            "params": [
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Performance impact**: Medium"
+        },
+        {
+          "info": {
+            "name": "Get exposure graph by foreign system target id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v1/alpha/exposure/target/:systemId/:targetId/graph",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Performance impact**: Medium"
+        },
+        {
+          "info": {
+            "name": "Get exposure analysis info by exposure analysis id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/alpha/exposure/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "**Performance impact**: Medium"
+        },
+        {
+          "info": {
+            "name": "Get exposure graph by exposure analysis id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/alpha/exposure/:id/graph",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "**Performance impact**: Medium"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

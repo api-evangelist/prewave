@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Scores - Externals API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scores - Externals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get external score history for one supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/scores/externals",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID of the target. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID of the target. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID of the target. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "102006215",
+                "type": "query",
+                "description": "Prewave ID of the target. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. Applies to supplierId, customerId, and ownId (not prewaveId)."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "1",
+                "type": "query",
+                "description": "Optional. Perspective to filter scores by. If omitted, your account default is used."
+              },
+              {
+                "name": "groupId",
+                "value": "10",
+                "type": "query",
+                "description": "Optional. Score group to filter results by."
+              }
+            ]
+          },
+          "docs": "\nReturns score history per event type for one supplier. Identify the supplier using query parameters such as supplier ID, customer ID, own site ID, or Prewave ID — the same identifiers you use elsewhere in the public supplier APIs.\n\n**When to use this**\n- Auditing what scores are stored for one supplier after an integration run.\n- Showing score history in a customer-facing report or internal dashboard.\n- Verifying that an upload landed as expected for a given supplier.\n\n**Optional filters**\n- `p"
+        },
+        {
+          "info": {
+            "name": "Upload external scores for one or more suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/scores/externals",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUploads scores per supplier and event type. Event types are the risk dimensions you score for a supplier (e.g. Carbon, Flood).\n\n**What you send**\n- A list of suppliers, each with how to find that supplier in Prewave and one or more scores.\n- At most 100 supplier entries in `data` per request.\n- At most 50 score rows per supplier in `scores` (one per event type).\n- Each score needs an event type key (`eventTypeKey`), a value from 1 to 100, and an optional comment.\n\n**Recommended workflow**\n1. Ca"
+        },
+        {
+          "info": {
+            "name": "List event types for a perspective",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/scores/externals/event-types",
+            "params": [
+              {
+                "name": "perspectiveId",
+                "value": "5484774",
+                "type": "query",
+                "description": "Perspective to list event types for. Use the same perspective as your uploads or reads when possible. Your API token must have access to this perspective."
+              }
+            ]
+          },
+          "docs": "\nLists event types configured for a perspective—the risk dimensions you can score (e.g. Carbon, Flood). Use this before a bulk upload so your integration sends event type keys that match what customers see in the product.\n\n**When to use this**\n- Planning a score import: see which event types apply before building the file or API payload.\n- Explaining to stakeholders which risk dimensions external scores can refer to for that perspective.\n- Troubleshooting failed uploads: compare your source data"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

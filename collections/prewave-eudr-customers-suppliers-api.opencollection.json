@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Customers - Suppliers API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Customers - Suppliers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find supplier connection contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/suppliers/:supplierId/connection-contacts",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "102006215",
+                "type": "path",
+                "description": "Supplier target ID for which connection contacts are to be retrieved."
+              }
+            ]
+          },
+          "docs": "\nRetrieve connection contacts for a supplier, including contacts added by your organization and contacts added by connected customers.\n\nConnection contacts are contact persons associated with suppliers that can be used for communication\nand relationship management. This endpoint returns all available contacts for the specified supplier,\nregardless of which organization added them.\n\n**Use Cases**:\n- Retrieve contact information for supplier communication\n- View contacts added by other connected c"
+        },
+        {
+          "info": {
+            "name": "Create connection contact for own or connected supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/suppliers/:supplierId/connection-contacts",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "102006215",
+                "type": "path",
+                "description": "Supplier target ID for whom new contacts will be created. If the given target is not a supplier, it will be automatically created as one."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new connection contact for a supplier.\n\nThis endpoint allows you to add contact persons to suppliers for relationship management.\nIf the specified target is not currently a supplier, it will be automatically connected as one.\n\n**Use Cases**:\n- Add contact persons to suppliers\n- Maintain supplier contact information\n- Enable supplier communication\n\n**Required permissions:** `access_public_products`, `access_public_mng_conn_contacts`, and `READ` on the target\n        "
+        },
+        {
+          "info": {
+            "name": "Find suppliers by their IDs or references where at least one of the two parameters must be provided and maximum allowed is 100.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/suppliers",
+            "params": [
+              {
+                "name": "targetIds",
+                "value": "102006215",
+                "type": "query",
+                "description": "List of supplier target IDs. Must not be provided together with 'refs'. Maximum allowed: 100."
+              },
+              {
+                "name": "refs",
+                "value": "ERP-12345",
+                "type": "query",
+                "description": "List of supplier references. Must not be provided together with 'targetIds'. Maximum allowed: 100."
+              }
+            ]
+          },
+          "docs": "\nFind suppliers by providing either a list of target IDs or a list of references. Exactly one of the two parameters must be provided. The maximum number of allowed IDs or references is limited to 100. Returns a list of supplier details for the provided identifiers, including screening status, references, connection contacts, and supplier maturity when available.\n\n**Use Cases**:\n- Look up suppliers by internal target IDs\n- Resolve suppliers by external reference codes\n- Retrieve supplier details "
+        },
+        {
+          "info": {
+            "name": "Search for supplier sites (max results: 100)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/suppliers/search",
+            "params": [
+              {
+                "name": "query",
+                "value": "Acme",
+                "type": "query",
+                "description": "The search string (minimum 3 characters). Used to match supplier names or other identifying information."
+              }
+            ]
+          },
+          "docs": "\nSearch for supplier sites by a free-text query. Only site-type suppliers are returned.\nThe query must be at least 3 characters long. The maximum number of results is limited to\n100. If the query is too short or no matching supplier type\nis found, an error is returned.\n\n**Use Cases**:\n- Search for suppliers by name or identifier\n- Find supplier sites for product associations\n- Discover available suppliers\n\n**Required permission:** `access_public_products`\n        "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

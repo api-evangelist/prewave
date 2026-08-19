@@ -1,0 +1,3320 @@
+{
+  "item": [
+    {
+      "id": "e1ffd28a-0b26-4b7f-ba4d-786d25e7c835",
+      "name": "EUDR - Customers - DDS",
+      "description": {
+        "content": "🆕 NEW - Allows you to manage customer Due Diligence Statements (DDS), including creating, updating, submitting, withdrawing customer DDS, and viewing supplier DDS associated with products.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "140da05b-fa67-42cd-a703-d7f4347466b0",
+          "name": "Update a customer DDS for an inbound product",
+          "request": {
+            "name": "Update a customer DDS for an inbound product",
+            "description": {
+              "content": "\nUpdates an existing customer Due Diligence Statement (DDS) identified by `ddsId`.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Update compliance statements\n- Modify due diligence information\n- Correct DDS data before submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "customer-dds",
+                ":ddsId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ddsId",
+                  "description": "(Required) ID of the customer DDS to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityType\": \"<string>\",\n  \"customerCity\": \"<string>\",\n  \"customerCountryId\": \"<integer>\",\n  \"customerName\": \"<string>\",\n  \"customerPostalCode\": \"<string>\",\n  \"customerStreet\": \"<string>\",\n  \"eoriNumber\": \"<string>\",\n  \"netWeightInKg\": \"<number>\",\n  \"operatorType\": \"<string>\",\n  \"countryOfActivityId\": \"<integer>\",\n  \"originRequestReferences\": {\n    \"reference\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  \"quantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c3e5182d-f40a-46b7-9745-35f1a1b4155b",
+              "name": "Customer DDS updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":123,\\\"active\\\":true,\\\"referenceNumber\\\":\\\"EU-REF-12345\\\",\\\"verificationNumber\\\":\\\"VER-987654\\\",\\\"date\\\":{\\\"date\\\":\\\"2025-09-30T12:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"archived\\\":false,\\\"archiveDate\\\":null,\\\"origins\\\":[],\\\"eoriNumber\\\":\\\"EU123456789\\\",\\\"customerName\\\":\\\"Acme GmbH\\\",\\\"customerCity\\\":\\\"Vienna\\\",\\\"customerPostalCode\\\":\\\"1010\\\",\\\"customerStreet\\\":\\\"Main Street 1\\\",\\\"customerCountry\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"state\\\":\\\"Available\\\",\\\"operatorType\\\":\\\"RepresentativeOperator\\\",\\\"activityType\\\":\\\"Import\\\",\\\"countryOfActivity\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"originRequestReferences\\\":[{\\\"ddsId\\\":456,\\\"reference\\\":\\\"PO-2025-001\\\",\\\"type\\\":\\\"PurchaseOrder\\\"},{\\\"ddsId\\\":457,\\\"reference\\\":\\\"SHP-2025-042\\\",\\\"type\\\":\\\"ShipmentNumber\\\"}],\\\"productName\\\":\\\"Oak Wood Planks\\\",\\\"productDescription\\\":\\\"Sawn oak wood planks, 2 m length, kiln-dried\\\",\\\"netWeightInKg\\\":1250.75,\\\"quantity\\\":10,\\\"unit\\\":\\\"m3\\\",\\\"hsCode\\\":\\\"440799\\\",\\\"submissionError\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5aedbe6-3b40-4ff9-982a-666b4177e985",
+              "name": "Invalid request payload (e.g. missing required fields, invalid values).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_payload\",\n  \"message\": \"Field 'eoriNumber' is required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1accefd2-550f-4dfd-8eaf-d943f1b11f8e",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1cfe226-76a5-4539-84aa-eec173055bef",
+              "name": "DDS not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6222dc6-4a46-4ae6-bb30-db25bb56b29a",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5192bed3-08d4-45f8-bd9f-535af77db9e8",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7892be7-09fa-445c-a6c5-9c349bfe56a7",
+          "name": "Delete a customer DDS before successful submission",
+          "request": {
+            "name": "Delete a customer DDS before successful submission",
+            "description": {
+              "content": "\nDelete a customer Due Diligence Statement (DDS) while it is new or in submission-error state.\n\nThis endpoint permanently removes the specified customer DDS.\nIt cannot be used for DDS entries that have already been submitted or made available.\nUse with caution as this operation cannot be undone.\n\n**Required permission:** `access_public_products` and access to the DDS\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "customer-dds",
+                ":ddsId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ddsId",
+                  "description": "(Required) ID of the customer DDS to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "53c2233c-c491-4736-8f8e-050af3eb8188",
+              "name": "Customer DDS deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c09903d7-36c6-4a2e-9e4c-4d2829e9925f",
+              "name": "Invalid request payload (e.g. missing required fields, invalid values).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_payload\",\n  \"message\": \"Field 'eoriNumber' is required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cd3594e-ebe1-4ae0-8b8a-8845c86075c7",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2569ff69-9805-4c3b-aafe-097c4d9f5c05",
+              "name": "DDS not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0fda5ff2-0c35-424f-90e1-201910c33e8f",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cb612a2-ef45-4ed3-88d2-fed22d67df0b",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fb550c44-6909-41cb-83ad-9bea5cb3396a",
+          "name": "Submit a customer DDS to TracesNT system",
+          "request": {
+            "name": "Submit a customer DDS to TracesNT system",
+            "description": {
+              "content": "\nSubmits the specified customer Due Diligence Statement (DDS) to the TracesNT system for regulatory processing.\nReturns `202 Accepted` if the request is successfully queued for processing.\n\n**Use Cases**:\n- Submit DDS to regulatory system\n- Complete compliance workflow\n- Register DDS with authorities\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "customer-dds",
+                ":ddsId",
+                "submission"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ddsId",
+                  "description": "(Required) ID of the customer DDS to submit."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c81d8d08-208f-4967-a5bb-0f8e0afc263c",
+              "name": "Request accepted for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a00a1ccc-a87d-46d5-951d-e65c8e989009",
+              "name": "Invalid request payload (e.g. missing required fields, invalid values).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_payload\",\n  \"message\": \"Field 'eoriNumber' is required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90d4147e-3f52-4697-89c1-f83824ff284b",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ef6e6f0-10b7-4f50-b8a5-0d1717d210aa",
+              "name": "DDS not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04d7d131-c818-4c33-9956-ef5c51b5df72",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a47f2f3b-55a1-4809-987d-06481f0deb2b",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "submission"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the customer DDS to submit."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30637ac9-6ca4-401c-a68a-ce393e0eb3e3",
+          "name": "Fetch customer DDS entries for a product",
+          "request": {
+            "name": "Fetch customer DDS entries for a product",
+            "description": {
+              "content": "\nReturns all customer Due Diligence Statements (DDS) associated with the given inbound or outbound product.\nOnly accessible if the caller has read permission for the product.\n\n**Use Cases**:\n- View all customer DDS entries for a product\n- Track compliance statements\n- Review DDS history and submission status\n\n**Required permission:** `access_public_products` and `READ` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                ":productId",
+                "customer-dds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) ID of the product for which to fetch customer DDS entries."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "819753dd-87a4-430c-b0a1-5876d6d2e1f2",
+              "name": "List of customer DDS entries for the product.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch customer DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":123,\\\"active\\\":true,\\\"referenceNumber\\\":\\\"EU-REF-12345\\\",\\\"verificationNumber\\\":\\\"VER-987654\\\",\\\"date\\\":{\\\"date\\\":\\\"2025-09-30T12:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"archived\\\":false,\\\"archiveDate\\\":null,\\\"origins\\\":[],\\\"eoriNumber\\\":\\\"EU123456789\\\",\\\"customerName\\\":\\\"Acme GmbH\\\",\\\"customerCity\\\":\\\"Vienna\\\",\\\"customerPostalCode\\\":\\\"1010\\\",\\\"customerStreet\\\":\\\"Main Street 1\\\",\\\"customerCountry\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"state\\\":\\\"Available\\\",\\\"operatorType\\\":\\\"RepresentativeOperator\\\",\\\"activityType\\\":\\\"Import\\\",\\\"countryOfActivity\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"originRequestReferences\\\":[{\\\"ddsId\\\":456,\\\"reference\\\":\\\"PO-2025-001\\\",\\\"type\\\":\\\"PurchaseOrder\\\"},{\\\"ddsId\\\":457,\\\"reference\\\":\\\"SHP-2025-042\\\",\\\"type\\\":\\\"ShipmentNumber\\\"}],\\\"productName\\\":\\\"Oak Wood Planks\\\",\\\"productDescription\\\":\\\"Sawn oak wood planks, 2 m length, kiln-dried\\\",\\\"netWeightInKg\\\":1250.75,\\\"quantity\\\":10,\\\"unit\\\":\\\"m3\\\",\\\"hsCode\\\":\\\"440799\\\",\\\"submissionError\\\":null},{\\\"id\\\":124,\\\"active\\\":true,\\\"referenceNumber\\\":null,\\\"verificationNumber\\\":null,\\\"date\\\":{\\\"date\\\":\\\"2025-10-05T09:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"archived\\\":false,\\\"archiveDate\\\":null,\\\"origins\\\":[],\\\"eoriNumber\\\":\\\"EU987654321\\\",\\\"customerName\\\":\\\"Beta Trading AG\\\",\\\"customerCity\\\":\\\"Zurich\\\",\\\"customerPostalCode\\\":\\\"8001\\\",\\\"customerStreet\\\":\\\"Bahnhofstrasse 10\\\",\\\"customerCountry\\\":{\\\"id\\\":756,\\\"name\\\":\\\"Switzerland\\\",\\\"countryCode\\\":\\\"CH\\\",\\\"bounds\\\":null},\\\"state\\\":\\\"SubmissionError\\\",\\\"operatorType\\\":\\\"RepresentativeOperator\\\",\\\"activityType\\\":\\\"Export\\\",\\\"countryOfActivity\\\":{\\\"id\\\":756,\\\"name\\\":\\\"Switzerland\\\",\\\"countryCode\\\":\\\"CH\\\",\\\"bounds\\\":null},\\\"originRequestReferences\\\":[],\\\"productName\\\":\\\"Plywood Panels\\\",\\\"productDescription\\\":\\\"Veneered plywood panels for furniture production\\\",\\\"netWeightInKg\\\":850.00,\\\"quantity\\\":25,\\\"unit\\\":\\\"NAR\\\",\\\"hsCode\\\":\\\"441510\\\",\\\"submissionError\\\":{\\\"code\\\":\\\"INVALID_EORI\\\",\\\"detail\\\":\\\"The EORI number could not be validated with the regulatory system.\\\",\\\"reasons\\\":[\\\"EORI number format is invalid\\\",\\\"No matching operator record found\\\"]}}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b97649df-7fec-479e-9bd0-516fa0b8429f",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch customer DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b20eb5fc-295b-4955-b0a9-a17fbf884632",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch customer DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5a49593-4c5b-477a-8007-33d8ad21e5c8",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch customer DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2aa09cba-a378-4c77-a08d-bf7a614c6e0b",
+          "name": "Create a new customer DDS for an inbound product",
+          "request": {
+            "name": "Create a new customer DDS for an inbound product",
+            "description": {
+              "content": "\nCreates a new customer Due Diligence Statement (DDS) for the specified inbound product.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Create compliance statements for products\n- Document due diligence information\n- Prepare DDS data before regulatory submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                ":productId",
+                "customer-dds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) ID of the product for which to create the customer DDS."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityType\": \"<string>\",\n  \"customerCity\": \"<string>\",\n  \"customerCountryId\": \"<integer>\",\n  \"customerName\": \"<string>\",\n  \"customerPostalCode\": \"<string>\",\n  \"customerStreet\": \"<string>\",\n  \"eoriNumber\": \"<string>\",\n  \"netWeightInKg\": \"<number>\",\n  \"operatorType\": \"<string>\",\n  \"countryOfActivityId\": \"<integer>\",\n  \"originRequestReferences\": {\n    \"reference\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"type\": \"<string>\"\n  },\n  \"quantity\": \"<number>\",\n  \"unit\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "027616b4-5ae9-4624-8cd8-d44749cb11d9",
+              "name": "Customer DDS created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":123,\\\"active\\\":true,\\\"referenceNumber\\\":\\\"EU-REF-12345\\\",\\\"verificationNumber\\\":\\\"VER-987654\\\",\\\"date\\\":{\\\"date\\\":\\\"2025-09-30T12:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"archived\\\":false,\\\"archiveDate\\\":null,\\\"origins\\\":[],\\\"eoriNumber\\\":\\\"EU123456789\\\",\\\"customerName\\\":\\\"Acme GmbH\\\",\\\"customerCity\\\":\\\"Vienna\\\",\\\"customerPostalCode\\\":\\\"1010\\\",\\\"customerStreet\\\":\\\"Main Street 1\\\",\\\"customerCountry\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"state\\\":\\\"Available\\\",\\\"operatorType\\\":\\\"RepresentativeOperator\\\",\\\"activityType\\\":\\\"Import\\\",\\\"countryOfActivity\\\":{\\\"id\\\":14,\\\"name\\\":\\\"Austria\\\",\\\"countryCode\\\":\\\"AT\\\",\\\"bounds\\\":null},\\\"originRequestReferences\\\":[{\\\"ddsId\\\":456,\\\"reference\\\":\\\"PO-2025-001\\\",\\\"type\\\":\\\"PurchaseOrder\\\"},{\\\"ddsId\\\":457,\\\"reference\\\":\\\"SHP-2025-042\\\",\\\"type\\\":\\\"ShipmentNumber\\\"}],\\\"productName\\\":\\\"Oak Wood Planks\\\",\\\"productDescription\\\":\\\"Sawn oak wood planks, 2 m length, kiln-dried\\\",\\\"netWeightInKg\\\":1250.75,\\\"quantity\\\":10,\\\"unit\\\":\\\"m3\\\",\\\"hsCode\\\":\\\"440799\\\",\\\"submissionError\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b4d03b1-3344-44ad-9490-cf2d5a0c5935",
+              "name": "Invalid request payload (e.g. missing required fields, invalid values).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_payload\",\n  \"message\": \"Field 'eoriNumber' is required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7a7f9a1-bc1e-4424-a976-32557697c2e5",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1328ec3f-3258-4494-a2d1-98ede0598ebc",
+              "name": "DDS not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "175d3037-c32b-4d24-abee-5404cffeefbf",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8fe25ef-b412-4d3d-b2a8-f8433c33d948",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "customer-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to create the customer DDS."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"eoriNumber\":\"EU123456789\",\"customerName\":\"Acme GmbH\",\"customerCity\":\"Vienna\",\"customerPostalCode\":\"1010\",\"customerStreet\":\"Main Street 1\",\"customerCountryId\":14,\"activityType\":\"Import\",\"countryOfActivityId\":14,\"originRequestReferences\":[{\"reference\":[\"PO-2025-001\",\"PO-2025-002\"],\"type\":\"PurchaseOrder\"},{\"reference\":[\"SHP-2025-042\"],\"type\":\"ShipmentNumber\"}],\"netWeightInKg\":1250.75,\"quantity\":10,\"unit\":\"m3\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ca0a495f-14dd-431b-8e13-7f52b73e6540",
+          "name": "Withdraw a submitted customer DDS",
+          "request": {
+            "name": "Withdraw a submitted customer DDS",
+            "description": {
+              "content": "\nWithdraws a customer Due Diligence Statement (DDS) from the regulatory system.\nThe DDS must be in `Available` state, and the withdrawal must be requested no later than 72 hours after it becomes available.\nThe withdrawal is completed synchronously; a successful response means both the regulatory withdrawal and local state update completed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "customer-dds",
+                ":ddsId",
+                "withdraw"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ddsId",
+                  "description": "(Required) The ID of the DDS statement."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4baee7fd-21a4-4dd7-ad3e-bce2b5d1281d",
+              "name": "Customer DDS withdrawn successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "96290eaf-19a4-4d64-a527-6f6bbc94c474",
+              "name": "The DDS ID path parameter is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"invalid_request\",\n  \"message\": \"Invalid request\",\n  \"solution\": \"Fix the request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd14b939-64b2-4713-9128-a4eda0a3c194",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a7c6a2c-35da-4cbd-a3da-1508de0a3a35",
+              "name": "The customer DDS is missing or inaccessible in Dashboard, or its submission is missing in the regulatory service.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Active customer DDS #123 was not found\\\",\\\"solution\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4718e2d-8c77-46a5-9f3e-2abe685a87df",
+              "name": "The customer DDS is not in `Available` state in Dashboard.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"customer_dds_withdrawal_not_allowed\\\",\\\"message\\\":\\\"Customer DDS #123 cannot be withdrawn from state Submitted\\\",\\\"solution\\\":null}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10025cfe-3491-4f76-a14b-ea991498635c",
+              "name": "The regulatory service rejected the withdrawal, for example because the withdrawal window elapsed, the regulatory status is not withdrawable, or required submission identifiers are missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"message\\\":\\\"The regulatory service rejected the DDS withdrawal\\\",\\\"reasons\\\":[\\\"EUDR-WITHDRAW-ACTIVE-CHECK\\\"],\\\"solution\\\":\\\"Please try again later.\\\",\\\"code\\\":\\\"tracesnt_dds_error\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08a3ac77-dc3f-48b1-8919-36fb1ae841fe",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "293d66b3-649a-4eb7-821f-47bf638fa51f",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "faec8a70-2140-43b5-9da2-e220c5079f93",
+              "name": "The regulatory system failed to process the withdrawal or returned an invalid response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "customer-dds",
+                    ":ddsId",
+                    "withdraw"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) The ID of the DDS statement."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"message\\\":\\\"Traces NT returned an unexpected customer DDS withdrawal response\\\",\\\"reasons\\\":[\\\"Expected id=123 and tracesNtStatus=WITHDRAWN\\\"],\\\"solution\\\":\\\"Please try again later.\\\",\\\"code\\\":\\\"tracesnt_dds_error\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bb5e528d-c2d8-40f6-ace6-eac316008874",
+          "name": "Fetch supplier DDS entries for a product",
+          "request": {
+            "name": "Fetch supplier DDS entries for a product",
+            "description": {
+              "content": "\nRetrieve all supplier Due Diligence Statements (DDS) associated with the specified product.\n\nThis endpoint returns all supplier DDS entries that have been submitted for the product,\nincluding origin information provided by suppliers in response to origin requests.\n\n**Use Cases**:\n- View supplier DDS responses for a product\n- Track supplier compliance data\n- Review origin information from suppliers\n\n**Required permission:** `access_public_products` and `READ` on the product\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "products",
+                ":productId",
+                "supplier-dds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "productId",
+                  "description": "(Required) ID of the product for which to fetch supplier DDS entries."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4e9428ce-5747-4d8f-8d40-1f10a530062f",
+              "name": "List of supplier DDS entries for the product.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "supplier-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch supplier DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":201,\\\"active\\\":true,\\\"referenceNumber\\\":\\\"EU-SUP-67890\\\",\\\"date\\\":{\\\"date\\\":\\\"2025-08-15T14:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"netWeightInKg\\\":500.25,\\\"archived\\\":false,\\\"archiveDate\\\":null},{\\\"id\\\":202,\\\"active\\\":false,\\\"referenceNumber\\\":\\\"EU-SUP-11111\\\",\\\"date\\\":{\\\"date\\\":\\\"2024-11-20T10:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"netWeightInKg\\\":320.00,\\\"archived\\\":true,\\\"archiveDate\\\":{\\\"date\\\":\\\"2025-01-10T08:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"}}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0053c38d-6a72-4aaa-9264-e4db211c8e12",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "supplier-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch supplier DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4274fd57-386a-4839-812f-0db55353c72a",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "supplier-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch supplier DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0847867-e42a-4fd5-a48f-b75f7f2705a6",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "products",
+                    ":productId",
+                    "supplier-dds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "productId",
+                      "description": "(Required) ID of the product for which to fetch supplier DDS entries."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d43772d-f144-40df-b50b-81b1a0137f56",
+          "name": "Retrieve all available DDS units along with their associated HS codes",
+          "request": {
+            "name": "Retrieve all available DDS units along with their associated HS codes",
+            "description": {
+              "content": "\nRetrieve reference data for all available DDS units and their associated HS codes.\n\nThis endpoint returns all DDS units that can be used when creating or updating DDS entries,\nalong with the HS codes that are associated with each unit.\n\n**Use Cases**:\n- Get DDS unit reference data before creating a DDS\n- Populate unit selection dropdowns\n- Validate unit and HS code associations\n\n**Required permission:** `access_public_products`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "dds-units"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "14c7a61e-7eb8-4851-af88-9b5d276f7c3c",
+              "name": "List of DDS units with associated HS codes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "dds-units"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"unit\\\":\\\"MTQ\\\",\\\"hsCodes\\\":[{\\\"code\\\":\\\"440799\\\",\\\"description\\\":\\\"Wood sawn or chipped lengthwise, sliced or peeled, of oak\\\",\\\"commodityId\\\":1},{\\\"code\\\":\\\"441510\\\",\\\"description\\\":\\\"Plywood, veneered panels and similar laminated wood\\\",\\\"commodityId\\\":2}],\\\"description\\\":\\\"Cubic metre\\\"},{\\\"unit\\\":\\\"NAR\\\",\\\"hsCodes\\\":[{\\\"code\\\":\\\"441510\\\",\\\"description\\\":\\\"Plywood, veneered panels and similar laminated wood\\\",\\\"commodityId\\\":2}],\\\"description\\\":\\\"Number of items (pieces)\\\"},{\\\"unit\\\":\\\"KSD\\\",\\\"hsCodes\\\":[{\\\"code\\\":\\\"0901\\\",\\\"description\\\":\\\"Coffee, whether or not roasted or decaffeinated\\\",\\\"commodityId\\\":3}],\\\"description\\\":\\\"Kilogram of substance in dry state\\\"}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e92bb507-f8d5-4c36-93e1-8f427e284432",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "dds-units"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b52e20b-3192-419c-ba62-951f1fcf10e1",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "dds-units"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d23f5d2f-df54-4a0a-ae67-da7901083feb",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "dds-units"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7da3b4c8-d5af-45c1-9edc-aeeb4c8e6734",
+          "name": "Delete a supplier DDS and its origins",
+          "request": {
+            "name": "Delete a supplier DDS and its origins",
+            "description": {
+              "content": "\nDelete a supplier Due Diligence Statement (DDS) and all its associated origin information.\n\nThis endpoint permanently removes the specified supplier DDS and all related origin data.\nUse with caution as this operation cannot be undone.\n\n**Use Cases**:\n- Remove incorrect supplier DDS entries\n- Clean up duplicate DDS data\n- Delete outdated compliance statements\n\n**Required permission:** `access_public_products` and `DELETE` on the DDS\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "eudr",
+                "customers",
+                "supplier-dds",
+                ":ddsId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "ddsId",
+                  "description": "(Required) ID of the supplier DDS to delete."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "81f89344-8b81-4e59-ae84-8fcf4742b1fb",
+              "name": "Supplier DDS deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "supplier-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the supplier DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "038505ed-5d49-45af-8755-499a75412075",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "supplier-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the supplier DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9c896bf-d0da-4523-a106-89727d717903",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "supplier-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the supplier DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b69e3b2e-7bed-4ab6-9a33-2bbbcda8f279",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "eudr",
+                    "customers",
+                    "supplier-dds",
+                    ":ddsId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "ddsId",
+                      "description": "(Required) ID of the supplier DDS to delete."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f94ec7fc-0643-42ba-ae41-e87a323a61a9",
+    "name": "Public Prewave Actions EUDR - Customers - DDS API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

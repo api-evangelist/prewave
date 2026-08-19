@@ -1,0 +1,1293 @@
+{
+  "item": [
+    {
+      "id": "8104f819-4909-402a-a24d-fd6d98752faf",
+      "name": "Scores - Enterprise Export",
+      "description": {
+        "content": "Public API for managing enterprise export configurations and retrieving score data in Prewave's supply chain network.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ccb2fe1e-b483-4727-ba57-3623826a6f25",
+          "name": "Get Export Configuration",
+          "request": {
+            "name": "Get Export Configuration",
+            "description": {
+              "content": "\nRetrieve the current export configuration for the authenticated user.\n\nThis endpoint returns the user's active export job configuration, which determines:\n- Which collections, targets, and perspectives to include\n- How frequently the export job runs (interval)\n- Whether the job is currently enabled\n- Whether to include detailed score components and subcomponents\n\n**Configuration Behavior:**\n\n*Run Intervals:*\n- `SIX_HOURS`: Job runs every 6 hours (minimum interval)\n- `TWELVE_HOURS`: Job runs every 12 hours\n- `DAILY`: Job runs once every 24 hours\n- `WEEKLY`: Job runs once every 168 hours (7 days)\n- The scheduler checks for due executions periodically, so actual execution may occur shortly after the interval elapses\n\n*Enabled State:*\n- When `enabled` is `true`, the job will automatically run based on the configured `runInterval`\n- When `enabled` is `false`, the job will not execute, even if the interval has elapsed\n- Jobs only run if they are both enabled AND due based on the last execution time\n\n*Collections and Targets:*\n- `collectionIds`: List of Prewave Collection IDs. All targets within these collections will be included in the export\n- `targetIds`: List of specific Target IDs to include. These are combined with targets from collections (union operation)\n- Targets from collections and individual target IDs are merged together (no duplicates)\n- If a collection is empty or contains no accessible targets, it will be skipped during execution\n- **To get collection IDs**: Use endpoints from the Collections API:\n  - `GET /public/v1/collections` - List all accessible collections (returns `id` field for each collection)\n  - `GET /public/v1/collections/{collectionId}` - Get a specific collection by ID\n- **To get target IDs**: Use endpoints from the Suppliers API:\n  - `GET /public/v2/suppliers/sites` - List all supplier sites (returns `prewaveTargetId` field for each supplier)\n  - `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}` - Get a specific supplier by ID\n\n*Perspectives:*\n- `perspectiveIds`: List of Perspective IDs for which scores should be calculated\n- **Required for active configurations** - must contain at least one perspective ID when creating or updating a configuration\n- ⚠️ **Important**: If `perspectiveIds` is empty, the endpoint will accept the configuration but **no scores will be generated** during execution\n- In the default response (when no configuration exists), `perspectiveIds` will be empty (`[]`), indicating an incomplete/disabled configuration\n- Scores are calculated for each combination of (target × perspective)\n- All specified perspectives must be accessible to the user\n- Example: If you have 10 targets and 2 perspectives, 20 score calculations will be performed\n\n*Components:*\n- `includeComponents`: When `true`, the export results will include detailed score components and subcomponents\n- When `false`, only top-level scores and risk levels are included\n- Enabling components increases the response size but provides more granular score breakdowns\n\n**Response Format:**\n- If no configuration exists, a default configuration will be returned with:\n  - Empty `collectionIds` and `targetIds` lists\n  - Empty `perspectiveIds` list\n  - `enabled` set to `false`\n  - `runInterval` set to `WEEKLY`\n  - `includeComponents` set to `false`\n- ⚠️ **Note**: While the default configuration shows `perspectiveIds` as empty, this is not a valid configuration for generating scores. You must provide at least one perspective ID when creating or updating the configuration, otherwise no scores will be generated during execution.\n- All configuration fields are returned as specified in the response schema\n- The `runInterval` field defaults to `WEEKLY` if not explicitly set\n\n**Using the Configuration:**\n\n1. **Check Configuration**: Use this endpoint to verify your current export configuration\n2. **Update Configuration**: Use `POST /public/v1/enterprise-export/scores/config` to create or update the configuration\n3. **Retrieve Results**: After a job executes, use `GET /public/v1/enterprise-export/scores` to retrieve score results\n4. **Check Errors**: Use `GET /public/v1/enterprise-export/scores/errors` to view any errors that occurred during execution\n\n**Important Notes:**\n- The configuration is user-specific - each user has their own export configuration\n- Jobs run asynchronously - execution may take time depending on the number of targets and perspectives\n- Results are only available after at least one successful execution has completed\n- If no results are available yet, `GET /public/v1/enterprise-export/scores` will return an empty page\n- Collection access is validated before execution - if you lack access to specified collections, the execution will fail\n- The last successful execution's results are always available via the scores endpoint\n\n**Required Permission**: `ACCESS_ENTERPRISE_EXPORT_API`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "enterprise-export",
+                "scores",
+                "config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f6fa9c15-8375-4520-adb9-f3fa767ec916",
+              "name": "Configuration successfully retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"runInterval\": \"WEEKLY\",\n  \"enabled\": true,\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"targetIds\": [\n    102006215,\n    101641243,\n    10422185\n  ],\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"includeComponents\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29324b59-f24e-4187-ad87-3d662b15ef76",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d33ccfb8-6e2c-4000-815f-2f7b43f88dc9",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f366e70c-a745-4695-8105-06d8e20fd1d7",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54ac49bf-fa81-4441-bd75-a524bc31942a",
+          "name": "Create or Update Export Configuration",
+          "request": {
+            "name": "Create or Update Export Configuration",
+            "description": {
+              "content": "\nCreate a new export configuration or update the existing one for the authenticated user.\n\nThis endpoint allows you to configure automated score export jobs that will calculate and export scores for your specified collections, targets, and perspectives at regular intervals.\n\n**Upsert Behavior:**\n- If no configuration exists for the user, a new configuration will be created\n- If a configuration already exists, it will be completely replaced with the new values\n- This is an idempotent operation - calling it multiple times with the same data produces the same result\n- Each user can have only one export configuration at a time\n\n**Configuration Fields:**\n\n*Run Interval (`runInterval`):*\n- **Optional field** - defaults to `WEEKLY` if not specified\n- Valid values: `SIX_HOURS`, `TWELVE_HOURS`, `DAILY`, `WEEKLY`\n- Determines how frequently the export job executes:\n  - `SIX_HOURS`: Every 6 hours (minimum interval)\n  - `TWELVE_HOURS`: Every 12 hours\n  - `DAILY`: Once every 24 hours\n  - `WEEKLY`: Once every 168 hours (7 days)\n- The scheduler checks periodically, so execution may occur shortly after the interval elapses\n\n*Enabled State (`enabled`):*\n- **Required field** - must be explicitly set to `true` or `false`\n- When `true`: Job will automatically run based on the configured `runInterval`\n- When `false`: Job will not execute, even if the interval has elapsed\n- You can disable a job without deleting the configuration\n\n*Collections (`collectionIds`):*\n- **Required field** - must be provided (can be empty array `[]`)\n- List of Prewave Collection IDs to include in the export\n- All targets within these collections will be included in the export\n- Collections are validated for user access when the job executes (not at configuration time)\n- Empty collections or collections with no accessible targets will be skipped during execution\n- **To get collection IDs**: Use endpoints from the Collections API:\n  - `GET /public/v1/collections` - List all accessible collections (returns `id` field for each collection)\n  - `GET /public/v1/collections/{collectionId}` - Get a specific collection by ID\n\n*Targets (`targetIds`):*\n- **Required field** - must be provided (can be empty array `[]`)\n- List of specific Target IDs to include in addition to collection targets\n- Targets from collections and individual target IDs are combined (union operation) with no duplicates\n- Useful for including specific targets that may not be in any collection\n- Target access is validated when the job executes\n- **To get target IDs**: Use endpoints from the Suppliers API:\n  - `GET /public/v2/suppliers/sites` - List all supplier sites (returns `prewaveTargetId` field for each supplier)\n  - `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}` - Get a specific supplier by ID\n\n*Perspectives (`perspectiveIds`):*\n- **Required field** - must be provided and **must contain at least one perspective ID** (cannot be empty array `[]`)\n- List of Perspective IDs for which scores should be calculated\n- ⚠️ **Critical**: If `perspectiveIds` is empty, the configuration will be saved successfully, but **no scores will be generated** during job execution. The endpoint will not return an error, but the export job will produce no results.\n- Scores are calculated for each combination of (target × perspective)\n- All specified perspectives must be accessible to the user (validated at execution time)\n- Example: If you have 10 targets and 2 perspectives, 20 score calculations will be performed\n\n*Components (`includeComponents`):*\n- **Required field** - must be explicitly set to `true` or `false`\n- When `true`: Export results include detailed score components and subcomponents\n- When `false`: Only top-level scores and risk levels are included\n- Enabling components increases response size but provides granular score breakdowns\n- Affects the structure of data returned by `GET /public/v1/enterprise-export/scores`\n\n**Validation and Execution:**\n\n*Configuration-Time Validation:*\n- Basic request validation (JSON format, field types)\n- Run interval must be one of the valid enum values\n- All required fields must be present\n\n*Execution-Time Validation:*\n- Collection access is validated when the job runs (not when configuration is saved)\n- Target access is validated during execution\n- Perspective access is validated during execution\n- If validation fails during execution, the job will fail and errors will be available via `GET /public/v1/enterprise-export/scores/errors`\n\n**After Configuration:**\n\n1. **Immediate Effect**: Configuration is saved immediately upon successful request\n2. **Job Scheduling**: If `enabled` is `true`, the job will be scheduled based on:\n   - The configured `runInterval`\n   - The time since the last execution (if any)\n3. **First Execution**: If this is a new configuration or the first time enabling:\n   - The job will run when the scheduler next checks (typically within an hour)\n   - Or immediately if the interval has already elapsed\n4. **Results Availability**: After successful execution:\n   - Use `GET /public/v1/enterprise-export/scores` to retrieve score results\n   - Use `GET /public/v1/enterprise-export/scores/errors` to check for any errors\n5. **Configuration Updates**: Use `GET /public/v1/enterprise-export/scores/config` to verify your configuration\n\n**Best Practices:**\n\n- **Start Small**: Begin with a small set of collections/targets and perspectives to test the configuration\n- **Monitor Results**: Check the scores endpoint after the first execution to verify everything works\n- **Check Errors**: Regularly review the errors endpoint to identify any issues\n- **Frequency**: Choose an appropriate `runInterval` based on your data freshness requirements\n- **Components**: Only enable `includeComponents` if you need detailed score breakdowns (increases data size)\n- **Empty Lists**: You can provide empty arrays for `collectionIds` or `targetIds` if you only want to use one type. However, **`perspectiveIds` must contain at least one ID** - if empty, no scores will be generated.\n\n**Important Notes:**\n- The configuration is user-specific - each user manages their own export configuration\n- Jobs run asynchronously - execution may take time depending on the number of targets and perspectives\n- Previous configuration is completely replaced - all fields are updated, not merged\n- Validation happens at execution time, not configuration time - invalid IDs will cause execution failures\n- If a job fails due to access issues, fix the configuration and the next scheduled run will attempt again\n\n**Required Permission**: `ACCESS_ENTERPRISE_EXPORT_API`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "enterprise-export",
+                "scores",
+                "config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"enabled\": \"<boolean>\",\n  \"includeComponents\": \"<boolean>\",\n  \"perspectiveIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"runInterval\": \"<string>\",\n  \"targetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a6af2489-1ce7-4f4e-8ba6-1502c7642f9f",
+              "name": "Configuration successfully created or updated. The response contains the complete configuration that was saved, including any default values applied (e.g., runInterval defaults to WEEKLY if not specified).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"runInterval\": \"WEEKLY\",\n  \"enabled\": true,\n  \"collectionIds\": [\n    123,\n    456\n  ],\n  \"targetIds\": [\n    102006215,\n    101641243\n  ],\n  \"perspectiveIds\": [\n    1,\n    2\n  ],\n  \"includeComponents\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80aaae01-3eb1-4d1d-89c8-7cec8d7c0a33",
+              "name": "400 Bad Request - Invalid request payload or validation errors. The request body is malformed, contains invalid data types, or has validation errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"validation_error\",\n  \"message\": \"Invalid run interval. Must be one of: SIX_HOURS, TWELVE_HOURS, DAILY, WEEKLY\",\n  \"details\": {\n    \"field\": \"runInterval\",\n    \"value\": \"INVALID_INTERVAL\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6107dd5e-768a-4f45-a1ef-26f7decdfed4",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dedc050d-ca31-4508-8572-97ddcf753cd7",
+              "name": "404 Not Found - One or more collections, targets, or perspectives specified in the configuration were not found or are not accessible to the authenticated user. Note: This validation typically occurs during job execution, not at configuration time. However, if immediate validation is performed and resources are not accessible, this error will be returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Collection with ID 999 not found or not accessible\",\n  \"details\": {\n    \"resourceType\": \"Collection\",\n    \"resourceId\": 999\n  },\n  \"solution\": \"Verify the collection ID and ensure you have access to it\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4d01f7e-ebda-4af0-8734-838b515a3fab",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0c4080c-ab43-45b4-ba25-2e2fb2d674fc",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionIds\": [\n    123,\n    456,\n    789\n  ],\n  \"enabled\": true,\n  \"includeComponents\": false,\n  \"perspectiveIds\": [\n    1,\n    2,\n    3\n  ],\n  \"runInterval\": \"WEEKLY\",\n  \"targetIds\": [\n    101,\n    202,\n    303,\n    102006215\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ed5713f-a87b-447a-958a-22a4a9b1113e",
+          "name": "Retrieve Latest Score Results",
+          "request": {
+            "name": "Retrieve Latest Score Results",
+            "description": {
+              "content": "\nRetrieve a paginated list of the most recent score results for the authenticated user.\n\nThis endpoint returns score data generated by the user's configured export job from the most recent successful execution. Results include:\n- Target information (ID, name, supplier identifiers)\n- Perspective details (ID, name)\n- Calculated scores and risk levels\n- Action priority when enabled for the export account in the database, using the same Supply Chain Analysis matrix logic as `GET/POST /v2/analysis/matrix-targets/{targetId}?perspectiveId=...`\n- Score components and subcomponents (if enabled in configuration)\n- Calculation timestamps\n\n**Data Source:**\n- Results are automatically generated based on the user's export configuration and run interval\n- This endpoint returns data from the **last successful execution** only\n- Results are paginated for efficient data retrieval\n- If no export job has been configured or no results are available, an empty page is returned\n\n**Response:**\nReturns a paginated list of score entries. Each entry includes target information (ID, name, supplier identifiers), perspective details, calculated scores, risk levels, action priority when available, and optionally score components/subcomponents if enabled in configuration. See the response schema for complete field definitions.\n\n**Pagination:**\n- Results are paginated for efficient data retrieval\n- Use query parameters to control pagination:\n  - `page`: Page number (0-indexed, default: 0)\n  - `size`: Number of items per page (default: 20)\n- Results are ordered by calculation timestamp (most recent first)\n\n**Important: Target ID Stability**\n\n✅ **This endpoint always returns correct target IDs**\n\nThe `targetId` field in each score entry represents the current, correct Prewave Target ID. If a target merge or consolidation occurred after a score was calculated, the system automatically updates the stored target ID to reflect the current, merged target. You can rely on the `targetId` values returned by this endpoint as the authoritative source for current target identifiers.\n\n⚠️ **However, target IDs may change over time** due to target merges or data consolidation. When this happens:\n- The target's edge numbers, edge data, and collection memberships are automatically moved to a new target\n- This endpoint automatically updates score entries to reference the new `targetId` after a merge occurs\n- To find the current `targetId` for a supplier independently, use `GET /public/v2/suppliers/sites` and match by supplier identifiers from the `supplierIds` field\n\n**Target ID Stability:**\n- Once a supplier has been **screened** (indicated by `screened: true` when retrieving supplier details via `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}`), the chance of `targetId` changing becomes very low\n- Target ID changes can still occur for screened suppliers, but this is rare\n- Unscreened suppliers (`screened: false`) have a higher likelihood of ID changes during data consolidation\n\n**How This Affects Score Results:**\n- Score entries are initially associated with the `targetId` that existed at the time the score was calculated\n- If a target merge occurs after score calculation, this endpoint automatically updates the stored `targetId` to the current, merged target ID\n- All score entries returned by this endpoint always reference the current, correct `targetId`\n- The `edgeNumbers` field in each score entry provides additional stable identifiers (like SAP IDs, Coupa IDs) for mapping to your internal systems\n\n💡 **Tip for Integrations:**\n- Use the `edgeNumbers` field as a stable identifier for mapping scores to your internal systems (e.g., SAP IDs, Coupa IDs)\n- For regular synchronization, use `GET /public/v2/suppliers/sites` to always have the latest `targetId` values mapped to your supplier identifiers\n- When matching scores to suppliers, prefer matching by supplier identifiers rather than `targetId` for better reliability\n- For screened suppliers (`screened: true`), the `targetId` is more stable, but periodic synchronization is still recommended\n- For unscreened suppliers, more frequent synchronization is advisable\n\n**Note**: Fields with null values (`riskLevel`, `actionPriority`, `groups`, `components`, `subComponents`) are omitted from the JSON response. This is standard JSON serialization behavior.\n\n**Required Permission**: `ACCESS_ENTERPRISE_EXPORT_API`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "enterprise-export",
+                "scores"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Zero-based page index (0..N)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "20",
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e7b23be7-1def-4332-be9e-8c54bc373fa2",
+              "name": "Score results successfully retrieved. Returns a paginated response containing score data entries from the most recent successful execution.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"targetId\": 102006215,\n      \"targetName\": \"Inter Cars SA\",\n      \"edgeNumbers\": [\n        {\n          \"number\": \"SUP-12345\",\n          \"source\": \"SAP\",\n          \"existingEdgeId\": 102006215\n        },\n        {\n          \"number\": \"BNOID-67890\",\n          \"existingEdgeId\": 102006215\n        }\n      ],\n      \"perspectiveId\": 1,\n      \"perspectiveName\": \"LKSG\",\n      \"calculatedAt\": \"2025-01-20T10:30:00\",\n      \"score\": 85,\n      \"riskLevel\": \"LOW\",\n      \"actionPriority\": {\n        \"value\": 68,\n        \"riskLevel\": \"High\"\n      }\n    },\n    {\n      \"targetId\": 101641243,\n      \"targetName\": \"Acme Corporation\",\n      \"edgeNumbers\": [\n        {\n          \"number\": \"COUPA-54321\",\n          \"source\": \"Coupa\",\n          \"existingEdgeId\": 101641243\n        }\n      ],\n      \"perspectiveId\": 1,\n      \"perspectiveName\": \"LKSG\",\n      \"calculatedAt\": \"2025-01-20T10:30:00\",\n      \"score\": 92,\n      \"riskLevel\": \"LOW\",\n      \"actionPriority\": {\n        \"value\": 42,\n        \"riskLevel\": \"Mid\"\n      }\n    }\n  ],\n  \"size\": 20,\n  \"number\": 0,\n  \"totalElements\": 150,\n  \"totalPages\": 8,\n  \"numberOfElements\": 20\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e28ea02-d56e-4f93-b3c7-9b1d0cb4bf4b",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25d21c35-c143-42ba-ba00-aa8a4b4bfd54",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8c7947f-bcc2-4be6-a990-9b13c727a93d",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ae4cf98-4306-46c6-ad19-ae99ddd0cece",
+          "name": "Retrieve Score Generation Errors",
+          "request": {
+            "name": "Retrieve Score Generation Errors",
+            "description": {
+              "content": "\nRetrieve a paginated list of error logs related to score generation for the authenticated user.\n\nThis endpoint returns detailed error information for targets and perspectives where score calculation failed during the most recent successful export job execution. Use this endpoint to identify and troubleshoot issues that prevented score calculation for specific target-perspective combinations.\n\n**Data Source:**\n- Error logs are from the **last successful execution** only (errors from failed executions are not included)\n- Errors are only recorded for execution units that failed during score calculation\n- If no errors occurred during the last execution, an empty page is returned\n- Results are paginated for efficient data retrieval\n\n**Response:**\nReturns a paginated list of error entries. Each entry includes the target ID, perspective ID, timestamp when the error occurred, and a list of error messages explaining why score calculation failed. See the response schema for complete field definitions.\n\n**Common Error Causes:**\n\nErrors are typically caused by:\n- **Missing or invalid target data**: Target may have been deleted, deactivated, or is inaccessible\n- **Insufficient data for score calculation**: Not enough data points available to calculate a reliable score\n- **Invalid perspective configuration**: Perspective may not be properly configured or accessible\n- **Target not in perspective scope**: Target may not be included in the perspective's scope\n- **System processing issues**: Temporary system issues during score calculation\n- **Data quality issues**: Missing required data fields or invalid data formats\n\n**Pagination:**\n- Results are paginated for efficient data retrieval\n- Use query parameters to control pagination:\n  - `page`: Page number (0-indexed, default: 0)\n  - `size`: Number of items per page (default: 20)\n- Results are ordered by error timestamp (most recent first)\n\n**Important: Target ID Stability**\n\n✅ **This endpoint always returns correct target IDs**\n\nThe `targetId` field in each error entry represents the current, correct Prewave Target ID. If a target merge or consolidation occurred after an error was recorded, the system automatically updates the stored target ID to reflect the current, merged target. You can rely on the `targetId` values returned by this endpoint as the authoritative source for current target identifiers.\n\n⚠️ **However, target IDs may change over time** due to target merges or data consolidation. When this happens:\n- The target's supplier identifiers, edge data, and collection memberships are automatically moved to a new target\n- This endpoint automatically updates error entries to reference the new `targetId` after a merge occurs\n- To find the current `targetId` for a supplier independently, use `GET /public/v2/suppliers/sites` and match by supplier identifiers\n\n**Target ID Stability:**\n- Once a supplier has been **screened** (indicated by `screened: true` when retrieving supplier details via `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}`), the chance of `targetId` changing becomes very low\n- Target ID changes can still occur for screened suppliers, but this is rare\n- Unscreened suppliers (`screened: false`) have a higher likelihood of ID changes during data consolidation\n\n**How This Affects Error Logs:**\n- Error entries are initially associated with the `targetId` that existed at the time the error occurred\n- If a target merge occurs after an error was recorded, this endpoint automatically updates the stored `targetId` to the current, merged target ID\n- All error entries returned by this endpoint always reference the current, correct `targetId`\n\n**Using Error Information:**\n\n1. **Identify Issues**: Review error messages to understand why score calculation failed\n2. **Fix Configuration**: Update your export configuration if targets or perspectives are invalid\n3. **Verify Access**: Ensure you have access to the targets and perspectives referenced in errors\n4. **Monitor Trends**: Track error patterns over time to identify systemic issues\n5. **Retry After Fixes**: After fixing configuration issues, wait for the next scheduled execution to see if errors are resolved\n\n**Note**: This endpoint only returns errors from the most recent successful execution. If an entire execution fails, no error logs will be available via this endpoint.\n\n**Required Permission**: `ACCESS_ENTERPRISE_EXPORT_API`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "enterprise-export",
+                "scores",
+                "errors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Zero-based page index (0..N)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "20",
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "50f677c1-c6a1-4749-b35c-5f88d7607464",
+              "name": "Error logs successfully retrieved. Returns a paginated response containing error entries from the most recent successful execution.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"targetId\": 102006215,\n      \"perspectiveId\": 1,\n      \"calculatedAt\": \"2025-01-20T10:30:00\",\n      \"errors\": [\n        \"Insufficient data for score calculation\",\n        \"Missing ESG indicators for target\"\n      ]\n    },\n    {\n      \"targetId\": 101641243,\n      \"perspectiveId\": 2,\n      \"calculatedAt\": \"2025-01-20T10:30:00\",\n      \"errors\": [\n        \"Target not found in perspective scope\"\n      ]\n    },\n    {\n      \"targetId\": 10422185,\n      \"perspectiveId\": 1,\n      \"calculatedAt\": \"2025-01-20T10:30:00\",\n      \"errors\": [\n        \"Target data is incomplete\",\n        \"Required data fields are missing\"\n      ]\n    }\n  ],\n  \"size\": 20,\n  \"number\": 0,\n  \"totalElements\": 5,\n  \"totalPages\": 1,\n  \"numberOfElements\": 3\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "492b85e7-9729-4304-b4c3-2d295432629d",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c1a8222-36fd-4112-818b-34fe4b4fe2e3",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd4ed3ae-52bb-48e2-8bd2-84828af5a305",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "enterprise-export",
+                    "scores",
+                    "errors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1138c22d-db7d-45f9-b39c-9f2293b518e4",
+    "name": "Public Prewave Actions Scores - Enterprise Export API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

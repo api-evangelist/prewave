@@ -1,0 +1,1927 @@
+{
+  "item": [
+    {
+      "id": "a455c0a4-e954-4b85-a0a7-59d8dce3b783",
+      "name": "Suppliers - Management",
+      "description": {
+        "content": "Supplier management endpoints for listing, retrieving, updating supplier data, and bulk operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0c473ed9-49b2-4274-b3ba-d962bea50aee",
+          "name": "Update target data.",
+          "request": {
+            "name": "Update target data.",
+            "description": {
+              "content": "\nUpdate spend data and Code of Conduct status for the specified target.\n\n**Required Permission**: `update_supplier_data`\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spendDataMlnEuro\": \"<double>\",\n  \"year\": \"<integer>\",\n  \"cocSigned\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5ce7d9dd-6cd3-4396-af42-79a6b5dac4ac",
+              "name": "Target data updated successfully. Returns the full updated target payload.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendDataMlnEuro\": 0.15,\n  \"year\": 2025,\n  \"cocSigned\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"sname\\\":\\\"4990729\\\",\\\"logo\\\":\\\"/images/company-img/acme-manufacturing-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-manufacturing-bg.jpg\\\",\\\"description\\\":\\\"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.\\\",\\\"website\\\":\\\"https://www.acme-manufacturing.example.com\\\",\\\"location\\\":\\\"Detroit, MI, US\\\",\\\"yearFounded\\\":1987,\\\"size\\\":\\\"Large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-manufacturing\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Detroit\\\",\\\"countryCode\\\":\\\"US\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"sname\\\":\\\"6252001\\\",\\\"logo\\\":\\\"/images/company-img/acme-corporation-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-corporation-bg.jpg\\\",\\\"description\\\":\\\"Global automotive supplier and parent organization of Acme Manufacturing Inc.\\\",\\\"website\\\":\\\"https://www.acme-corporation.example.com\\\",\\\"location\\\":\\\"Stuttgart, DE\\\",\\\"yearFounded\\\":1962,\\\"size\\\":\\\"Very large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-corporation\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Stuttgart\\\",\\\"countryCode\\\":\\\"DE\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2018-01-10T09:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2019-04-12T14:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":0,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":true,\\\"connectionContactsCount\\\":12,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":1,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\"}],\\\"scoreAvail\\\":\\\"Alert\\\",\\\"revenue\\\":8500000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870810\\\",\\\"nshipments\\\":128}],\\\"merged_targets\\\":[]},\\\"industries\\\":[{\\\"id\\\":554433221,\\\"name\\\":\\\"Automotive Manufacturing\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":\\\"Industry classification for automotive parts and vehicle component manufacturing.\\\",\\\"website\\\":null,\\\"location\\\":\\\"Global\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":1122334,\\\"ctype\\\":\\\"industry\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Industry\\\",\\\"pluralName\\\":\\\"Industries\\\",\\\"icon\\\":\\\"fas fa-industry\\\",\\\"ordering\\\":10,\\\"priority\\\":1,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#F0F0F0\\\",\\\"textColor\\\":\\\"#333333\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":123.456,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[],\\\"merged_targets\\\":[]}],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2020-03-15T10:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2021-06-01T08:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":1,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":false,\\\"connectionContactsCount\\\":3,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]},{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]}],\\\"collectionLevel\\\":2,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],[{\\\"id\\\":55,\\\"name\\\":\\\"North America\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\"},{\\\"system\\\":\\\"supplier\\\",\\\"id\\\":\\\"ACME-MFG-42\\\",\\\"source\\\":\\\"Excel\\\"}],\\\"scoreAvail\\\":\\\"Peer\\\",\\\"revenue\\\":1250000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870899\\\",\\\"nshipments\\\":42},{\\\"code\\\":\\\"401110\\\",\\\"nshipments\\\":15}],\\\"merged_targets\\\":[102001100]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d57fc1f-31b3-4ecf-a73c-90d1f7bc99ea",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendDataMlnEuro\": 0.15,\n  \"year\": 2025,\n  \"cocSigned\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7696f110-3917-4761-9576-320239d17ed6",
+              "name": "Target not found or no permission to access it.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendDataMlnEuro\": 0.15,\n  \"year\": 2025,\n  \"cocSigned\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Target not found: systemId=customer, targetId=INVALID_ID\\\",\\\"solution\\\":\\\"Verify target ID and system ID are correct\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f51572be-6a68-476f-b275-d88ef30a5da5",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendDataMlnEuro\": 0.15,\n  \"year\": 2025,\n  \"cocSigned\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14467067-dbbe-4e55-be2d-46458c5c3429",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendDataMlnEuro\": 0.15,\n  \"year\": 2025,\n  \"cocSigned\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31048723-5d8b-49ee-88e0-9b3b6c3fd29c",
+          "name": "Bulk fetch detailed target information by target IDs",
+          "request": {
+            "name": "Bulk fetch detailed target information by target IDs",
+            "description": {
+              "content": "Fetch detailed information for multiple targets at once, including name, supplier identifiers, and other target details.\nThis endpoint supports both Prewave internal target IDs and foreign system mappings for maximum flexibility.\n\n**Required Permission**: `access_public_target`\n\n**Performance impact**: Medium (depends on batch size)\n\n**Use cases**:\n- Get target details for multiple suppliers at once\n- Resolve foreign system IDs to Prewave target information\n- Bulk data synchronization and integration\n\n**Request format**:\n- Use `targetIds` for Prewave internal target IDs: `[101, 102, 103]`\n- Use `foreignTargets` for foreign system mappings: `[{\"systemId\": \"customer\", \"targetId\": \"SUPPLIER001\"}]`\n- Both fields are optional, but at least one must be provided\n\n**Response format**:\n- `targets`: Successfully fetched targets with full details (same as individual target endpoint)\n- `errors`: Failed lookups with specific error reasons (NOT_FOUND, ACCESS_DENIED, etc.)\n\n**Error handling**:\n- Individual target errors are returned in the `errors` field, not as HTTP errors\n- Empty results are valid (empty `targets` list)\n- Permission checks are performed per target",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                "targets",
+                "bulk-fetch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isValid\": \"<boolean>\",\n  \"targetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"foreignTargets\": [\n    {\n      \"systemId\": \"<string>\",\n      \"targetId\": \"<string>\"\n    },\n    {\n      \"systemId\": \"<string>\",\n      \"targetId\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4fb3039e-0048-4983-8455-ce375cca5bc3",
+              "name": "Bulk fetch completed successfully. Check the response for successful targets and any errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    "targets",
+                    "bulk-fetch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetIds\": [\n    101,\n    102,\n    103\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"targets\\\":[{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"sname\\\":\\\"4990729\\\",\\\"logo\\\":\\\"/images/company-img/acme-manufacturing-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-manufacturing-bg.jpg\\\",\\\"description\\\":\\\"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.\\\",\\\"website\\\":\\\"https://www.acme-manufacturing.example.com\\\",\\\"location\\\":\\\"Detroit, MI, US\\\",\\\"yearFounded\\\":1987,\\\"size\\\":\\\"Large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-manufacturing\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Detroit\\\",\\\"countryCode\\\":\\\"US\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"sname\\\":\\\"6252001\\\",\\\"logo\\\":\\\"/images/company-img/acme-corporation-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-corporation-bg.jpg\\\",\\\"description\\\":\\\"Global automotive supplier and parent organization of Acme Manufacturing Inc.\\\",\\\"website\\\":\\\"https://www.acme-corporation.example.com\\\",\\\"location\\\":\\\"Stuttgart, DE\\\",\\\"yearFounded\\\":1962,\\\"size\\\":\\\"Very large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-corporation\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Stuttgart\\\",\\\"countryCode\\\":\\\"DE\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2018-01-10T09:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2019-04-12T14:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":0,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":true,\\\"connectionContactsCount\\\":12,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":1,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\"}],\\\"scoreAvail\\\":\\\"Alert\\\",\\\"revenue\\\":8500000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870810\\\",\\\"nshipments\\\":128}],\\\"merged_targets\\\":[]},\\\"industries\\\":[{\\\"id\\\":554433221,\\\"name\\\":\\\"Automotive Manufacturing\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":\\\"Industry classification for automotive parts and vehicle component manufacturing.\\\",\\\"website\\\":null,\\\"location\\\":\\\"Global\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":1122334,\\\"ctype\\\":\\\"industry\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Industry\\\",\\\"pluralName\\\":\\\"Industries\\\",\\\"icon\\\":\\\"fas fa-industry\\\",\\\"ordering\\\":10,\\\"priority\\\":1,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#F0F0F0\\\",\\\"textColor\\\":\\\"#333333\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":123.456,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[],\\\"merged_targets\\\":[]}],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2020-03-15T10:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2021-06-01T08:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":1,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":false,\\\"connectionContactsCount\\\":3,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]},{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]}],\\\"collectionLevel\\\":2,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],[{\\\"id\\\":55,\\\"name\\\":\\\"North America\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\"},{\\\"system\\\":\\\"supplier\\\",\\\"id\\\":\\\"ACME-MFG-42\\\",\\\"source\\\":\\\"Excel\\\"}],\\\"scoreAvail\\\":\\\"Peer\\\",\\\"revenue\\\":1250000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870899\\\",\\\"nshipments\\\":42},{\\\"code\\\":\\\"401110\\\",\\\"nshipments\\\":15}],\\\"merged_targets\\\":[102001100]},{\\\"id\\\":101,\\\"name\\\":\\\"Beta Components Ltd\\\",\\\"sname\\\":\\\"2643743\\\",\\\"logo\\\":\\\"/images/company-img/beta-components-logo.svg\\\",\\\"backgroundPicture\\\":null,\\\"description\\\":\\\"Supplier of precision machined metal components.\\\",\\\"website\\\":\\\"https://www.beta-components.example.com\\\",\\\"location\\\":\\\"London, GB\\\",\\\"yearFounded\\\":2005,\\\"size\\\":\\\"Medium\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Pending\\\",\\\"linkedInId\\\":\\\"beta-components\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"London\\\",\\\"countryCode\\\":\\\"GB\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":false,\\\"connectionContactsCount\\\":1,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"BETA-101\\\",\\\"source\\\":\\\"SAP\\\"}],\\\"scoreAvail\\\":\\\"SSA\\\",\\\"revenue\\\":45000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"732690\\\",\\\"nshipments\\\":8}],\\\"merged_targets\\\":[]}],\\\"errors\\\":[{\\\"targetId\\\":102,\\\"systemId\\\":null,\\\"systemTargetId\\\":null,\\\"reason\\\":\\\"ACCESS_DENIED\\\"},{\\\"targetId\\\":null,\\\"systemId\\\":\\\"customer\\\",\\\"systemTargetId\\\":\\\"UNKNOWN_SUPPLIER\\\",\\\"reason\\\":\\\"NOT_FOUND\\\"}]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e923c51-293c-402b-b9cf-f8af42ed5910",
+              "name": "Invalid request - neither targetIds nor foreignTargets provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    "targets",
+                    "bulk-fetch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetIds\": [\n    101,\n    102,\n    103\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"solution\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cd5b78d-64b9-41f4-b29f-3db34aa1f2e5",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    "targets",
+                    "bulk-fetch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetIds\": [\n    101,\n    102,\n    103\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9209a120-e6bc-499a-9e50-f51fdea9b9f9",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    "targets",
+                    "bulk-fetch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetIds\": [\n    101,\n    102,\n    103\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "033b6c94-0033-4acc-a77c-875e25bc36be",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    "targets",
+                    "bulk-fetch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetIds\": [\n    101,\n    102,\n    103\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "15d90ee8-9089-4825-8500-ff6430a01956",
+          "name": "Get detailed information about a target.",
+          "request": {
+            "name": "Get detailed information about a target.",
+            "description": {
+              "content": "\nRetrieve detailed information about a target identified by system ID and target ID.\n\n**Required Permission**: `access_public_target`\n\n**Performance impact**: Low\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "47f0af46-1658-4231-bffb-a75500db64eb",
+              "name": "Successfully retrieved target details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"sname\\\":\\\"4990729\\\",\\\"logo\\\":\\\"/images/company-img/acme-manufacturing-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-manufacturing-bg.jpg\\\",\\\"description\\\":\\\"Automotive parts manufacturer specializing in electric vehicle components and battery assemblies.\\\",\\\"website\\\":\\\"https://www.acme-manufacturing.example.com\\\",\\\"location\\\":\\\"Detroit, MI, US\\\",\\\"yearFounded\\\":1987,\\\"size\\\":\\\"Large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-manufacturing\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Detroit\\\",\\\"countryCode\\\":\\\"US\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"sname\\\":\\\"6252001\\\",\\\"logo\\\":\\\"/images/company-img/acme-corporation-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-corporation-bg.jpg\\\",\\\"description\\\":\\\"Global automotive supplier and parent organization of Acme Manufacturing Inc.\\\",\\\"website\\\":\\\"https://www.acme-corporation.example.com\\\",\\\"location\\\":\\\"Stuttgart, DE\\\",\\\"yearFounded\\\":1962,\\\"size\\\":\\\"Very large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-corporation\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Stuttgart\\\",\\\"countryCode\\\":\\\"DE\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2018-01-10T09:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2019-04-12T14:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":0,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":true,\\\"connectionContactsCount\\\":12,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":1,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\"}],\\\"scoreAvail\\\":\\\"Alert\\\",\\\"revenue\\\":8500000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870810\\\",\\\"nshipments\\\":128}],\\\"merged_targets\\\":[]},\\\"industries\\\":[{\\\"id\\\":554433221,\\\"name\\\":\\\"Automotive Manufacturing\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":\\\"Industry classification for automotive parts and vehicle component manufacturing.\\\",\\\"website\\\":null,\\\"location\\\":\\\"Global\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":1122334,\\\"ctype\\\":\\\"industry\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Industry\\\",\\\"pluralName\\\":\\\"Industries\\\",\\\"icon\\\":\\\"fas fa-industry\\\",\\\"ordering\\\":10,\\\"priority\\\":1,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#F0F0F0\\\",\\\"textColor\\\":\\\"#333333\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":123.456,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[],\\\"merged_targets\\\":[]}],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2020-03-15T10:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2021-06-01T08:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":1,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":false,\\\"connectionContactsCount\\\":3,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]},{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Manufacturing Inc\\\",\\\"customName\\\":null,\\\"latestRequest\\\":null,\\\"foreignSystems\\\":[{\\\"number\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\",\\\"existingEdgeId\\\":null}]}],\\\"collectionLevel\\\":2,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}],[{\\\"id\\\":55,\\\"name\\\":\\\"North America\\\"},{\\\"id\\\":108,\\\"name\\\":\\\"Automotive\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"SUPPLIER001\\\",\\\"source\\\":\\\"SAP\\\"},{\\\"system\\\":\\\"supplier\\\",\\\"id\\\":\\\"ACME-MFG-42\\\",\\\"source\\\":\\\"Excel\\\"}],\\\"scoreAvail\\\":\\\"Peer\\\",\\\"revenue\\\":1250000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870899\\\",\\\"nshipments\\\":42},{\\\"code\\\":\\\"401110\\\",\\\"nshipments\\\":15}],\\\"merged_targets\\\":[102001100]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42c39eb2-9b1a-4e03-b082-f940d5195ab1",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24b452b6-9e2f-44fb-8c72-01b03d36f47c",
+              "name": "Target not found or no permission to access it.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Target not found: systemId=customer, targetId=INVALID_ID\\\",\\\"solution\\\":\\\"Verify target ID and system ID are correct\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8db8cb28-2930-49bc-94ed-625b91f98ed5",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2b22875-d9b4-4412-bee3-3cb3ea20219e",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b026cbf-c2c0-47af-8b81-26949813266a",
+          "name": "Get the parents of the target as a list.",
+          "request": {
+            "name": "Get the parents of the target as a list.",
+            "description": {
+              "content": "\nRetrieve parent targets for the specified target.\n\n**Required Permission**: `access_public_target_parents`\n\n**Performance impact**: Low\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "target",
+                ":systemId",
+                ":targetId",
+                "parents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "803e2101-c95b-494b-a779-fbb389a6466f",
+              "name": "Successfully retrieved parent targets",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "parents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":987654321,\\\"name\\\":\\\"Acme Corporation\\\",\\\"sname\\\":\\\"6252001\\\",\\\"logo\\\":\\\"/images/company-img/acme-corporation-logo.svg\\\",\\\"backgroundPicture\\\":\\\"/images/company-img/acme-corporation-bg.jpg\\\",\\\"description\\\":\\\"Global automotive supplier and parent organization of Acme Manufacturing Inc.\\\",\\\"website\\\":\\\"https://www.acme-corporation.example.com\\\",\\\"location\\\":\\\"Stuttgart, DE\\\",\\\"yearFounded\\\":1962,\\\"size\\\":\\\"Very large\\\",\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":\\\"acme-corporation\\\",\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":972417,\\\"ctype\\\":\\\"company\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"icon\\\":\\\"fas fa-building\\\",\\\"ordering\\\":0,\\\"priority\\\":0,\\\"connectable\\\":true,\\\"bgColor\\\":\\\"#E8F4FD\\\",\\\"textColor\\\":\\\"#1A365D\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":\\\"Stuttgart\\\",\\\"countryCode\\\":\\\"DE\\\",\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[{\\\"id\\\":554433221,\\\"name\\\":\\\"Automotive Manufacturing\\\",\\\"sname\\\":null,\\\"logo\\\":null,\\\"backgroundPicture\\\":null,\\\"description\\\":\\\"Industry classification for automotive parts and vehicle component manufacturing.\\\",\\\"website\\\":null,\\\"location\\\":\\\"Global\\\",\\\"yearFounded\\\":null,\\\"size\\\":null,\\\"screened\\\":true,\\\"screenedStatus\\\":\\\"Screened\\\",\\\"linkedInId\\\":null,\\\"type\\\":{\\\"id\\\":5195261,\\\"type\\\":\\\"organization\\\",\\\"displayName\\\":\\\"Site Group\\\",\\\"pluralName\\\":\\\"Site Groups\\\",\\\"ordering\\\":0,\\\"scoring\\\":\\\"Alert\\\"},\\\"ctype\\\":{\\\"id\\\":1122334,\\\"ctype\\\":\\\"industry\\\",\\\"targetTypeId\\\":5195261,\\\"displayName\\\":\\\"Industry\\\",\\\"pluralName\\\":\\\"Industries\\\",\\\"icon\\\":\\\"fas fa-industry\\\",\\\"ordering\\\":10,\\\"priority\\\":1,\\\"connectable\\\":false,\\\"bgColor\\\":\\\"#F0F0F0\\\",\\\"textColor\\\":\\\"#333333\\\"},\\\"geo\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"geoShape\\\":{\\\"geometry\\\":null,\\\"properties\\\":{\\\"name\\\":null,\\\"countryCode\\\":null,\\\"alertCount\\\":null,\\\"boundingBox\\\":null},\\\"type\\\":\\\"Feature\\\"},\\\"parents\\\":[],\\\"organization\\\":null,\\\"industries\\\":[],\\\"monitoredSince\\\":null,\\\"earliestAlert\\\":null,\\\"ordering\\\":null,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":false,\\\"managed\\\":false,\\\"isPublic\\\":null,\\\"connectionContactsCount\\\":null,\\\"population\\\":null,\\\"following\\\":false,\\\"collectionFollowing\\\":false,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":null,\\\"collectionPath\\\":[],\\\"collectionPaths\\\":[],\\\"foreignSystems\\\":[],\\\"scoreAvail\\\":\\\"None\\\",\\\"revenue\\\":123.456,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[],\\\"merged_targets\\\":[]}],\\\"monitoredSince\\\":{\\\"date\\\":\\\"2018-01-10T09:00:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"earliestAlert\\\":{\\\"date\\\":\\\"2019-04-12T14:30:00\\\",\\\"_datetype_\\\":\\\"DateTime\\\"},\\\"ordering\\\":0,\\\"disruptionStatusUpdate\\\":null,\\\"own\\\":true,\\\"managed\\\":true,\\\"isPublic\\\":true,\\\"connectionContactsCount\\\":12,\\\"population\\\":null,\\\"following\\\":true,\\\"collectionFollowing\\\":true,\\\"tier\\\":null,\\\"path\\\":[],\\\"collectionLevel\\\":1,\\\"collectionPath\\\":[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}],\\\"collectionPaths\\\":[[{\\\"id\\\":42,\\\"name\\\":\\\"Tier-1 Suppliers\\\"}]],\\\"foreignSystems\\\":[{\\\"system\\\":\\\"customer\\\",\\\"id\\\":\\\"ACME-CORP-001\\\",\\\"source\\\":\\\"SAP\\\"}],\\\"scoreAvail\\\":\\\"Alert\\\",\\\"revenue\\\":8500000000,\\\"impact\\\":\\\"Low\\\",\\\"hsCode\\\":[{\\\"code\\\":\\\"870810\\\",\\\"nshipments\\\":128}],\\\"merged_targets\\\":[]}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5da9f998-2b39-40f9-b42d-ab7cf295cf57",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "parents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "940ab7d4-7b71-4759-a6f0-468a4619253b",
+              "name": "Target not found or no permission to access it.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "parents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"code\\\":\\\"resource_not_found\\\",\\\"message\\\":\\\"Target not found: systemId=customer, targetId=INVALID_ID\\\",\\\"solution\\\":\\\"Verify target ID and system ID are correct\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26726cf8-b684-449c-8bdb-e85ede04f9af",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "parents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd97faf1-ed45-4596-9994-3ea09757b785",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "parents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "badf2441-acde-4f8a-8be1-64cae2af92ae",
+          "name": "Get all suppliers of the customer",
+          "request": {
+            "name": "Get all suppliers of the customer",
+            "description": {
+              "content": "⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v2 Supplier Management API. Please migrate to the new endpoints:\n\n### Replacement Endpoints\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/suppliers` | `GET /public/v2/suppliers/sites` | List all suppliers |\n| `GET /public/v1/target/prewave/{targetId}` | `GET /public/v2/suppliers/sites/find-by-identifier?prewaveId={targetId}` | Get detailed supplier by ID |\n\n---\n\n## Why Migrate?\n\nThe v2 API provides significant improvements:\n\n### 1. Simplified Response Structure\n- **v1**: Returns complex `PublicTargetDTO` with 30+ fields including nested objects (parents, industries, collections, etc.)\n- **v2**: Returns `PublicSupplierV2DTO` with only essential fields:\n  - `prewaveTargetId` (Int)\n  - `name` (String)\n  - `address` (String?)\n  - `city` (String?)\n  - `countryCode` (String?)\n  - `supplierIds` (List<PublicSupplierIdentifierId>)\n\n**Example v2 Response:**\n```json\n{\n  \"content\": [\n    {\n      \"prewaveTargetId\": 102006215,\n      \"name\": \"Acme Corporation\",\n      \"address\": \"123 Main St, Vienna, Austria\",\n      \"city\": \"Vienna\",\n      \"countryCode\": \"AT\",\n      \"supplierIds\": [\n        {\"id\": \"SUP-12345\", \"source\": \"SAP\"}\n      ]\n    }\n  ]\n}\n```\n\n### 2. Better Documentation\n- Comprehensive examples for all endpoints\n- Detailed error response documentation\n- Clear parameter descriptions\n- Migration guidance and best practices\n\n### 3. Improved Consistency\n- Fixed alphabetical ordering (by name, then by ID) for deterministic pagination\n- Consistent response structure across all endpoints\n- Predictable behavior for integrations\n\n### 4. Target ID Stability Guidance\n- Clear documentation about when target IDs may change\n- Best practices for synchronization\n- Guidance on handling target merges\n\n### 5. Full CRUD Operations\n- `POST /public/v2/suppliers/sites` - Create suppliers\n- `DELETE /public/v2/suppliers/sites` - Deactivate suppliers\n- `GET /public/v2/suppliers/sites/pending` - Track pending creations\n\n### 6. Better Performance\n- Optimized database queries\n- Reduced response payload size (typically 60-80% smaller)\n- Faster response times\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Update List Endpoint\n**Before:**\n```http\nGET /public/v1/suppliers?page=0&size=20\n```\n\n**After:**\n```http\nGET /public/v2/suppliers/sites?page=0&size=20\n```\n\n### Step 2: Update Response Parsing\n**Before:** Parse complex `PublicTargetDTO` with nested structures\n\n**After:** Parse simplified `PublicSupplierV2DTO` with flat structure\n\n### Step 3: Understand Sites vs Site-Groups\n⚠️ **Important**: The v2 endpoint returns **only sites** (physical locations), not site-groups.\n\n- **v1**: Included both sites and site-groups\n- **v2**: Includes only sites (physical locations with addresses)\n- **Result**: Total count may be lower in v2\n\nIf you need site-group information, you may need to adjust your integration logic or contact support for guidance.\n\n### Step 4: Get Detailed Information (if needed)\nIf you need detailed supplier information, use the v2 search endpoint:\n```http\nGET /public/v2/suppliers/sites/find-by-identifier?prewaveId={prewaveTargetId}\n```\n\n---\n\n## Breaking Changes\n\n1. **Response Structure**: The response structure is completely different. You'll need to update your response parsing logic.\n2. **Field Names**: Some field names have changed (e.g., `id` → `prewaveTargetId`).\n3. **Removed Fields**: Many fields from v1 are not available in the list endpoint (use the detail endpoint if needed).\n4. **Query Parameters**: The `hasNumber` parameter is not available in v2. Filter by supplier identifiers in your application logic if needed.\n5. **Sites vs Site-Groups**:\n   - **v1**: Returns both **sites** (physical locations/branches with addresses) and **site-groups** (general company owners without specific addresses)\n   - **v2**: Returns **only sites** (physical locations/branches with addresses). Site-groups are excluded\n   - **Impact**: The total number of elements returned by v2 may be **lower** than v1 because site-groups are excluded\n   - **Why**: The v2 API focuses on physical supplier locations (sites) which are more relevant for most integrations\n\n---\n\n**Required Permission**: `ACCESS_PUBLIC_SUPPLIERS`\n\n**Performance Impact**: Medium\n\nFor detailed migration examples and API reference, see the v2 Supplier Management API documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "suppliers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "hasNumber",
+                  "value": "<boolean>",
+                  "description": "If true, only suppliers that have at least one Supplier Information Number are returned. If false, only suppliers that do not have a Supplier Information Number are returned. If not provided, all suppliers are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2dc49f30-fcf0-49d0-ac64-081bf9c13350",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hasNumber",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"content\": [\n    null,\n    null\n  ],\n  \"size\": 370,\n  \"number\": 8073,\n  \"totalElements\": 1310,\n  \"totalPages\": 8218,\n  \"numberOfElements\": 188,\n  \"first\": true,\n  \"last\": false,\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8decc5fa-7f91-45bb-8367-ef97609f619a",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hasNumber",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e54c5a07-8ece-4c5c-9c36-ba64da5a2c5d",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hasNumber",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89df0c19-f2eb-4890-bd90-e16c1a801612",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hasNumber",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c3ce87b9-e866-4952-9316-6a84855f4408",
+    "name": "Public Prewave Actions Suppliers - Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

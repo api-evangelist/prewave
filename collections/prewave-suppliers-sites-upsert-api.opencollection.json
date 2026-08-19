@@ -1,0 +1,188 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Suppliers - Sites Upsert API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Suppliers - Sites Upsert",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Force the processing of all pending site upsert requests.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/process"
+          },
+          "docs": "\nTrigger processing of all queued site upsert requests. Intended for administrative use.\n\n**Required permission:** `sites_upsert_admin`\n\n**Performance impact:** Medium\n    "
+        },
+        {
+          "info": {
+            "name": "List all site upsert requests for your organisation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/full"
+          },
+          "docs": "\nList all site upsert requests for your organisation. The organisation is determined by your API user or API token.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n"
+        },
+        {
+          "info": {
+            "name": "Upsert suppliers and their desired collections with a full load.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/full",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nFull load means that all sites need to exist in the request payload.\nExisting sites not part of the payload will be removed from the managed collections in this request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Medium\n"
+        },
+        {
+          "info": {
+            "name": "Upsert suppliers and their desired collections with a delta load.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/delta",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nIn contrast to the full load, the delta load only updates the sites in the payload.\nExisting sites not part of the payload will not be removed from managed collections.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Medium\n"
+        },
+        {
+          "info": {
+            "name": "Disable edges to suppliers and remove them from managed collections.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/delta",
+            "params": [
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nDeactivate supplier edges identified by your references.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+        },
+        {
+          "info": {
+            "name": "Get details of matched targets.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/:requestId/matched-targets",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "550e8400-e29b-41d4-a716-446655440001",
+                "type": "path",
+                "description": "The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids."
+              }
+            ]
+          },
+          "docs": "\nRetrieve targets matched during processing of a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+        },
+        {
+          "info": {
+            "name": "Get the list of dry runs for a specific request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/:requestId/dry-runs",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "550e8400-e29b-41d4-a716-446655440001",
+                "type": "path",
+                "description": "The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids."
+              }
+            ]
+          },
+          "docs": "\nList dry runs associated with a site upsert request. Use a dry-run ID with the dry-run report endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+        },
+        {
+          "info": {
+            "name": "List all site upsert requests for your organisation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/requests"
+          },
+          "docs": "\nList all site upsert requests for your organisation. The organisation is determined by your API user or API token.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n"
+        },
+        {
+          "info": {
+            "name": "Get the status of a specific site upsert request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/full/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "550e8400-e29b-41d4-a716-446655440001",
+                "type": "path",
+                "description": "The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids."
+              }
+            ]
+          },
+          "docs": "\nRetrieve processing status and per-site outcomes for a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+        },
+        {
+          "info": {
+            "name": "Download the dry-run results report.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/sites-upsert/dry-run/:dryRunId",
+            "params": [
+              {
+                "name": "dryRunId",
+                "value": "660e8400-e29b-41d4-a716-446655440001",
+                "type": "path",
+                "description": "Dry-run ID"
+              }
+            ]
+          },
+          "docs": "\nDownload an Excel report for a dry run. Obtain the dry-run ID from the `{requestId}/dry-runs` endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

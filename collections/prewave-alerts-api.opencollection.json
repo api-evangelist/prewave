@@ -1,0 +1,206 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Alerts API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Alerts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all alerts of the current user's feed (V2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/feed",
+            "params": [
+              {
+                "name": "collectionIds",
+                "value": "123, 456",
+                "type": "query",
+                "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. In V1 this was collectionId (singular); same comma-separated IDs."
+              },
+              {
+                "name": "from",
+                "value": "2024-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Start of the date range (inclusive). Use UTC ISO 8601 format (e.g. `2024-01-01T00:00:00Z`). If omitted, V2 returns alerts from the last 90 days filtered by `createdAt`. In V1 you could use `newerThan` (milliseconds) or `from`; V2 uses `from` only."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "1",
+                "type": "query",
+                "description": "Perspective ID to filter the feed by. Defaults to the user's default perspective."
+              },
+              {
+                "name": "priorities",
+                "value": "High, Critical",
+                "type": "query",
+                "description": "List of priorities to filter the feed by Allowed values: Low, Mid, High, Critical (comma-separated)."
+              },
+              {
+                "name": "includeGeo",
+                "value": "true",
+                "type": "query",
+                "description": "If set to true, the response will include the geo information. Set to true when you need coordinates or shapes for mapping."
+              },
+              {
+                "name": "impactLevelIds",
+                "value": "1, 2",
+                "type": "query",
+                "description": "Impact level IDs to filter the feed by. Valid IDs depend on your tenant configuration."
+              },
+              {
+                "name": "minTier",
+                "value": "1",
+                "type": "query",
+                "description": "Minimum supply chain tier depth to include (V2 only). Tier 1 = direct suppliers, Tier 2 = their suppliers, etc. Default 1. Must be ≤ maxTier; max value 5."
+              },
+              {
+                "name": "maxTier",
+                "value": "1",
+                "type": "query",
+                "description": "Maximum supply chain tier depth to include (V2 only). Tier 1 = direct suppliers, Tier 2 = their suppliers, etc. Default 1. Must be ≥ minTier; max value 5."
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\nRetrieve all alerts for targets that are in collections with feed delivery enabled. Results are ordered by newest first. V2 uses the same filtering and feed logic as the Prewave dashboard.\n\n**Response:** A `Page` containing a list of alert objects. Standard pagination fields: `content`, `totalElements`, `totalPages`, `size`, `number`, `first`, `last`. Each alert includes id, title, timestamps (ISO 8601 UTC), event, priority, classification, locations, links, media, primary/mentioned targets, co"
+        },
+        {
+          "info": {
+            "name": "Get alerts for a specific target",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/alerts",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "prewave",
+                "type": "path",
+                "description": "An identifier that indicates which system the targetId originates from. Supported values are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "102006215",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "newerThan",
+                "value": "1705312800000",
+                "type": "query",
+                "description": "Only return alerts that are newer than the given timestamp (Timestamp in milliseconds since epoch)"
+              },
+              {
+                "name": "priorities",
+                "value": "High,Critical",
+                "type": "query",
+                "description": "List of priorities to filter the feed by"
+              },
+              {
+                "name": "includeGeo",
+                "value": "true",
+                "type": "query",
+                "description": "If set to true, the response will include the geo information."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "1",
+                "type": "query",
+                "description": "The perspective ID to filter the alerts. If not provided, the user's perspective ID will be used."
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\nRetrieve alerts for a specific target identified by system ID and target ID.\n\nThis endpoint returns paginated alerts for a single target, supporting foreign system ID mapping.\nThe target can be identified using Prewave internal IDs or foreign system IDs (e.g., customer,\nsupplier, SAP IDs).\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, so"
+        },
+        {
+          "info": {
+            "name": "Get all alerts of the current user's feed",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/feed",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123,456",
+                "type": "query",
+                "description": "Collection IDs to filter the feed by. Only alerts for targets in these collections will be returned. Obtain collection IDs from `GET /public/v1/collections` endpoint."
+              },
+              {
+                "name": "newerThan",
+                "value": "",
+                "type": "query",
+                "description": "⚠️ **DEPRECATED** - Use `from` parameter instead. Only return alerts that are newer than the given timestamp (Timestamp in milliseconds). This parameter is deprecated in favor of ISO 8601 date format."
+              },
+              {
+                "name": "from",
+                "value": "2020-12-31T23:59",
+                "type": "query",
+                "description": "Only return alerts that are newer than the given date. Use ISO 8601 format (e.g., 2020-12-31T23:59). This parameter replaces the deprecated `newerThan` parameter."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "1",
+                "type": "query",
+                "description": "Perspective ID to filter the feed by. Defaults to the user's default perspective. The perspective determines which risk factors and scoring weights are applied to alerts."
+              },
+              {
+                "name": "priorities",
+                "value": "High,Critical",
+                "type": "query",
+                "description": "List of priorities to filter the feed by"
+              },
+              {
+                "name": "includeGeo",
+                "value": "true",
+                "type": "query",
+                "description": "If set to true, the response will include the geo information."
+              },
+              {
+                "name": "impactLevelIds",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Impact level IDs to filter the feed by. Only alerts with these impact levels will be returned."
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\n## Current Endpoint Behavior\n\nRetrieve all alerts for targets that are in collections with feed delivery enabled.\n\nThis endpoint returns paginated alerts filtered by various criteria. Alerts are returned for targets\nthat belong to collections where feed delivery is enabled. Results are ordered by newest first.\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, locatio"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

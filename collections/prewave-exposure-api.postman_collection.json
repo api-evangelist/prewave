@@ -1,0 +1,1382 @@
+{
+  "item": [
+    {
+      "id": "f1dd14df-3020-46a9-93c5-5d939e5094d3",
+      "name": "Exposure",
+      "description": {
+        "content": "Get exposure analysis graph and targets",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e73bf4bc-31c8-4e32-95af-923d96dd5ae4",
+          "name": "Get exposure graph by target id",
+          "request": {
+            "name": "Get exposure graph by target id",
+            "description": {
+              "content": "**Performance impact**: Medium",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "alpha",
+                "exposure",
+                "target",
+                ":targetId",
+                "graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "targetId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_2\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": \"<integer>\",\n  \"minProbability\": \"<double>\",\n  \"shipmentsPeriodFrom\": \"<date>\",\n  \"shipmentsPeriodTo\": \"<date>\",\n  \"exposedTargetId\": \"<integer>\",\n  \"exposedAlertId\": \"<integer>\",\n  \"scenarioId\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "82e050c4-51ab-4060-a780-7db1c228627c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"linkSets\": [\n    {\n      \"fromTier\": 1716,\n      \"links\": [\n        {\n          \"from\": {\n            \"targetId\": 7632,\n            \"tier\": 8905\n          },\n          \"fromWeight\": 1321.8198088715149,\n          \"to\": {\n            \"targetId\": 8938,\n            \"tier\": 8036\n          },\n          \"toWeight\": 6404.94034488286,\n          \"edgeDetails\": null\n        },\n        {\n          \"from\": {\n            \"targetId\": 815,\n            \"tier\": 6785\n          },\n          \"fromWeight\": 3951.3467143959224,\n          \"to\": {\n            \"targetId\": 7298,\n            \"tier\": 9839\n          },\n          \"toWeight\": 4914.775830052841,\n          \"edgeDetails\": null\n        }\n      ],\n      \"toTier\": 6395\n    },\n    {\n      \"fromTier\": 3960,\n      \"links\": [\n        {\n          \"from\": {\n            \"targetId\": 8855,\n            \"tier\": 172\n          },\n          \"fromWeight\": 1330.9279038407606,\n          \"to\": {\n            \"targetId\": 6356,\n            \"tier\": 1061\n          },\n          \"toWeight\": 5610.589565180596,\n          \"edgeDetails\": null\n        },\n        {\n          \"from\": {\n            \"targetId\": 1506,\n            \"tier\": 4150\n          },\n          \"fromWeight\": 4457.268663391658,\n          \"to\": {\n            \"targetId\": 3284,\n            \"tier\": 764\n          },\n          \"toWeight\": 9418.608465642294,\n          \"edgeDetails\": null\n        }\n      ],\n      \"toTier\": 3210\n    }\n  ],\n  \"tiers\": [\n    {\n      \"targets\": [\n        {\n          \"commodityIds\": [\n            7128,\n            958\n          ],\n          \"id\": 495,\n          \"name\": \"string\",\n          \"tier\": 3226,\n          \"weight\": 6721.829456980738,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 8065\n        },\n        {\n          \"commodityIds\": [\n            616,\n            6193\n          ],\n          \"id\": 111,\n          \"name\": \"string\",\n          \"tier\": 1179,\n          \"weight\": 1304.462573499172,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 3388\n        }\n      ],\n      \"tier\": 388\n    },\n    {\n      \"targets\": [\n        {\n          \"commodityIds\": [\n            4190,\n            628\n          ],\n          \"id\": 1117,\n          \"name\": \"string\",\n          \"tier\": 1322,\n          \"weight\": 1182.6587007621115,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 9941\n        },\n        {\n          \"commodityIds\": [\n            6008,\n            4281\n          ],\n          \"id\": 2868,\n          \"name\": \"string\",\n          \"tier\": 6431,\n          \"weight\": 3904.008797202919,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 2481\n        }\n      ],\n      \"tier\": 8188\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b477e2a-3191-4364-8846-2e18b7645430",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4de00de-af9d-49c2-80bd-586e1e10f0d8",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "968e1959-a862-4c6d-a18b-94f3d1425d77",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d2172644-41ef-402d-a8de-f997658aa4a6",
+          "name": "Get exposure graph by foreign system target id",
+          "request": {
+            "name": "Get exposure graph by foreign system target id",
+            "description": {
+              "content": "**Performance impact**: Medium",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "alpha",
+                "exposure",
+                "target",
+                ":systemId",
+                ":targetId",
+                "graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": \"<integer>\",\n  \"minProbability\": \"<double>\",\n  \"shipmentsPeriodFrom\": \"<date>\",\n  \"shipmentsPeriodTo\": \"<date>\",\n  \"exposedTargetId\": \"<integer>\",\n  \"exposedAlertId\": \"<integer>\",\n  \"scenarioId\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee205f0b-af77-406e-b762-4a43c4a16923",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"linkSets\": [\n    {\n      \"fromTier\": 6402,\n      \"links\": [\n        {\n          \"from\": {\n            \"targetId\": 661,\n            \"tier\": 5179\n          },\n          \"fromWeight\": 2836.5785944962254,\n          \"to\": {\n            \"targetId\": 4516,\n            \"tier\": 8893\n          },\n          \"toWeight\": 8532.706285917053,\n          \"edgeDetails\": null\n        },\n        {\n          \"from\": {\n            \"targetId\": 8062,\n            \"tier\": 6859\n          },\n          \"fromWeight\": 9601.935247158995,\n          \"to\": {\n            \"targetId\": 7909,\n            \"tier\": 7281\n          },\n          \"toWeight\": 1085.126411289974,\n          \"edgeDetails\": null\n        }\n      ],\n      \"toTier\": 3313\n    },\n    {\n      \"fromTier\": 7638,\n      \"links\": [\n        {\n          \"from\": {\n            \"targetId\": 8671,\n            \"tier\": 4602\n          },\n          \"fromWeight\": 5428.328603836592,\n          \"to\": {\n            \"targetId\": 5548,\n            \"tier\": 8467\n          },\n          \"toWeight\": 2810.935733031941,\n          \"edgeDetails\": null\n        },\n        {\n          \"from\": {\n            \"targetId\": 4918,\n            \"tier\": 80\n          },\n          \"fromWeight\": 707.4629112355169,\n          \"to\": {\n            \"targetId\": 8048,\n            \"tier\": 2242\n          },\n          \"toWeight\": 7982.842060820016,\n          \"edgeDetails\": null\n        }\n      ],\n      \"toTier\": 2646\n    }\n  ],\n  \"tiers\": [\n    {\n      \"targets\": [\n        {\n          \"commodityIds\": [\n            7451,\n            4635\n          ],\n          \"id\": 2292,\n          \"name\": \"string\",\n          \"tier\": 2704,\n          \"weight\": 6671.574204963031,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 2374\n        },\n        {\n          \"commodityIds\": [\n            2188,\n            6150\n          ],\n          \"id\": 5920,\n          \"name\": \"string\",\n          \"tier\": 3483,\n          \"weight\": 4133.546483586749,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 1440\n        }\n      ],\n      \"tier\": 1973\n    },\n    {\n      \"targets\": [\n        {\n          \"commodityIds\": [\n            8589,\n            134\n          ],\n          \"id\": 4534,\n          \"name\": \"string\",\n          \"tier\": 512,\n          \"weight\": 9661.047459243775,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 9110\n        },\n        {\n          \"commodityIds\": [\n            8973,\n            355\n          ],\n          \"id\": 1718,\n          \"name\": \"string\",\n          \"tier\": 6294,\n          \"weight\": 4141.173758406174,\n          \"purchase\": null,\n          \"exposedSuppliersCount\": null,\n          \"baseSuppliersCount\": null,\n          \"nshipments\": 5406\n        }\n      ],\n      \"tier\": 472\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "464dfa44-82f9-426f-999e-35601f462478",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "000961da-00d3-424e-9ed6-880a0da6bc61",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 20,\\n        \\\"requestCount\\\": 20,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 20,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f0c6d20-466b-44b6-9573-dfd4a4b672ec",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    "target",
+                    ":systemId",
+                    ":targetId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"collectionCommodityFilters\": {\n    \"key_0\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    },\n    \"key_1\": {\n      \"commodities\": [\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        },\n        {\n          \"commodityId\": \"<integer>\",\n          \"path\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"treeId\": \"<integer>\"\n        }\n      ],\n      \"logisticsProvider\": \"<boolean>\",\n      \"suspectedSuppliers\": \"<boolean>\"\n    }\n  },\n  \"commodityFilter\": {\n    \"commodities\": [\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      },\n      {\n        \"commodityId\": \"<integer>\",\n        \"path\": [\n          \"<integer>\",\n          \"<integer>\"\n        ],\n        \"treeId\": \"<integer>\"\n      }\n    ],\n    \"logisticsProvider\": \"<boolean>\",\n    \"suspectedSuppliers\": \"<boolean>\"\n  },\n  \"exposedCollectionIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedCountryIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"exposedTargetIds\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"maxTiers\": \"<integer>\",\n  \"scopePrivate\": \"<boolean>\",\n  \"scopePublic\": \"<boolean>\",\n  \"scopeShared\": \"<boolean>\",\n  \"sourceCustomer\": \"<boolean>\",\n  \"sourceCustoms\": \"<boolean>\",\n  \"sourceMedia\": \"<boolean>\",\n  \"sourcePrewavePrediction\": \"<boolean>\",\n  \"type\": \"<string>\",\n  \"minShipments\": null,\n  \"minProbability\": null,\n  \"shipmentsPeriodFrom\": null,\n  \"shipmentsPeriodTo\": null,\n  \"exposedTargetId\": null,\n  \"exposedAlertId\": null,\n  \"scenarioId\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f9a15379-8881-4750-b41b-1287a6595e6f",
+          "name": "Get exposure analysis info by exposure analysis id",
+          "request": {
+            "name": "Get exposure analysis info by exposure analysis id",
+            "description": {
+              "content": "**Performance impact**: Medium",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "alpha",
+                "exposure",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b6ed527-cc61-467d-b751-7585d5d22f92",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25ac146c-0528-468e-8c46-fe76d2eda5e0",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54e3f9f6-d5cb-449f-804b-0edd418cf9ea",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8104a6aa-535f-4816-ac4f-b173d70ffb7b",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28ccf0bc-9f79-499d-9702-5491e9b6a5f3",
+          "name": "Get exposure graph by exposure analysis id",
+          "request": {
+            "name": "Get exposure graph by exposure analysis id",
+            "description": {
+              "content": "**Performance impact**: Medium",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "alpha",
+                "exposure",
+                ":id",
+                "graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "overviewTiers",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "riskTargetIds",
+                  "value": "[\"<integer>\",\"<integer>\"]"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetIds",
+                  "value": "[\"<integer>\",\"<integer>\"]"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "exposedQuery",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12b54e00-4176-40f2-8f73-8537d8942344",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "overviewTiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "riskTargetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "exposedQuery",
+                      "value": "null"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"aggregatedStats\": [\n    {\n      \"count\": 5537,\n      \"tier\": 3170\n    },\n    {\n      \"count\": 3188,\n      \"tier\": 6890\n    }\n  ],\n  \"baseTargetCount\": 4142,\n  \"baseTargets\": [\n    {\n      \"commodities\": [\n        {\n          \"id\": 9125,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 84,\n          \"name\": \"string\"\n        }\n      ],\n      \"id\": 7517,\n      \"name\": \"string\",\n      \"riskTargets\": [\n        {\n          \"commodities\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"commoditySources\": {\n            \"key_0\": [\n              \"Customs\",\n              \"Media\"\n            ]\n          },\n          \"id\": 3636,\n          \"name\": \"string\",\n          \"reasons\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"tier\": 4089,\n          \"type\": {\n            \"displayName\": \"string\",\n            \"id\": 3255,\n            \"pluralName\": \"string\",\n            \"scoring\": \"Peer\",\n            \"type\": \"string\",\n            \"ordering\": null\n          },\n          \"numberShipments\": null\n        },\n        {\n          \"commodities\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"commoditySources\": {\n            \"key_0\": [\n              \"PrewavePrediction\",\n              \"Customs\"\n            ],\n            \"key_1\": [\n              \"Media\",\n              \"Customer\"\n            ]\n          },\n          \"id\": 2346,\n          \"name\": \"string\",\n          \"reasons\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"tier\": 4529,\n          \"type\": {\n            \"displayName\": \"string\",\n            \"id\": 9139,\n            \"pluralName\": \"string\",\n            \"scoring\": \"Peer\",\n            \"type\": \"string\",\n            \"ordering\": null\n          },\n          \"numberShipments\": null\n        }\n      ],\n      \"type\": {\n        \"displayName\": \"string\",\n        \"id\": 4918,\n        \"pluralName\": \"string\",\n        \"scoring\": \"Alert\",\n        \"type\": \"string\",\n        \"ordering\": null\n      },\n      \"numberShipments\": null\n    },\n    {\n      \"commodities\": [\n        {\n          \"id\": 3350,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 2753,\n          \"name\": \"string\"\n        }\n      ],\n      \"id\": 4374,\n      \"name\": \"string\",\n      \"riskTargets\": [\n        {\n          \"commodities\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"commoditySources\": {\n            \"key_0\": [\n              \"Media\",\n              \"Customer\"\n            ]\n          },\n          \"id\": 4318,\n          \"name\": \"string\",\n          \"reasons\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"tier\": 6701,\n          \"type\": {\n            \"displayName\": \"string\",\n            \"id\": 4122,\n            \"pluralName\": \"string\",\n            \"scoring\": \"Alert\",\n            \"type\": \"string\",\n            \"ordering\": null\n          },\n          \"numberShipments\": null\n        },\n        {\n          \"commodities\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"commoditySources\": {\n            \"key_0\": [\n              \"Media\",\n              \"Customer\"\n            ],\n            \"key_1\": [\n              \"PrewavePrediction\",\n              \"Customs\"\n            ]\n          },\n          \"id\": 8945,\n          \"name\": \"string\",\n          \"reasons\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"tier\": 5942,\n          \"type\": {\n            \"displayName\": \"string\",\n            \"id\": 4720,\n            \"pluralName\": \"string\",\n            \"scoring\": \"Peer\",\n            \"type\": \"string\",\n            \"ordering\": null\n          },\n          \"numberShipments\": null\n        }\n      ],\n      \"type\": {\n        \"displayName\": \"string\",\n        \"id\": 3630,\n        \"pluralName\": \"string\",\n        \"scoring\": \"Alert\",\n        \"type\": \"string\",\n        \"ordering\": null\n      },\n      \"numberShipments\": null\n    }\n  ],\n  \"graph\": {\n    \"linkSets\": [\n      {\n        \"fromTier\": 9843,\n        \"links\": [\n          {\n            \"from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fromWeight\": 4067.4284072030077,\n            \"to\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"toWeight\": 698.1152755142206,\n            \"edgeDetails\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fromWeight\": 5493.372737940162,\n            \"to\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"toWeight\": 4631.496409588036,\n            \"edgeDetails\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"toTier\": 8567\n      },\n      {\n        \"fromTier\": 0,\n        \"links\": [\n          {\n            \"from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fromWeight\": 4530.897683383918,\n            \"to\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"toWeight\": 7441.196730744242,\n            \"edgeDetails\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"from\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"fromWeight\": 3383.5085563882385,\n            \"to\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"toWeight\": 5255.744583628654,\n            \"edgeDetails\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"toTier\": 4711\n      }\n    ],\n    \"tiers\": [\n      {\n        \"targets\": [\n          {\n            \"commodityIds\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"id\": 635,\n            \"name\": \"string\",\n            \"tier\": 3219,\n            \"weight\": 3771.7857794081333,\n            \"purchase\": null,\n            \"exposedSuppliersCount\": null,\n            \"baseSuppliersCount\": null,\n            \"nshipments\": 141\n          },\n          {\n            \"commodityIds\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"id\": 8238,\n            \"name\": \"string\",\n            \"tier\": 4952,\n            \"weight\": 4791.2194161829975,\n            \"purchase\": null,\n            \"exposedSuppliersCount\": null,\n            \"baseSuppliersCount\": null,\n            \"nshipments\": 2629\n          }\n        ],\n        \"tier\": 9807\n      },\n      {\n        \"targets\": [\n          {\n            \"commodityIds\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"id\": 9631,\n            \"name\": \"string\",\n            \"tier\": 8720,\n            \"weight\": 7244.088256870198,\n            \"purchase\": null,\n            \"exposedSuppliersCount\": null,\n            \"baseSuppliersCount\": null,\n            \"nshipments\": 6458\n          },\n          {\n            \"commodityIds\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"id\": 8766,\n            \"name\": \"string\",\n            \"tier\": 8080,\n            \"weight\": 2128.6837280243167,\n            \"purchase\": null,\n            \"exposedSuppliersCount\": null,\n            \"baseSuppliersCount\": null,\n            \"nshipments\": 1038\n          }\n        ],\n        \"tier\": 9859\n      }\n    ]\n  },\n  \"targets\": [\n    {\n      \"stats\": [\n        {\n          \"count\": 1768,\n          \"tier\": 5449\n        },\n        {\n          \"count\": 9716,\n          \"tier\": 516\n        }\n      ],\n      \"target\": {\n        \"baseSupplierCount\": 1455,\n        \"exposedDistinctCount\": 2926,\n        \"id\": 5515,\n        \"name\": \"string\",\n        \"tier\": 758,\n        \"type\": {\n          \"displayName\": \"string\",\n          \"id\": 3871,\n          \"pluralName\": \"string\",\n          \"scoring\": \"Alert\",\n          \"type\": \"string\",\n          \"ordering\": null\n        },\n        \"edgeNumbers\": null\n      }\n    },\n    {\n      \"stats\": [\n        {\n          \"count\": 5870,\n          \"tier\": 8812\n        },\n        {\n          \"count\": 1474,\n          \"tier\": 1395\n        }\n      ],\n      \"target\": {\n        \"baseSupplierCount\": 9190,\n        \"exposedDistinctCount\": 3145,\n        \"id\": 8280,\n        \"name\": \"string\",\n        \"tier\": 4153,\n        \"type\": {\n          \"displayName\": \"string\",\n          \"id\": 59,\n          \"pluralName\": \"string\",\n          \"scoring\": \"Peer\",\n          \"type\": \"string\",\n          \"ordering\": null\n        },\n        \"edgeNumbers\": null\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e3d57d5-a7b0-4b19-99e2-2f3ffe66d156",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "overviewTiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "riskTargetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "exposedQuery",
+                      "value": "null"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e73624f9-13bb-45bb-be45-3dbdccd4f510",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "overviewTiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "riskTargetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "exposedQuery",
+                      "value": "null"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd7180af-2039-4d6a-9c1b-be9b3593a359",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "alpha",
+                    "exposure",
+                    ":id",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "overviewTiers",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "riskTargetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "exposedQuery",
+                      "value": "null"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cf60d5cc-c565-48ff-b25a-31636e0095f8",
+    "name": "Public Prewave Actions Exposure API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

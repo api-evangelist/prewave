@@ -1,0 +1,1949 @@
+{
+  "item": [
+    {
+      "id": "c9a08340-bcca-44ac-a377-a5455c9d52e0",
+      "name": "Suppliers - Supplier Graph",
+      "description": {
+        "content": "⚠️ **DEPRECATED** - This API is deprecated and will be removed at the end of December 2026.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "600622e0-2106-4c3f-91b3-e2b6efb13e5c",
+          "name": "Get a tree-structure of suppliers of the given target",
+          "request": {
+            "name": "Get a tree-structure of suppliers of the given target",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections Tier-N API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v2/suppliers/{systemId}/{targetId}/supplier-graph` | `GET /public/v1/collections/{collectionId}/tier-n/data` | Get collection-based supplier graphs |\n\n---\n\n## Why Migrate?\n\nThe v1 Collections Tier-N API provides significant improvements:\n\n### 1. Collection-Based Approach\n- **v2**: Works with individual target IDs\n- **v1**: Works with collections, allowing you to analyze multiple suppliers together\n- **v1**: Better integration with collection management workflows\n- **v1**: Collection-level configuration for consistent analysis settings\n\n### 2. Enhanced Functionality\n- **v2**: Basic supplier graph with limited configuration\n- **v1**: Advanced filtering through collection settings\n- **v1**: Configurable data sources (customs, media, predictions)\n- **v1**: Better control over scope (private, shared, public targets)\n\n### 3. Improved Consistency\n- **v2**: Target-specific endpoint\n- **v1**: Aligned with collection-based API design\n- **v1**: Consistent with other collection management endpoints\n\n### 4. Better Documentation\n- Comprehensive examples for all endpoints\n- Detailed error response documentation\n- Clear parameter descriptions\n- Migration guidance and best practices\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Identify Collection ID\n\n**Important**: The v1 endpoint requires a collection ID instead of a target ID. If you don't have a collection yet:\n\n1. Create a collection using `POST /public/v1/collections`\n2. Add your target to the collection using `POST /public/v1/collections/{collectionId}/targets`\n3. Ensure the collection has tier-n enabled (`tiersEnabled: true`)\n\n### Step 2: Update Endpoint Call\n\n**Before:**\n```http\nGET /public/v2/suppliers/prewave/102006215/supplier-graph?tierLevel=3&commodityIds=101,102&filter={...}\n```\n\n**After:**\n```http\nGET /public/v1/collections/123/tier-n/data?tierLevel=3&commodityIds=101,102\n```\n\n### Step 3: Update Request Parameters\n\n**v2 Parameters:**\n- `systemId`: System identifier (path parameter)\n- `targetId`: Target identifier (path parameter)\n- `tierLevel`: Maximum tier level (query parameter, max 4)\n- `commodityIds`: List of commodity IDs (query parameter)\n- `filter`: Complex filter object (query parameter)\n- `commodityTreeId`: Commodity tree ID (query parameter)\n- `fetchParents`: Include parents (query parameter, default: true)\n\n**v1 Parameters:**\n- `collectionId`: Collection identifier (path parameter)\n- `tierLevel`: Maximum tier level (query parameter, max 4)\n- `commodityIds`: List of commodity IDs (query parameter)\n- `commodityTreeId`: Commodity tree ID (query parameter)\n- `fetchParents`: Include parents (query parameter, default: true)\n- Filter options can be configured in collection settings using `PUT /public/v1/collections/{collectionId}/tier-n/settings`\n\n### Step 4: Configure Collection Settings (Optional)\n\nFor advanced filtering, configure collection settings:\n\n```http\nPUT /public/v1/collections/123/tier-n/settings\n{\n  \"maxTier\": 3,\n  \"scopePrivate\": true,\n  \"scopeShared\": true,\n  \"sourceCustoms\": true,\n  \"sourceMedia\": true,\n  \"minShipments\": 5,\n  \"probability\": 75\n}\n```\n\n---\n\n## Breaking Changes\n\n1. **Endpoint Path**: Changed from `/public/v2/suppliers/{systemId}/{targetId}/supplier-graph` to `/public/v1/collections/{collectionId}/tier-n/data`\n2. **Path Parameters**:\n   - **v2**: Requires `systemId` and `targetId`\n   - **v1**: Requires `collectionId` (collection-based approach)\n3. **Filter Configuration**:\n   - **v2**: Filter passed as query parameter object\n   - **v1**: Filter options configured in collection settings or passed as separate query parameters\n4. **Response Structure**: May differ slightly - review response format\n5. **Collection Requirement**: v1 requires targets to be part of a collection\n\n---\n\n## Important Notes\n\n### Collection Requirement\n- The v1 endpoint requires targets to be part of a collection\n- If you're currently using this endpoint with individual targets, you'll need to:\n  1. Create or identify a collection containing your target\n  2. Ensure the collection has tier-n enabled (`tiersEnabled: true`)\n  3. Use the collection ID instead of target ID\n\n### Filter Migration\n- Complex filter objects from v2 should be migrated to collection settings\n- Use `GET /public/v1/collections/{collectionId}/tier-n/settings` to view current settings\n- Use `PUT /public/v1/collections/{collectionId}/tier-n/settings` to configure filters\n\n---\n\n**Performance Impact**: High\n\nFor detailed API reference and examples, see the v1 Collections Tier-N API documentation.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "suppliers",
+                ":systemId",
+                ":targetId",
+                "supplier-graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tierLevel",
+                  "value": "<integer>",
+                  "description": "Defines the maximum limit of tiers that should be fetched. Must be <=4"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "<integer>",
+                  "description": "List of commodity ids to filter the supplier graph"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "<integer>",
+                  "description": "List of commodity ids to filter the supplier graph"
+                },
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "countryIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hscodes",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "onlyDirectlySuppliers",
+                  "value": "<boolean>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "scopes",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetTypeIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "tiers",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "countries",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "lastShipment",
+                  "value": "<date>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityTreeId",
+                  "value": "<integer>",
+                  "description": "Represents a collection of commodityIds"
+                },
+                {
+                  "disabled": false,
+                  "key": "fetchParents",
+                  "value": "true",
+                  "description": "Defines whether the parents of the targets should be included in the result."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac51ade7-0d9f-426c-9224-890b4a1c68d0",
+              "name": "Successfully retrieved supplier graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"target\": 10422185,\n    \"suppliers\": [\n      {\n        \"target\": 101641243,\n        \"suppliers\": [],\n        \"targetInfo\": {\n          \"tier\": 1,\n          \"path\": [\n            10422185\n          ],\n          \"collectionLevel\": 1,\n          \"collectionPath\": [\n            123\n          ],\n          \"collectionPaths\": [\n            [\n              123\n            ]\n          ]\n        },\n        \"edgeSource\": \"Shared\",\n        \"edgeInfo\": {\n          \"hsCodes\": [\n            {\n              \"code\": \"847330\",\n              \"nShipments\": 15\n            }\n          ],\n          \"probability\": 85\n        },\n        \"merged_targets\": []\n      }\n    ],\n    \"targetInfo\": {\n      \"tier\": 0,\n      \"path\": [],\n      \"collectionLevel\": 0,\n      \"collectionPath\": [],\n      \"collectionPaths\": []\n    },\n    \"edgeSource\": \"Public Media\",\n    \"edgeInfo\": null,\n    \"merged_targets\": []\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a549922-5d49-41dc-aec0-1ff89731f43e",
+              "name": "Invalid request parameters (e.g., tier level > 4)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4229153-3c0e-4990-833b-e0907feb010e",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eed8d2c3-879c-436c-85b1-37d659024004",
+              "name": "Target not found or not accessible to the user",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "91f9ae58-c73e-492a-994b-012f7b9dd769",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47d9257d-3551-4c5f-a833-7118716cbbb2",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4e1ca26-2a5b-4e8d-a722-ab130ae270fb",
+          "name": "Get a tree-structure of suppliers of the given target",
+          "request": {
+            "name": "Get a tree-structure of suppliers of the given target",
+            "description": {
+              "content": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v1 Collections Tier-N API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/suppliers/{systemId}/{targetId}/supplier-graph` | `GET /public/v1/collections/{collectionId}/tier-n/data` | Get collection-based supplier graphs |\n\n---\n\n## Why Migrate?\n\nThe v1 Collections Tier-N API provides significant improvements:\n\n### 1. Collection-Based Approach\n- **v1**: Works with individual target IDs\n- **v1 Tier-N**: Works with collections, allowing you to analyze multiple suppliers together\n- **v1 Tier-N**: Better integration with collection management workflows\n- **v1 Tier-N**: Collection-level configuration for consistent analysis settings\n\n### 2. Enhanced Functionality\n- **v1**: Basic supplier graph with limited configuration\n- **v1 Tier-N**: Advanced filtering through collection settings\n- **v1 Tier-N**: Configurable data sources (customs, media, predictions)\n- **v1 Tier-N**: Better control over scope (private, shared, public targets)\n\n### 3. Improved Consistency\n- **v1**: Target-specific endpoint\n- **v1 Tier-N**: Aligned with collection-based API design\n- **v1 Tier-N**: Consistent with other collection management endpoints\n\n### 4. Better Documentation\n- Comprehensive examples for all endpoints\n- Detailed error response documentation\n- Clear parameter descriptions\n- Migration guidance and best practices\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Identify Collection ID\n\n**Important**: The v1 Tier-N endpoint requires a collection ID instead of a target ID. If you don't have a collection yet:\n\n1. Create a collection using `POST /public/v1/collections`\n2. Add your target to the collection using `POST /public/v1/collections/{collectionId}/targets`\n3. Ensure the collection has tier-n enabled (`tiersEnabled: true`)\n\n### Step 2: Update Endpoint Call\n\n**Before:**\n```http\nGET /public/v1/suppliers/prewave/102006215/supplier-graph?tierLevel=3&commodityIds=101,102&filter={...}\n```\n\n**After:**\n```http\nGET /public/v1/collections/123/tier-n/data?tierLevel=3&commodityIds=101,102\n```\n\n### Step 3: Update Request Parameters\n\n**v1 Parameters**:\n- `systemId`: System identifier (path parameter)\n- `targetId`: Target identifier (path parameter)\n- `tierLevel`: Maximum tier level (query parameter, max 4)\n- `commodityIds`: List of commodity IDs (query parameter)\n- `filter`: Complex filter object (query parameter)\n- `commodityTreeId`: Commodity tree ID (query parameter)\n- `fetchParents`: Include parents (query parameter, default: true)\n\n**v1 Tier-N Parameters**:\n- `collectionId`: Collection identifier (path parameter)\n- `tierLevel`: Maximum tier level (query parameter, max 4)\n- `commodityIds`: List of commodity IDs (query parameter)\n- `commodityTreeId`: Commodity tree ID (query parameter)\n- Filter options can be configured in collection settings using `PUT /public/v1/collections/{collectionId}/tier-n/settings`\n\n### Step 4: Configure Collection Settings (Optional)\n\nFor advanced filtering, configure collection settings:\n\n```http\nPUT /public/v1/collections/123/tier-n/settings\n{\n\"maxTier\": 3,\n\"scopePrivate\": true,\n\"scopeShared\": true,\n\"sourceCustoms\": true,\n\"sourceMedia\": true,\n\"minShipments\": 5,\n\"probability\": 75\n}\n```\n\n---\n\n## Breaking Changes\n\n1. **Endpoint Path**: Changed from `/public/v1/suppliers/{systemId}/{targetId}/supplier-graph` to `/public/v1/collections/{collectionId}/tier-n/data`\n2. **Path Parameters**:\n- **v1**: Requires `systemId` and `targetId`\n- **v1 Tier-N**: Requires `collectionId` (collection-based approach)\n3. **Filter Configuration**:\n- **v1**: Filter passed as query parameter object\n- **v1 Tier-N**: Filter options configured in collection settings or passed as separate query parameters\n4. **Response Structure**: May differ slightly - review response format\n5. **Collection Requirement**: v1 Tier-N requires targets to be part of a collection\n\n---\n\n## Important Notes\n\n### Collection Requirement\n- The v1 Tier-N endpoint requires targets to be part of a collection\n- If you're currently using this endpoint with individual targets, you'll need to:\n1. Create or identify a collection containing your target\n2. Ensure the collection has tier-n enabled (`tiersEnabled: true`)\n3. Use the collection ID instead of target ID\n\n### Filter Migration\n- Complex filter objects from v1 should be migrated to collection settings\n- Use `GET /public/v1/collections/{collectionId}/tier-n/settings` to view current settings\n- Use `PUT /public/v1/collections/{collectionId}/tier-n/settings` to configure filters\n\n---\n\n**Required Permission**: `ACCESS_PUBLIC_SUPPLIER_GRAPH`\n\n**Performance Impact**: High\n\nFor detailed API reference and examples, see the v1 Collections Tier-N API documentation.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "suppliers",
+                ":systemId",
+                ":targetId",
+                "supplier-graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tierLevel",
+                  "value": "<integer>",
+                  "description": "Defines the maximum limit of tiers that should be fetched. Must be <=4"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "<integer>",
+                  "description": "List of commodity ids to filter the supplier graph"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "<integer>",
+                  "description": "List of commodity ids to filter the supplier graph"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityTreeId",
+                  "value": "<integer>",
+                  "description": "Represents a collection of commodityIds"
+                },
+                {
+                  "disabled": false,
+                  "key": "collectionIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "commodityIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "countryIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hscodes",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "onlyDirectlySuppliers",
+                  "value": "<boolean>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "scopes",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetTypeIds",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "tiers",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "countries",
+                  "value": "[\"<integer>\",\"<integer>\"]",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "lastShipment",
+                  "value": "<date>",
+                  "description": "(Required) Filter object used for specifying limiting criteria for retrieving targets, affects both the targets and edge data in relation to the affected organization which queries the data.\n\n - **q**                     *[TARGET & EDGE]* - a query term by which target details (target name or existing edge details\n                                             (edge number WITHOUT edge number source are used as condition)\n\n - **collections**           *[TARGET]* - a list of collection ids to filter in any which the target needs to exist\n\n - **commodityIds**          *[TARGET & EDGE]* - a list of commodity infotag ids by which the target needs to be associated with any\n\n - **tt**                    *[TARGET]* - a list of target types the target needs to be assigned\n\n - **tier**                  *[EDGE]* - a list of tiers by which to filter the targets by, in relation to the organization as a supplier\n\n - **scope**                 *[EDGE]* - defines the visibilities of edge connections to the affected target\n                                    (if an edge is restricted to the affected customer it's 'Private',\n                                    otherwise it's 'Shared' if the edge is shared to the organization by\n                                    a different organization)\n\n - **source**                *[EDGE]* - determines edge source that should be considered (either 'Customer', 'Customs', 'Media' or 'PrewavePrediction')\n\n - **country**               *[TARGET]* - a list of infotag ids for countries which the target is assigned to any\n                                      (`country_id` column in the target, generally only for POI targets)\n\n - **hscode**                *[EDGE]* - a list of codes by which the target is associated to via an edge's HS code\n\n - **ods**                    *[TARGET]* - only direct suppliers (true/false)\n\n - **lastShipment**           *[EDGE]* - a date which determines a cut-off point after which the latest shipment must have happened regardless of HS Codes\n                                    (if `hscodes` are supplied it's already taken care of by the time this filter is applied, otherwise filters over all HS Codes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "fetchParents",
+                  "value": "true",
+                  "description": "Defines whether the parents of the targets should be included in the result."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "systemId",
+                  "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "targetId",
+                  "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52065d92-be51-4a09-9c34-24e91647caa5",
+              "name": "Successfully retrieved supplier graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"target\": 10422185,\n    \"suppliers\": [\n      {\n        \"target\": 101641243,\n        \"suppliers\": [],\n        \"tier\": 1,\n        \"path\": [\n          10422185\n        ],\n        \"edgeSource\": \"Shared\",\n        \"merged_targets\": []\n      }\n    ],\n    \"tier\": 0,\n    \"path\": [],\n    \"edgeSource\": \"Public Media\",\n    \"merged_targets\": []\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b96ed971-9c1d-4fd3-9c7b-b3567d9d2ed2",
+              "name": "Invalid request parameters (e.g., tier level > 4)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2cdd213-bd27-43ee-95f8-a2530f399cb5",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "248e9e82-339b-429a-87f7-408fe1342c70",
+              "name": "Target not found or not accessible to the user",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96391edc-c732-4bd9-8d52-2c2ddd5d1557",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56252302-097c-4139-9e01-ca103da78eea",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "suppliers",
+                    ":systemId",
+                    ":targetId",
+                    "supplier-graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tierLevel",
+                      "value": "3"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "commodityTreeId",
+                      "value": "456"
+                    },
+                    {
+                      "key": "collectionIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "commodityIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "countryIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "hscodes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "onlyDirectlySuppliers",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "scopes",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "targetTypeIds",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "tiers",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "null"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "countries",
+                      "value": "<integer>,<integer>"
+                    },
+                    {
+                      "key": "lastShipment",
+                      "value": "null"
+                    },
+                    {
+                      "key": "fetchParents",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "systemId",
+                      "description": "(Required) The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "targetId",
+                      "description": "(Required) The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "00e3977c-6c28-41ff-a2de-4bc0dc7688cc",
+    "name": "Public Prewave Actions Suppliers - Supplier Graph API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

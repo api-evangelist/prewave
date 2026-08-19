@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Collections - Management API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections - Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get collection by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "The unique identifier (ID) of the collection to retrieve. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+              }
+            ]
+          },
+          "docs": "\nRetrieve a specific collection by its unique identifier.\n\nThe collection must be accessible to the authenticated user and must be active (not deactivated). This includes:\n- Collections owned by the user\n- Collections shared with the user's teams\n- Organization-wide collections (if user has appropriate permissions)\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `READ` permission on them.\n\n**Response:**\nReturns a collection object with full details inc"
+        },
+        {
+          "info": {
+            "name": "Update an existing collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "The unique identifier (ID) of the collection to update. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUpdate an existing collection's name and lanes settings.\n\nOnly active collections that the user has update permissions for can be modified. Only the collection name and lanes setting can be updated through this endpoint. Other properties like `scope` and `tiersEnabled` cannot be changed after creation.\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `UPDATE` permission on them.\n\n**Request:**\nOnly `name` (required) and `lanes` (optional) fields can be "
+        },
+        {
+          "info": {
+            "name": "Deactivate a collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "The unique identifier (ID) of the collection to deactivate. This is the same identifier returned in the `id` field when retrieving collections via GET /public/v1/collections."
+              }
+            ]
+          },
+          "docs": "\nDeactivate (soft delete) an existing collection.\n\nThis operation performs a **soft deletion** by marking the collection as inactive. The collection data remains in the database but is no longer accessible through the API.\n\n**Parameter:**\n- `{collectionId}` (path parameter): The unique identifier of the collection to deactivate.\n\n**What happens when you deactivate a collection:**\n\n1. **Collection Deactivation**: The collection is soft-deleted (marked as inactive)\n2. **API Visibility**: The colle"
+        },
+        {
+          "info": {
+            "name": "List all collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/collections",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ]
+          },
+          "docs": "\nRetrieve all active collections accessible to the authenticated user with pagination support.\n\nThis endpoint returns collections that the user has read access to, including:\n- User-owned collections (`scope: User`)\n- Customer collections (`scope: Customer`) - organization-wide collections accessible to the user\n- Team-shared collections (via collection roles)\n\n**Note**:\n- Only active (non-deactivated) collections are returned\n- Featured collections (`scope: Featured`) are excluded from this end"
+        },
+        {
+          "info": {
+            "name": "Create a new collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/collections",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new collection with the specified properties.\n\nThe collection will be created with \"Customer\" scope by default unless explicitly specified otherwise. All required fields must be provided and will be validated.\n\n**Note**: The collection will be automatically subscribed to your account upon creation, and you will become the collection owner.\n\n**Request:**\nThe request body includes collection name (required) and optional fields for scope, lanes, tiersEnabled, and parentId. See the `Public"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Customers - Origin Requests API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Customers - Origin Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update origin request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/origin-requests/:originRequestId",
+            "params": [
+              {
+                "name": "originRequestId",
+                "value": "1001",
+                "type": "path",
+                "description": "The ID of the origin request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n\nUpdate an existing origin request. Only requests in `Requested` status can be updated.\nAt least one of `requestedWeight` or `endDate` must be provided.\n- `requestedWeight` — update the requested weight for the origin request.\n- `endDate` — update the end date for the origin request.\n\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Close origin request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/origin-requests/:originRequestId/close",
+            "params": [
+              {
+                "name": "originRequestId",
+                "value": "1001",
+                "type": "path",
+                "description": "The ID of the origin request."
+              }
+            ]
+          },
+          "docs": "\n\nThe request can be closed only if it is in `Requested` status.\nClosing the request prevents any further updates or actions on it.\nOnce closed, the request status is set to `Answered` or `Canceled`:\n- **Answered** — at least one origin has been provided for the request.\n- **Canceled** — no origins have been provided for the request.\n\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Bulk request origins for products",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/origin-requests",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n\nSend origin requests for products to suppliers. Suppliers are notified by in-app notification and email.\nAdditional email CCs and a comment can be provided in the payload.\nEvery supplier must have at least one contact to be notified.\nTo manage and fetch contacts, use the connection-contact endpoints.\n\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Fetch customer origin requests per inbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/:productId/origin-requests",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "The ID of the product."
+              },
+              {
+                "name": "page",
+                "value": "0",
+                "type": "query",
+                "description": "Page number (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "10",
+                "type": "query",
+                "description": "Page size"
+              },
+              {
+                "name": "reference",
+                "value": "PO-2025-001",
+                "type": "query",
+                "description": "Origin request reference"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Origin request status"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a paginated list of origin requests for a specific inbound product.\n\nReturns origin requests created for the product, with optional filtering by reference and status.\nEach item includes status details when the request is answered, delayed, or rejected.\n\n**Use Cases**:\n- View all origin requests for a product\n- Track request status and supplier responses\n- Filter requests by reference or status\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size`"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

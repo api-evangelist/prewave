@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Collections - Targets API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections - Targets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get targets in collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/targets",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the collection"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ]
+          },
+          "docs": "\nRetrieve all targets that are currently part of a collection with pagination support.\n\nReturns paginated target references with basic information about each target (ID and name).\nTo get detailed target information, use the targets API with these target IDs.\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `GET /public/v1/collections` - List all collections accessible to you (returns collections with `id` field)\n  - `GET /public/v"
+        },
+        {
+          "info": {
+            "name": "Add targets to collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/targets",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the collection"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nAdd multiple targets (suppliers, customers, etc.) to a collection.\n\nTargets are identified by their unique `prewaveTargetId` (target's `infotag_id`). If a target is already in the collection,\nit will be ignored (no duplicate entries). All target IDs must be valid and accessible to the user.\n\nThis operation is atomic - either all targets are added successfully, or none are added.\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `G"
+        },
+        {
+          "info": {
+            "name": "Remove target from collection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v1/collections/:collectionId/targets/:targetId",
+            "params": [
+              {
+                "name": "collectionId",
+                "value": "123",
+                "type": "path",
+                "description": "Unique identifier of the collection"
+              },
+              {
+                "name": "targetId",
+                "value": "10422185",
+                "type": "path",
+                "description": "The prewaveTargetId (target's infotag_id) of the target to remove from the collection. This is the same identifier returned in the `id` field when retrieving targets via GET /public/v1/collections/{collectionId}/targets or GET /public/v2/suppliers/sites."
+              }
+            ]
+          },
+          "docs": "\nRemove a single target from a collection.\n\nThe target is identified by its `prewaveTargetId` (target's `infotag_id`) in the URL path. If the target is not\ncurrently in the collection, the operation will complete successfully without error (idempotent operation).\n\n**Getting Collection ID:**\n- To find available collections and their IDs, use the Collections Management API:\n  - `GET /public/v1/collections` - List all collections accessible to you (returns collections with `id` field)\n  - `GET /pub"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

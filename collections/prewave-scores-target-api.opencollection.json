@@ -1,0 +1,210 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Scores - Target API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scores - Target",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns the target score including the overall score and scores for all infotag-groups.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/score",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the perspective, that should be used to calculate the target-score."
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the group that items should be returned"
+              },
+              {
+                "name": "component",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score component"
+              },
+              {
+                "name": "subcomponent",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score subcomponent"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score` | `GET "
+        },
+        {
+          "info": {
+            "name": "Get the event type scores for a infotag group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/score/:groupId",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the group that items should be returned"
+              },
+              {
+                "name": "perspectiveId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the perspective, that should be used to calculate the target-score."
+              },
+              {
+                "name": "component",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score component"
+              },
+              {
+                "name": "subcomponent",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score subcomponent"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score/{groupId"
+        },
+        {
+          "info": {
+            "name": "The historical overall-score of the target for the last months, depending on the defined perspective",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/score-history",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the group that items should be returned"
+              },
+              {
+                "name": "perspectiveId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the perspective, that should be used to calculate the target-score."
+              },
+              {
+                "name": "component",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score component"
+              },
+              {
+                "name": "subcomponent",
+                "value": "",
+                "type": "query",
+                "description": "Filter by score subcomponent"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-history`"
+        },
+        {
+          "info": {
+            "name": "The current score for a target split up into the scoring components, depending on the defined perspective.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/score-components",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "perspectiveId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the perspective, that should be used to calculate the target-score."
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the group that items should be returned"
+              }
+            ]
+          },
+          "docs": "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-componen"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

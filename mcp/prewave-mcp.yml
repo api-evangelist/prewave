@@ -322,3 +322,9 @@ tools:
 - name: removeTargetFromCollection
   description: Remove target from collection
   source_operation: openapi/prewave-openapi-original.json#removeTargetFromCollection
+deployment:
+  mode: none
+  verified: derived
+  tools: 104
+  checked: '2026-08-12'
+  source: catalog MCP census

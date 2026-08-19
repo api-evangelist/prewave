@@ -1,0 +1,1841 @@
+{
+  "item": [
+    {
+      "id": "dac7dc60-1cf6-44ca-aa77-611d9257c562",
+      "name": "Actions",
+      "description": {
+        "content": "🆕 NEW - Retrieve actions (tasks/work items), action types, and action statuses for supplier relationships, compliance reviews, and operational activities. Available from February 2026.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "103939f2-12ce-4aba-b105-1ed0d359f5ac",
+          "name": "List actions",
+          "request": {
+            "name": "List actions",
+            "description": {
+              "content": "\nRetrieves a paginated list of actions with filtering and sorting capabilities.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions?page=0&size=20\n```\n\n**Response Format:**\nReturns a lightweight summary view optimized for list/table displays. For complete action details including full descriptions, action items, and attachment metadata, use `GET /public/v1/actions/{actionId}`.\n\n**Filtering:**\nAll filter parameters are optional and can be combined. Multiple values are passed as comma-separated lists (e.g., `typeIds=5,6,7`).\n\n**Finding Valid Filter Values:**\n- **Target IDs**: Use `GET /public/v2/suppliers/sites` to get valid `prewaveTargetId` values\n- **Action Types & Status IDs**: Use [`GET /public/v1/actions/types`](#/Actions/listActionTypes) to get valid action type IDs and [`GET /public/v1/actions/statuses`](#/Actions/listActionStatuses) to get valid status IDs\n- **Team IDs & User IDs**: Available in your organization's team and user management interfaces\n\n**Performance:**\n- Response payloads are optimized for list views (60-80% smaller than full detail responses)\n- Using multiple filters may impact query performance\n- Text search (`query` parameter) searches across title and description fields\n- Date range filters are inclusive (both endpoints included)\n- Use pagination (`page`, `size`) to limit response size for large result sets\n\n**Required Permission:** `access_public_actions`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "actions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "Zero-based page index (0..N)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "typeIds",
+                  "value": "<integer>",
+                  "description": "Filter by action type IDs. Multiple values: comma-separated (e.g., '5,6,7') or repeated parameter. Use GET /public/v1/actions/types to find valid type IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "typeIds",
+                  "value": "<integer>",
+                  "description": "Filter by action type IDs. Multiple values: comma-separated (e.g., '5,6,7') or repeated parameter. Use GET /public/v1/actions/types to find valid type IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusIds",
+                  "value": "<integer>",
+                  "description": "Filter by status IDs. Multiple values: comma-separated (e.g., '2,3') or repeated parameter. Use GET /public/v1/actions/statuses to find valid status IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusIds",
+                  "value": "<integer>",
+                  "description": "Filter by status IDs. Multiple values: comma-separated (e.g., '2,3') or repeated parameter. Use GET /public/v1/actions/statuses to find valid status IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "targetIds",
+                  "value": "<integer>",
+                  "description": "Filter by target/supplier IDs (prewaveTargetId). Multiple values: comma-separated (e.g., '102006215,102006216') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetIds",
+                  "value": "<integer>",
+                  "description": "Filter by target/supplier IDs (prewaveTargetId). Multiple values: comma-separated (e.g., '102006215,102006216') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "assigneeIds",
+                  "value": "<integer>",
+                  "description": "Filter by assignee user IDs. Multiple values: comma-separated (e.g., '100,101') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "assigneeIds",
+                  "value": "<integer>",
+                  "description": "Filter by assignee user IDs. Multiple values: comma-separated (e.g., '100,101') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "teamIds",
+                  "value": "<integer>",
+                  "description": "Filter by team IDs. Multiple values: comma-separated (e.g., '10,11') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "teamIds",
+                  "value": "<integer>",
+                  "description": "Filter by team IDs. Multiple values: comma-separated (e.g., '10,11') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "organizationIds",
+                  "value": "<integer>",
+                  "description": "Filter by organization/site group IDs. Multiple values: comma-separated (e.g., '500001') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "organizationIds",
+                  "value": "<integer>",
+                  "description": "Filter by organization/site group IDs. Multiple values: comma-separated (e.g., '500001') or repeated parameter"
+                },
+                {
+                  "disabled": false,
+                  "key": "dueDateFrom",
+                  "value": "<dateTime>",
+                  "description": "Due date from (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "dueDateTo",
+                  "value": "<dateTime>",
+                  "description": "Due date to (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "createdAtFrom",
+                  "value": "<dateTime>",
+                  "description": "Creation date from (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "createdAtTo",
+                  "value": "<dateTime>",
+                  "description": "Creation date to (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "updatedAtFrom",
+                  "value": "<dateTime>",
+                  "description": "Update date from (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "updatedAtTo",
+                  "value": "<dateTime>",
+                  "description": "Update date to (ISO 8601 timestamp)"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Text search in title/description (case-insensitive)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5cb57127-5ad3-40d3-aeba-a56f2924b73a",
+              "name": "Successfully retrieved actions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "typeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statusIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "assigneeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "teamIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "organizationIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "dueDateFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "dueDateTo",
+                      "value": "2024-12-31T23:59:59Z"
+                    },
+                    {
+                      "key": "createdAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "createdAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updatedAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updatedAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "query",
+                      "value": "compliance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"content\\\":[{\\\"actionId\\\":12345,\\\"title\\\":\\\"Review supplier compliance documentation\\\",\\\"type\\\":{\\\"id\\\":5,\\\"displayName\\\":\\\"Incident Review\\\"},\\\"status\\\":{\\\"id\\\":2,\\\"title\\\":\\\"In Progress\\\",\\\"state\\\":\\\"InProgress\\\"},\\\"target\\\":{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Corporation\\\"},\\\"assignees\\\":[{\\\"id\\\":100,\\\"name\\\":\\\"John Doe\\\",\\\"email\\\":\\\"john.doe@example.com\\\"}],\\\"teams\\\":[{\\\"id\\\":10,\\\"name\\\":\\\"Compliance Team\\\"}],\\\"dueDate\\\":1735689599.000000000,\\\"createdAt\\\":1705314600.000000000,\\\"updatedAt\\\":1705761900.000000000}],\\\"totalElements\\\":57,\\\"totalPages\\\":3,\\\"size\\\":20,\\\"number\\\":0}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "262bffc7-1b68-450a-8e0d-510daf18bbeb",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "typeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statusIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "assigneeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "teamIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "organizationIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "dueDateFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "dueDateTo",
+                      "value": "2024-12-31T23:59:59Z"
+                    },
+                    {
+                      "key": "createdAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "createdAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updatedAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updatedAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "query",
+                      "value": "compliance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22388d16-f269-4ce4-8ca0-6fa0c6d7feca",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "typeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statusIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "assigneeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "teamIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "organizationIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "dueDateFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "dueDateTo",
+                      "value": "2024-12-31T23:59:59Z"
+                    },
+                    {
+                      "key": "createdAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "createdAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updatedAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updatedAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "query",
+                      "value": "compliance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22181bd9-e6e5-47bc-ab21-8f5cd5f36ea9",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "typeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statusIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "targetIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "assigneeIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "teamIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "organizationIds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "dueDateFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "dueDateTo",
+                      "value": "2024-12-31T23:59:59Z"
+                    },
+                    {
+                      "key": "createdAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "createdAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updatedAtFrom",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updatedAtTo",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "query",
+                      "value": "compliance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2db750a-ed68-4306-b20a-73a9596e4fa6",
+          "name": "Get action by ID",
+          "request": {
+            "name": "Get action by ID",
+            "description": {
+              "content": "\nRetrieves detailed information about a specific action.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/12345\n```\n\n**Response:**\nReturns comprehensive action details including description, creator, action items, skip information, and attachment metadata.\n\n**Action ID:**\nThe `actionId` is a **stable identifier** that uniquely identifies an action. Once created, it never changes, making it safe for:\n- Storing in your database for future reference\n- Using in URLs and bookmarks\n- External references and integrations\n\nTo find action IDs, use [`GET /public/v1/actions`](#/Actions/listActions) to list all actions and retrieve their `actionId` values.\n\n**Related Operations:**\n- `GET /public/v1/actions` - List all actions (to find actions by other criteria)\n\n**Required Permission:** `access_public_actions`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "actions",
+                ":actionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "actionId",
+                  "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "21bb949f-c330-46c2-bc06-93df889d53e8",
+              "name": "Action found and returned successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "actionId",
+                      "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"actionId\\\":12345,\\\"title\\\":\\\"Review supplier compliance documentation\\\",\\\"description\\\":\\\"Please review the compliance documentation provided by Acme Corporation\\\",\\\"type\\\":{\\\"id\\\":5,\\\"displayName\\\":\\\"Incident Review\\\"},\\\"status\\\":{\\\"id\\\":2,\\\"title\\\":\\\"In Progress\\\",\\\"state\\\":\\\"InProgress\\\"},\\\"target\\\":{\\\"id\\\":102006215,\\\"name\\\":\\\"Acme Corporation\\\"},\\\"assignees\\\":[{\\\"id\\\":100,\\\"name\\\":\\\"John Doe\\\",\\\"email\\\":\\\"john.doe@example.com\\\"}],\\\"teams\\\":[{\\\"id\\\":10,\\\"name\\\":\\\"Compliance Team\\\"}],\\\"creator\\\":{\\\"id\\\":99,\\\"name\\\":\\\"Alice Manager\\\",\\\"email\\\":\\\"alice.manager@example.com\\\"},\\\"dueDate\\\":1735689599.000000000,\\\"createdAt\\\":1705314600.000000000,\\\"updatedAt\\\":1705761900.000000000,\\\"mainItem\\\":{\\\"id\\\":1001,\\\"type\\\":\\\"Alert\\\",\\\"entityId\\\":5001},\\\"attachmentItems\\\":[]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c418c5c-004f-4702-90c1-47988937edc7",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "actionId",
+                      "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36558b93-d30f-4099-a352-d5a0a2a7f21e",
+              "name": "404 Not Found - The action with the specified actionId was not found or is not accessible to your organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "actionId",
+                      "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Action not found for actionId 12345\",\n  \"solution\": \"Verify the actionId and ensure it belongs to your organization. Use GET /public/v1/actions to list all accessible actions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7bbf874-9d55-49d3-9d74-a84a841a3f70",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "actionId",
+                      "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94de5202-e879-4e93-9c1a-759ccbd488f7",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    ":actionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "actionId",
+                      "description": "(Required) Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0745be59-115d-4506-b850-41ea713ebe13",
+          "name": "List action types",
+          "request": {
+            "name": "List action types",
+            "description": {
+              "content": "\nRetrieves a list of all action types available for your organization.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types\n```\n\n**Response Format:**\nReturns all action types accessible to your organization. Each action type includes:\n- `id` - Internal action type identifier\n- `displayName` - Human-readable name for display in UI\n\n**Filtering:**\nAction types are automatically filtered to show only those:\n- Available for your organization\n- Not excluded for your user/role\n- Marked as public\n\n**Use Cases:**\n- Discover available action types for dropdown/select UI components\n- Display action type information in user interfaces\n- Find valid `typeId` values for filtering actions (`GET /public/v1/actions?typeIds=...`)\n\n**Related Operations:**\n- `GET /public/v1/actions/types/{typeId}` - Get details for a specific action type\n- `GET /public/v1/actions?typeIds={typeId}` - Filter actions by type ID\n\n**Required Permission:** `access_public_actions`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "actions",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1a450562-1fd6-46f5-a674-036fc04c0cf6",
+              "name": "Successfully retrieved action types",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":5,\\\"displayName\\\":\\\"Incident Review\\\"},{\\\"id\\\":6,\\\"displayName\\\":\\\"Self Assessment Request\\\"},{\\\"id\\\":7,\\\"displayName\\\":\\\"Code of Conduct Review\\\"}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1b51bf1-63a3-4d06-930e-d6ca1af5feec",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a1edafa-1a57-4d30-82c6-36ded1f38c82",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f2c2e59-cc29-4616-95ec-c57796b332f8",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8738aefe-fd26-45ab-a317-5a82fb2c0536",
+          "name": "Get action type by ID",
+          "request": {
+            "name": "Get action type by ID",
+            "description": {
+              "content": "\nRetrieves detailed information about a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types/5\n```\n\n**Response Format:**\nReturns the action type details including ID and display name.\n\n**Use Cases:**\n- Display action type information in detail views\n- Check if a specific action type is available for your organization\n\n**Related Operations:**\n- `GET /public/v1/actions/types` - List all available action types\n- `GET /public/v1/actions?typeIds={typeId}` - Filter actions by this type ID\n\n**Required Permission:** `access_public_actions`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "actions",
+                "types",
+                ":typeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "typeId",
+                  "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8f689032-80c3-4862-8d57-0da2ae81a14d",
+              "name": "Action type found and returned successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types",
+                    ":typeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "typeId",
+                      "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"id\\\":5,\\\"displayName\\\":\\\"Incident Review\\\"}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f2f6a51-c64f-4789-837d-d17903110761",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types",
+                    ":typeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "typeId",
+                      "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64ea7554-1a4f-4b9a-8d32-cc053c4768f5",
+              "name": "404 Not Found - The action type with the specified ID was not found or is not accessible to your organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types",
+                    ":typeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "typeId",
+                      "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Action type with id 999 is not found or is not accessible\",\n  \"solution\": \"Verify the typeId and ensure it belongs to your organization. Use GET /public/v1/actions/types to list all accessible action types.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05d91330-093c-414b-a201-344973e2b51c",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types",
+                    ":typeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "typeId",
+                      "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cede5d42-e064-4c65-b1e4-7bedf1be8297",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "types",
+                    ":typeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "typeId",
+                      "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b200c44e-3e9d-40d5-9596-e7e848d07bef",
+          "name": "List action statuses for type",
+          "request": {
+            "name": "List action statuses for type",
+            "description": {
+              "content": "\nRetrieves a list of action statuses that are valid for a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/statuses?typeId=5\n```\n\n**Response Format:**\nReturns only the statuses that are valid for the specified action type. This is essential for:\n- Building type-specific status selection UI components\n- Understanding which statuses can be assigned to actions of a specific type\n\n**Status Transitions:**\nEach action type has a defined set of valid statuses.\n\n**Use Cases:**\n- Discover valid statuses for a specific action type\n- Build dynamic UI that only shows valid statuses for each action type\n\n**Finding Action Type IDs:**\nUse `GET /public/v1/actions/types` to find valid `typeId` values.\n\n**Related Operations:**\n- `GET /public/v1/actions/types` - List all available action types\n- `GET /public/v1/actions/statuses` - List all statuses (not filtered by type)\n\n**Required Permission:** `access_public_actions`\n        ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "actions",
+                "statuses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "typeId",
+                  "value": "<integer>",
+                  "description": "(Required) Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "651ddffd-4da5-4928-8003-e66fedffb6fc",
+              "name": "Successfully retrieved action statuses for the specified type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "typeId",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"[{\\\"id\\\":1,\\\"title\\\":\\\"Planned\\\",\\\"state\\\":\\\"Planned\\\"},{\\\"id\\\":2,\\\"title\\\":\\\"In Progress\\\",\\\"state\\\":\\\"InProgress\\\"},{\\\"id\\\":3,\\\"title\\\":\\\"Completed\\\",\\\"state\\\":\\\"Completed\\\"},{\\\"id\\\":4,\\\"title\\\":\\\"Aborted\\\",\\\"state\\\":\\\"Aborted\\\"}]\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f1d62f2-f14f-47fb-891e-064edab651cb",
+              "name": "403 Forbidden - Authentication or authorization failure. This status code is returned when: (1) the request lacks valid authentication credentials (missing or invalid X-Auth-Token header), or (2) the authenticated user does not have the required permission to access this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "typeId",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"loggedIn\\\": true,\\n        \\\"code\\\": \\\"access_denied\\\",\\n        \\\"message\\\": \\\"Access denied: you don't have necessary permissions to access this resource\\\",\\n        \\\"solution\\\": \\\"Contact support for appropriate permissions\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b3418cf-0b18-4794-bb7f-fd6e87171928",
+              "name": "404 Not Found - The action type with the specified ID was not found or is not accessible to your organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "typeId",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"resource_not_found\",\n  \"message\": \"Action type with id 999 is not found or is not accessible\",\n  \"solution\": \"Verify the typeId and ensure it belongs to your organization. Use GET /public/v1/actions/types to list all accessible action types.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4edcb80b-dae7-4d17-930c-861183524403",
+              "name": "429 Too Many Requests - API rate limit exceeded. The request has been rejected because the rate limit for this endpoint has been exceeded. Default rate limits: GET requests - 100 per 10 seconds, 500 per minute; POST/PUT/PATCH/DELETE requests - 20 per 10 seconds, 100 per minute. For increased access, please contact customer success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "typeId",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"error\\\": \\\"API rate limit exceeded\\\",\\n        \\\"message\\\": \\\"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\\\",\\n        \\\"requestLimit\\\": 100,\\n        \\\"requestCount\\\": 100,\\n        \\\"limits\\\": [\\n            {\\n                \\\"requestLimit\\\": 100,\\n                \\\"timeInSeconds\\\": 10\\n            },\\n            {\\n                \\\"requestLimit\\\": 500,\\n                \\\"timeInSeconds\\\": 60\\n            }\\n        ],\\n        \\\"currentTime\\\": \\\"2026-01-15T10:30:00\\\",\\n        \\\"nextResetAt\\\": \\\"2026-01-15T10:30:10\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3034c4eb-5f4c-466a-888a-712e4e65642a",
+              "name": "500 Internal Server Error - An unexpected error occurred on the server. The request may or may not have been processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "actions",
+                    "statuses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "typeId",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n        \\\"code\\\": \\\"internal_error\\\",\\n        \\\"message\\\": \\\"An unexpected error occurred\\\",\\n        \\\"solution\\\": \\\"Please try again later or contact support\\\"\\n    }\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prewave.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "00e27491-3bb8-4fbe-aa70-63355df497f7",
+    "name": "Public Prewave Actions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documentation of the Public Prewave API.\n\n## What's New\n\n### Q1 2026 — Supplier Management, User Management, Actions and Feed\n\nThis quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.\n\n- **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.\n- **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.\n- ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).\n\n📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**\n\n### Q2 2026 — Supplier Screening and External Scores\n\nWe have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.\n\n- **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.\n- **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.\n- **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.\n\n📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**\n\n### Q3 2026 — Scores Webhooks\n\nTo support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.\n\n- **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier's score updates, so you can drive immediate mitigation responses without polling the API.\n- **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.\n- **Note:** Schemas and behaviors are subject to refinement prior to general availability.\n\nDocumentation updates will be provided prior to release.\n\n### Q4 2026 — Feed V2\n\nWe are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).\n\n- **Availability:** Details will be announced before release.\n- **Note:** Schemas and behaviors are subject to refinement prior to the official release.\n\nDocumentation updates will be provided prior to release.\n\n---\n\n## Authentication\nPrewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each\nendpoint needs present as a http header.\n\nTo pass the token in a request, simply add it as a header-parameter with\n* key = X-Auth-Token\n* value = api-token\n\nSee an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef\n```\ncurl --request GET \\\n--url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \\\n--header 'X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef'\n```\n\n---\n\n## Manage API Tokens\n\nBefore you can obtain your API token, you'll need the credentials for your API user. These credentials will be\nsent to you as part of the company-onboarding. If you haven't got your credentials yet, please reach out to\nyour sales-contact at Prewave or contact us via info@prewave.ai\n\nTo generate an API Token, navigate to https://www.prewave.com/management/api and log in with the\ncredentials of your API user. Then click at the button \"Create New\" and use your new api-token authentication as a header parameter.\n\nYou can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.\nAPI tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.\n\n---\n\n## Default Rate Limits\n\nWe have two types of default rate limits. For increased access, please contact customer success.\n\n| Type                              | Requests per 10 seconds | Requests per Minute |\n|-----------------------------------|-------------------------|---------------------|\n| GET requests                      | 100                     | 500                 |\n| POST, PUT, PATCH, DELETE requests | 20                      | 100                 |\n\n",
+      "type": "text/plain"
+    }
+  }
+}

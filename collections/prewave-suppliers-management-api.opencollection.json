@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Suppliers - Management API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Suppliers - Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update target data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/data",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "prewave",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "10422185",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUpdate spend data and Code of Conduct status for the specified target.\n\n**Required Permission**: `update_supplier_data`\n    "
+        },
+        {
+          "info": {
+            "name": "Bulk fetch detailed target information by target IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/target/targets/bulk-fetch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fetch detailed information for multiple targets at once, including name, supplier identifiers, and other target details.\nThis endpoint supports both Prewave internal target IDs and foreign system mappings for maximum flexibility.\n\n**Required Permission**: `access_public_target`\n\n**Performance impact**: Medium (depends on batch size)\n\n**Use cases**:\n- Get target details for multiple suppliers at once\n- Resolve foreign system IDs to Prewave target information\n- Bulk data synchronization and integr"
+        },
+        {
+          "info": {
+            "name": "Get detailed information about a target.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "prewave",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "10422185",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              }
+            ]
+          },
+          "docs": "\nRetrieve detailed information about a target identified by system ID and target ID.\n\n**Required Permission**: `access_public_target`\n\n**Performance impact**: Low\n    "
+        },
+        {
+          "info": {
+            "name": "Get the parents of the target as a list.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/target/:systemId/:targetId/parents",
+            "params": [
+              {
+                "name": "systemId",
+                "value": "prewave",
+                "type": "path",
+                "description": "The system ID is an identifier to determine from which the targetId might originate from. Supported systemIds are \"prewave\", \"customer\", \"supplier\", \"own\"."
+              },
+              {
+                "name": "targetId",
+                "value": "10422185",
+                "type": "path",
+                "description": "The target ID can be the target's prewaveId or an external id (edge number) representing the site in another system."
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "\nRetrieve parent targets for the specified target.\n\n**Required Permission**: `access_public_target_parents`\n\n**Performance impact**: Low\n    "
+        },
+        {
+          "info": {
+            "name": "Get all suppliers of the customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/suppliers",
+            "params": [
+              {
+                "name": "hasNumber",
+                "value": "",
+                "type": "query",
+                "description": "If true, only suppliers that have at least one Supplier Information Number are returned. If false, only suppliers that do not have a Supplier Information Number are returned. If not provided, all suppliers are returned."
+              },
+              {
+                "name": "pageable",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n---\n\n## Migration Required\n\nThis endpoint has been replaced by the v2 Supplier Management API. Please migrate to the new endpoints:\n\n### Replacement Endpoints\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/suppliers` | `GET /public/v2/suppliers/sites` | List all suppliers |\n| `GET /public/v1/target/prewave/{targetId}` | `GET /public/v2/supplier"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

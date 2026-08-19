@@ -1,0 +1,297 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions EUDR - Customers - Products API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "EUDR - Customers - Products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update an existing outbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/outbound/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "The ID of the product."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUpdate an existing outbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Update an existing inbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/inbound/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "The ID of the product."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nUpdate an existing inbound product's information.\n\nAll product fields in the payload can be updated; changes are persisted immediately.\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Get a list of outbound products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/outbound",
+            "params": [
+              {
+                "name": "ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter by product IDs. When set, other filters are ignored."
+              },
+              {
+                "name": "q",
+                "value": "soy oil",
+                "type": "query",
+                "description": "Full text search query for outbound product names, references or linked inbound product names, references or suppliers."
+              },
+              {
+                "name": "page",
+                "value": "0",
+                "type": "query",
+                "description": "Page number (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "10",
+                "type": "query",
+                "description": "Page size"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a paginated list of outbound products for EUDR compliance.\n\nOutbound products are products that your organization sells or distributes.\nEach item includes linked inbound product IDs when BOM relationships exist.\n\n**Use Cases**:\n- List all outbound products\n- Filter products by various criteria\n- Export product data for compliance reporting\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required per"
+        },
+        {
+          "info": {
+            "name": "Create a new outbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/outbound",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new outbound product for EUDR compliance.\n\nOutbound products represent products that your organization sells or distributes.\nProvide at least `name` and `hsCode`; add `scientificName` and `reference` when available.\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Connect inbound products to an outbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/outbound/:productId/inbound",
+            "params": [
+              {
+                "name": "productId",
+                "value": "401",
+                "type": "path",
+                "description": "The ID of the outbound product."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nLink one or more inbound products to an outbound product.\n\nThese relationships are used for EUDR compliance tracking and origin request management.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        "
+        },
+        {
+          "info": {
+            "name": "Get a list of inbound products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/inbound",
+            "params": [
+              {
+                "name": "ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter by product IDs. When set, other filters are ignored."
+              },
+              {
+                "name": "q",
+                "value": "soy oil",
+                "type": "query",
+                "description": "Full text search query for product names, suppliers  or product references."
+              },
+              {
+                "name": "refs",
+                "value": "Ref123,Ref456",
+                "type": "query",
+                "description": "Filter by product references."
+              },
+              {
+                "name": "las",
+                "value": "Negligible,NotRequired",
+                "type": "query",
+                "description": "Filter by legality assessment status."
+              },
+              {
+                "name": "dfs",
+                "value": "Negligible,NotRequired",
+                "type": "query",
+                "description": "Filter by DF status."
+              },
+              {
+                "name": "dd",
+                "value": "Blocked,Allowed,WaitingForOrigins,Draft",
+                "type": "query",
+                "description": "Filter by DDS status."
+              },
+              {
+                "name": "os",
+                "value": "Active",
+                "type": "query",
+                "description": "Filter by origin status."
+              },
+              {
+                "name": "ors",
+                "value": "Requested,Answered",
+                "type": "query",
+                "description": "Filter by origin request status."
+              },
+              {
+                "name": "orso",
+                "value": "in",
+                "type": "query",
+                "description": "Operator for origin request status filtering. Can be used in combination with 'ors' parameter."
+              },
+              {
+                "name": "sccas",
+                "value": "Pending,Derisked",
+                "type": "query",
+                "description": "Filter by SCCA status."
+              },
+              {
+                "name": "includeOrigins",
+                "value": "false",
+                "type": "query",
+                "description": "Url encoded query parameter for controlling if origins will be included in the response. It allows lighter response in case they are not needed."
+              },
+              {
+                "name": "page",
+                "value": "0",
+                "type": "query",
+                "description": "Page number (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "10",
+                "type": "query",
+                "description": "Page size"
+              }
+            ]
+          },
+          "docs": "\nRetrieve a paginated list of inbound products for EUDR compliance.\n\nInbound products are products that your organization receives from suppliers.\nUse `includeOrigins=true` (default) to include origin information on each product.\n\n**Use Cases**:\n- List all inbound products\n- Filter products by various criteria\n- Review supplier, DDS status, and origin data per product\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control paginat"
+        },
+        {
+          "info": {
+            "name": "Create a new inbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/inbound",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new inbound product for EUDR compliance.\n\nInbound products represent products that your organization receives from suppliers.\nProvide `name`, `hsCode`, and `supplierId` at minimum.\n\n**Required permission:** `access_public_products`\n        "
+        },
+        {
+          "info": {
+            "name": "Deactivate a product and its origins",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/:productId",
+            "params": [
+              {
+                "name": "productId",
+                "value": "301",
+                "type": "path",
+                "description": "The ID of the product."
+              }
+            ]
+          },
+          "docs": "\nDeactivate a product and its associated origins.\n\nOnce deactivated, the product is no longer available for active use in EUDR compliance workflows.\n\n**Required permission:** `access_public_products` and `DELETE` on the product\n        "
+        },
+        {
+          "info": {
+            "name": "Disconnect an inbound product from an outbound product",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/eudr/customers/products/outbound/:outboundProductId/inbound/:inboundProductId",
+            "params": [
+              {
+                "name": "outboundProductId",
+                "value": "401",
+                "type": "path",
+                "description": "The ID of the outbound product."
+              },
+              {
+                "name": "inboundProductId",
+                "value": "201",
+                "type": "path",
+                "description": "The ID of the inbound product."
+              }
+            ]
+          },
+          "docs": "\nRemove the link between an inbound product and an outbound product.\n\nThe products themselves are not deleted — only the BOM relationship is removed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the outbound product\n        "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

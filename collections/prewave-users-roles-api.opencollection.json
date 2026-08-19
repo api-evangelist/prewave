@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Users - Roles API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users - Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve roles assigned to a specific user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/users/:userId/roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4523345",
+                "type": "path",
+                "description": "The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve all roles currently assigned to a specific user.\n\n### Use Cases\n- **Security Audits**: Verify that users only have the permissions necessary for their current function.\n- **Troubleshooting**: Check if a user's lack of access to a feature is due to missing roles.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n### Getting User ID\n- To find users and their numerical IDs, use the Users Management API:\n  - `GET /public/v1/users` - Retrieve all users with "
+        },
+        {
+          "info": {
+            "name": "Assign new roles to a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/users/:userId/roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4523345",
+                "type": "path",
+                "description": "The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n### Overview\nAssign one or more roles to an existing user.\n\n### Use Cases\n- **Privilege Escalation**: Grant a user additional management permissions.\n- **Onboarding**: Finalize a user's access setup by adding specific functional roles.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n### Getting User ID\n- To find users and their numerical IDs, use the Users Management API:\n  - `GET /public/v1/users` - Retrieve all users with their `id` field.\n- The `id` field in the user re"
+        },
+        {
+          "info": {
+            "name": "List all available role definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/users/roles/available"
+          },
+          "docs": "\n### Overview\nRetrieve a list of all role names that can be assigned to users within your organization.\n\n### Use Cases\n- **Discovery**: Find out which roles are valid for assignment before calling the Add Roles endpoint.\n- **UI Population**: Populate a dropdown in your internal management tool with valid role names and descriptions.\n\n### Why Use This?\nUse this endpoint to discover valid role identifiers before assigning them. This ensures you only use roles that are active and compatible with yo"
+        },
+        {
+          "info": {
+            "name": "Revoke a specific role from a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v1/users/:userId/roles/:roleName",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4523345",
+                "type": "path",
+                "description": "The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`."
+              },
+              {
+                "name": "roleName",
+                "value": "ROLE_USER_MANAGER",
+                "type": "path",
+                "description": "The exact internal name of the role to remove. Discover valid names via the [Available Roles](#operations-Users_-_Roles-getAvailableRoles) endpoint."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRevoke a specific role from an existing user.\n\n### Use Cases\n- **Access Reduction**: Downgrade a user's permissions when they move to a different team or department.\n- **Security**: Remove access that is no longer required as part of the principle of least privilege.\n\n### Identification\n- **userId**: Numerical identifier of the user.\n- **roleName**: The exact string identifier of the role (e.g., `ROLE_USER_MANAGER`).\n\n### Getting User ID\n- To find users and their numerical IDs, use"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

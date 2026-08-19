@@ -1,0 +1,154 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Suppliers - Connection Contacts API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Suppliers - Connection Contacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find supplier connection contacts by identifier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/connection-contacts",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. If not provided, matches IDs with any source or without a source. Applies to all provided ID parameters."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve all connection contacts for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).\n\nConnection contacts are contact persons associated with suppliers that can be used for communication and relationship management. This endpoint returns contacts that are accessible to your organization.\n\n### Search Behavior\n- Provide at least one identifier parameter.\n- The identifiers must resolve to **exactly one** supplier.\n- If multiple suppliers "
+        },
+        {
+          "info": {
+            "name": "Create connection contact for a supplier by identifier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/suppliers/connection-contacts",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. If not provided, matches IDs with any source or without a source. Applies to all provided ID parameters."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n### Overview\nCreate a new connection contact for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).\n\nThis endpoint allows you to add contact persons to suppliers for relationship management. If your organization is not yet connected to the identified target, it will be automatically connected as a supplier.\n\n### Auto-Connection Logic\n- If the identified target is not yet connected to your organization, an edge of type 'Supplier' will be created automa"
+        },
+        {
+          "info": {
+            "name": "Get a connection contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/connection-contacts/:contactId",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "42",
+                "type": "path",
+                "description": "Unique identifier of the connection contact. You can obtain this ID from the list endpoint (GET) or from the creation response (POST)."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve a connection contact by its unique Prewave identifier.\n\n### Identification\nThe `{contactId}` is a unique numerical identifier of the connection contact.\n\n### Getting contactId\n- From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.\n- From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.\n\n### Required Permission\n`access_public_suppliers` and `access_public_conn_contacts`\n     "
+        },
+        {
+          "info": {
+            "name": "Delete a connection contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/suppliers/connection-contacts/:contactId",
+            "params": [
+              {
+                "name": "contactId",
+                "value": "42",
+                "type": "path",
+                "description": "Unique identifier of the connection contact. You can obtain this ID from the list endpoint (GET) or from the creation response (POST)."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nDelete a connection contact by its unique Prewave identifier.\n\n### Identification\nThe `{contactId}` is a unique numerical identifier of the connection contact.\n\n### Getting contactId\n- From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.\n- From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.\n\n### Required Permission\n`access_public_suppliers` and `access_public_mng_conn_contacts`\n   "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,371 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Suppliers - Sites API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Suppliers - Sites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ]
+          },
+          "docs": "\nRetrieve all supplier sites accessible to the authenticated user with pagination support.\n\nThis endpoint returns a list of supplier sites (physical locations/branches with addresses), not site-groups (general company owners). Each site represents a specific physical location where the supplier operates.\n\n**Related Endpoints:**\n- To find suppliers by specific identifiers, use `GET /public/v2/suppliers/sites/find-by-identifier`.\n- To create a new supplier, use `POST /public/v2/suppliers/sites`.\n-"
+        },
+        {
+          "info": {
+            "name": "Create a new supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new supplier with the specified properties.\n\nThe supplier will be created and automatically added to the user's supplier connections.\nAll required fields must be provided and will be validated.\n\n**Asynchronous Processing:**\n- Supplier creation is an asynchronous process that may take a few hours to complete.\n- The endpoint returns immediately with a `202 Accepted` status and a UUID for tracking.\n- The `202 Accepted` status indicates that the request has been accepted for processing but"
+        },
+        {
+          "info": {
+            "name": "Deactivate a supplier by identifier",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. Applies to supplierId, customerId, and ownId (not prewaveId)."
+              }
+            ]
+          },
+          "docs": "\nDeactivate (disconnect) a supplier from your organization using any identifier (supplier ID, customer ID, own site ID, or Prewave ID).\n\nThis unified endpoint allows you to deactivate suppliers using any type of identifier. You can search by one or more ID types, but **exactly one supplier must be found** for the deletion to proceed.\n\n**Related Endpoints:**\n- To find suppliers by identifier before deactivating, use `GET /public/v2/suppliers/sites/find-by-identifier`.\n- To create a new supplier, "
+        },
+        {
+          "info": {
+            "name": "Get validation status for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/validation",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. If not provided, matches IDs with any source or without a source. Applies to all provided ID parameters."
+              }
+            ]
+          },
+          "docs": "\nRetrieve the status of the **most recent** validation request for a supplier site, using the same identifier query parameters as `GET /public/v2/suppliers/sites/find-by-identifier`.\n\n**Resolution:**\n- At least one of `supplierId`, `customerId`, `ownId`, or `prewaveId` must be provided.\n- **Exactly one** supplier must match (same rules as `DELETE /public/v2/suppliers/sites` and `POST /public/v2/suppliers/sites/validation`). If multiple suppliers match, `400` is returned.\n- The response reflects "
+        },
+        {
+          "info": {
+            "name": "Request validation for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/validation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nRequest a validation (discovery) for an existing supplier site. Validation is the process of verifying and enriching a supplier's data. Both endpoints (`POST` and `GET`) require the `ACCESS_PUBLIC_VALIDATION_REQUEST` permission.\n\n**Request body shape (OpenAPI schema: `PublicValidationRequestPayloadV2`):**\n```json\n{\n  \"identifier\": {\n    \"supplierId\": null,\n    \"customerId\": null,\n    \"ownId\": null,\n    \"prewaveId\": 102006215,\n    \"source\": null\n  }\n}\n```\n- **`identifier`:** At least one of `sup"
+        },
+        {
+          "info": {
+            "name": "Get screening status for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/screening",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. If not provided, matches IDs with any source or without a source. Applies to all provided ID parameters."
+              }
+            ]
+          },
+          "docs": "\nRetrieve the status of the **most recent** screening request for a supplier site, using the same identifier query parameters as `GET /public/v2/suppliers/sites/find-by-identifier`.\n\nThis applies to screening started via `POST /public/v2/suppliers/sites/screening` and, once the target exists, to screening that was scheduled with `screeningPeriodInYears` on `POST /public/v2/suppliers/sites` (batch post-init screening is still attributed to your user when it runs).\n\n**Resolution:**\n- At least one "
+        },
+        {
+          "info": {
+            "name": "Request screening for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/screening",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nRequest a history screening for a supplier site. The body has two parts: `identifier` (how to find the site) and `options` (screening parameters).\n\n**Request body shape (OpenAPI schema: `PublicScreeningRequestPayloadV2`):**\n```json\n{\n  \"identifier\": {\n    \"supplierId\": null,\n    \"customerId\": null,\n    \"ownId\": null,\n    \"prewaveId\": 102006215,\n    \"source\": null\n  },\n  \"options\": {\n    \"periodInYears\": 2\n  }\n}\n```\n- **`identifier`:** At least one of `supplierId`, `customerId`, `ownId`, or `pre"
+        },
+        {
+          "info": {
+            "name": "Create an identifier for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/identifiers",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. Applies to supplierId, customerId, and ownId (not prewaveId)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\nCreate a new identifier (supplier ID, customer ID, or own site ID) for a supplier using flexible search parameters.\n\n**Related Endpoints:**\n- To find suppliers by identifier, use `GET /public/v2/suppliers/sites/find-by-identifier`.\n- To delete an identifier, use `DELETE /public/v2/suppliers/sites/identifiers`.\n- To create a new supplier, use `POST /public/v2/suppliers/sites`.\n- To get all suppliers, use `GET /public/v2/suppliers/sites`.\n\n**How It Works:**\n\n1. **Find the Supplier**: Provide one "
+        },
+        {
+          "info": {
+            "name": "Delete an identifier for a supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/identifiers",
+            "params": [
+              {
+                "name": "type",
+                "value": "SUPPLIER_ID",
+                "type": "query",
+                "description": "The type of identifier to delete"
+              },
+              {
+                "name": "id",
+                "value": "SUP-12345",
+                "type": "query",
+                "description": "The identifier value to delete"
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system of the identifier to delete. If not provided, will search for identifiers without a source or with the default source."
+              }
+            ]
+          },
+          "docs": "\nDelete an identifier (supplier ID, customer ID, or own site ID) from all suppliers in your organization.\n\n**Related Endpoints:**\n- To create an identifier, use `POST /public/v2/suppliers/sites/identifiers`.\n- To find suppliers by identifier, use `GET /public/v2/suppliers/sites/find-by-identifier`.\n- To get all suppliers, use `GET /public/v2/suppliers/sites`.\n\n**How It Works:**\n\nThis endpoint deletes a specific identifier across all suppliers that have it. You specify:\n- `type`: The type of iden"
+        },
+        {
+          "info": {
+            "name": "Get pending suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/pending",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "query",
+                "description": "Optional UUID to filter pending suppliers. When provided, only the pending supplier with the matching UUID will be returned."
+              }
+            ]
+          },
+          "docs": "\nRetrieve all pending supplier creation requests for the authenticated user.\n\nThis endpoint returns supplier creation requests that are currently pending processing. These are suppliers that have been submitted via `POST /public/v2/suppliers/sites` (create supplier endpoint) but have not yet been processed and made available in the main suppliers list.\n\n**Status Values:**\n- `New`: The supplier creation request has been submitted and is awaiting initial processing\n- `Pending`: The supplier creati"
+        },
+        {
+          "info": {
+            "name": "Find suppliers by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v2/suppliers/sites/find-by-identifier",
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "SAP-12345",
+                "type": "query",
+                "description": "Supplier ID to search for. Can be combined with customerId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "customerId",
+                "value": "CRM-67890",
+                "type": "query",
+                "description": "Customer ID to search for. Can be combined with supplierId, ownId, and/or prewaveId."
+              },
+              {
+                "name": "ownId",
+                "value": "OWN-SITE-01",
+                "type": "query",
+                "description": "Own site ID to search for. Can be combined with supplierId, customerId, and/or prewaveId."
+              },
+              {
+                "name": "prewaveId",
+                "value": "12345",
+                "type": "query",
+                "description": "Prewave ID to search for. Can be combined with supplierId, customerId, and/or ownId."
+              },
+              {
+                "name": "source",
+                "value": "SAP",
+                "type": "query",
+                "description": "Optional source system to filter by. If not provided, matches IDs with any source or without a source. Applies to all provided ID parameters."
+              }
+            ]
+          },
+          "docs": "\nFind suppliers/sites by their identifiers (supplier ID, customer ID, own site ID, or Prewave ID) with optional source.\n\nThis unified endpoint allows you to search for suppliers using any type of identifier from external systems (e.g., SAP, Coupa, DNB). You can search by one or more ID types simultaneously.\n\n**Related Endpoints:**\n- To get all suppliers with pagination, use `GET /public/v2/suppliers/sites`.\n- To create a new supplier, use `POST /public/v2/suppliers/sites`.\n- To create an identif"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,203 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Actions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List actions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/actions",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              },
+              {
+                "name": "typeIds",
+                "value": "5",
+                "type": "query",
+                "description": "Filter by action type IDs. Multiple values: comma-separated (e.g., '5,6,7') or repeated parameter. Use GET /public/v1/actions/types to find valid type IDs."
+              },
+              {
+                "name": "statusIds",
+                "value": "2",
+                "type": "query",
+                "description": "Filter by status IDs. Multiple values: comma-separated (e.g., '2,3') or repeated parameter. Use GET /public/v1/actions/statuses to find valid status IDs."
+              },
+              {
+                "name": "targetIds",
+                "value": "102006215",
+                "type": "query",
+                "description": "Filter by target/supplier IDs (prewaveTargetId). Multiple values: comma-separated (e.g., '102006215,102006216') or repeated parameter"
+              },
+              {
+                "name": "assigneeIds",
+                "value": "100",
+                "type": "query",
+                "description": "Filter by assignee user IDs. Multiple values: comma-separated (e.g., '100,101') or repeated parameter"
+              },
+              {
+                "name": "teamIds",
+                "value": "10",
+                "type": "query",
+                "description": "Filter by team IDs. Multiple values: comma-separated (e.g., '10,11') or repeated parameter"
+              },
+              {
+                "name": "organizationIds",
+                "value": "500001",
+                "type": "query",
+                "description": "Filter by organization/site group IDs. Multiple values: comma-separated (e.g., '500001') or repeated parameter"
+              },
+              {
+                "name": "dueDateFrom",
+                "value": "2024-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Due date from (ISO 8601 timestamp)"
+              },
+              {
+                "name": "dueDateTo",
+                "value": "2024-12-31T23:59:59Z",
+                "type": "query",
+                "description": "Due date to (ISO 8601 timestamp)"
+              },
+              {
+                "name": "createdAtFrom",
+                "value": "2024-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Creation date from (ISO 8601 timestamp)"
+              },
+              {
+                "name": "createdAtTo",
+                "value": "2024-01-31T23:59:59Z",
+                "type": "query",
+                "description": "Creation date to (ISO 8601 timestamp)"
+              },
+              {
+                "name": "updatedAtFrom",
+                "value": "2024-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Update date from (ISO 8601 timestamp)"
+              },
+              {
+                "name": "updatedAtTo",
+                "value": "2024-01-31T23:59:59Z",
+                "type": "query",
+                "description": "Update date to (ISO 8601 timestamp)"
+              },
+              {
+                "name": "query",
+                "value": "compliance",
+                "type": "query",
+                "description": "Text search in title/description (case-insensitive)"
+              }
+            ]
+          },
+          "docs": "\nRetrieves a paginated list of actions with filtering and sorting capabilities.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions?page=0&size=20\n```\n\n**Response Format:**\nReturns a lightweight summary view optimized for list/table displays. For complete action details including full descri"
+        },
+        {
+          "info": {
+            "name": "Get action by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/actions/:actionId",
+            "params": [
+              {
+                "name": "actionId",
+                "value": "12345",
+                "type": "path",
+                "description": "Action key (stable identifier). Use GET /public/v1/actions to find action keys."
+              }
+            ]
+          },
+          "docs": "\nRetrieves detailed information about a specific action.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/12345\n```\n\n**Response:**\nReturns comprehensive action details including description, creator, action items, skip information, and attachment metadata.\n\n**Action ID:**\nThe `actionId` i"
+        },
+        {
+          "info": {
+            "name": "List action types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/actions/types"
+          },
+          "docs": "\nRetrieves a list of all action types available for your organization.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types\n```\n\n**Response Format:**\nReturns all action types accessible to your organization. Each action type includes:\n- `id` - Internal action type identifier\n- `displayN"
+        },
+        {
+          "info": {
+            "name": "Get action type by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/actions/types/:typeId",
+            "params": [
+              {
+                "name": "typeId",
+                "value": "5",
+                "type": "path",
+                "description": "Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+              }
+            ]
+          },
+          "docs": "\nRetrieves detailed information about a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types/5\n```\n\n**Response Format:**\nReturns the action type details including ID and display name.\n\n**Use Cases:**\n- Display action type information in detail views\n- Check if a sp"
+        },
+        {
+          "info": {
+            "name": "List action statuses for type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/actions/statuses",
+            "params": [
+              {
+                "name": "typeId",
+                "value": "5",
+                "type": "query",
+                "description": "Action type ID. Use GET /public/v1/actions/types to find action type IDs."
+              }
+            ]
+          },
+          "docs": "\nRetrieves a list of action statuses that are valid for a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/statuses?typeId=5\n```\n\n**Response Format:**\nReturns only the statuses that are valid for the specified action type. This is essential for:\n- Building type-speci"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Prewave Actions Users API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Auth-Token",
+      "value": "{{X-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search and list users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/users",
+            "params": [
+              {
+                "name": "search",
+                "value": "john",
+                "type": "query",
+                "description": "Fuzzy search against **first name**, **last name**, or **email**."
+              },
+              {
+                "name": "active",
+                "value": "true",
+                "type": "query",
+                "description": "Filter by account status. `true` for active users, `false` for deactivated ones."
+              },
+              {
+                "name": "confirmed",
+                "value": "false",
+                "type": "query",
+                "description": "Filter by confirmation status. `true` for users who have verified their email."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              }
+            ]
+          },
+          "docs": "\n### Overview\nRetrieve a comprehensive list of all users within your customer's scope. This endpoint is ideal for auditing, synchronization, or building user-management dashboards.\n\n### Use Cases\n- **Auditing**: Regularly export user lists to verify access levels.\n- **Synchronization**: Keep an external user directory in sync with Prewave.\n- **Management**: Build custom internal dashboards for your organization.\n\n### Filtering\nRefine your results using the following optional parameters:\n- **Sear"
+        },
+        {
+          "info": {
+            "name": "Invite and onboard a new user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prewave.com/public/v1/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n### Overview\nOnboard a new member to your organization. This action triggers an automated invitation email.\n\n### Use Cases\n- **New Employee**: Onboard a new team member with their required access level.\n- **External Partner**: Invite a stakeholder to collaborate with specific roles.\n- **Automation**: Programmatically create users as part of your internal onboarding flow.\n\n### Invitation Lifecycle\n1. **Request**: You provide the user's email and initial configuration.\n2. **Created**: The user ac"
+        },
+        {
+          "info": {
+            "name": "Retrieve detailed user profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prewave.com/public/v1/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4523345",
+                "type": "path",
+                "description": "The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`."
+              }
+            ]
+          },
+          "docs": "\n### Overview\nFetch the complete profile of a specific user. This includes organizational details, active subscriptions (plans), and assigned access controls.\n\n### Use Cases\n- **Profile Inspection**: Verify the current configuration of a specific user.\n- **Pre-Update Check**: Retrieve the current state before performing a partial update.\n- **Identity Verification**: Confirm the email and name associated with a numerical ID.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n##"
+        },
+        {
+          "info": {
+            "name": "Update user profile and status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.prewave.com/public/v1/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4523345",
+                "type": "path",
+                "description": "The unique numerical identifier of the target user. If you do not have this ID, you can find it by searching for the user via `GET /public/v1/users`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n### Overview\nModify profile details, subscription levels, or account status for an existing user.\n\n### Use Cases\n- **Profile Correction**: Correct a user's name or contact details.\n- **Plan Management**: Upgrade or downgrade a user's subscription (e.g., Enterprise vs. Basic).\n- **Status Management**: Activate or deactivate user access.\n- **Access Refinement**: Update team associations.\n\n### Identification\nThe `{userId}` is a unique numerical identifier.\n\n### Getting User ID\n- To find users and "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
