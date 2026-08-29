@@ -3,6 +3,17 @@ info:
   title: Submit an EUDR Due Diligence Statement
   version: 1.0.0
   summary: Register an outbound product, request commodity origins, attach a DDS, and submit it.
+  x-realizes-capability-ids:
+  - BC-130.10
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-130.10
+      capability_name: Regulatory Compliance Management
+      spec: prewave-eudr-customers-dds-api-openapi.yml
+      confidence: 0.7
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: eudrCustomersDdsApi
   url: ../openapi/prewave-eudr-customers-dds-api-openapi.yml

@@ -3,6 +3,17 @@ info:
   title: Onboard and monitor a supplier
   version: 1.0.0
   summary: Create a supplier site, run validation and screening, then read its risk alerts.
+  x-realizes-capability-ids:
+  - BC-510.10
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-510.10
+      capability_name: Supplier Onboarding Management
+      spec: prewave-suppliers-sites-api-openapi.yml
+      confidence: 0.75
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: alertsApi
   url: ../openapi/prewave-alerts-api-openapi.yml
