@@ -1,0 +1,115 @@
+slug: prewave
+provider: Prewave
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 9
+edges:
+- tag: Disruptions
+  spec_file: prewave-disruptions-api-openapi.yml
+  capability_id: BC-520.60
+  capability_id_l1: BC-520
+  capability_name: Supply Chain Risk Management
+  confidence: 0.8
+  evidence: '"findAlerts  Find alerts on disruption map"; schemas DisruptionStatus, PublicAlertDTO, RiskAnalysisType'
+  reason: Retrieves risk-event alerts on a supply-chain disruption map — supply-chain disruption detection
+    and visibility, not IT monitoring or financial-crime alerting. Maps to Supply Chain Risk Management;
+    thin single-operation surface keeps confidence below 0.9.
+- tag: Scores - Externals
+  spec_file: prewave-scores-externals-api-openapi.yml
+  capability_id: BC-510.30
+  capability_id_l1: BC-510
+  capability_name: Supplier Risk Management
+  confidence: 0.78
+  evidence: GET /public/v1/scores/externals  Get external score history for one supplier; POST  Upload
+    external scores for one or more suppliers
+  reason: Operations ingest and retrieve externally sourced risk scores keyed to individual suppliers
+    (PublicExternalTargetScore, PublicExtScoreHistory). This is supplier risk scoring and monitoring,
+    i.e. Supplier Risk Management, not generic analytics.
+- tag: Scores - Target
+  spec_file: prewave-scores-target-api-openapi.yml
+  capability_id: BC-510.30
+  capability_id_l1: BC-510
+  capability_name: Supplier Risk Management
+  confidence: 0.78
+  evidence: Returns the target score including the overall score and scores for all infotag-groups; The
+    historical overall-score of the target for the last months
+  reason: Targets here are the monitored supplier entities; the endpoints return overall, component and
+    historical risk scores per target. That is assessment and monitoring of risk on suppliers — Supplier
+    Risk Management. Some chance a grader would prefer enterprise risk assessment, so not maximal confidence.
+- tag: Suppliers - Sites
+  spec_file: prewave-suppliers-sites-api-openapi.yml
+  capability_id: BC-510.10
+  capability_id_l1: BC-510
+  capability_name: Supplier Onboarding Management
+  confidence: 0.75
+  evidence: POST /public/v2/suppliers/sites  Create a new supplier; POST /public/v2/suppliers/sites/validation  Request
+    validation for a supplier; POST /public/v2/suppliers/sites/screening  Request screening for a supplier
+  reason: Creation, identifier assignment, validation and screening requests for suppliers map onto Supplier
+    Onboarding Management (qualification, registration, due diligence). Screening also touches supplier
+    risk, hence not top confidence.
+- tag: Collections - Network
+  spec_file: prewave-collections-network-api-openapi.yml
+  capability_id: BC-520.60
+  capability_id_l1: BC-520
+  capability_name: Supply Chain Risk Management
+  confidence: 0.7
+  evidence: '"Get tree graph for a collection", "Get commodity graph for a collection"; schemas Connection,
+    EdgeImpactData, DisruptionStatus, RiskAnalysisType'
+  reason: Returns the multi-tier supply-network graph (tree and commodity graphs) with edge impact and
+    disruption status, i.e. supply-chain network visibility for risk purposes, matching Supply Chain Risk
+    Management (disruption, visibility, resilience). Confidence held at moderate because the endpoints
+    are read-only graph retrieval and could also be read as supplier risk mapping.
+- tag: Collections - Tier-N
+  spec_file: prewave-collections-tier-n-api-openapi.yml
+  capability_id: BC-520.60
+  capability_id_l1: BC-520
+  capability_name: Supply Chain Risk Management
+  confidence: 0.7
+  evidence: '"findSupplierGraph  Get a tree-structure of suppliers of the given collection", "getTierNCollectionGraph  Get
+    tier-n collection supplier graph"; PublicTierNCollectionGraphShipment'
+  reason: Delivers sub-tier (tier-n) supplier graphs derived from shipment data, which is the multi-tier
+    supply-chain transparency/visibility capability the vendor describes. Mapped to Supply Chain Risk
+    Management (visibility, resilience); part of the surface is settings configuration, hence moderate
+    confidence.
+- tag: EUDR - Customers - DDS
+  spec_file: prewave-eudr-customers-dds-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: '"submitCustomerDDS  Submit a customer DDS to TracesNT system", "withdrawCustomerDDS  Withdraw
+    a submitted customer DDS"'
+  reason: Lifecycle and regulatory submission of Due Diligence Statements to the EU TRACES NT system under
+    the EU Deforestation Regulation — filing to satisfy a sector regulation, i.e. Regulatory Compliance
+    Management. Could alternatively be read as sustainable-sourcing evidence, so confidence is moderate.
+- tag: Exposure
+  spec_file: prewave-exposure-api-openapi.yml
+  capability_id: BC-520.60
+  capability_id_l1: BC-520
+  capability_name: Supply Chain Risk Management
+  confidence: 0.7
+  evidence: '"getExposureAnalysisById  Get exposure analysis info by exposure analysis id", "getExposureGraphByTargetId  Get
+    exposure graph by target id"; schemas ExposureFilter, CommodityFilter, RiskAnalysisType, PredictionData'
+  reason: Computes and returns supply-network exposure analyses and graphs filtered by commodity, with
+    risk-analysis and prediction structures — assessment of supply-chain exposure/disruption risk. Mapped
+    to Supply Chain Risk Management; alpha-stage, graph-retrieval framing keeps confidence moderate.
+- tag: Suppliers - Management
+  spec_file: prewave-suppliers-management-api-openapi.yml
+  capability_id: BC-510
+  capability_id_l1: BC-510
+  capability_name: Supplier Management
+  confidence: 0.7
+  evidence: GET /public/v1/suppliers  suppliers  Get all suppliers of the customer; PUT /public/v1/target/{systemId}/{targetId}/data  Update
+    target data
+  reason: Operations read and maintain the customer's supplier (target) records, including parent relationships
+    and bulk detail fetch. This is supplier record management; the L2 split between onboarding/master
+    data is not determinable from the summaries.

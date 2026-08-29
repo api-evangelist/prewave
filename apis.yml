@@ -404,6 +404,9 @@ apis:
   - type: APIReference
     url: https://dev.prewave.com
 common:
+- type: CapabilityMap
+  url: capabilities/prewave-capability-edges.yml
+  name: Prewave Business Capability Map
 - type: Overlay
   url: overlays/prewave-openapi-overlay.yaml
 - type: Website
