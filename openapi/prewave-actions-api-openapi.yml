@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Public Prewave Actions API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,54 @@ paths:
       tags:
       - Actions
       summary: List actions
-      description: "\nRetrieves a paginated list of actions with filtering and sorting capabilities.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions?page=0&size=20\n```\n\n**Response Format:**\nReturns a lightweight summary view optimized for list/table displays. For complete action details including full descriptions, action items, and attachment metadata, use `GET /public/v1/actions/{actionId}`.\n\n**Filtering:**\nAll filter parameters are optional and can be combined. Multiple values are passed as comma-separated lists (e.g., `typeIds=5,6,7`).\n\n**Finding Valid Filter Values:**\n- **Target IDs**: Use `GET /public/v2/suppliers/sites` to get valid `prewaveTargetId` values\n- **Action Types & Status IDs**: Use [`GET /public/v1/actions/types`](#/Actions/listActionTypes) to get valid action type IDs and [`GET /public/v1/actions/statuses`](#/Actions/listActionStatuses) to get valid status IDs\n- **Team IDs & User IDs**: Available in your organization's team and user management interfaces\n\n**Performance:**\n- Response payloads are optimized for list views (60-80% smaller than full detail responses)\n- Using multiple filters may impact query performance\n- Text search (`query` parameter) searches across title and description fields\n- Date range filters are inclusive (both endpoints included)\n- Use pagination (`page`, `size`) to limit response size for large result sets\n\n**Required Permission:** `access_public_actions`\n        "
+      description: 'Retrieves a paginated list of actions with filtering and sorting capabilities.
+
+
+        For detailed information about actions, action types, and action statuses, see the Prewave Help Center.
+
+
+        **Quick Start:**
+
+        ```
+
+        GET /public/v1/actions?page=0&size=20
+
+        ```
+
+
+        **Response Format:**
+
+        Returns a lightweight summary view optimized for list/table displays. For complete action details including full descriptions, action items, and attachment metadata, use `GET /public/v1/actions/{actionId}`.
+
+
+        **Filtering:**
+
+        All filter parameters are optional and can be combined. Multiple values are passed as comma-separated lists (e.g., `typeIds=5,6,7`).
+
+
+        **Finding Valid Filter Values:**
+
+        - **Target IDs**: Use `GET /public/v2/suppliers/sites` to get valid `prewaveTargetId` values
+
+        - **Action Types & Status IDs**: Use `GET /public/v1/actions/types` to get valid action type IDs and `GET /public/v1/actions/statuses` to get valid status IDs
+
+        - **Team IDs & User IDs**: Available in your organization''s team and user management interfaces
+
+
+        **Performance:**
+
+        - Response payloads are optimized for list views (60-80% smaller than full detail responses)
+
+        - Using multiple filters may impact query performance
+
+        - Text search (`query` parameter) searches across title and description fields
+
+        - Date range filters are inclusive (both endpoints included)
+
+        - Use pagination (`page`, `size`) to limit response size for large result sets
+
+
+        **Required Permission:** `access_public_actions`'
       operationId: listActions
       parameters:
       - name: page
@@ -350,7 +258,46 @@ paths:
       tags:
       - Actions
       summary: Get action by ID
-      description: "\nRetrieves detailed information about a specific action.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/12345\n```\n\n**Response:**\nReturns comprehensive action details including description, creator, action items, skip information, and attachment metadata.\n\n**Action ID:**\nThe `actionId` is a **stable identifier** that uniquely identifies an action. Once created, it never changes, making it safe for:\n- Storing in your database for future reference\n- Using in URLs and bookmarks\n- External references and integrations\n\nTo find action IDs, use [`GET /public/v1/actions`](#/Actions/listActions) to list all actions and retrieve their `actionId` values.\n\n**Related Operations:**\n- `GET /public/v1/actions` - List all actions (to find actions by other criteria)\n\n**Required Permission:** `access_public_actions`\n        "
+      description: 'Retrieves detailed information about a specific action.
+
+
+        For detailed information about actions, action types, and action statuses, see the Prewave Help Center.
+
+
+        **Quick Start:**
+
+        ```
+
+        GET /public/v1/actions/12345
+
+        ```
+
+
+        **Response:**
+
+        Returns comprehensive action details including description, creator, action items, skip information, and attachment metadata.
+
+
+        **Action ID:**
+
+        The `actionId` is a **stable identifier** that uniquely identifies an action. Once created, it never changes, making it safe for:
+
+        - Storing in your database for future reference
+
+        - Using in URLs and bookmarks
+
+        - External references and integrations
+
+
+        To find action IDs, use `GET /public/v1/actions` to list all actions and retrieve their `actionId` values.
+
+
+        **Related Operations:**
+
+        - `GET /public/v1/actions` - List all actions (to find actions by other criteria)
+
+
+        **Required Permission:** `access_public_actions`'
       operationId: getActionById
       parameters:
       - name: actionId
@@ -421,7 +368,58 @@ paths:
       tags:
       - Actions
       summary: List action types
-      description: "\nRetrieves a list of all action types available for your organization.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types\n```\n\n**Response Format:**\nReturns all action types accessible to your organization. Each action type includes:\n- `id` - Internal action type identifier\n- `displayName` - Human-readable name for display in UI\n\n**Filtering:**\nAction types are automatically filtered to show only those:\n- Available for your organization\n- Not excluded for your user/role\n- Marked as public\n\n**Use Cases:**\n- Discover available action types for dropdown/select UI components\n- Display action type information in user interfaces\n- Find valid `typeId` values for filtering actions (`GET /public/v1/actions?typeIds=...`)\n\n**Related Operations:**\n- `GET /public/v1/actions/types/{typeId}` - Get details for a specific action type\n- `GET /public/v1/actions?typeIds={typeId}` - Filter actions by type ID\n\n**Required Permission:** `access_public_actions`\n        "
+      description: 'Retrieves a list of all action types available for your organization.
+
+
+        For detailed information about actions, action types, and action statuses, see the Prewave Help Center.
+
+
+        **Quick Start:**
+
+        ```
+
+        GET /public/v1/actions/types
+
+        ```
+
+
+        **Response Format:**
+
+        Returns all action types accessible to your organization. Each action type includes:
+
+        - `id` - Internal action type identifier
+
+        - `displayName` - Human-readable name for display in UI
+
+
+        **Filtering:**
+
+        Action types are automatically filtered to show only those:
+
+        - Available for your organization
+
+        - Not excluded for your user/role
+
+        - Marked as public
+
+
+        **Use Cases:**
+
+        - Discover available action types for dropdown/select UI components
+
+        - Display action type information in user interfaces
+
+        - Find valid `typeId` values for filtering actions (`GET /public/v1/actions?typeIds=...`)
+
+
+        **Related Operations:**
+
+        - `GET /public/v1/actions/types/{typeId}` - Get details for a specific action type
+
+        - `GET /public/v1/actions?typeIds={typeId}` - Filter actions by type ID
+
+
+        **Required Permission:** `access_public_actions`'
       operationId: listActionTypes
       responses:
         '200':
@@ -471,7 +469,41 @@ paths:
       tags:
       - Actions
       summary: Get action type by ID
-      description: "\nRetrieves detailed information about a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/types/5\n```\n\n**Response Format:**\nReturns the action type details including ID and display name.\n\n**Use Cases:**\n- Display action type information in detail views\n- Check if a specific action type is available for your organization\n\n**Related Operations:**\n- `GET /public/v1/actions/types` - List all available action types\n- `GET /public/v1/actions?typeIds={typeId}` - Filter actions by this type ID\n\n**Required Permission:** `access_public_actions`\n        "
+      description: 'Retrieves detailed information about a specific action type.
+
+
+        For detailed information about actions, action types, and action statuses, see the Prewave Help Center.
+
+
+        **Quick Start:**
+
+        ```
+
+        GET /public/v1/actions/types/5
+
+        ```
+
+
+        **Response Format:**
+
+        Returns the action type details including ID and display name.
+
+
+        **Use Cases:**
+
+        - Display action type information in detail views
+
+        - Check if a specific action type is available for your organization
+
+
+        **Related Operations:**
+
+        - `GET /public/v1/actions/types` - List all available action types
+
+        - `GET /public/v1/actions?typeIds={typeId}` - Filter actions by this type ID
+
+
+        **Required Permission:** `access_public_actions`'
       operationId: getActionTypeById
       parameters:
       - name: typeId
@@ -542,7 +574,55 @@ paths:
       tags:
       - Actions
       summary: List action statuses for type
-      description: "\nRetrieves a list of action statuses that are valid for a specific action type.\n\nFor detailed information about actions, action types, and action statuses, see the [Prewave Help Center](https://help.prewave.com/en/articles/258470-action-planner-action-dashboard-action-status-and-action-types).\n\n**Quick Start:**\n```\nGET /public/v1/actions/statuses?typeId=5\n```\n\n**Response Format:**\nReturns only the statuses that are valid for the specified action type. This is essential for:\n- Building type-specific status selection UI components\n- Understanding which statuses can be assigned to actions of a specific type\n\n**Status Transitions:**\nEach action type has a defined set of valid statuses.\n\n**Use Cases:**\n- Discover valid statuses for a specific action type\n- Build dynamic UI that only shows valid statuses for each action type\n\n**Finding Action Type IDs:**\nUse `GET /public/v1/actions/types` to find valid `typeId` values.\n\n**Related Operations:**\n- `GET /public/v1/actions/types` - List all available action types\n- `GET /public/v1/actions/statuses` - List all statuses (not filtered by type)\n\n**Required Permission:** `access_public_actions`\n        "
+      description: 'Retrieves a list of action statuses that are valid for a specific action type.
+
+
+        For detailed information about actions, action types, and action statuses, see the Prewave Help Center.
+
+
+        **Quick Start:**
+
+        ```
+
+        GET /public/v1/actions/statuses?typeId=5
+
+        ```
+
+
+        **Response Format:**
+
+        Returns only the statuses that are valid for the specified action type. This is essential for:
+
+        - Building type-specific status selection UI components
+
+        - Understanding which statuses can be assigned to actions of a specific type
+
+
+        **Status Transitions:**
+
+        Each action type has a defined set of valid statuses.
+
+
+        **Use Cases:**
+
+        - Discover valid statuses for a specific action type
+
+        - Build dynamic UI that only shows valid statuses for each action type
+
+
+        **Finding Action Type IDs:**
+
+        Use `GET /public/v1/actions/types` to find valid `typeId` values.
+
+
+        **Related Operations:**
+
+        - `GET /public/v1/actions/types` - List all available action types
+
+        - `GET /public/v1/actions/statuses` - List all statuses (not filtered by type)
+
+
+        **Required Permission:** `access_public_actions`'
       operationId: listActionStatusesForType
       parameters:
       - name: typeId
@@ -622,6 +702,145 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+          example: null
+        sorted:
+          type: boolean
+          example: null
+        unsorted:
+          type: boolean
+          example: null
+      example: null
+    PublicActionDTO:
+      required:
+      - actionId
+      - assignees
+      - createdAt
+      - status
+      - target
+      - teams
+      - title
+      - type
+      - updatedAt
+      type: object
+      properties:
+        actionId:
+          type: integer
+          description: Public-facing action key
+          format: int32
+          example: 12345
+        title:
+          type: string
+          description: Action title
+          example: Review supplier compliance
+        type:
+          $ref: '#/components/schemas/PublicActionTypeDTO'
+        status:
+          $ref: '#/components/schemas/PublicActionStatusDTO'
+        target:
+          $ref: '#/components/schemas/PublicTargetRef'
+        assignees:
+          type: array
+          description: Assigned users
+          items:
+            $ref: '#/components/schemas/PublicUserRefDTO'
+          example: null
+        teams:
+          type: array
+          description: Assigned teams
+          items:
+            $ref: '#/components/schemas/PublicTeamRefDTO'
+          example: null
+        organization:
+          allOf:
+          - $ref: '#/components/schemas/PublicTargetRef'
+          example: null
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: Due date (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-12-31T23:59:59Z'
+        createdAt:
+          type: string
+          description: Creation timestamp (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          description: Last update timestamp (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-01-20T14:45:00Z'
+      description: Public API v1 DTO for action list item
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicActionSkipDTO:
+      required:
+      - reason
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Skip reason
+          example: NotApplicable
+        otherText:
+          type:
+          - string
+          - 'null'
+          description: Additional reason text
+          example: Supplier no longer active
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: End date for skip (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-12-31T23:59:59Z'
+      description: Action skip information
+      example: null
     PublicUserRefDTO:
       required:
       - id
@@ -638,11 +857,94 @@ components:
           description: User full name
           example: John Doe
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: User email
-          nullable: true
           example: john.doe@example.com
       description: User reference information
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicActionTypeDTO:
+      required:
+      - displayName
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Action type ID
+          format: int32
+          example: 5
+        displayName:
+          type: string
+          description: Action type display name
+          example: Incident Review
+      description: Action type information
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          example: null
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          example: null
+        sort:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
       example: null
     PublicActionItemDTO:
       required:
@@ -660,10 +962,11 @@ components:
           description: Item type
           example: Alert
         entityId:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Entity ID this item references
           format: int32
-          nullable: true
           example: 5001
       description: Action item information
       example: null
@@ -709,9 +1012,10 @@ components:
           description: Action title
           example: Review supplier compliance
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Action description
-          nullable: true
           example: Please review the compliance documentation
         type:
           $ref: '#/components/schemas/PublicActionTypeDTO'
@@ -732,17 +1036,17 @@ components:
             $ref: '#/components/schemas/PublicTeamRefDTO'
           example: null
         organization:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicTargetRef'
           example: null
         creator:
           $ref: '#/components/schemas/PublicUserRefDTO'
         dueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Due date (ISO 8601 timestamp)
           format: date-time
-          nullable: true
           example: '2024-12-31T23:59:59Z'
         createdAt:
           type: string
@@ -755,12 +1059,10 @@ components:
           format: date-time
           example: '2024-01-20T14:45:00Z'
         mainItem:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicActionItemDTO'
           example: null
         executionItem:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicActionItemDTO'
           example: null
@@ -771,61 +1073,32 @@ components:
             $ref: '#/components/schemas/PublicActionItemDTO'
           example: null
         skipInfo:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicActionSkipDTO'
           example: null
       description: Public API v1 DTO for detailed action response
       example: null
-    AccessDeniedErrorDTO:
+    PublicActionStatusDTO:
       required:
-      - code
-      - loggedIn
-      - message
+      - id
+      - state
+      - title
       type: object
       properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
+        id:
+          type: integer
+          description: Status ID
+          format: int32
+          example: 3
+        title:
           type: string
-          nullable: true
-          example: null
-        code:
+          description: Status title
+          example: In Progress
+        state:
           type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    PublicActionSkipDTO:
-      required:
-      - reason
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Skip reason
-          example: NotApplicable
-        otherText:
-          type: string
-          description: Additional reason text
-          nullable: true
-          example: Supplier no longer active
-        endDate:
-          type: string
-          description: End date for skip (ISO 8601 timestamp)
-          format: date-time
-          nullable: true
-          example: '2024-12-31T23:59:59Z'
-      description: Action skip information
+          description: Status state
+          example: InProgress
+      description: Action status information
       example: null
     ErrorDTO:
       required:
@@ -842,11 +1115,29 @@ components:
           description: Error message
           example: null
         solution:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Possible solution to the error
-          nullable: true
           example: null
       description: Error response
+      example: null
+    PublicTargetRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave Target ID
+          format: int32
+          example: 102006215
+        name:
+          type: string
+          description: Target name
+          example: Acme Corporation
+      description: Reference to a target (supplier/site)
       example: null
     SchemaPublicActionDTO:
       type: object
@@ -890,214 +1181,8 @@ components:
           type: boolean
           example: null
       example: null
-    PublicActionDTO:
-      required:
-      - actionId
-      - assignees
-      - createdAt
-      - status
-      - target
-      - teams
-      - title
-      - type
-      - updatedAt
-      type: object
-      properties:
-        actionId:
-          type: integer
-          description: Public-facing action key
-          format: int32
-          example: 12345
-        title:
-          type: string
-          description: Action title
-          example: Review supplier compliance
-        type:
-          $ref: '#/components/schemas/PublicActionTypeDTO'
-        status:
-          $ref: '#/components/schemas/PublicActionStatusDTO'
-        target:
-          $ref: '#/components/schemas/PublicTargetRef'
-        assignees:
-          type: array
-          description: Assigned users
-          items:
-            $ref: '#/components/schemas/PublicUserRefDTO'
-          example: null
-        teams:
-          type: array
-          description: Assigned teams
-          items:
-            $ref: '#/components/schemas/PublicTeamRefDTO'
-          example: null
-        organization:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicTargetRef'
-          example: null
-        dueDate:
-          type: string
-          description: Due date (ISO 8601 timestamp)
-          format: date-time
-          nullable: true
-          example: '2024-12-31T23:59:59Z'
-        createdAt:
-          type: string
-          description: Creation timestamp (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-01-15T10:30:00Z'
-        updatedAt:
-          type: string
-          description: Last update timestamp (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-01-20T14:45:00Z'
-      description: Public API v1 DTO for action list item
-      example: null
-    PublicActionTypeDTO:
-      required:
-      - displayName
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Action type ID
-          format: int32
-          example: 5
-        displayName:
-          type: string
-          description: Action type display name
-          example: Incident Review
-      description: Action type information
-      example: null
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-          example: null
-        sorted:
-          type: boolean
-          example: null
-        unsorted:
-          type: boolean
-          example: null
-      example: null
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-          example: null
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-          example: null
-        sort:
-          type: array
-          items:
-            type: string
-            example: null
-          example: null
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    PublicActionStatusDTO:
-      required:
-      - id
-      - state
-      - title
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Status ID
-          format: int32
-          example: 3
-        title:
-          type: string
-          description: Status title
-          example: In Progress
-        state:
-          type: string
-          description: Status state
-          example: InProgress
-      description: Action status information
-      example: null
-    PublicTargetRef:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave Target ID
-          format: int32
-          example: 102006215
-        name:
-          type: string
-          description: Target name
-          example: Acme Corporation
-      description: Reference to a target (supplier/site)
-      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

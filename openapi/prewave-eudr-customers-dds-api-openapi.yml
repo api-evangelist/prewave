@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions EUDR - Customers - DDS API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave EUDR - Customers - DDS API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,21 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Update a customer DDS for an inbound product
-      description: "\nUpdates an existing customer Due Diligence Statement (DDS) identified by `ddsId`.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Update compliance statements\n- Modify due diligence information\n- Correct DDS data before submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      description: 'Updates an existing customer Due Diligence Statement (DDS) identified by `ddsId`.
+
+        The payload must contain all required customer, activity, and product measure fields.
+
+
+        **Use Cases**:
+
+        - Update compliance statements
+
+        - Modify due diligence information
+
+        - Correct DDS data before submission
+
+
+        **Required permission:** `access_public_products` and `UPDATE` on the DDS'
       operationId: updateCustomerDDS
       parameters:
       - name: ddsId
@@ -262,7 +137,17 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Delete a customer DDS before successful submission
-      description: "\nDelete a customer Due Diligence Statement (DDS) while it is new or in submission-error state.\n\nThis endpoint permanently removes the specified customer DDS.\nIt cannot be used for DDS entries that have already been submitted or made available.\nUse with caution as this operation cannot be undone.\n\n**Required permission:** `access_public_products` and access to the DDS\n        "
+      description: 'Delete a customer Due Diligence Statement (DDS) while it is new or in submission-error state.
+
+
+        This endpoint permanently removes the specified customer DDS.
+
+        It cannot be used for DDS entries that have already been submitted or made available.
+
+        Use with caution as this operation cannot be undone.
+
+
+        **Required permission:** `access_public_products` and access to the DDS'
       operationId: deleteCustomerDDS
       parameters:
       - name: ddsId
@@ -349,7 +234,21 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Submit a customer DDS to TracesNT system
-      description: "\nSubmits the specified customer Due Diligence Statement (DDS) to the TracesNT system for regulatory processing.\nReturns `202 Accepted` if the request is successfully queued for processing.\n\n**Use Cases**:\n- Submit DDS to regulatory system\n- Complete compliance workflow\n- Register DDS with authorities\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      description: 'Submits the specified customer Due Diligence Statement (DDS) to the TracesNT system for regulatory processing.
+
+        Returns `202 Accepted` if the request is successfully queued for processing.
+
+
+        **Use Cases**:
+
+        - Submit DDS to regulatory system
+
+        - Complete compliance workflow
+
+        - Register DDS with authorities
+
+
+        **Required permission:** `access_public_products` and `UPDATE` on the DDS'
       operationId: submitCustomerDDS
       parameters:
       - name: ddsId
@@ -436,7 +335,21 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Fetch customer DDS entries for a product
-      description: "\nReturns all customer Due Diligence Statements (DDS) associated with the given inbound or outbound product.\nOnly accessible if the caller has read permission for the product.\n\n**Use Cases**:\n- View all customer DDS entries for a product\n- Track compliance statements\n- Review DDS history and submission status\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+      description: 'Returns all customer Due Diligence Statements (DDS) associated with the given inbound or outbound product.
+
+        Only accessible if the caller has read permission for the product.
+
+
+        **Use Cases**:
+
+        - View all customer DDS entries for a product
+
+        - Track compliance statements
+
+        - Review DDS history and submission status
+
+
+        **Required permission:** `access_public_products` and `READ` on the product'
       operationId: findCustomerDDS
       parameters:
       - name: productId
@@ -498,7 +411,21 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Create a new customer DDS for an inbound product
-      description: "\nCreates a new customer Due Diligence Statement (DDS) for the specified inbound product.\nThe payload must contain all required customer, activity, and product measure fields.\n\n**Use Cases**:\n- Create compliance statements for products\n- Document due diligence information\n- Prepare DDS data before regulatory submission\n\n**Required permission:** `access_public_products` and `UPDATE` on the product\n        "
+      description: 'Creates a new customer Due Diligence Statement (DDS) for the specified inbound product.
+
+        The payload must contain all required customer, activity, and product measure fields.
+
+
+        **Use Cases**:
+
+        - Create compliance statements for products
+
+        - Document due diligence information
+
+        - Prepare DDS data before regulatory submission
+
+
+        **Required permission:** `access_public_products` and `UPDATE` on the product'
       operationId: addCustomerDDS
       parameters:
       - name: productId
@@ -605,7 +532,14 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Withdraw a submitted customer DDS
-      description: "\nWithdraws a customer Due Diligence Statement (DDS) from the regulatory system.\nThe DDS must be in `Available` state, and the withdrawal must be requested no later than 72 hours after it becomes available.\nThe withdrawal is completed synchronously; a successful response means both the regulatory withdrawal and local state update completed.\n\n**Required permission:** `access_public_products` and `UPDATE` on the DDS\n        "
+      description: 'Withdraws a customer Due Diligence Statement (DDS) from the regulatory system.
+
+        The DDS must be in `Available` state, and the withdrawal must be requested no later than 72 hours after it becomes available.
+
+        The withdrawal is completed synchronously; a successful response means both the regulatory withdrawal and local state update completed.
+
+
+        **Required permission:** `access_public_products` and `UPDATE` on the DDS'
       operationId: withdrawCustomerDDS
       parameters:
       - name: ddsId
@@ -713,7 +647,24 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Fetch supplier DDS entries for a product
-      description: "\nRetrieve all supplier Due Diligence Statements (DDS) associated with the specified product.\n\nThis endpoint returns all supplier DDS entries that have been submitted for the product,\nincluding origin information provided by suppliers in response to origin requests.\n\n**Use Cases**:\n- View supplier DDS responses for a product\n- Track supplier compliance data\n- Review origin information from suppliers\n\n**Required permission:** `access_public_products` and `READ` on the product\n        "
+      description: 'Retrieve all supplier Due Diligence Statements (DDS) associated with the specified product.
+
+
+        This endpoint returns all supplier DDS entries that have been submitted for the product,
+
+        including origin information provided by suppliers in response to origin requests.
+
+
+        **Use Cases**:
+
+        - View supplier DDS responses for a product
+
+        - Track supplier compliance data
+
+        - Review origin information from suppliers
+
+
+        **Required permission:** `access_public_products` and `READ` on the product'
       operationId: findSupplierDDS
       parameters:
       - name: productId
@@ -776,7 +727,24 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Retrieve all available DDS units along with their associated HS codes
-      description: "\nRetrieve reference data for all available DDS units and their associated HS codes.\n\nThis endpoint returns all DDS units that can be used when creating or updating DDS entries,\nalong with the HS codes that are associated with each unit.\n\n**Use Cases**:\n- Get DDS unit reference data before creating a DDS\n- Populate unit selection dropdowns\n- Validate unit and HS code associations\n\n**Required permission:** `access_public_products`\n        "
+      description: 'Retrieve reference data for all available DDS units and their associated HS codes.
+
+
+        This endpoint returns all DDS units that can be used when creating or updating DDS entries,
+
+        along with the HS codes that are associated with each unit.
+
+
+        **Use Cases**:
+
+        - Get DDS unit reference data before creating a DDS
+
+        - Populate unit selection dropdowns
+
+        - Validate unit and HS code associations
+
+
+        **Required permission:** `access_public_products`'
       operationId: findDDSUnits
       responses:
         '200':
@@ -827,7 +795,24 @@ paths:
       tags:
       - EUDR - Customers - DDS
       summary: Delete a supplier DDS and its origins
-      description: "\nDelete a supplier Due Diligence Statement (DDS) and all its associated origin information.\n\nThis endpoint permanently removes the specified supplier DDS and all related origin data.\nUse with caution as this operation cannot be undone.\n\n**Use Cases**:\n- Remove incorrect supplier DDS entries\n- Clean up duplicate DDS data\n- Delete outdated compliance statements\n\n**Required permission:** `access_public_products` and `DELETE` on the DDS\n        "
+      description: 'Delete a supplier Due Diligence Statement (DDS) and all its associated origin information.
+
+
+        This endpoint permanently removes the specified supplier DDS and all related origin data.
+
+        Use with caution as this operation cannot be undone.
+
+
+        **Use Cases**:
+
+        - Remove incorrect supplier DDS entries
+
+        - Clean up duplicate DDS data
+
+        - Delete outdated compliance statements
+
+
+        **Required permission:** `access_public_products` and `DELETE` on the DDS'
       operationId: deleteSupplierDDS
       parameters:
       - name: ddsId
@@ -872,6 +857,470 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
+    PublicFeatureCollection:
+      required:
+      - features
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFeature'
+          example: null
+      description: Plot of the origin
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicDDSReference:
+      required:
+      - ddsId
+      - reference
+      - type
+      type: object
+      properties:
+        ddsId:
+          type: integer
+          description: Referenced DDS ID
+          format: int32
+          example: 456
+        reference:
+          type: string
+          description: Reference label
+          example: PO-2025-001
+        type:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: List of DDS references
+      example: null
+    PublicDFCheckResult:
+      required:
+      - outdated
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Public deforestation status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+        outdated:
+          type: boolean
+          description: Is the check outdated
+          example: null
+      description: Deforestation check result status
+      example: null
+    PublicProducer:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Target ID of the producer
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Producer name
+          example: null
+        geo:
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+        countryId:
+          type:
+          - integer
+          - 'null'
+          description: Country ID of the producer
+          format: int32
+          example: null
+      description: Producer of the origin
+      example: null
+    Score:
+      required:
+      - risk
+      - value
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+          example: null
+        risk:
+          type: string
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicDDSUnit:
+      required:
+      - hsCodes
+      - unit
+      type: object
+      properties:
+        unit:
+          type: string
+          description: Unit of the DDS (e.g., NAR, MTQ, KSD)
+          example: NAR
+        hsCodes:
+          $ref: '#/components/schemas/PublicProductHSCode'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the DDS unit
+          example: Cubic meter of sawn wood
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicCountry:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Country ID
+          format: int32
+          example: 14
+        name:
+          type: string
+          description: Country name
+          example: Austria
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type:
+          - string
+          - 'null'
+          description: Country code in form of ISO 3166-1 alpha-2 code
+          example: AT
+        bounds:
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+      description: Country where the economic activity is taking place
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicMinimalOriginRequest:
+      required:
+      - createdAt
+      - id
+      - references
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin request ID
+          format: int32
+          example: null
+        createdAt:
+          type: string
+          description: Creation date of the origin request
+          format: date-time
+          example: null
+        status:
+          type: string
+          description: Public origin request status.
+          enum:
+          - Requested
+          - Answered
+          - Rejected
+          - Canceled
+          - Delayed
+          example: null
+        references:
+          type: array
+          description: References date of the origin request
+          items:
+            $ref: '#/components/schemas/PublicOriginRequestRef'
+          example: null
+      description: Origin request references
+      example: null
+    PublicCustomerDDSPayload:
+      required:
+      - activityType
+      - customerCity
+      - customerCountryId
+      - customerName
+      - customerPostalCode
+      - customerStreet
+      - eoriNumber
+      - netWeightInKg
+      type: object
+      properties:
+        eoriNumber:
+          type: string
+          description: EORI number of the customer.
+          example: EU123456789
+        customerName:
+          type: string
+          description: Name of the customer as stated on the DDS.
+          example: Acme GmbH
+        customerCity:
+          type: string
+          description: City of the customer as stated on the DDS.
+          example: Vienna
+        customerPostalCode:
+          type: string
+          description: Postal code of the customer as stated on the DDS.
+          example: '1010'
+        customerStreet:
+          type: string
+          description: Street of the customer as stated on the DDS.
+          example: Main Street 1
+        customerCountryId:
+          type: integer
+          description: ID of the customer's home country (see /countries endpoint).
+          format: int32
+          example: 14
+        operatorType:
+          type:
+          - string
+          - 'null'
+          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
+          example: RepresentativeOperator
+          deprecated: true
+          enum:
+          - RepresentativeOperator
+          - Operator
+          - Trader
+        activityType:
+          type: string
+          description: Public activity type.
+          example: Import
+          enum:
+          - Import
+          - Export
+          - Domestic
+          - Trade
+        countryOfActivityId:
+          type:
+          - integer
+          - 'null'
+          description: ID of the country where the economic activity is taking place (see /countries endpoint).
+          format: int32
+          example: 14
+        originRequestReferences:
+          allOf:
+          - $ref: '#/components/schemas/PublicDDSReferencePayload'
+          example: null
+        netWeightInKg:
+          type: number
+          description: Net weight of the product in kg.
+          example: 100.5
+        quantity:
+          type:
+          - number
+          - 'null'
+          description: Product quantity (additional info).
+          example: 10
+        unit:
+          type:
+          - string
+          - 'null'
+          description: Unit of the quantity (e.g. kg, t, m3).
+          example: kg
+      description: Payload for creating or updating a Customer DDS. Contains all required and optional fields for a customer DDS statement, including references and product measures.
+      example: null
+    PublicProductHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: HS code
+          example: '440799'
+        description:
+          type:
+          - string
+          - 'null'
+          description: HS code description
+          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
+        commodityId:
+          type:
+          - integer
+          - 'null'
+          description: Commodity ID for the HS code
+          format: int32
+          example: 1
+      description: List of HS codes associated with this DDS unit
+      example: null
+    PublicDFCheck:
+      required:
+      - checkDate
+      - deforestedArea
+      - numberOfAlerts
+      - pictures
+      - primaryForestArea
+      type: object
+      properties:
+        checkDate:
+          type: string
+          description: Deforestation check date
+          format: date-time
+          example: null
+        primaryForestArea:
+          type: number
+          description: Available forest area in hectares
+          format: double
+          example: null
+        deforestedArea:
+          type: number
+          description: Deforested area in hectares
+          format: double
+          example: null
+        numberOfAlerts:
+          type: integer
+          description: Number of alerts
+          format: int32
+          example: null
+        pictures:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: null
+          example: null
+      description: Result of deforestation check request
+      example: null
+    PublicPendingDFRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Public deforestation check type.
+          enum:
+          - Basic
+          - Advanced
+          example: null
+      description: Public pending deforestation request details.
+      example: null
+    PublicSubmissionError:
+      required:
+      - code
+      - detail
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        detail:
+          type: string
+          description: Human readable details about the error
+          example: null
+        reasons:
+          type:
+          - array
+          - 'null'
+          description: Detailed reasons about the error, if any
+          items:
+            type: string
+            description: Detailed reasons about the error, if any
+            example: null
+          example: null
+      description: Details about a submission error, if state is SUBMISSION_ERROR
+      example: null
     CodeErrorDTO:
       required:
       - code
@@ -1062,122 +1511,11 @@ components:
           description: Error message
           example: null
         solution:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Possible solution to the error
-          nullable: true
           example: null
-      example: null
-    PublicOrigin:
-      required:
-      - active
-      - country
-      - createdAt
-      - id
-      - plot
-      - plotAreaHa
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Origin ID
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Origin name
-          nullable: true
-          example: null
-        active:
-          type: boolean
-          description: Active status
-          example: null
-        producedAtStart:
-          type: string
-          description: Production start date
-          format: date-time
-          nullable: true
-          example: null
-        producedAtEnd:
-          type: string
-          description: Production end date
-          format: date-time
-          nullable: true
-          example: null
-        producer:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicProducer'
-          example: null
-        country:
-          $ref: '#/components/schemas/PublicCountry'
-        plot:
-          $ref: '#/components/schemas/PublicFeatureCollection'
-        plotAreaHa:
-          type: number
-          description: Plot area in hectares
-          format: double
-          example: null
-        dds:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicProductSupplierDDS'
-          example: null
-        request:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicMinimalOriginRequest'
-          example: null
-        pendingProducerDiscoveryRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicProducerDiscoveryRequest'
-          example: null
-        countryRisk:
-          type: string
-          description: Public EUDR risk.
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          example: null
-        pendingDFRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicPendingDFRequest'
-          example: null
-        dfCheck:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicDFCheck'
-          example: null
-        dfCheckResult:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicDFCheckResult'
-          example: null
-        legalityCheck:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicOriginLegalityCheck'
-          example: null
-        weight:
-          type: number
-          description: Weight, if origin is provided from an origin request with weight
-          nullable: true
-          example: null
-        createdAt:
-          type: string
-          description: Creation date of the origin
-          format: date-time
-          example: null
-        updatedAt:
-          type: string
-          description: Last update date of the origin
-          format: date-time
-          example: null
-      description: List of product's origins
       example: null
     PublicOriginRequestRef:
       required:
@@ -1205,87 +1543,144 @@ components:
           example: null
       description: References date of the origin request
       example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    PublicSubmissionError:
+    PublicOrigin:
       required:
-      - code
-      - detail
+      - active
+      - country
+      - createdAt
+      - id
+      - plot
+      - plotAreaHa
+      - updatedAt
       type: object
       properties:
-        code:
+        id:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
+          type:
+          - string
+          - 'null'
+          description: Origin name
+          example: null
+        active:
+          type: boolean
+          description: Active status
+          example: null
+        producedAtStart:
+          type:
+          - string
+          - 'null'
+          description: Production start date
+          format: date-time
+          example: null
+        producedAtEnd:
+          type:
+          - string
+          - 'null'
+          description: Production end date
+          format: date-time
+          example: null
+        producer:
+          allOf:
+          - $ref: '#/components/schemas/PublicProducer'
+          example: null
+        country:
+          $ref: '#/components/schemas/PublicCountry'
+        plot:
+          $ref: '#/components/schemas/PublicFeatureCollection'
+        plotAreaHa:
+          type: number
+          description: Plot area in hectares
+          format: double
+          example: null
+        dds:
+          allOf:
+          - $ref: '#/components/schemas/PublicProductSupplierDDS'
+          example: null
+        request:
+          allOf:
+          - $ref: '#/components/schemas/PublicMinimalOriginRequest'
+          example: null
+        pendingProducerDiscoveryRequest:
+          allOf:
+          - $ref: '#/components/schemas/PublicProducerDiscoveryRequest'
+          example: null
+        countryRisk:
+          type:
+          - string
+          - 'null'
+          description: Public EUDR risk.
+          enum:
+          - Low
+          - Mid
+          - High
+          example: null
+        pendingDFRequest:
+          allOf:
+          - $ref: '#/components/schemas/PublicPendingDFRequest'
+          example: null
+        dfCheck:
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheck'
+          example: null
+        dfCheckResult:
+          allOf:
+          - $ref: '#/components/schemas/PublicDFCheckResult'
+          example: null
+        legalityCheck:
+          allOf:
+          - $ref: '#/components/schemas/PublicOriginLegalityCheck'
+          example: null
+        weight:
+          type:
+          - number
+          - 'null'
+          description: Weight, if origin is provided from an origin request with weight
+          example: null
+        createdAt:
           type: string
-          description: Error code
+          description: Creation date of the origin
+          format: date-time
           example: null
-        detail:
+        updatedAt:
           type: string
-          description: Human readable details about the error
+          description: Last update date of the origin
+          format: date-time
           example: null
-        reasons:
-          type: array
-          description: Detailed reasons about the error, if any
-          nullable: true
-          items:
-            type: string
-            description: Detailed reasons about the error, if any
-            example: null
-          example: null
-      description: Details about a submission error, if state is SUBMISSION_ERROR
+      description: List of product's origins
       example: null
-    PublicDDSUnit:
+    PublicProducerDiscoveryRequest:
       required:
-      - hsCodes
-      - unit
+      - id
+      - name
+      - originId
       type: object
       properties:
-        unit:
+        id:
+          type: integer
+          description: Producer discovery request ID
+          format: int32
+          example: null
+        originId:
+          type: integer
+          description: Origin ID
+          format: int32
+          example: null
+        name:
           type: string
-          description: Unit of the DDS (e.g., NAR, MTQ, KSD)
-          example: NAR
-        hsCodes:
-          $ref: '#/components/schemas/PublicProductHSCode'
-        description:
-          type: string
-          description: Description of the DDS unit
-          nullable: true
-          example: Cubic meter of sawn wood
+          description: Producer name
+          example: null
+        targetId:
+          type:
+          - integer
+          - 'null'
+          description: Producer Target ID
+          format: int32
+          example: null
+      description: Pending producer discovery request
       example: null
     PublicGeometrySchema:
       required:
@@ -1316,142 +1711,6 @@ components:
           example: null
       description: Geometry plot object
       example: null
-    PublicProductHSCode:
-      required:
-      - code
-      type: object
-      properties:
-        code:
-          type: string
-          description: HS code
-          example: '440799'
-        description:
-          type: string
-          description: HS code description
-          nullable: true
-          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
-        commodityId:
-          type: integer
-          description: Commodity ID for the HS code
-          format: int32
-          nullable: true
-          example: 1
-      description: List of HS codes associated with this DDS unit
-      example: null
-    PublicMinimalOriginRequest:
-      required:
-      - createdAt
-      - id
-      - references
-      - status
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Origin request ID
-          format: int32
-          example: null
-        createdAt:
-          type: string
-          description: Creation date of the origin request
-          format: date-time
-          example: null
-        status:
-          type: string
-          description: Public origin request status.
-          enum:
-          - Requested
-          - Answered
-          - Rejected
-          - Canceled
-          - Delayed
-          example: null
-        references:
-          type: array
-          description: References date of the origin request
-          items:
-            $ref: '#/components/schemas/PublicOriginRequestRef'
-          example: null
-      description: Origin request references
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicCountry:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Country ID
-          format: int32
-          example: 14
-        name:
-          type: string
-          description: Country name
-          example: Austria
-        countryCode:
-          maxLength: 2
-          minLength: 2
-          type: string
-          description: Country code in form of ISO 3166-1 alpha-2 code
-          nullable: true
-          example: AT
-        bounds:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicGeometrySchema'
-          example: null
-      description: Country where the economic activity is taking place
-      example: null
     PublicProductSupplierDDS:
       required:
       - active
@@ -1471,9 +1730,10 @@ components:
           description: Active status
           example: true
         referenceNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Reference number
-          nullable: true
           example: EU-REF-12345
         date:
           type: string
@@ -1489,12 +1749,271 @@ components:
           description: Archived
           example: false
         archiveDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Archive date
           format: date-time
-          nullable: true
           example: null
       description: Supplier DDS
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicFeature:
+      required:
+      - geometry
+      - properties
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/PublicGeometrySchema'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          example: null
+      example: null
+    PublicCustomerDDS:
+      required:
+      - active
+      - activityType
+      - archived
+      - customerCity
+      - customerCountry
+      - customerName
+      - customerPostalCode
+      - customerStreet
+      - date
+      - eoriNumber
+      - hsCode
+      - id
+      - netWeightInKg
+      - operatorType
+      - origins
+      - productDescription
+      - productName
+      - state
+      type: object
+      properties:
+        id:
+          type: integer
+          description: DDS ID
+          format: int32
+          example: null
+        active:
+          type: boolean
+          description: Active status
+          example: null
+        referenceNumber:
+          type:
+          - string
+          - 'null'
+          description: Reference number
+          example: null
+        verificationNumber:
+          type:
+          - string
+          - 'null'
+          description: Verification number
+          example: null
+        date:
+          type: string
+          description: DDS date
+          format: date-time
+          example: null
+        archived:
+          type: boolean
+          description: Archived
+          example: null
+        archiveDate:
+          type:
+          - string
+          - 'null'
+          description: Archive date
+          format: date-time
+          example: null
+        origins:
+          type: array
+          description: List of DDS origins
+          items:
+            $ref: '#/components/schemas/PublicOrigin'
+          example: null
+        eoriNumber:
+          type: string
+          description: EORI number of the customer
+          example: EU123456789
+        customerName:
+          type: string
+          description: Name of the customer as stated on the DDS
+          example: Acme GmbH
+        customerCity:
+          type: string
+          description: City of the customer as stated on the DDS
+          example: Vienna
+        customerPostalCode:
+          type: string
+          description: Postal code of the customer as stated on the DDS
+          example: '1010'
+        customerStreet:
+          type: string
+          description: Street of the customer as stated on the DDS
+          example: Main Street 1
+        customerCountry:
+          $ref: '#/components/schemas/PublicCountry'
+        state:
+          type: string
+          description: Public customer DDS state.
+          example: Available
+          enum:
+          - New
+          - Submitting
+          - Submitted
+          - SubmissionError
+          - Available
+          - Rejected
+          - Cancelled
+          - Withdrawn
+          - Archived
+          - Suspended
+          - Updated
+          - Grouped
+          - Obsolete
+        operatorType:
+          type: string
+          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
+          example: RepresentativeOperator
+          enum:
+          - RepresentativeOperator
+          - Operator
+          - Trader
+        activityType:
+          type: string
+          description: Public activity type.
+          example: Import
+          enum:
+          - Import
+          - Export
+          - Domestic
+          - Trade
+        countryOfActivity:
+          allOf:
+          - $ref: '#/components/schemas/PublicCountry'
+          example: null
+        originRequestReferences:
+          allOf:
+          - $ref: '#/components/schemas/PublicDDSReference'
+          example: null
+        productName:
+          type: string
+          description: Product name label
+          example: Wooden Table
+        productDescription:
+          type: string
+          description: Product description label
+          example: Oak wood table, 2m x 1m
+        netWeightInKg:
+          type: number
+          description: Net Weight in Kg
+          example: 100.5
+        quantity:
+          type:
+          - number
+          - 'null'
+          description: Product quantity (additional info)
+          example: 10
+        unit:
+          type:
+          - string
+          - 'null'
+          description: Quantity unit
+          example: kg
+        hsCode:
+          type: string
+          description: HS code
+          example: '440799'
+        submissionError:
+          allOf:
+          - $ref: '#/components/schemas/PublicSubmissionError'
+          example: null
+      example: null
+    PublicDDSReferencePayload:
+      required:
+      - reference
+      - type
+      type: object
+      properties:
+        reference:
+          type: array
+          description: Reference labels (e.g. purchase order numbers, shipment numbers).
+          example:
+          - PO-2025-001
+          - PO-2025-002
+          items:
+            type: string
+            description: Reference labels (e.g. purchase order numbers, shipment numbers).
+            example: '["PO-2025-001","PO-2025-002"]'
+        type:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: Reference for a DDS statement, including one or more reference labels and the reference type.
+      example: null
+    PublicOriginLegalityCheck:
+      required:
+      - scoreAvail
+      - status
+      type: object
+      properties:
+        score:
+          allOf:
+          - $ref: '#/components/schemas/Score'
+          example: null
+        scoreAvail:
+          type: string
+          description: Public score availability.
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        status:
+          type: string
+          description: Public legality assessment status.
+          enum:
+          - Negligible
+          - NonNegligible
+          - NotRequired
+          - Required
+          example: null
+      description: Legality check result
       example: null
     TracesNtDDSErrorDTO:
       required:
@@ -1600,530 +2119,8 @@ components:
           - risk_analysis_already_monitored
           example: null
       example: null
-    PublicDFCheck:
-      required:
-      - checkDate
-      - deforestedArea
-      - numberOfAlerts
-      - pictures
-      - primaryForestArea
-      type: object
-      properties:
-        checkDate:
-          type: string
-          description: Deforestation check date
-          format: date-time
-          example: null
-        primaryForestArea:
-          type: number
-          description: Available forest area in hectares
-          format: double
-          example: null
-        deforestedArea:
-          type: number
-          description: Deforested area in hectares
-          format: double
-          example: null
-        numberOfAlerts:
-          type: integer
-          description: Number of alerts
-          format: int32
-          example: null
-        pictures:
-          type: array
-          items:
-            type: string
-            format: uuid
-            example: null
-          example: null
-      description: Result of deforestation check request
-      example: null
-    PublicFeature:
-      required:
-      - geometry
-      - properties
-      type: object
-      properties:
-        geometry:
-          $ref: '#/components/schemas/PublicGeometrySchema'
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          example: null
-      example: null
-    PublicDFCheckResult:
-      required:
-      - outdated
-      - status
-      type: object
-      properties:
-        status:
-          type: string
-          description: Public deforestation status.
-          enum:
-          - Negligible
-          - NonNegligible
-          - NotRequired
-          - Required
-          example: null
-        outdated:
-          type: boolean
-          description: Is the check outdated
-          example: null
-      description: Deforestation check result status
-      example: null
-    Score:
-      required:
-      - risk
-      - value
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-          example: null
-        risk:
-          type: string
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      example: null
-    PublicCustomerDDS:
-      required:
-      - active
-      - activityType
-      - archived
-      - customerCity
-      - customerCountry
-      - customerName
-      - customerPostalCode
-      - customerStreet
-      - date
-      - eoriNumber
-      - hsCode
-      - id
-      - netWeightInKg
-      - operatorType
-      - origins
-      - productDescription
-      - productName
-      - state
-      type: object
-      properties:
-        id:
-          type: integer
-          description: DDS ID
-          format: int32
-          example: null
-        active:
-          type: boolean
-          description: Active status
-          example: null
-        referenceNumber:
-          type: string
-          description: Reference number
-          nullable: true
-          example: null
-        verificationNumber:
-          type: string
-          description: Verification number
-          nullable: true
-          example: null
-        date:
-          type: string
-          description: DDS date
-          format: date-time
-          example: null
-        archived:
-          type: boolean
-          description: Archived
-          example: null
-        archiveDate:
-          type: string
-          description: Archive date
-          format: date-time
-          nullable: true
-          example: null
-        origins:
-          type: array
-          description: List of DDS origins
-          items:
-            $ref: '#/components/schemas/PublicOrigin'
-          example: null
-        eoriNumber:
-          type: string
-          description: EORI number of the customer
-          example: EU123456789
-        customerName:
-          type: string
-          description: Name of the customer as stated on the DDS
-          example: Acme GmbH
-        customerCity:
-          type: string
-          description: City of the customer as stated on the DDS
-          example: Vienna
-        customerPostalCode:
-          type: string
-          description: Postal code of the customer as stated on the DDS
-          example: '1010'
-        customerStreet:
-          type: string
-          description: Street of the customer as stated on the DDS
-          example: Main Street 1
-        customerCountry:
-          $ref: '#/components/schemas/PublicCountry'
-        state:
-          type: string
-          description: Public customer DDS state.
-          example: Available
-          enum:
-          - New
-          - Submitting
-          - Submitted
-          - SubmissionError
-          - Available
-          - Rejected
-          - Cancelled
-          - Withdrawn
-          - Archived
-          - Suspended
-          - Updated
-          - Grouped
-          - Obsolete
-        operatorType:
-          type: string
-          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
-          example: RepresentativeOperator
-          enum:
-          - RepresentativeOperator
-          - Operator
-          - Trader
-        activityType:
-          type: string
-          description: Public activity type.
-          example: Import
-          enum:
-          - Import
-          - Export
-          - Domestic
-          - Trade
-        countryOfActivity:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicCountry'
-          example: null
-        originRequestReferences:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicDDSReference'
-          example: null
-        productName:
-          type: string
-          description: Product name label
-          example: Wooden Table
-        productDescription:
-          type: string
-          description: Product description label
-          example: Oak wood table, 2m x 1m
-        netWeightInKg:
-          type: number
-          description: Net Weight in Kg
-          example: 100.5
-        quantity:
-          type: number
-          description: Product quantity (additional info)
-          nullable: true
-          example: 10
-        unit:
-          type: string
-          description: Quantity unit
-          nullable: true
-          example: kg
-        hsCode:
-          type: string
-          description: HS code
-          example: '440799'
-        submissionError:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicSubmissionError'
-          example: null
-      example: null
-    PublicDDSReference:
-      required:
-      - ddsId
-      - reference
-      - type
-      type: object
-      properties:
-        ddsId:
-          type: integer
-          description: Referenced DDS ID
-          format: int32
-          example: 456
-        reference:
-          type: string
-          description: Reference label
-          example: PO-2025-001
-        type:
-          type: string
-          description: Public product reference type.
-          example: PurchaseOrder
-          enum:
-          - PurchaseOrder
-          - ShipmentNumber
-          - Other
-      description: List of DDS references
-      example: null
-    PublicOriginLegalityCheck:
-      required:
-      - scoreAvail
-      - status
-      type: object
-      properties:
-        score:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Score'
-          example: null
-        scoreAvail:
-          type: string
-          description: Public score availability.
-          enum:
-          - None
-          - Peer
-          - Alert
-          - SSA
-          - External
-          example: null
-        status:
-          type: string
-          description: Public legality assessment status.
-          enum:
-          - Negligible
-          - NonNegligible
-          - NotRequired
-          - Required
-          example: null
-      description: Legality check result
-      example: null
-    PublicPendingDFRequest:
-      required:
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: Public deforestation check type.
-          enum:
-          - Basic
-          - Advanced
-          example: null
-      description: Public pending deforestation request details.
-      example: null
-    PublicFeatureCollection:
-      required:
-      - features
-      type: object
-      properties:
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicFeature'
-          example: null
-      description: Plot of the origin
-      example: null
-    PublicProducer:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Target ID of the producer
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Producer name
-          example: null
-        geo:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicGeometrySchema'
-          example: null
-        countryId:
-          type: integer
-          description: Country ID of the producer
-          format: int32
-          nullable: true
-          example: null
-      description: Producer of the origin
-      example: null
-    PublicDDSReferencePayload:
-      required:
-      - reference
-      - type
-      type: object
-      properties:
-        reference:
-          type: array
-          description: Reference labels (e.g. purchase order numbers, shipment numbers).
-          example:
-          - PO-2025-001
-          - PO-2025-002
-          items:
-            type: string
-            description: Reference labels (e.g. purchase order numbers, shipment numbers).
-            example: '["PO-2025-001","PO-2025-002"]'
-        type:
-          type: string
-          description: Public product reference type.
-          example: PurchaseOrder
-          enum:
-          - PurchaseOrder
-          - ShipmentNumber
-          - Other
-      description: Reference for a DDS statement, including one or more reference labels and the reference type.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicCustomerDDSPayload:
-      required:
-      - activityType
-      - customerCity
-      - customerCountryId
-      - customerName
-      - customerPostalCode
-      - customerStreet
-      - eoriNumber
-      - netWeightInKg
-      type: object
-      properties:
-        eoriNumber:
-          type: string
-          description: EORI number of the customer.
-          example: EU123456789
-        customerName:
-          type: string
-          description: Name of the customer as stated on the DDS.
-          example: Acme GmbH
-        customerCity:
-          type: string
-          description: City of the customer as stated on the DDS.
-          example: Vienna
-        customerPostalCode:
-          type: string
-          description: Postal code of the customer as stated on the DDS.
-          example: '1010'
-        customerStreet:
-          type: string
-          description: Street of the customer as stated on the DDS.
-          example: Main Street 1
-        customerCountryId:
-          type: integer
-          description: ID of the customer's home country (see /countries endpoint).
-          format: int32
-          example: 14
-        operatorType:
-          type: string
-          description: Public operator type. RepresentativeOperator is the only supported value. Operator and Trader are deprecated and retained only for legacy data.
-          nullable: true
-          example: RepresentativeOperator
-          deprecated: true
-          enum:
-          - RepresentativeOperator
-          - Operator
-          - Trader
-        activityType:
-          type: string
-          description: Public activity type.
-          example: Import
-          enum:
-          - Import
-          - Export
-          - Domestic
-          - Trade
-        countryOfActivityId:
-          type: integer
-          description: ID of the country where the economic activity is taking place (see /countries endpoint).
-          format: int32
-          nullable: true
-          example: 14
-        originRequestReferences:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicDDSReferencePayload'
-          example: null
-        netWeightInKg:
-          type: number
-          description: Net weight of the product in kg.
-          example: 100.5
-        quantity:
-          type: number
-          description: Product quantity (additional info).
-          nullable: true
-          example: 10
-        unit:
-          type: string
-          description: Unit of the quantity (e.g. kg, t, m3).
-          nullable: true
-          example: kg
-      description: Payload for creating or updating a Customer DDS. Contains all required and optional fields for a customer DDS statement, including references and product measures.
-      example: null
-    PublicProducerDiscoveryRequest:
-      required:
-      - id
-      - name
-      - originId
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Producer discovery request ID
-          format: int32
-          example: null
-        originId:
-          type: integer
-          description: Origin ID
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Producer name
-          example: null
-        targetId:
-          type: integer
-          description: Producer Target ID
-          format: int32
-          nullable: true
-          example: null
-      description: Pending producer discovery request
-      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

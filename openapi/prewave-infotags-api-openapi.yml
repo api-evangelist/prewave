@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Infotags API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Infotags API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,27 @@ paths:
       tags:
       - Infotags
       summary: Get public feed infotags
-      description: "\nRetrieve reference infotags used to interpret alert and feed data.\n\nReturns public infotags for the following types: `alert_status`, `event_type`, `risk_level`, `industry`,\nand `location`. Each entry includes the infotag ID, type, optional short code (`svalue`), and display name.\n\n**Use cases**:\n- Resolve infotag IDs and codes when consuming alert feeds\n- Populate filter dropdowns for event types, risk levels, and locations\n- Map short codes to human-readable labels\n\n**Required permission:** `access_public_infotags`\n\n**Performance impact:** Low\n    "
+      description: 'Retrieve reference infotags used to interpret alert and feed data.
+
+
+        Returns public infotags for the following types: `alert_status`, `event_type`, `risk_level`, `industry`,
+
+        and `location`. Each entry includes the infotag ID, type, optional short code (`svalue`), and display name.
+
+
+        **Use cases**:
+
+        - Resolve infotag IDs and codes when consuming alert feeds
+
+        - Populate filter dropdowns for event types, risk levels, and locations
+
+        - Map short codes to human-readable labels
+
+
+        **Required permission:** `access_public_infotags`
+
+
+        **Performance impact:** Low'
       operationId: infotags
       responses:
         '200':
@@ -211,7 +92,25 @@ paths:
       tags:
       - Infotags
       summary: Get infotag groups for the current user
-      description: "\nRetrieve infotag groups available to the authenticated user.\n\nInfotag groups cluster related event types—for example Environmental or Social—and are used when\nworking with scores, alerts, and feed filters.\n\n**Use cases**:\n- List groups the current user can access\n- Resolve group IDs when filtering alerts or scores by category\n\n**Required permission:** `access_public_infotags`\n\n**Performance impact:** Low\n    "
+      description: 'Retrieve infotag groups available to the authenticated user.
+
+
+        Infotag groups cluster related event types—for example Environmental or Social—and are used when
+
+        working with scores, alerts, and feed filters.
+
+
+        **Use cases**:
+
+        - List groups the current user can access
+
+        - Resolve group IDs when filtering alerts or scores by category
+
+
+        **Required permission:** `access_public_infotags`
+
+
+        **Performance impact:** Low'
       operationId: infotagGroups
       responses:
         '200':
@@ -263,117 +162,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicSimplifiedInfotagDTO:
-      required:
-      - id
-      - type
-      - value
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Id of the infotag
-          format: int32
-          example: null
-        type:
-          type: string
-          description: Type of the infotag
-          example: null
-        svalue:
-          type: string
-          description: Short name/code of the infotag
-          nullable: true
-          example: null
-        value:
-          type: string
-          description: Name of the infotag
-          example: null
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicInfotagGroup:
-      required:
-      - id
-      - name
-      - sname
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Id of the infotag group
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Name of the infotag group
-          example: null
-        sname:
-          type: string
-          description: Short name/code of the infotag group
-          example: null
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -413,8 +201,123 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicInfotagGroup:
+      required:
+      - id
+      - name
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the infotag group
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Name of the infotag group
+          example: null
+        sname:
+          type: string
+          description: Short name/code of the infotag group
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicSimplifiedInfotagDTO:
+      required:
+      - id
+      - type
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the infotag
+          format: int32
+          example: null
+        type:
+          type: string
+          description: Type of the infotag
+          example: null
+        svalue:
+          type:
+          - string
+          - 'null'
+          description: Short name/code of the infotag
+          example: null
+        value:
+          type: string
+          description: Name of the infotag
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

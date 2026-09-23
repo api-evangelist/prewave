@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Collections - Tier-N API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Collections - Tier-N API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,21 @@ paths:
       tags:
       - Collections - Tier-N
       summary: Get tier-n collection settings
-      description: "\n### Overview\nRetrieve tier-n configuration for a collection. These settings are used as defaults when calling `GET .../tier-n/data` and can be overridden via query parameters there.\n\n### Related Operations\n- **Data**: [GET /public/v1/collections/{collectionId}/tier-n/data](#operations-Collections_-_Tier-N-getTierNCollectionGraph)\n- **Update**: [PUT /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-updateTierNCollectionSettings)\n\n### Required Permission\n`access_public_supplier_graph`, `access_collection`, and `read` on the collection.\n    "
+      description: '### Overview
+
+        Retrieve tier-n configuration for a collection. These settings are used as defaults when calling `GET .../tier-n/data` and can be overridden via query parameters there.
+
+
+        ### Related Operations
+
+        - **Data**: GET /public/v1/collections/{collectionId}/tier-n/data
+
+        - **Update**: PUT /public/v1/collections/{collectionId}/tier-n/settings
+
+
+        ### Required Permission
+
+        `access_public_supplier_graph`, `access_collection`, and `read` on the collection.'
       operationId: getTierNCollectionSettings
       parameters:
       - name: collectionId
@@ -235,7 +110,26 @@ paths:
       tags:
       - Collections - Tier-N
       summary: Update tier-n collection settings
-      description: "\n### Overview\nUpdate tier-n configuration for a collection. All request fields are optional (partial update). Updated settings become defaults for `GET .../tier-n/data`.\n\n### Validation\n- Collection must exist, be active, and have `tiersEnabled=true`.\n- `maxTier` 1–9 if provided; `probability` 0–100 if provided; dates in YYYY-MM-DD; `shipmentsPeriodFrom` ≤ `shipmentsPeriodTo`.\n\n### Audit\nThe update is recorded with comment \"Tier-n collection settings updated via Public API\".\n\n### Required Permission\n`manage_collection` and `update` on the collection.\n    "
+      description: '### Overview
+
+        Update tier-n configuration for a collection. All request fields are optional (partial update). Updated settings become defaults for `GET .../tier-n/data`.
+
+
+        ### Validation
+
+        - Collection must exist, be active, and have `tiersEnabled=true`.
+
+        - `maxTier` 1–9 if provided; `probability` 0–100 if provided; dates in YYYY-MM-DD; `shipmentsPeriodFrom` ≤ `shipmentsPeriodTo`.
+
+
+        ### Audit
+
+        The update is recorded with comment "Tier-n collection settings updated via Public API".
+
+
+        ### Required Permission
+
+        `manage_collection` and `update` on the collection.'
       operationId: updateTierNCollectionSettings
       parameters:
       - name: collectionId
@@ -335,9 +229,7 @@ paths:
       tags:
       - Collections - Tier-N
       summary: Get a tree-structure of suppliers of the given collection
-      description: '
-
-        ⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
+      description: '⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
 
 
         **Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.
@@ -452,9 +344,7 @@ paths:
         **Performance Impact**: High
 
 
-        For detailed API reference and examples, see the v1 Collections Tier-N API documentation.
-
-        '
+        For detailed API reference and examples, see the v1 Collections Tier-N API documentation.'
       operationId: findSupplierGraph
       parameters:
       - name: collectionId
@@ -655,7 +545,38 @@ paths:
       tags:
       - Collections - Tier-N
       summary: Get tier-n collection supplier graph
-      description: "\n### Overview\nRetrieve a stream of supplier relationship data for a tier-n enabled collection. Each entry represents a relationship between a customer and supplier at a specific tier level (tier 1 = direct suppliers, tier 2+ = indirect).\n\n### Response Format\n- JSON array of supplier relationship entries (tier, supplierTargetId, customerTargetId, source, and optional probability/mediaSources/nShipments/shipments).\n- Null-valued fields are omitted. Optional fields appear based on query params (e.g. `includeMediaSources`, `includeShipmentDetails`).\n\n### Query Parameters\nAll optional. They override collection defaults from `GET .../tier-n/settings`. Use them to filter (tier, source, hsCodes, dates) or override scope/source settings.\n\n### Performance\n- Filter by `tier`, `source`, or `hsCodes` to reduce response size. Higher `maxTier` increases data volume and response time.\n\n### Related Operations\n- **Settings**: [GET /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-getTierNCollectionSettings)\n- **Update settings**: [PUT /public/v1/collections/{collectionId}/tier-n/settings](#operations-Collections_-_Tier-N-updateTierNCollectionSettings)\n\n### Required Permission\n`access_public_supplier_graph`, `access_collection`, and `read` on the collection.\n    "
+      description: '### Overview
+
+        Retrieve a stream of supplier relationship data for a tier-n enabled collection. Each entry represents a relationship between a customer and supplier at a specific tier level (tier 1 = direct suppliers, tier 2+ = indirect).
+
+
+        ### Response Format
+
+        - JSON array of supplier relationship entries (tier, supplierTargetId, customerTargetId, source, and optional probability/mediaSources/nShipments/shipments).
+
+        - Null-valued fields are omitted. Optional fields appear based on query params (e.g. `includeMediaSources`, `includeShipmentDetails`).
+
+
+        ### Query Parameters
+
+        All optional. They override collection defaults from `GET .../tier-n/settings`. Use them to filter (tier, source, hsCodes, dates) or override scope/source settings.
+
+
+        ### Performance
+
+        - Filter by `tier`, `source`, or `hsCodes` to reduce response size. Higher `maxTier` increases data volume and response time.
+
+
+        ### Related Operations
+
+        - **Settings**: GET /public/v1/collections/{collectionId}/tier-n/settings
+
+        - **Update settings**: PUT /public/v1/collections/{collectionId}/tier-n/settings
+
+
+        ### Required Permission
+
+        `access_public_supplier_graph`, `access_collection`, and `read` on the collection.'
       operationId: getTierNCollectionGraph
       parameters:
       - name: collectionId
@@ -939,72 +860,44 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicTierNCollectionGraphEntry:
-      required:
-      - customerTargetId
-      - source
-      - supplierTargetId
-      - tier
+    ApiRateLimitResponse:
       type: object
       properties:
-        tier:
-          type: integer
-          description: Tier number of the relationship. Tier 1 = direct suppliers, Tier 2 = suppliers of suppliers, etc. Higher tiers represent deeper supply chain connections.
-          format: int32
-          example: 2
-        supplierTargetId:
-          type: integer
-          description: Unique identifier of the supplier target in this relationship. Use this ID to look up additional supplier information via other APIs.
-          format: int32
-          example: 4567
-        customerTargetId:
-          type: integer
-          description: Unique identifier of the customer target in this relationship. This represents the 'from' side of the supplier relationship.
-          format: int32
-          example: 1234
-        source:
+        error:
           type: string
-          description: Source of the supplier relationship edge
-          enum:
-          - Customer
-          - Media
-          - Customs
-          - PrewavePrediction
-          example: null
-        probability:
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
           type: integer
-          description: Confidence or probability score for the relationship (0-100). Only present for PREWAVE_PREDICTION sources. Higher values indicate more confident predictions.
+          description: Maximum number of requests allowed in the current time window
           format: int32
-          nullable: true
-          example: 87
-        mediaSources:
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
           type: array
-          description: List of media source URLs used to derive this MEDIA-type relationship. Only present when source=MEDIA and includeMediaSources=true. These URLs provide evidence for the relationship.
-          nullable: true
-          example:
-          - https://example.com/article-1
-          - https://example.com/article-2
+          description: All rate limits that apply to this endpoint, showing different time windows
           items:
-            type: string
-            description: List of media source URLs used to derive this MEDIA-type relationship. Only present when source=MEDIA and includeMediaSources=true. These URLs provide evidence for the relationship.
-            example: '["https://example.com/article-1","https://example.com/article-2"]'
-        nShipments:
-          type: integer
-          description: Number of shipments observed for this supplier/customer pair. Only present for CUSTOMS sources. Indicates the strength of the business relationship based on trade data.
-          format: int32
-          nullable: true
-          writeOnly: true
-          example: 3
-        shipments:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicTierNCollectionGraphShipment'
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
           example: null
-        nshipments:
-          type: integer
-          format: int32
-          example: null
-      description: "\n        Single supplier relationship entry in the tier-n collection graph.\n\n        Each entry represents a relationship between a customer and supplier at a specific\n        tier level, along with metadata about how this relationship was discovered and\n        its confidence level.\n\n        ## Understanding Tiers\n        - **Tier 1**: Direct suppliers (immediate business relationships)\n        - **Tier 2**: Suppliers of your suppliers (second-degree relationships)\n        - **Tier 3+**: Deeper supply chain connections\n\n        ## Data Sources\n        - **CUSTOMS**: Based on shipment data (most reliable)\n        - **MEDIA**: Based on news/media reports\n        - **CUSTOMER**: Based on customer-provided data\n        - **PREWAVE_PREDICTION**: AI-predicted relationships\n\n        ## Optional Fields\n        - `probability`: Only present for PREWAVE_PREDICTION sources\n        - `mediaSources`: Only present for MEDIA sources when requested\n        - `nShipments`: Only present for CUSTOMS sources\n        - `shipments`: Only present when includeShipmentDetails=true\n    "
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
     PublicTierNCollectionSettingsUpdateRequest:
       type: object
@@ -1012,162 +905,113 @@ components:
         maxTier:
           maximum: 9
           minimum: 1
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: 'Maximum tier level configured for analysis. Range: 1-9. Higher values allow deeper supply chain analysis but may increase response time.'
           format: int32
-          nullable: true
           example: 3
         scopePrivate:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include private targets in the analysis scope. Private targets typically represent internal company data.
-          nullable: true
           example: true
         scopeShared:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include shared targets in the analysis scope. Shared targets typically represent partner/team data.
-          nullable: true
           example: true
         scopePublic:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include public targets in the analysis scope. Public targets typically represent open/public data.
-          nullable: true
           example: false
         sourceCustomer:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include customer data sources in the analysis. Customer data comes from customer-provided information.
-          nullable: true
           example: true
         sourceCustoms:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include customs data sources in the analysis. Customs data is typically the most reliable source based on shipment records.
-          nullable: true
           example: true
         sourceMedia:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include media data sources in the analysis. Media data comes from news reports and may be less reliable.
-          nullable: true
           example: false
         sourcePrewavePrediction:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include Prewave prediction data sources in the analysis. These are AI-predicted relationships with confidence scores.
-          nullable: true
           example: true
         minShipments:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Minimum number of shipments required for a relationship to be included. Higher values filter out less established relationships. Set to null to remove minimum.
           format: int32
-          nullable: true
           example: 5
         probability:
           maximum: 100
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Minimum probability threshold for predicted relationships (0-100). Higher values return only high-confidence predictions. Set to null to remove threshold.
           format: int32
-          nullable: true
           example: 75
         shipmentsPeriodFrom:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Start date for shipment period analysis. Only relationships with shipments in this period are considered. Format: YYYY-MM-DD. Set to null to remove start date limit.'
           format: date
-          nullable: true
           example: '2024-01-01'
         shipmentsPeriodTo:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'End date for shipment period analysis. Only relationships with shipments in this period are considered. Format: YYYY-MM-DD. Set to null to remove end date limit.'
           format: date
-          nullable: true
           example: '2024-12-31'
         suspectedSuppliers:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include suspected suppliers in the analysis. Suspected suppliers are flagged as potentially risky or suspicious.
-          nullable: true
           example: false
         logisticsProvider:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether to include logistics providers in the analysis. Logistics providers are companies that provide logistics services rather than direct suppliers.
-          nullable: true
           example: false
       description: "\n        Request payload for updating tier-n collection settings.\n\n        This class contains the configuration settings that can be updated for a tier-n enabled collection.\n        All fields are optional, allowing partial updates of the collection settings.\n\n        ## Configuration Categories\n\n        ### Tier Configuration\n        - `maxTier`: Maximum tier level for analysis (1-9)\n\n        ### Scope Settings\n        - `scopePrivate/Shared/Public`: Which target types to include in analysis\n\n        ### Data Source Settings\n        - `source*`: Which data sources to use for relationship discovery\n\n        ### Filtering Parameters\n        - `minShipments`: Minimum shipment count threshold\n        - `probability`: Minimum confidence threshold for predictions\n        - `shipmentsPeriodFrom/To`: Time period for shipment analysis\n        - `suspectedSuppliers`: Include flagged suppliers\n        - `logisticsProvider`: Include logistics service providers\n    "
       example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
+    ApiRateLimitTimeRequestLimit:
       type: object
       properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicTierNCollectionGraphShipment:
-      required:
-      - hscode
-      type: object
-      properties:
-        hscode:
+        requestLimit:
           type: integer
-          description: 6-digit HS (Harmonized System) code identifying the product category. Used internationally for trade classification.
+          description: Maximum number of requests allowed in this time window
           format: int32
-          example: 847330
-        nShipments:
+          example: 100
+        timeInSeconds:
           type: integer
-          description: Number of shipments observed for this specific HS code in the relationship. Indicates the volume of trade activity for this product category.
+          description: Time window duration in seconds
           format: int32
-          nullable: true
-          writeOnly: true
-          example: 5
-        lastShipment:
-          type: string
-          description: 'Date of the most recent shipment observed for this HS code. Format: YYYY-MM-DD. Useful for assessing recency of product-specific activity.'
-          format: date
-          nullable: true
-          example: '2024-03-15'
-        nshipments:
-          type: integer
-          format: int32
-          example: null
-      description: "\n        Detailed shipment information for a specific HS code within a supplier relationship.\n\n        This provides granular shipment data broken down by product category (HS code),\n        showing the volume and recency of trade activity for specific products between\n        the supplier and customer.\n\n        ## HS Codes\n        HS (Harmonized System) codes are 6-digit product classification codes used\n        internationally for trade. They help identify specific product categories\n        involved in the business relationship.\n\n        ## Use Cases\n        - **Product Analysis**: Understand which products drive the relationship\n        - **Volume Assessment**: See shipment frequency and volume per product\n        - **Recency Tracking**: Identify the most recent activity per product\n        - **Risk Analysis**: Assess dependency on specific product categories\n    "
+          example: 10
+      description: Rate limit configuration for a specific time window
       example: null
     PublicTierNCollectionSettings:
       required:
@@ -1242,28 +1086,32 @@ components:
           description: Whether to include Prewave prediction data sources in the analysis. These are AI-predicted relationships with confidence scores.
           example: true
         minShipments:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Minimum number of shipments required for a relationship to be included. Higher values filter out less established relationships. Null means no minimum.
           format: int32
-          nullable: true
           example: 5
         probability:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Minimum probability threshold for predicted relationships (0-100). Higher values return only high-confidence predictions. Null means no threshold.
           format: int32
-          nullable: true
           example: 75
         shipmentsPeriodFrom:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Start date for shipment period analysis. Only relationships with shipments in this period are considered. Format: YYYY-MM-DD. Null means no start date limit.'
           format: date
-          nullable: true
           example: '2024-01-01'
         shipmentsPeriodTo:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'End date for shipment period analysis. Only relationships with shipments in this period are considered. Format: YYYY-MM-DD. Null means no end date limit.'
           format: date
-          nullable: true
           example: '2024-12-31'
         suspectedSuppliers:
           type: boolean
@@ -1286,88 +1134,35 @@ components:
             example: null
       description: Tier-n collection settings and metadata configuration.
       example: null
-    ApiRateLimitTimeRequestLimit:
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
       type: object
       properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
           type: string
-          description: Error type identifier
-          example: RateLimitExceeded
+          description: Error code
+          example: null
         message:
           type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          description: Error message
           example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    PublicSupplierGraphShipment:
-      required:
-      - hscode
-      type: object
-      properties:
-        hscode:
-          type: integer
-          description: HS code (6 digits)
-          format: int32
-          example: 847330
-        nShipments:
-          type: integer
-          description: Number of shipments observed for this HS code
-          format: int32
-          nullable: true
-          writeOnly: true
-          example: 5
-        lastShipment:
-          type: string
-          description: Date of the last observed shipment for this HS code
-          format: date
-          nullable: true
-          example: '2024-03-15'
-        nshipments:
-          type: integer
-          format: int32
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
           example: null
-      description: Shipment details for a supplier relationship, grouped by HS code
       example: null
     PublicSupplierGraphEntry:
       required:
@@ -1402,15 +1197,17 @@ components:
           - PrewavePrediction
           example: null
         probability:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Confidence or probability for the relationship in percent (0-100)
           format: int32
-          nullable: true
           example: 87
         mediaSources:
-          type: array
+          type:
+          - array
+          - 'null'
           description: List of media source URLs used to derive MEDIA edges; present only when includeMediaSources=true
-          nullable: true
           example:
           - https://example.com/article-1
           - https://example.com/article-2
@@ -1419,16 +1216,18 @@ components:
             description: List of media source URLs used to derive MEDIA edges; present only when includeMediaSources=true
             example: '["https://example.com/article-1","https://example.com/article-2"]'
         nShipments:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Number of shipments observed for this supplier/target pair (if shipments filtering is active)
           format: int32
-          nullable: true
           writeOnly: true
           example: 3
         shipments:
-          type: array
+          type:
+          - array
+          - 'null'
           description: Detailed shipment information per HS code; present only when includeShipmentDetails=true
-          nullable: true
           items:
             $ref: '#/components/schemas/PublicSupplierGraphShipment'
           example: null
@@ -1438,8 +1237,161 @@ components:
           example: null
       description: Single supplier relationship entry in the supplier graph
       example: null
+    PublicTierNCollectionGraphShipment:
+      required:
+      - hscode
+      type: object
+      properties:
+        hscode:
+          type: integer
+          description: 6-digit HS (Harmonized System) code identifying the product category. Used internationally for trade classification.
+          format: int32
+          example: 847330
+        nShipments:
+          type:
+          - integer
+          - 'null'
+          description: Number of shipments observed for this specific HS code in the relationship. Indicates the volume of trade activity for this product category.
+          format: int32
+          writeOnly: true
+          example: 5
+        lastShipment:
+          type:
+          - string
+          - 'null'
+          description: 'Date of the most recent shipment observed for this HS code. Format: YYYY-MM-DD. Useful for assessing recency of product-specific activity.'
+          format: date
+          example: '2024-03-15'
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      description: "\n        Detailed shipment information for a specific HS code within a supplier relationship.\n\n        This provides granular shipment data broken down by product category (HS code),\n        showing the volume and recency of trade activity for specific products between\n        the supplier and customer.\n\n        ## HS Codes\n        HS (Harmonized System) codes are 6-digit product classification codes used\n        internationally for trade. They help identify specific product categories\n        involved in the business relationship.\n\n        ## Use Cases\n        - **Product Analysis**: Understand which products drive the relationship\n        - **Volume Assessment**: See shipment frequency and volume per product\n        - **Recency Tracking**: Identify the most recent activity per product\n        - **Risk Analysis**: Assess dependency on specific product categories\n    "
+      example: null
+    PublicSupplierGraphShipment:
+      required:
+      - hscode
+      type: object
+      properties:
+        hscode:
+          type: integer
+          description: HS code (6 digits)
+          format: int32
+          example: 847330
+        nShipments:
+          type:
+          - integer
+          - 'null'
+          description: Number of shipments observed for this HS code
+          format: int32
+          writeOnly: true
+          example: 5
+        lastShipment:
+          type:
+          - string
+          - 'null'
+          description: Date of the last observed shipment for this HS code
+          format: date
+          example: '2024-03-15'
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      description: Shipment details for a supplier relationship, grouped by HS code
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicTierNCollectionGraphEntry:
+      required:
+      - customerTargetId
+      - source
+      - supplierTargetId
+      - tier
+      type: object
+      properties:
+        tier:
+          type: integer
+          description: Tier number of the relationship. Tier 1 = direct suppliers, Tier 2 = suppliers of suppliers, etc. Higher tiers represent deeper supply chain connections.
+          format: int32
+          example: 2
+        supplierTargetId:
+          type: integer
+          description: Unique identifier of the supplier target in this relationship. Use this ID to look up additional supplier information via other APIs.
+          format: int32
+          example: 4567
+        customerTargetId:
+          type: integer
+          description: Unique identifier of the customer target in this relationship. This represents the 'from' side of the supplier relationship.
+          format: int32
+          example: 1234
+        source:
+          type: string
+          description: Source of the supplier relationship edge
+          enum:
+          - Customer
+          - Media
+          - Customs
+          - PrewavePrediction
+          example: null
+        probability:
+          type:
+          - integer
+          - 'null'
+          description: Confidence or probability score for the relationship (0-100). Only present for PREWAVE_PREDICTION sources. Higher values indicate more confident predictions.
+          format: int32
+          example: 87
+        mediaSources:
+          type:
+          - array
+          - 'null'
+          description: List of media source URLs used to derive this MEDIA-type relationship. Only present when source=MEDIA and includeMediaSources=true. These URLs provide evidence for the relationship.
+          example:
+          - https://example.com/article-1
+          - https://example.com/article-2
+          items:
+            type: string
+            description: List of media source URLs used to derive this MEDIA-type relationship. Only present when source=MEDIA and includeMediaSources=true. These URLs provide evidence for the relationship.
+            example: '["https://example.com/article-1","https://example.com/article-2"]'
+        nShipments:
+          type:
+          - integer
+          - 'null'
+          description: Number of shipments observed for this supplier/customer pair. Only present for CUSTOMS sources. Indicates the strength of the business relationship based on trade data.
+          format: int32
+          writeOnly: true
+          example: 3
+        shipments:
+          allOf:
+          - $ref: '#/components/schemas/PublicTierNCollectionGraphShipment'
+          example: null
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      description: "\n        Single supplier relationship entry in the tier-n collection graph.\n\n        Each entry represents a relationship between a customer and supplier at a specific\n        tier level, along with metadata about how this relationship was discovered and\n        its confidence level.\n\n        ## Understanding Tiers\n        - **Tier 1**: Direct suppliers (immediate business relationships)\n        - **Tier 2**: Suppliers of your suppliers (second-degree relationships)\n        - **Tier 3+**: Deeper supply chain connections\n\n        ## Data Sources\n        - **CUSTOMS**: Based on shipment data (most reliable)\n        - **MEDIA**: Based on news/media reports\n        - **CUSTOMER**: Based on customer-provided data\n        - **PREWAVE_PREDICTION**: AI-predicted relationships\n\n        ## Optional Fields\n        - `probability`: Only present for PREWAVE_PREDICTION sources\n        - `mediaSources`: Only present for MEDIA sources when requested\n        - `nShipments`: Only present for CUSTOMS sources\n        - `shipments`: Only present when includeShipmentDetails=true\n    "
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

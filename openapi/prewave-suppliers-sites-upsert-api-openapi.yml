@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Suppliers - Sites Upsert API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Suppliers - Sites Upsert API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -155,8 +16,14 @@ paths:
     post:
       tags:
       - Suppliers - Sites Upsert
-      summary: Force the processing of all pending site upsert requests.
-      description: "\nTrigger processing of all queued site upsert requests. Intended for administrative use.\n\n**Required permission:** `sites_upsert_admin`\n\n**Performance impact:** Medium\n    "
+      summary: Force the processing of all pending site upsert requests
+      description: 'Trigger processing of all queued site upsert requests. Intended for administrative use.
+
+
+        **Required permission:** `sites_upsert_admin`
+
+
+        **Performance impact:** Medium'
       operationId: forceProcessing
       responses:
         '200':
@@ -195,18 +62,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: List all site upsert requests for your organisation.
-      description: '
-
-        List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
+      summary: List all site upsert requests for your organisation
+      description: 'List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
 
 
         **Required permission:** `create_sites_upsert_requests`
 
 
-        **Performance impact:** Low
-
-        '
+        **Performance impact:** Low'
       operationId: listRequests
       responses:
         '200':
@@ -259,10 +122,8 @@ paths:
     post:
       tags:
       - Suppliers - Sites Upsert
-      summary: Upsert suppliers and their desired collections with a full load.
-      description: '
-
-        Full load means that all sites need to exist in the request payload.
+      summary: Upsert suppliers and their desired collections with a full load
+      description: 'Full load means that all sites need to exist in the request payload.
 
         Existing sites not part of the payload will be removed from the managed collections in this request.
 
@@ -270,9 +131,7 @@ paths:
         **Required permission:** `create_sites_upsert_requests`
 
 
-        **Performance impact:** Medium
-
-        '
+        **Performance impact:** Medium'
       operationId: fullLoad
       requestBody:
         description: Full load payload containing all sites that should remain active
@@ -343,10 +202,8 @@ paths:
     post:
       tags:
       - Suppliers - Sites Upsert
-      summary: Upsert suppliers and their desired collections with a delta load.
-      description: '
-
-        In contrast to the full load, the delta load only updates the sites in the payload.
+      summary: Upsert suppliers and their desired collections with a delta load
+      description: 'In contrast to the full load, the delta load only updates the sites in the payload.
 
         Existing sites not part of the payload will not be removed from managed collections.
 
@@ -354,9 +211,7 @@ paths:
         **Required permission:** `create_sites_upsert_requests`
 
 
-        **Performance impact:** Medium
-
-        '
+        **Performance impact:** Medium'
       operationId: deltaLoad
       requestBody:
         description: Delta load payload containing sites to create or update
@@ -420,8 +275,14 @@ paths:
     delete:
       tags:
       - Suppliers - Sites Upsert
-      summary: Disable edges to suppliers and remove them from managed collections.
-      description: "\nDeactivate supplier edges identified by your references.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      summary: Disable edges to suppliers and remove them from managed collections
+      description: 'Deactivate supplier edges identified by your references.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low'
       operationId: deactivateEdges
       parameters:
       - name: dryRun
@@ -485,8 +346,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: Get details of matched targets.
-      description: "\nRetrieve targets matched during processing of a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      summary: Get details of matched targets
+      description: 'Retrieve targets matched during processing of a site upsert request.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low'
       operationId: getMatchedTargets
       parameters:
       - name: requestId
@@ -545,8 +412,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: Get the list of dry runs for a specific request.
-      description: "\nList dry runs associated with a site upsert request. Use a dry-run ID with the dry-run report endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      summary: Get the list of dry runs for a specific request
+      description: 'List dry runs associated with a site upsert request. Use a dry-run ID with the dry-run report endpoint.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low'
       operationId: getDryRuns
       parameters:
       - name: requestId
@@ -609,18 +482,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: List all site upsert requests for your organisation.
-      description: '
-
-        List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
+      summary: List all site upsert requests for your organisation
+      description: 'List all site upsert requests for your organisation. The organisation is determined by your API user or API token.
 
 
         **Required permission:** `create_sites_upsert_requests`
 
 
-        **Performance impact:** Low
-
-        '
+        **Performance impact:** Low'
       operationId: listRequests_1
       responses:
         '200':
@@ -674,8 +543,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: Get the status of a specific site upsert request.
-      description: "\nRetrieve processing status and per-site outcomes for a site upsert request.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      summary: Get the status of a specific site upsert request
+      description: 'Retrieve processing status and per-site outcomes for a site upsert request.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low'
       operationId: fullLoadStatus
       parameters:
       - name: requestId
@@ -732,8 +607,14 @@ paths:
     get:
       tags:
       - Suppliers - Sites Upsert
-      summary: Download the dry-run results report.
-      description: "\nDownload an Excel report for a dry run. Obtain the dry-run ID from the `{requestId}/dry-runs` endpoint.\n\n**Required permission:** `create_sites_upsert_requests`\n\n**Performance impact:** Low\n    "
+      summary: Download the dry-run results report
+      description: 'Download an Excel report for a dry run. Obtain the dry-run ID from the `{requestId}/dry-runs` endpoint.
+
+
+        **Required permission:** `create_sites_upsert_requests`
+
+
+        **Performance impact:** Low'
       operationId: getDryRunReport
       parameters:
       - name: dryRunId
@@ -781,75 +662,29 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    SitesUpsertSafetyStockPayload:
-      type: object
-      properties:
-        onPremiseStockLevelMonths:
-          type: integer
-          description: Safety stocks on premise of goods purchased from this supplier
-          format: int32
-          nullable: true
-          example: 2
-        atSupplierLocation:
-          type: string
-          description: The supplier location
-          nullable: true
-          example: SameBuilding
-          enum:
-          - SameBuilding
-          - DifferentFireSection
-          - DifferentBuilding
-          - NotApplicable
-        atSupplierDeviation:
-          type: string
-          description: Deviation from the agreed upon Safety Stock
-          nullable: true
-          example: OnTarget
-          enum:
-          - NotApplicable
-          - OnTarget
-          - Below
-          - Above
-        atSupplierStockLevelMonths:
-          type: integer
-          description: Agreed upon safety stock at the supplier
-          format: int32
-          nullable: true
-          example: 4
-        atSupplierLastConfirmedDate:
-          type: string
-          description: Date on which the safety stock level was last confirmed by the supplier.
-          format: date
-          nullable: true
-          example: '2023-11-23'
-        inLogisticChainDaysOnHand:
-          type: integer
-          description: Stock Level currently on the logistics chain to the production facilities.
-          format: int32
-          nullable: true
-          example: 40
-      example: null
-    SitesUpsertDryRunDTO:
+    SitesUpsertRequestStatusResponse:
       required:
-      - dryRunId
-      - requestId
-      - time
+      - sites
+      - status
       type: object
       properties:
-        requestId:
+        status:
           type: string
-          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
-          format: uuid
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
           example: null
-        dryRunId:
-          type: string
-          description: The ID of the dry run. This ID can be used to retrieve the dry run results.
-          format: uuid
+        reason:
+          type:
+          - string
+          - 'null'
           example: null
-        time:
-          type: string
-          description: The time when the dry run was created.
-          format: date-time
+        sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertSiteStatusEntry'
           example: null
       example: null
     SitesUpsertValidationFailedResponse:
@@ -861,6 +696,142 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SitesUpsertValidationErrorEntry'
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    SitesUpsertSiteStatusEntry:
+      required:
+      - id
+      - status
+      - yourReference
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        yourReference:
+          type: string
+          example: null
+        yourReferenceSource:
+          type:
+          - string
+          - 'null'
+          example: null
+        status:
+          type: string
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        statusText:
+          type:
+          - string
+          - 'null'
+          example: null
+        prewaveId:
+          type:
+          - integer
+          - 'null'
+          description: If status is "Done" this will reference the site on Prewave
+          format: int32
+          example: null
+      example: null
+    PublicSitesUpsertRequestEntry:
+      required:
+      - created
+      - requestId
+      - status
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
+          example: null
+        status:
+          type: string
+          description: Status of the sites upsert request
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        created:
+          type: string
+          description: The time when the request was created
+          format: date-time
+          example: null
+      example: null
+    SitesUpsertExternalReferencePayload:
+      required:
+      - externalId
+      - system
+      type: object
+      properties:
+        externalId:
+          type: string
+          description: The external identifier
+          example: DUNS_123
+        system:
+          type: string
+          description: The external identifier type
+          example: duns
+      description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
+      example: null
+    PublicSitesUpsertMatchedTarget:
+      required:
+      - createdAt
+      - edgeNumbers
+      - name
+      - targetId
+      type: object
+      properties:
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        edgeNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+      example: null
+    SitesUpsertValidationErrorEntry:
+      required:
+      - error
+      - yourReference
+      type: object
+      properties:
+        yourReference:
+          type: string
+          example: null
+        error:
+          type: string
           example: null
       example: null
     ApiRateLimitResponse:
@@ -902,6 +873,153 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    SitesUpsertSafetyStockPayload:
+      type: object
+      properties:
+        onPremiseStockLevelMonths:
+          type:
+          - integer
+          - 'null'
+          description: Safety stocks on premise of goods purchased from this supplier
+          format: int32
+          example: 2
+        atSupplierLocation:
+          type:
+          - string
+          - 'null'
+          description: The supplier location
+          example: SameBuilding
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+        atSupplierDeviation:
+          type:
+          - string
+          - 'null'
+          description: Deviation from the agreed upon Safety Stock
+          example: OnTarget
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+        atSupplierStockLevelMonths:
+          type:
+          - integer
+          - 'null'
+          description: Agreed upon safety stock at the supplier
+          format: int32
+          example: 4
+        atSupplierLastConfirmedDate:
+          type:
+          - string
+          - 'null'
+          description: Date on which the safety stock level was last confirmed by the supplier.
+          format: date
+          example: '2023-11-23'
+        inLogisticChainDaysOnHand:
+          type:
+          - integer
+          - 'null'
+          description: Stock Level currently on the logistics chain to the production facilities.
+          format: int32
+          example: 40
+      example: null
+    SitesUpsertRequestCreatedResponse:
+      required:
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: string
+          example: null
+        source:
+          type:
+          - string
+          - 'null'
+          example: null
+        existingEdgeId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    SitesUpsertYourReference:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: A textual identifier that uniquely identifies a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
+          example: ERP-ID-123
+        source:
+          type:
+          - string
+          - 'null'
+          description: An identifier that determines which system the “your_reference” originates. The source could be any ERP system or any internal tool you use to maintain your data
+          example: erp
+      example: null
+    PublicFullSitesUpsertPayload:
+      required:
+      - dryRun
+      - siteData
+      type: object
+      properties:
+        siteData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
+          example: null
+        dryRun:
+          type: boolean
+          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+          example: null
+      example: null
     SitesUpsertPayloadSiteEntry:
       required:
       - addressLine
@@ -928,26 +1046,30 @@ components:
           description: Unstructured address lines describing the lower levels of an address. Usually this is a street name and house number.
           example: Rothschildplatz 4, 3rd Floor
         postalCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Postal code of the address. Not all countries use or require postal codes to be present, but where they are used, they may trigger additional validation with other parts of the address.
-          nullable: true
           example: '1020'
         industries:
-          type: array
+          type:
+          - array
+          - 'null'
           description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
-          nullable: true
           items:
             $ref: '#/components/schemas/SitesUpsertIndustryDefinitionPayload'
           example: null
         website:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The official website for this site, such as the homepage of a business.
-          nullable: true
           example: https://www.prewave.com
         contact:
-          type: array
+          type:
+          - array
+          - 'null'
           description: List of email addresses for the site's contacts to complete self-assessments.
-          nullable: true
           items:
             type: string
             description: List of email addresses for the site's contacts to complete self-assessments.
@@ -972,9 +1094,10 @@ components:
           - Customer
           - Own
         diImpact:
-          type: string
+          type:
+          - string
+          - 'null'
           description: "Your estimated \"Degree of Influence Forced Impact\" on the operation of the site.\n            |Assess your site's risk and prioritize it by determining the level of impact."
-          nullable: true
           example: Low
           enum:
           - NA
@@ -984,9 +1107,10 @@ components:
           - High
           - Critical
         biImpact:
-          type: string
+          type:
+          - string
+          - 'null'
           description: "Your estimated \"Business Interruption Forced Impact\" on the operation of the site.\n            |Assess your site's risk and prioritize it by determining the level of impact."
-          nullable: true
           example: Low
           enum:
           - NA
@@ -996,9 +1120,10 @@ components:
           - High
           - Critical
         priority:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Priority of the alerts for that Site.
-          nullable: true
           example: Mid
           enum:
           - Low
@@ -1006,15 +1131,17 @@ components:
           - High
           - Critical
         spendData:
-          type: number
+          type:
+          - number
+          - 'null'
           description: "The total value of the goods and/or services you purchased at that site in EUR per year.\n            |Prewave can automatically evaluate its impact based on the spending data you provide and the total revenue of the site."
           format: double
-          nullable: true
           example: 500000.0
         collectionNames:
-          type: array
+          type:
+          - array
+          - 'null'
           description: A list of collections in which you want to group your site.
-          nullable: true
           example:
           - product group
           - responsible supplier manager
@@ -1026,56 +1153,67 @@ components:
             description: A list of collections in which you want to group your site.
             example: '["product group","responsible supplier manager","responsible team","region","product"]'
         externalReferences:
-          type: array
+          type:
+          - array
+          - 'null'
           description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
-          nullable: true
           items:
             $ref: '#/components/schemas/SitesUpsertExternalReferencePayload'
           example: null
         postInitScreeningPeriod:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: "Request a history screening of the site (in years to be screened) to be triggered automatically right after the onboarding.\n             |Additional costs may apply, quota is affected."
           format: int32
-          nullable: true
           example: null
         impactData:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/SitesUpsertImpactDataPayload'
           example: null
         safetyStock:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/SitesUpsertSafetyStockPayload'
           example: null
       example: null
-    AccessDeniedErrorDTO:
+    SitesUpsertDryRunDTO:
       required:
-      - code
-      - loggedIn
-      - message
+      - dryRunId
+      - requestId
+      - time
       type: object
       properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
+        requestId:
           type: string
-          nullable: true
+          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
+          format: uuid
           example: null
-        code:
+        dryRunId:
           type: string
-          description: Error code
+          description: The ID of the dry run. This ID can be used to retrieve the dry run results.
+          format: uuid
           example: null
-        message:
+        time:
           type: string
-          description: Error message
+          description: The time when the dry run was created.
+          format: date-time
           example: null
-        solution:
+      example: null
+    SitesUpsertIndustryDefinitionPayload:
+      required:
+      - industry
+      - industryStandard
+      type: object
+      properties:
+        industry:
           type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
+          description: The industry identifier based on the standard
+          example: I_AUTOMOTIVE
+        industryStandard:
+          type: string
+          description: The industry standard used
+          example: MOCK-ISO-42
+      description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
       example: null
     ErrorDTO:
       required:
@@ -1092,147 +1230,12 @@ components:
           description: Error message
           example: null
         solution:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Possible solution to the error
-          nullable: true
           example: null
       description: Error response
-      example: null
-    SitesUpsertExternalReferencePayload:
-      required:
-      - externalId
-      - system
-      type: object
-      properties:
-        externalId:
-          type: string
-          description: The external identifier
-          example: DUNS_123
-        system:
-          type: string
-          description: The external identifier type
-          example: duns
-      description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
-      example: null
-    SitesUpsertRequestCreatedResponse:
-      required:
-      - requestId
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
-          format: uuid
-          example: null
-      example: null
-    EdgeNumber:
-      required:
-      - number
-      type: object
-      properties:
-        number:
-          type: string
-          example: null
-        source:
-          type: string
-          nullable: true
-          example: null
-        existingEdgeId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-      example: null
-    SitesUpsertRequestStatusResponse:
-      required:
-      - sites
-      - status
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - Work in progress
-          - Done
-          - Failed
-          - Cancelled
-          example: null
-        reason:
-          type: string
-          nullable: true
-          example: null
-        sites:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitesUpsertSiteStatusEntry'
-          example: null
-      example: null
-    PublicSitesUpsertRequestEntry:
-      required:
-      - created
-      - requestId
-      - status
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
-          format: uuid
-          example: null
-        status:
-          type: string
-          description: Status of the sites upsert request
-          enum:
-          - Work in progress
-          - Done
-          - Failed
-          - Cancelled
-          example: null
-        created:
-          type: string
-          description: The time when the request was created
-          format: date-time
-          example: null
-      example: null
-    PublicSitesUpsertMatchedTarget:
-      required:
-      - createdAt
-      - edgeNumbers
-      - name
-      - targetId
-      type: object
-      properties:
-        targetId:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        createdAt:
-          type: string
-          format: date-time
-          example: null
-        edgeNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdgeNumber'
-          example: null
-      example: null
-    SitesUpsertYourReference:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: A textual identifier that uniquely identifies a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
-          example: ERP-ID-123
-        source:
-          type: string
-          description: An identifier that determines which system the “your_reference” originates. The source could be any ERP system or any internal tool you use to maintain your data
-          nullable: true
-          example: erp
       example: null
     PublicDeltaSitesUpsertPayload:
       required:
@@ -1261,134 +1264,42 @@ components:
           format: int32
           example: 2024
         bi12MlnEuro:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The Business Interruption-12 Value is the revenue generated with the products produced with the suppliers goods. It represents the revenue at risk in case this supplier fails to deliver.
           format: double
-          nullable: true
           example: 20.0
         grossMttrEMonths:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: "Mean time to recovery (mttr) in months in case of an \"elementary loss\" of this suppliers facility.\n            |In other words: \"How long does it take to shift production to another site or another supplier?\" "
           format: int32
-          nullable: true
           example: 2
         grossMttrIMonths:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: "Mean time to recovery (mttr) in months in case of an \"insolvency loss\" of this suppliers facility.\n            |In other words: \"'\"How long does it take to shift production to another site or another supplier?\" "
           format: int32
-          nullable: true
           example: 4
         cocSigned:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Did this supplier sign our Code of Conduct?
-          nullable: true
           example: true
         additionalInformation:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Additional text information regarding this impact data
-          nullable: true
           example: null
       description: Data related to calculating the impact.
       example: null
-    SitesUpsertSiteStatusEntry:
-      required:
-      - id
-      - status
-      - yourReference
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        yourReference:
-          type: string
-          example: null
-        yourReferenceSource:
-          type: string
-          nullable: true
-          example: null
-        status:
-          type: string
-          enum:
-          - Work in progress
-          - Done
-          - Failed
-          - Cancelled
-          example: null
-        statusText:
-          type: string
-          nullable: true
-          example: null
-        prewaveId:
-          type: integer
-          description: If status is "Done" this will reference the site on Prewave
-          format: int32
-          nullable: true
-          example: null
-      example: null
-    SitesUpsertValidationErrorEntry:
-      required:
-      - error
-      - yourReference
-      type: object
-      properties:
-        yourReference:
-          type: string
-          example: null
-        error:
-          type: string
-          example: null
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicFullSitesUpsertPayload:
-      required:
-      - dryRun
-      - siteData
-      type: object
-      properties:
-        siteData:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
-          example: null
-        dryRun:
-          type: boolean
-          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
-          example: null
-      example: null
-    SitesUpsertIndustryDefinitionPayload:
-      required:
-      - industry
-      - industryStandard
-      type: object
-      properties:
-        industry:
-          type: string
-          description: The industry identifier based on the standard
-          example: I_AUTOMOTIVE
-        industryStandard:
-          type: string
-          description: The industry standard used
-          example: MOCK-ISO-42
-      description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
-      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

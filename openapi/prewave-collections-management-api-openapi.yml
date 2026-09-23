@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Collections - Management API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Collections - Management API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,38 @@ paths:
       tags:
       - Collections - Management
       summary: Get collection by ID
-      description: "\nRetrieve a specific collection by its unique identifier.\n\nThe collection must be accessible to the authenticated user and must be active (not deactivated). This includes:\n- Collections owned by the user\n- Collections shared with the user's teams\n- Organization-wide collections (if user has appropriate permissions)\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `READ` permission on them.\n\n**Response:**\nReturns a collection object with full details including nested child collections. The response includes the same fields as the list endpoint, but with the complete collection tree structure recursively populated. See the `PublicCollectionDTO` schema for complete field definitions.\n\n**Response Details:**\n- The response includes the full collection tree structure with all child collections recursively populated\n- Child collections have the same structure as the parent collection, allowing for nested hierarchies\n- Only active collections are returned (inactive/deactivated collections are filtered out)\n- Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior.\n\n**Required Permissions**: `ACCESS_COLLECTION` and `READ` on the collection.\n        "
+      description: 'Retrieve a specific collection by its unique identifier.
+
+
+        The collection must be accessible to the authenticated user and must be active (not deactivated). This includes:
+
+        - Collections owned by the user
+
+        - Collections shared with the user''s teams
+
+        - Organization-wide collections (if user has appropriate permissions)
+
+
+        **Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `READ` permission on them.
+
+
+        **Response:**
+
+        Returns a collection object with full details including nested child collections. The response includes the same fields as the list endpoint, but with the complete collection tree structure recursively populated. See the `PublicCollectionDTO` schema for complete field definitions.
+
+
+        **Response Details:**
+
+        - The response includes the full collection tree structure with all child collections recursively populated
+
+        - Child collections have the same structure as the parent collection, allowing for nested hierarchies
+
+        - Only active collections are returned (inactive/deactivated collections are filtered out)
+
+        - Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior.
+
+
+        **Required Permissions**: `ACCESS_COLLECTION` and `READ` on the collection.'
       operationId: getCollectionById
       parameters:
       - name: collectionId
@@ -228,7 +120,64 @@ paths:
       tags:
       - Collections - Management
       summary: Update an existing collection
-      description: "\nUpdate an existing collection's name and lanes settings.\n\nOnly active collections that the user has update permissions for can be modified. Only the collection name and lanes setting can be updated through this endpoint. Other properties like `scope` and `tiersEnabled` cannot be changed after creation.\n\n**Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `UPDATE` permission on them.\n\n**Request:**\nOnly `name` (required) and `lanes` (optional) fields can be updated. All other fields (`scope`, `tiersEnabled`, `parentId`) cannot be changed through this endpoint. See the `PublicCollectionUpdatePayload` schema for complete field definitions.\n\n**Validation Rules:**\n- Collection names must be unique within the user's scope (duplicate names will result in `409 Conflict`)\n- The collection must exist, be active (not deactivated), and be accessible to the user\n- The user must have `UPDATE` permission on the collection\n- The user must be the collection creator OR have been granted access to the collection\n\n**What happens when you update a collection:**\n\n1. **Collection Update**: The collection's name and/or lanes setting are updated\n2. **Audit Trail**: The update is recorded in the audit log with:\n   - The user who updated the collection\n   - Timestamp of the operation\n   - Previous and new values for changed fields\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection name and lanes updated via Public API\"\n\n**Important Notes:**\n\n- Collection names must be unique within the user's scope - attempting to use a duplicate name will result in `409 Conflict`\n- Only `name` and `lanes` can be updated through this endpoint - all other fields (`scope`, `type`, `tiersEnabled`, `parentId`) are preserved from the existing collection\n- The `scope` and `tiersEnabled` fields are immutable after creation\n- Inactive (deactivated) collections cannot be updated and will return `404 Not Found`\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permissions**: `MANAGE_COLLECTION` and `UPDATE` on the collection.\n        "
+      description: 'Update an existing collection''s name and lanes settings.
+
+
+        Only active collections that the user has update permissions for can be modified. Only the collection name and lanes setting can be updated through this endpoint. Other properties like `scope` and `tiersEnabled` cannot be changed after creation.
+
+
+        **Note**: Inactive (deactivated) collections will return `404 Not Found`, even if you have `UPDATE` permission on them.
+
+
+        **Request:**
+
+        Only `name` (required) and `lanes` (optional) fields can be updated. All other fields (`scope`, `tiersEnabled`, `parentId`) cannot be changed through this endpoint. See the `PublicCollectionUpdatePayload` schema for complete field definitions.
+
+
+        **Validation Rules:**
+
+        - Collection names must be unique within the user''s scope (duplicate names will result in `409 Conflict`)
+
+        - The collection must exist, be active (not deactivated), and be accessible to the user
+
+        - The user must have `UPDATE` permission on the collection
+
+        - The user must be the collection creator OR have been granted access to the collection
+
+
+        **What happens when you update a collection:**
+
+
+        1. **Collection Update**: The collection''s name and/or lanes setting are updated
+
+        2. **Audit Trail**: The update is recorded in the audit log with:
+
+        - The user who updated the collection
+
+        - Timestamp of the operation
+
+        - Previous and new values for changed fields
+
+        - Reference to the public API endpoint used
+
+        - Audit comment: "Collection name and lanes updated via Public API"
+
+
+        **Important Notes:**
+
+
+        - Collection names must be unique within the user''s scope - attempting to use a duplicate name will result in `409 Conflict`
+
+        - Only `name` and `lanes` can be updated through this endpoint - all other fields (`scope`, `type`, `tiersEnabled`, `parentId`) are preserved from the existing collection
+
+        - The `scope` and `tiersEnabled` fields are immutable after creation
+
+        - Inactive (deactivated) collections cannot be updated and will return `404 Not Found`
+
+        - All collection operations are audited for compliance and tracking purposes
+
+
+        **Required Permissions**: `MANAGE_COLLECTION` and `UPDATE` on the collection.'
       operationId: updateCollection
       parameters:
       - name: collectionId
@@ -346,7 +295,68 @@ paths:
       tags:
       - Collections - Management
       summary: Deactivate a collection
-      description: "\nDeactivate (soft delete) an existing collection.\n\nThis operation performs a **soft deletion** by marking the collection as inactive. The collection data remains in the database but is no longer accessible through the API.\n\n**Parameter:**\n- `{collectionId}` (path parameter): The unique identifier of the collection to deactivate.\n\n**What happens when you deactivate a collection:**\n\n1. **Collection Deactivation**: The collection is soft-deleted (marked as inactive)\n2. **API Visibility**: The collection will no longer appear in collection list queries (`GET /public/v1/collections`) or be accessible via `GET /public/v1/collections/{collectionId}`\n3. **Target Relationships**: Target-collection relationships remain in the database, but since the collection is inactive, targets linked to this collection become inaccessible through the API. The targets themselves are not deleted.\n4. **Cleanup**: Collection filters and tree filters associated with the collection are removed\n5. **User Default Collection**: If this collection was set as the user's default collection, it will be cleared\n6. **Audit Trail**: The deactivation is recorded in the audit log with:\n   - The user who deactivated the collection\n   - Timestamp of the operation\n   - Collection details (name, scope, type, ID)\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection deleted via Public API\"\n\n**Important Notes:**\n\n- This is a **soft delete** - the collection is marked as inactive but data remains in the database\n- Deactivated collections are filtered out from all API queries automatically\n- **Only the creator of the collection can deactivate it** - even if you have `DELETE` permission through a role, you must be the collection creator\n- Target-collection relationships remain in the database, but targets become inaccessible through the API since the collection is inactive\n- The targets themselves are not deleted - only the collection becomes inactive\n- The collection cannot be reactivated through this API (no reactivation endpoint is available)\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permissions**:\n- `MANAGE_COLLECTION` permission\n- `DELETE` permission on the collection\n- **You must be the creator of the collection** (collection.userId must match your user ID)\n        "
+      description: 'Deactivate (soft delete) an existing collection.
+
+
+        This operation performs a **soft deletion** by marking the collection as inactive. The collection data remains in the database but is no longer accessible through the API.
+
+
+        **Parameter:**
+
+        - `{collectionId}` (path parameter): The unique identifier of the collection to deactivate.
+
+
+        **What happens when you deactivate a collection:**
+
+
+        1. **Collection Deactivation**: The collection is soft-deleted (marked as inactive)
+
+        2. **API Visibility**: The collection will no longer appear in collection list queries (`GET /public/v1/collections`) or be accessible via `GET /public/v1/collections/{collectionId}`
+
+        3. **Target Relationships**: Target-collection relationships remain in the database, but since the collection is inactive, targets linked to this collection become inaccessible through the API. The targets themselves are not deleted.
+
+        4. **Cleanup**: Collection filters and tree filters associated with the collection are removed
+
+        5. **User Default Collection**: If this collection was set as the user''s default collection, it will be cleared
+
+        6. **Audit Trail**: The deactivation is recorded in the audit log with:
+
+        - The user who deactivated the collection
+
+        - Timestamp of the operation
+
+        - Collection details (name, scope, type, ID)
+
+        - Reference to the public API endpoint used
+
+        - Audit comment: "Collection deleted via Public API"
+
+
+        **Important Notes:**
+
+
+        - This is a **soft delete** - the collection is marked as inactive but data remains in the database
+
+        - Deactivated collections are filtered out from all API queries automatically
+
+        - **Only the creator of the collection can deactivate it** - even if you have `DELETE` permission through a role, you must be the collection creator
+
+        - Target-collection relationships remain in the database, but targets become inaccessible through the API since the collection is inactive
+
+        - The targets themselves are not deleted - only the collection becomes inactive
+
+        - The collection cannot be reactivated through this API (no reactivation endpoint is available)
+
+        - All collection operations are audited for compliance and tracking purposes
+
+
+        **Required Permissions**:
+
+        - `MANAGE_COLLECTION` permission
+
+        - `DELETE` permission on the collection
+
+        - **You must be the creator of the collection** (collection.userId must match your user ID)'
       operationId: deleteCollection
       parameters:
       - name: collectionId
@@ -424,7 +434,66 @@ paths:
       tags:
       - Collections - Management
       summary: List all collections
-      description: "\nRetrieve all active collections accessible to the authenticated user with pagination support.\n\nThis endpoint returns collections that the user has read access to, including:\n- User-owned collections (`scope: User`)\n- Customer collections (`scope: Customer`) - organization-wide collections accessible to the user\n- Team-shared collections (via collection roles)\n\n**Note**:\n- Only active (non-deactivated) collections are returned\n- Featured collections (`scope: Featured`) are excluded from this endpoint\n- Inactive (deactivated) collections are automatically filtered out\n\n**Response:**\nReturns a paginated list of collection objects. Each collection includes basic information such as id, uuid, scope, type, name, count, lanes, tiersEnabled, and optional parentId and children fields. See the `PublicCollectionDTO` schema for complete field definitions.\n\n**Note**: Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior. In the list endpoint, `children` arrays are typically empty - use `GET /public/v1/collections/{collectionId}` to retrieve a collection with its full children tree populated.\n\n        **Pagination:**\n        - Results are paginated for efficient data retrieval\n        - Use query parameters to control pagination:\n  - `page`: Page number (0-indexed, default: 0)\n  - `size`: Number of items per page (default: 500)\n        - Results are sorted alphabetically by collection name\n        - Only active collections are included in pagination (inactive/deactivated collections are filtered out)\n\n**Access Control:**\n- Collections are filtered to include only those accessible to you:\n  - Collections owned by you (`scope: User`)\n  - Customer collections accessible to your organization (`scope: Customer`)\n  - Collections where you have been granted access (via collection roles)\n- Featured collections are excluded from this endpoint\n- Inactive (deactivated) collections are automatically excluded\n\n**Required Permission**: `ACCESS_COLLECTION`\n        "
+      description: 'Retrieve all active collections accessible to the authenticated user with pagination support.
+
+
+        This endpoint returns collections that the user has read access to, including:
+
+        - User-owned collections (`scope: User`)
+
+        - Customer collections (`scope: Customer`) - organization-wide collections accessible to the user
+
+        - Team-shared collections (via collection roles)
+
+
+        **Note**:
+
+        - Only active (non-deactivated) collections are returned
+
+        - Featured collections (`scope: Featured`) are excluded from this endpoint
+
+        - Inactive (deactivated) collections are automatically filtered out
+
+
+        **Response:**
+
+        Returns a paginated list of collection objects. Each collection includes basic information such as id, uuid, scope, type, name, count, lanes, tiersEnabled, and optional parentId and children fields. See the `PublicCollectionDTO` schema for complete field definitions.
+
+
+        **Note**: Fields with null values (`parentId`, `updatedAt`) are omitted from the JSON response. This is standard JSON serialization behavior. In the list endpoint, `children` arrays are typically empty - use `GET /public/v1/collections/{collectionId}` to retrieve a collection with its full children tree populated.
+
+
+        **Pagination:**
+
+        - Results are paginated for efficient data retrieval
+
+        - Use query parameters to control pagination:
+
+        - `page`: Page number (0-indexed, default: 0)
+
+        - `size`: Number of items per page (default: 500)
+
+        - Results are sorted alphabetically by collection name
+
+        - Only active collections are included in pagination (inactive/deactivated collections are filtered out)
+
+
+        **Access Control:**
+
+        - Collections are filtered to include only those accessible to you:
+
+        - Collections owned by you (`scope: User`)
+
+        - Customer collections accessible to your organization (`scope: Customer`)
+
+        - Collections where you have been granted access (via collection roles)
+
+        - Featured collections are excluded from this endpoint
+
+        - Inactive (deactivated) collections are automatically excluded
+
+
+        **Required Permission**: `ACCESS_COLLECTION`'
       operationId: getAllCollections
       parameters:
       - name: page
@@ -527,7 +596,66 @@ paths:
       tags:
       - Collections - Management
       summary: Create a new collection
-      description: "\nCreate a new collection with the specified properties.\n\nThe collection will be created with \"Customer\" scope by default unless explicitly specified otherwise. All required fields must be provided and will be validated.\n\n**Note**: The collection will be automatically subscribed to your account upon creation, and you will become the collection owner.\n\n**Request:**\nThe request body includes collection name (required) and optional fields for scope, lanes, tiersEnabled, and parentId. See the `PublicCollectionPayload` schema for complete field definitions and validation rules.\n\n**Validation Rules:**\n- Collection names must be unique within the specified scope\n- The `tiersEnabled` field cannot be changed after collection creation\n- The `parentId` field is accepted but currently not used - collection hierarchy is managed internally\n\n**What happens when you create a collection:**\n\n1. **Collection Creation**: A new active collection is created with the specified properties\n2. **User Subscription**: You are automatically subscribed to the collection and become its owner\n3. **User Activity**: For Customer scope collections, the creation is logged in your user activity\n4. **Audit Trail**: The creation is recorded in the audit log with:\n   - The user who created the collection\n   - Timestamp of the operation\n   - Collection details (name, scope, type)\n   - Reference to the public API endpoint used\n   - Audit comment: \"Collection created via Public API\"\n\n**Important Notes:**\n\n- Collection names must be unique within the specified scope - attempting to use a duplicate name will result in `409 Conflict`\n- Once created, the `scope` and `tiersEnabled` fields cannot be changed\n- The collection will be empty (no targets) initially - use the Collection Targets API (`POST /public/v1/collections/{collectionId}/targets`) to add suppliers to the collection\n- You automatically become the owner of the collection upon creation\n- All collection operations are audited for compliance and tracking purposes\n\n**Required Permission**: `CREATE_COLLECTION`\n        "
+      description: 'Create a new collection with the specified properties.
+
+
+        The collection will be created with "Customer" scope by default unless explicitly specified otherwise. All required fields must be provided and will be validated.
+
+
+        **Note**: The collection will be automatically subscribed to your account upon creation, and you will become the collection owner.
+
+
+        **Request:**
+
+        The request body includes collection name (required) and optional fields for scope, lanes, tiersEnabled, and parentId. See the `PublicCollectionPayload` schema for complete field definitions and validation rules.
+
+
+        **Validation Rules:**
+
+        - Collection names must be unique within the specified scope
+
+        - The `tiersEnabled` field cannot be changed after collection creation
+
+        - The `parentId` field is accepted but currently not used - collection hierarchy is managed internally
+
+
+        **What happens when you create a collection:**
+
+
+        1. **Collection Creation**: A new active collection is created with the specified properties
+
+        2. **User Subscription**: You are automatically subscribed to the collection and become its owner
+
+        3. **User Activity**: For Customer scope collections, the creation is logged in your user activity
+
+        4. **Audit Trail**: The creation is recorded in the audit log with:
+
+        - The user who created the collection
+
+        - Timestamp of the operation
+
+        - Collection details (name, scope, type)
+
+        - Reference to the public API endpoint used
+
+        - Audit comment: "Collection created via Public API"
+
+
+        **Important Notes:**
+
+
+        - Collection names must be unique within the specified scope - attempting to use a duplicate name will result in `409 Conflict`
+
+        - Once created, the `scope` and `tiersEnabled` fields cannot be changed
+
+        - The collection will be empty (no targets) initially - use the Collection Targets API (`POST /public/v1/collections/{collectionId}/targets`) to add suppliers to the collection
+
+        - You automatically become the owner of the collection upon creation
+
+        - All collection operations are audited for compliance and tracking purposes
+
+
+        **Required Permission**: `CREATE_COLLECTION`'
       operationId: createCollection
       requestBody:
         description: Collection creation payload. Content-Type must be `application/json`. All required fields must be provided and will be validated. The `scope` field defaults to `Customer` if not provided.
@@ -623,179 +751,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicCollectionPayload:
-      required:
-      - lanes
-      - name
-      - scope
-      - tiersEnabled
-      type: object
-      properties:
-        scope:
-          type: string
-          enum:
-          - User
-          - Customer
-          - Featured
-          example: null
-        name:
-          minLength: 1
-          type: string
-          example: null
-        lanes:
-          type: boolean
-          example: null
-        tiersEnabled:
-          type: boolean
-          example: null
-        parentId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-      example: null
-    PublicCollectionUpdatePayload:
-      required:
-      - lanes
-      - name
-      type: object
-      properties:
-        name:
-          minLength: 1
-          type: string
-          example: null
-        lanes:
-          type: boolean
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicCollectionDTO:
-      required:
-      - children
-      - id
-      - lanes
-      - name
-      - scope
-      - tiersEnabled
-      - type
-      - uuid
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        uuid:
-          type: string
-          format: uuid
-          example: null
-        scope:
-          type: string
-          enum:
-          - User
-          - Customer
-          - Featured
-          example: null
-        type:
-          type: string
-          enum:
-          - Default
-          - Commodity
-          - Ariba
-          example: null
-        name:
-          type: string
-          example: null
-        count:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        lanes:
-          type: boolean
-          example: null
-        tiersEnabled:
-          type: boolean
-          example: null
-        parentId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicCollectionDTO'
-          example: null
-        updatedAt:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -835,8 +790,188 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    PublicCollectionPayload:
+      required:
+      - lanes
+      - name
+      - scope
+      - tiersEnabled
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
+        name:
+          minLength: 1
+          type: string
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        parentId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicCollectionDTO:
+      required:
+      - children
+      - id
+      - lanes
+      - name
+      - scope
+      - tiersEnabled
+      - type
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        uuid:
+          type: string
+          format: uuid
+          example: null
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
+        type:
+          type: string
+          enum:
+          - Default
+          - Commodity
+          - Ariba
+          example: null
+        name:
+          type: string
+          example: null
+        count:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        parentId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCollectionDTO'
+          example: null
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+      example: null
+    PublicCollectionUpdatePayload:
+      required:
+      - lanes
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          example: null
+        lanes:
+          type: boolean
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

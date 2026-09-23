@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Scores - Target API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Scores - Target API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -149,14 +10,161 @@ security:
 - Token authentication: []
 tags:
 - name: Scores - Target
-  description: "\n⚠️ **DEPRECATED** - Target score endpoints. These endpoints are deprecated and will be removed at the end of December 2026. Use `/public/v1/enterprise-export/scores` instead.\n\n**Note**: Responses from these endpoints include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n    "
+  description: '⚠️ **DEPRECATED** - Target score endpoints. These endpoints are deprecated and will be removed at the end of December 2026. Use `/public/v1/enterprise-export/scores` instead.
+
+
+    **Note**: Responses from these endpoints include a `Sunset` HTTP header (RFC 8594) indicating the removal date.'
 paths:
   /public/v1/target/{systemId}/{targetId}/score:
     get:
       tags:
       - Scores - Target
-      summary: Returns the target score including the overall score and scores for all infotag-groups.
-      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score` | `GET /public/v1/enterprise-export/scores` | Retrieve score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides significant improvements:\n\n### 1. Bulk Operations\n- Retrieve scores for multiple targets in a single request\n- More efficient for large-scale integrations\n\n### 2. Automated Updates\n- Configure scheduled exports that run automatically\n- No need to poll individual endpoints\n\n### 3. Better Performance\n- Optimized for large-scale data retrieval\n- Consistent data calculation timestamps\n\n### 4. Error Handling\n- Detailed error logs for failed calculations\n- Better visibility into data quality issues\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nUse `POST /public/v1/enterprise-export/scores/config` to set up your export configuration:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"collectionIds\": [123, 456],\n  \"targetIds\": [102006215, 101641243],\n  \"perspectiveIds\": [1, 2],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes all the same information as this endpoint, plus additional metadata:\n- Calculation timestamps\n- Risk levels\n- Edge numbers for target identification\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the target score including:\n- Overall target score\n- Scores for all infotag groups\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      summary: Returns the target score including the overall score and scores for all…
+      description: '⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
+
+
+        **Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.
+
+
+        ---
+
+
+        ## Migration Required
+
+
+        This endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:
+
+
+        ### Replacement Endpoint
+
+
+        | Old Endpoint | New Endpoint | Purpose |
+
+        |--------------|--------------|---------|
+
+        | `GET /public/v1/target/{systemId}/{targetId}/score` | `GET /public/v1/enterprise-export/scores` | Retrieve score data |
+
+
+        ---
+
+
+        ## Why Migrate?
+
+
+        The Enterprise Export API (`PublicEnterpriseExportController`) provides significant improvements:
+
+
+        ### 1. Bulk Operations
+
+        - Retrieve scores for multiple targets in a single request
+
+        - More efficient for large-scale integrations
+
+
+        ### 2. Automated Updates
+
+        - Configure scheduled exports that run automatically
+
+        - No need to poll individual endpoints
+
+
+        ### 3. Better Performance
+
+        - Optimized for large-scale data retrieval
+
+        - Consistent data calculation timestamps
+
+
+        ### 4. Error Handling
+
+        - Detailed error logs for failed calculations
+
+        - Better visibility into data quality issues
+
+
+        ---
+
+
+        ## Quick Migration Guide
+
+
+        ### Step 1: Configure Export Job
+
+
+        Use `POST /public/v1/enterprise-export/scores/config` to set up your export configuration:
+
+
+        ```json
+
+        {
+
+        "runInterval": "DAILY",
+
+        "enabled": true,
+
+        "collectionIds": [123, 456],
+
+        "targetIds": [102006215, 101641243],
+
+        "perspectiveIds": [1, 2],
+
+        "includeComponents": true
+
+        }
+
+        ```
+
+
+        ### Step 2: Retrieve Scores
+
+
+        Use `GET /public/v1/enterprise-export/scores` to retrieve score data:
+
+
+        ```http
+
+        GET /public/v1/enterprise-export/scores?page=0&size=20
+
+        ```
+
+
+        The response includes all the same information as this endpoint, plus additional metadata:
+
+        - Calculation timestamps
+
+        - Risk levels
+
+        - Edge numbers for target identification
+
+
+        ---
+
+
+        ## Current Endpoint Behavior
+
+
+        **Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`
+
+
+        **Performance impact**: Low
+
+
+        Returns the target score including:
+
+        - Overall target score
+
+        - Scores for all infotag groups
+
+
+        Supports filtering by:
+
+        - Perspective ID (optional, defaults to user''s perspective)
+
+        - Group ID (optional)
+
+        - Component (optional)
+
+        - Subcomponent (optional)'
       operationId: score
       parameters:
       - name: systemId
@@ -277,7 +285,121 @@ paths:
       tags:
       - Scores - Target
       summary: Get the event type scores for a infotag group
-      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score/{groupId}` | `GET /public/v1/enterprise-export/scores` | Retrieve event type scores |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Event type scores when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components (which includes event type scores):\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Event Type Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with event type scores:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `groups` arrays with `eventTypes` when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the event type scores for a specific infotag group, including:\n- Event type information\n- Event type score\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      description: '⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
+
+
+        **Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.
+
+
+        ---
+
+
+        ## Migration Required
+
+
+        This endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:
+
+
+        ### Replacement Endpoint
+
+
+        | Old Endpoint | New Endpoint | Purpose |
+
+        |--------------|--------------|---------|
+
+        | `GET /public/v1/target/{systemId}/{targetId}/score/{groupId}` | `GET /public/v1/enterprise-export/scores` | Retrieve event type scores |
+
+
+        ---
+
+
+        ## Why Migrate?
+
+
+        The Enterprise Export API (`PublicEnterpriseExportController`) provides:
+
+        - Event type scores when `includeComponents: true` is set in the configuration
+
+        - Bulk retrieval for multiple targets
+
+        - Automated scheduled exports
+
+        - Better performance for large-scale operations
+
+
+        ---
+
+
+        ## Quick Migration Guide
+
+
+        ### Step 1: Configure Export Job with Components
+
+
+        Configure your export job to include components (which includes event type scores):
+
+
+        ```json
+
+        {
+
+        "runInterval": "DAILY",
+
+        "enabled": true,
+
+        "targetIds": [102006215],
+
+        "perspectiveIds": [1],
+
+        "includeComponents": true
+
+        }
+
+        ```
+
+
+        ### Step 2: Retrieve Event Type Scores
+
+
+        Use `GET /public/v1/enterprise-export/scores` to retrieve score data with event type scores:
+
+
+        ```http
+
+        GET /public/v1/enterprise-export/scores?page=0&size=20
+
+        ```
+
+
+        The response includes `groups` arrays with `eventTypes` when `includeComponents` is enabled.
+
+
+        ---
+
+
+        ## Current Endpoint Behavior
+
+
+        **Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`
+
+
+        **Performance impact**: Low
+
+
+        Returns the event type scores for a specific infotag group, including:
+
+        - Event type information
+
+        - Event type score
+
+
+        Supports filtering by:
+
+        - Perspective ID (optional, defaults to user''s perspective)
+
+        - Component (optional)
+
+        - Subcomponent (optional)'
       operationId: scoreEventType
       parameters:
       - name: systemId
@@ -396,8 +518,128 @@ paths:
     get:
       tags:
       - Scores - Target
-      summary: The historical overall-score of the target for the last months, depending on the defined perspective
-      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-history` | `GET /public/v1/enterprise-export/scores` | Retrieve historical score data |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Historical score data with calculation timestamps\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job\n\nConfigure your export job to include historical data:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": false\n}\n```\n\n### Step 2: Retrieve Historical Scores\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with timestamps:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=100\n```\n\nThe response includes `calculatedAt` timestamps that allow you to track score changes over time.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the historical overall-score of the target for the last months, including:\n- Monthly scores\n- Month-over-month change\n- Year-over-year change\n- Maximum and minimum scores (overall and past year)\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n- Component (optional)\n- Subcomponent (optional)\n        "
+      summary: The historical overall-score of the target for the last months, depending on…
+      description: '⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
+
+
+        **Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.
+
+
+        ---
+
+
+        ## Migration Required
+
+
+        This endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:
+
+
+        ### Replacement Endpoint
+
+
+        | Old Endpoint | New Endpoint | Purpose |
+
+        |--------------|--------------|---------|
+
+        | `GET /public/v1/target/{systemId}/{targetId}/score-history` | `GET /public/v1/enterprise-export/scores` | Retrieve historical score data |
+
+
+        ---
+
+
+        ## Why Migrate?
+
+
+        The Enterprise Export API (`PublicEnterpriseExportController`) provides:
+
+        - Historical score data with calculation timestamps
+
+        - Bulk retrieval for multiple targets
+
+        - Automated scheduled exports
+
+        - Better performance for large-scale operations
+
+
+        ---
+
+
+        ## Quick Migration Guide
+
+
+        ### Step 1: Configure Export Job
+
+
+        Configure your export job to include historical data:
+
+
+        ```json
+
+        {
+
+        "runInterval": "DAILY",
+
+        "enabled": true,
+
+        "targetIds": [102006215],
+
+        "perspectiveIds": [1],
+
+        "includeComponents": false
+
+        }
+
+        ```
+
+
+        ### Step 2: Retrieve Historical Scores
+
+
+        Use `GET /public/v1/enterprise-export/scores` to retrieve score data with timestamps:
+
+
+        ```http
+
+        GET /public/v1/enterprise-export/scores?page=0&size=100
+
+        ```
+
+
+        The response includes `calculatedAt` timestamps that allow you to track score changes over time.
+
+
+        ---
+
+
+        ## Current Endpoint Behavior
+
+
+        **Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`
+
+
+        **Performance impact**: Low
+
+
+        Returns the historical overall-score of the target for the last months, including:
+
+        - Monthly scores
+
+        - Month-over-month change
+
+        - Year-over-year change
+
+        - Maximum and minimum scores (overall and past year)
+
+
+        Supports filtering by:
+
+        - Perspective ID (optional, defaults to user''s perspective)
+
+        - Group ID (optional)
+
+        - Component (optional)
+
+        - Subcomponent (optional)'
       operationId: scoreHistory
       parameters:
       - name: systemId
@@ -518,8 +760,122 @@ paths:
     get:
       tags:
       - Scores - Target
-      summary: The current score for a target split up into the scoring components, depending on the defined perspective.
-      description: "\n⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.\n\n**Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.\n\n---\n\n## Migration Required\n\nThis endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:\n\n### Replacement Endpoint\n\n| Old Endpoint | New Endpoint | Purpose |\n|--------------|--------------|---------|\n| `GET /public/v1/target/{systemId}/{targetId}/score-components` | `GET /public/v1/enterprise-export/scores` | Retrieve score components |\n\n---\n\n## Why Migrate?\n\nThe Enterprise Export API (`PublicEnterpriseExportController`) provides:\n- Score components and subcomponents when `includeComponents: true` is set in the configuration\n- Bulk retrieval for multiple targets\n- Automated scheduled exports\n- Better performance for large-scale operations\n\n---\n\n## Quick Migration Guide\n\n### Step 1: Configure Export Job with Components\n\nConfigure your export job to include components:\n\n```json\n{\n  \"runInterval\": \"DAILY\",\n  \"enabled\": true,\n  \"targetIds\": [102006215],\n  \"perspectiveIds\": [1],\n  \"includeComponents\": true\n}\n```\n\n### Step 2: Retrieve Score Components\n\nUse `GET /public/v1/enterprise-export/scores` to retrieve score data with components:\n\n```http\nGET /public/v1/enterprise-export/scores?page=0&size=20\n```\n\nThe response includes `components` and `subComponents` arrays when `includeComponents` is enabled.\n\n---\n\n## Current Endpoint Behavior\n\n**Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`\n\n**Performance impact**: Low\n\nReturns the current score for a target split up into scoring components, including:\n- Component type\n- Component score\n- List of subcomponents with their scores\n\nSupports filtering by:\n- Perspective ID (optional, defaults to user's perspective)\n- Group ID (optional)\n        "
+      summary: The current score for a target split up into the scoring components, depending…
+      description: '⚠️ **DEPRECATED** - This endpoint is deprecated and will be removed at the end of December 2026.
+
+
+        **Note**: Responses include a `Sunset` HTTP header (RFC 8594) indicating the removal date.
+
+
+        ---
+
+
+        ## Migration Required
+
+
+        This endpoint has been deprecated in favor of the Enterprise Export API. Please migrate to the new endpoint:
+
+
+        ### Replacement Endpoint
+
+
+        | Old Endpoint | New Endpoint | Purpose |
+
+        |--------------|--------------|---------|
+
+        | `GET /public/v1/target/{systemId}/{targetId}/score-components` | `GET /public/v1/enterprise-export/scores` | Retrieve score components |
+
+
+        ---
+
+
+        ## Why Migrate?
+
+
+        The Enterprise Export API (`PublicEnterpriseExportController`) provides:
+
+        - Score components and subcomponents when `includeComponents: true` is set in the configuration
+
+        - Bulk retrieval for multiple targets
+
+        - Automated scheduled exports
+
+        - Better performance for large-scale operations
+
+
+        ---
+
+
+        ## Quick Migration Guide
+
+
+        ### Step 1: Configure Export Job with Components
+
+
+        Configure your export job to include components:
+
+
+        ```json
+
+        {
+
+        "runInterval": "DAILY",
+
+        "enabled": true,
+
+        "targetIds": [102006215],
+
+        "perspectiveIds": [1],
+
+        "includeComponents": true
+
+        }
+
+        ```
+
+
+        ### Step 2: Retrieve Score Components
+
+
+        Use `GET /public/v1/enterprise-export/scores` to retrieve score data with components:
+
+
+        ```http
+
+        GET /public/v1/enterprise-export/scores?page=0&size=20
+
+        ```
+
+
+        The response includes `components` and `subComponents` arrays when `includeComponents` is enabled.
+
+
+        ---
+
+
+        ## Current Endpoint Behavior
+
+
+        **Required Permission**: `ACCESS_PUBLIC_TARGET_SCORE`
+
+
+        **Performance impact**: Low
+
+
+        Returns the current score for a target split up into scoring components, including:
+
+        - Component type
+
+        - Component score
+
+        - List of subcomponents with their scores
+
+
+        Supports filtering by:
+
+        - Perspective ID (optional, defaults to user''s perspective)
+
+        - Group ID (optional)'
       operationId: scoreComponents
       parameters:
       - name: systemId
@@ -610,6 +966,34 @@ paths:
       deprecated: true
 components:
   schemas:
+    PublicGroupScore:
+      required:
+      - group
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PublicInfotagGroup'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      description: List of group scores
+      example: null
+    PublicTargetScore:
+      required:
+      - groups
+      - score
+      type: object
+      properties:
+        score:
+          $ref: '#/components/schemas/PublicScore'
+        groups:
+          type: array
+          description: List of group scores
+          items:
+            $ref: '#/components/schemas/PublicGroupScore'
+          example: null
+      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -684,202 +1068,10 @@ components:
           - TargetScore
           example: null
         score:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicScore'
           example: null
       description: List of target score subcomponents
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicEventTypeScore:
-      required:
-      - eventType
-      type: object
-      properties:
-        eventType:
-          $ref: '#/components/schemas/PublicInfotagDTO'
-        score:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
-      example: null
-    PublicTargetScoreComponents:
-      required:
-      - subcomponents
-      type: object
-      properties:
-        component:
-          type: string
-          description: Score component of the target
-          nullable: true
-          enum:
-          - PeerScore
-          - AlertScore
-          - SSAScore
-          - ExternalScore
-          - TierNScore
-          example: null
-        score:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
-        subcomponents:
-          type: array
-          description: List of target score subcomponents
-          items:
-            $ref: '#/components/schemas/PublicTargetScoreSubcomponent'
-          example: null
-      example: null
-    PublicInfotagDTO:
-      required:
-      - id
-      - type
-      - value
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        type:
-          $ref: '#/components/schemas/PublicInfotagTypeDTO'
-        value:
-          type: string
-          example: null
-        svalue:
-          type: string
-          nullable: true
-          example: null
-        icon:
-          type: string
-          nullable: true
-          example: null
-        numValue:
-          type: number
-          nullable: true
-          example: null
-        priority:
-          type: string
-          nullable: true
-          deprecated: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        impactScore:
-          type: string
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      example: null
-    PublicScore:
-      type: object
-      properties:
-        value:
-          type: integer
-          description: Score value
-          format: int32
-          nullable: true
-          example: null
-        risk:
-          type: string
-          description: Score risk level
-          nullable: true
-          example: Mid
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-      description: Score of the target subcomponent
-      example: null
-    PublicInfotagTypeDTO:
-      required:
-      - active
-      - display
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: null
-        active:
-          type: boolean
-          example: null
-        displayName:
-          type: string
-          nullable: true
-          example: null
-        icon:
-          type: string
-          nullable: true
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        display:
-          type: boolean
-          example: null
       example: null
     ApiRateLimitTimeRequestLimit:
       type: object
@@ -917,34 +1109,100 @@ components:
           description: Short name/code of the infotag group
           example: null
       example: null
-    PublicTargetScore:
+    AccessDeniedErrorDTO:
       required:
-      - groups
-      - score
+      - code
+      - loggedIn
+      - message
       type: object
       properties:
-        score:
-          $ref: '#/components/schemas/PublicScore'
-        groups:
-          type: array
-          description: List of group scores
-          items:
-            $ref: '#/components/schemas/PublicGroupScore'
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
           example: null
       example: null
-    PublicGroupScore:
+    PublicTargetScoreComponents:
       required:
-      - group
+      - subcomponents
       type: object
       properties:
-        group:
-          $ref: '#/components/schemas/PublicInfotagGroup'
+        component:
+          type:
+          - string
+          - 'null'
+          description: Score component of the target
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
         score:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicScore'
           example: null
-      description: List of group scores
+        subcomponents:
+          type: array
+          description: List of target score subcomponents
+          items:
+            $ref: '#/components/schemas/PublicTargetScoreSubcomponent'
+          example: null
+      example: null
+    PublicScore:
+      type: object
+      properties:
+        value:
+          type:
+          - integer
+          - 'null'
+          description: Score value
+          format: int32
+          example: null
+        risk:
+          type:
+          - string
+          - 'null'
+          description: Score risk level
+          example: Mid
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+      description: Score of the target subcomponent
+      example: null
+    PublicEventTypeScore:
+      required:
+      - eventType
+      type: object
+      properties:
+        eventType:
+          $ref: '#/components/schemas/PublicInfotagDTO'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
       example: null
     PublicTargetScoreHistory:
       required:
@@ -994,8 +1252,116 @@ components:
           format: int32
           example: null
       example: null
+    PublicInfotagDTO:
+      required:
+      - id
+      - type
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          $ref: '#/components/schemas/PublicInfotagTypeDTO'
+        value:
+          type: string
+          example: null
+        svalue:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        numValue:
+          type:
+          - number
+          - 'null'
+          example: null
+        priority:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicInfotagTypeDTO:
+      required:
+      - active
+      - display
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+        active:
+          type: boolean
+          example: null
+        displayName:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        display:
+          type: boolean
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

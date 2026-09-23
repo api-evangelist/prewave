@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Alerts API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Alerts API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,65 @@ paths:
       tags:
       - Alerts
       summary: Get all alerts of the current user's feed (V2)
-      description: "\nRetrieve all alerts for targets that are in collections with feed delivery enabled. Results are ordered by newest first. V2 uses the same filtering and feed logic as the Prewave dashboard.\n\n**Response:** A `Page` containing a list of alert objects. Standard pagination fields: `content`, `totalElements`, `totalPages`, `size`, `number`, `first`, `last`. Each alert includes id, title, timestamps (ISO 8601 UTC), event, priority, classification, locations, links, media, primary/mentioned targets, collection paths, and optional geo (see `includeGeo`).\n\n**Pagination:** Use query parameters `page` (0-based index) and `size` (items per page). Default page size is 20 when not specified.\n\n**Required permission:** `access_public_user_feed`\n\n**Note:** Geographic information (`geo`) is only included when `includeGeo=true`. Fields with null values are omitted from the JSON response.\n\n---\n\n## Migration from V1 (`/public/v1/feed`)\n\n### What changed\n\n| Aspect | V1 | V2 |\n|--------|----|----|\n| **URL** | `/public/v1/feed` | `/public/v2/feed` |\n| **Collections** | `collectionId` (singular) | `collectionIds` (plural); same comma-separated IDs |\n| **Date filter** | `from` or `newerThan` (milliseconds) | `from` only; UTC ISO 8601 (e.g. `2024-01-01T00:00:00Z`) |\n| **Omit date** | (varies) | Last **90 days** of data |\n| **Timestamps in response** | Numeric (e.g. milliseconds) | **ISO 8601 strings in UTC** for `createdAt`, `predictedAtStart`, `predictedAtEnd` |\n\n### What is new in V2\n\n- **Tier control:** `minTier` and `maxTier` to include specific supply chain tiers (Tier 1 = direct suppliers, Tier 2 = their suppliers, etc.). Omit both for Tier 1 only (default).\n- **Classification:** `isSituationReport`, `active`, `relevancy` on each alert.\n- **Structured metadata:** `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`—easier to filter and display than the previous `infotags` list.\n- **Context:** `mentionedTargets`, `previousAlerts`, `flagged`, `useCaseDetails` for richer context.\n- **Performance:** V2 is significantly faster than V1—lower latency and higher throughput.\n\n### What is removed in V2\n\n- **`statusId`** — no longer returned.\n- **`infotags`** — use the new structured fields instead: `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`.\n        "
+      description: 'Retrieve all alerts for targets that are in collections with feed delivery enabled. Results are ordered by newest first. V2 uses the same filtering and feed logic as the Prewave dashboard.
+
+
+        **Response:** A `Page` containing a list of alert objects. Standard pagination fields: `content`, `totalElements`, `totalPages`, `size`, `number`, `first`, `last`. Each alert includes id, title, timestamps (ISO 8601 UTC), event, priority, classification, locations, links, media, primary/mentioned targets, collection paths, and optional geo (see `includeGeo`).
+
+
+        **Pagination:** Use query parameters `page` (0-based index) and `size` (items per page). Default page size is 20 when not specified.
+
+
+        **Required permission:** `access_public_user_feed`
+
+
+        **Note:** Geographic information (`geo`) is only included when `includeGeo=true`. Fields with null values are omitted from the JSON response.
+
+
+        ---
+
+
+        ## Migration from V1 (`/public/v1/feed`)
+
+
+        ### What changed
+
+
+        | Aspect | V1 | V2 |
+
+        |--------|----|----|
+
+        | **URL** | `/public/v1/feed` | `/public/v2/feed` |
+
+        | **Collections** | `collectionId` (singular) | `collectionIds` (plural); same comma-separated IDs |
+
+        | **Date filter** | `from` or `newerThan` (milliseconds) | `from` only; UTC ISO 8601 (e.g. `2024-01-01T00:00:00Z`) |
+
+        | **Omit date** | (varies) | Last **90 days** of data |
+
+        | **Timestamps in response** | Numeric (e.g. milliseconds) | **ISO 8601 strings in UTC** for `createdAt`, `predictedAtStart`, `predictedAtEnd` |
+
+
+        ### What is new in V2
+
+
+        - **Tier control:** `minTier` and `maxTier` to include specific supply chain tiers (Tier 1 = direct suppliers, Tier 2 = their suppliers, etc.). Omit both for Tier 1 only (default).
+
+        - **Classification:** `isSituationReport`, `active`, `relevancy` on each alert.
+
+        - **Structured metadata:** `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`—easier to filter and display than the previous `infotags` list.
+
+        - **Context:** `mentionedTargets`, `previousAlerts`, `flagged`, `useCaseDetails` for richer context.
+
+        - **Performance:** V2 is significantly faster than V1—lower latency and higher throughput.
+
+
+        ### What is removed in V2
+
+
+        - **`statusId`** — no longer returned.
+
+        - **`infotags`** — use the new structured fields instead: `eventTypes`, `eventTypeGroups`, `alertTypes`, `labels`.'
       operationId: alertFeed
       parameters:
       - name: collectionIds
@@ -308,7 +227,66 @@ paths:
       tags:
       - Alerts
       summary: Get alerts for a specific target
-      description: "\nRetrieve alerts for a specific target identified by system ID and target ID.\n\nThis endpoint returns paginated alerts for a single target, supporting foreign system ID mapping.\nThe target can be identified using Prewave internal IDs or foreign system IDs (e.g., customer,\nsupplier, SAP IDs).\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.\n\n**Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.\n\n**Use Cases**:\n- Monitor alerts for a specific supplier\n- Track alerts for targets identified by external system IDs\n- Filter alerts by priority, date, or perspective\n- Export target-specific alerts for reporting\n\n**Target Identification**:\n- Supports Prewave internal IDs (`systemId=\"prewave\"`)\n- Supports foreign system IDs (e.g., `systemId=\"customer\"`, `systemId=\"supplier\"`)\n- Automatically resolves foreign IDs to Prewave target IDs\n\n**Filtering Options**:\n- **priorities**: Filter by alert priority levels (Low, Mid, High, Critical)\n- **newerThan**: Filter alerts newer than a timestamp (milliseconds)\n- **perspectiveId**: Filter by perspective (defaults to user's perspective)\n- **includeGeo**: Include geographic coordinates in response\n\n**Pagination**:\n- Results are paginated (default: 20 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required Permission**: `access_public_target_feed`\n\n**Performance Impact**: Medium\n    "
+      description: 'Retrieve alerts for a specific target identified by system ID and target ID.
+
+
+        This endpoint returns paginated alerts for a single target, supporting foreign system ID mapping.
+
+        The target can be identified using Prewave internal IDs or foreign system IDs (e.g., customer,
+
+        supplier, SAP IDs).
+
+
+        **Response:**
+
+        Returns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.
+
+
+        **Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.
+
+
+        **Use Cases**:
+
+        - Monitor alerts for a specific supplier
+
+        - Track alerts for targets identified by external system IDs
+
+        - Filter alerts by priority, date, or perspective
+
+        - Export target-specific alerts for reporting
+
+
+        **Target Identification**:
+
+        - Supports Prewave internal IDs (`systemId="prewave"`)
+
+        - Supports foreign system IDs (e.g., `systemId="customer"`, `systemId="supplier"`)
+
+        - Automatically resolves foreign IDs to Prewave target IDs
+
+
+        **Filtering Options**:
+
+        - **priorities**: Filter by alert priority levels (Low, Mid, High, Critical)
+
+        - **newerThan**: Filter alerts newer than a timestamp (milliseconds)
+
+        - **perspectiveId**: Filter by perspective (defaults to user''s perspective)
+
+        - **includeGeo**: Include geographic coordinates in response
+
+
+        **Pagination**:
+
+        - Results are paginated (default: 20 items per page)
+
+        - Use `page` and `size` query parameters to control pagination
+
+
+        **Required Permission**: `access_public_target_feed`
+
+
+        **Performance Impact**: Medium'
       operationId: targetAlerts
       parameters:
       - name: systemId
@@ -455,7 +433,29 @@ paths:
       tags:
       - Alerts
       summary: Get all alerts of the current user's feed
-      description: "\n## Current Endpoint Behavior\n\nRetrieve all alerts for targets that are in collections with feed delivery enabled.\n\nThis endpoint returns paginated alerts filtered by various criteria. Alerts are returned for targets\nthat belong to collections where feed delivery is enabled. Results are ordered by newest first.\n\n**Response:**\nReturns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.\n\n**Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.\n\n**Required Permission**: `access_public_user_feed`\n\n**Performance Impact**: Medium\n        "
+      description: '## Current Endpoint Behavior
+
+
+        Retrieve all alerts for targets that are in collections with feed delivery enabled.
+
+
+        This endpoint returns paginated alerts filtered by various criteria. Alerts are returned for targets
+
+        that belong to collections where feed delivery is enabled. Results are ordered by newest first.
+
+
+        **Response:**
+
+        Returns a paginated list of alert objects. Each alert includes basic information (id, uuid, title, timestamps), event grouping, priority and classification details, location/geographic data, source links and media, infotags, primary target information, and collection paths. The response is wrapped in a Spring Data `Page` object with standard pagination fields. See the response schema for complete field definitions.
+
+
+        **Note**: Fields with null values are omitted from the JSON response. This is standard JSON serialization behavior. Geographic information (`geo`) is only available if `includeGeo` query parameter is set to `true`.
+
+
+        **Required Permission**: `access_public_user_feed`
+
+
+        **Performance Impact**: Medium'
       operationId: alertFeed_1
       parameters:
       - name: collectionId
@@ -708,89 +708,484 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    TargetForeignSystemDTO:
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+          example: null
+        sorted:
+          type: boolean
+          example: null
+        unsorted:
+          type: boolean
+          example: null
+      example: null
+    TargetRequestTypeStatusDto:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        customerId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        status:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NONE
+          - PENDING
+          - COMPLETED
+          - REJECTED
+          example: null
+        rejectionReason:
+          type:
+          - string
+          - 'null'
+          example: null
+      example: null
+    DeliverySettingTypeDTO:
+      required:
+      - displayName
+      - frequency
+      - inherited
+      - minPriority
+      - ordering
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Feed
+          - EmailRealtime
+          - EmailDaily
+          - EmailWeekly
+          example: null
+        displayName:
+          type: string
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        frequency:
+          type: string
+          example: null
+        minPriority:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        inherited:
+          type: boolean
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    InfotagDTO:
       required:
       - id
-      - system
+      - isTarget
+      - type
       type: object
       properties:
-        system:
-          type: string
-          example: null
         id:
-          type: string
+          type: integer
+          format: int32
           example: null
-        source:
-          type: string
-          nullable: true
+        type:
+          $ref: '#/components/schemas/InfotagTypeDTO'
+        value:
+          type:
+          - string
+          - 'null'
+          example: null
+        svalue:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        numValue:
+          type:
+          - number
+          - 'null'
+          example: null
+        priority:
+          type:
+          - string
+          - 'null'
+          description: Obsolete
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        isTarget:
+          type: boolean
+          example: null
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
           example: null
       example: null
-    PermissionDTO:
+    TargetRequestInfoDto:
       required:
-      - authority
-      - limits
+      - targetId
       type: object
       properties:
-        authority:
-          type: string
+        targetId:
+          type: integer
+          format: int32
           example: null
-        limits:
-          type: object
-          additionalProperties:
+        validationRequest:
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        screeningRequest:
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+        reportedTargetRequest:
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
+          example: null
+      example: null
+    PublicAlertFlaggedDTO:
+      required:
+      - flaggedAt
+      - reason
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason why the alert was flagged
+          example: null
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment on the flagging
+          example: null
+        flaggedAt:
+          type: string
+          description: When the alert was flagged
+          format: date-time
+          example: null
+      description: Flagging information for this alert
+      example: null
+    GeoProperties:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: null
+        countryCode:
+          type:
+          - string
+          - 'null'
+          example: null
+        alertCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        boundingBox:
+          type:
+          - array
+          - 'null'
+          items:
             type: integer
             format: int32
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        id:
-          type: integer
-          format: int32
-          nullable: true
+            example: null
           example: null
       example: null
-    PublicAlertLabelDTO:
+    SchemaPublicAlertDTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+          example: null
+        totalElements:
+          type: integer
+          format: int64
+          example: null
+        size:
+          type: integer
+          format: int32
+          example: null
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAlertDTO'
+          example: null
+        number:
+          type: integer
+          format: int32
+          example: null
+        numberOfElements:
+          type: integer
+          format: int32
+          example: null
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        first:
+          type: boolean
+          example: null
+        last:
+          type: boolean
+          example: null
+        empty:
+          type: boolean
+          example: null
+      example: null
+    UserSystemAttributes:
       required:
-      - bgColor
+      - incognitoOnboarding
+      - onboardingFlowComplete
+      type: object
+      properties:
+        onboardingFlowComplete:
+          type: boolean
+          example: null
+        incognitoOnboarding:
+          type: boolean
+          example: null
+        joinCustomer:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        supplierOnboardingData:
+          allOf:
+          - $ref: '#/components/schemas/SupplierOnboardingData'
+          example: null
+      example: null
+    PublicCollectionPathRef:
+      required:
+      - id
       - name
-      - scope
-      - textColor
+      - path
       type: object
       properties:
         id:
           type: integer
-          description: Prewave-internal label id
           format: int32
-          nullable: true
-          example: null
-        scope:
-          type: string
-          description: Scope of the label
-          enum:
-          - Public
-          - Customer
-          - User
           example: null
         name:
           type: string
-          description: Name of the label
           example: null
-        bgColor:
-          type: string
-          description: Background color of the label
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
           example: null
-        textColor:
-          type: string
-          description: Text color of the label
-          example: null
-      description: Labels assigned to this alert
+      description: The collections and their hierarchy for the target
       example: null
-    InfotagTypeDTO:
+    RiskAnalysisType:
+      required:
+      - availablePerspectives
+      - hideDetails
+      - products
+      - recommended
+      - scoping
+      - tierNAnalysisEnabled
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Default
+          - LkSG
+          - Norwegian Transparancy Act
+          - CSDDD (Beta)
+          - EU Battery Regulation
+          example: null
+        hideDetails:
+          type: boolean
+          example: null
+        recommended:
+          type: boolean
+          example: null
+        tierNAnalysisEnabled:
+          type: boolean
+          example: null
+        scoping:
+          type: boolean
+          example: null
+        products:
+          type: boolean
+          example: null
+        component:
+          type:
+          - string
+          - 'null'
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
+        perspectiveId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        availablePerspectives:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        countryScoreThreshold:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        industryScoreThreshold:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        purchaseVolumeThreshold:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+      example: null
+    PublicInfotagDTO:
+      required:
+      - id
+      - type
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          $ref: '#/components/schemas/PublicInfotagTypeDTO'
+        value:
+          type: string
+          example: null
+        svalue:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        numValue:
+          type:
+          - number
+          - 'null'
+          example: null
+        priority:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        impactScore:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    PublicMediaDTO:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        url:
+          type:
+          - string
+          - 'null'
+          example: null
+        mimeType:
+          type:
+          - string
+          - 'null'
+          example: null
+      description: Media files attached to the alert
+      example: null
+    PublicInfotagTypeDTO:
       required:
       - active
       - display
-      - ordering
       - type
       type: object
       properties:
@@ -801,19 +1196,49 @@ components:
           type: boolean
           example: null
         displayName:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         icon:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         ordering:
-          type: integer
+          type:
+          - integer
+          - 'null'
           format: int32
           example: null
         display:
           type: boolean
+          example: null
+      example: null
+    TeamDTO:
+      required:
+      - id
+      - name
+      - users
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        organizationId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
           example: null
       example: null
     PublicImpactLevelDTO:
@@ -852,10 +1277,580 @@ components:
           format: int32
           example: null
       example: null
-    InfotagDTO:
+    PublicAlertTargetDTO:
       required:
+      - impactLevel
+      - target
+      type: object
+      properties:
+        target:
+          $ref: '#/components/schemas/PublicTargetDTO'
+        impactLevel:
+          $ref: '#/components/schemas/PublicImpactLevelDTO'
+        impactScore:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        priority:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      description: The targets affected by this alert.
+      example: null
+    UserAttributes:
+      required:
+      - scenarioWelcomeScreenShown
+      type: object
+      properties:
+        scenarioWelcomeScreenShown:
+          type: boolean
+          example: null
+      example: null
+    EdgeImpactData:
+      required:
+      - causalContribution
+      - coc
+      - daysOnHand
+      - deviation
+      - edgeId
+      - stockAtSupplier
+      - stockOnPremise
+      - validFrom
+      - validTo
+      type: object
+      properties:
+        edgeId:
+          type: integer
+          format: int32
+          example: null
+        validFrom:
+          type: string
+          format: date-time
+          example: null
+        validTo:
+          type: string
+          format: date-time
+          example: null
+        purchase:
+          type:
+          - number
+          - 'null'
+          example: null
+        actualPurchase:
+          type:
+          - number
+          - 'null'
+          example: null
+        diForced:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        di:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        causalContribution:
+          type: boolean
+          example: null
+        bi12:
+          type:
+          - number
+          - 'null'
+          example: null
+        coc:
+          type: boolean
+          example: null
+        mttrGrossE:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        mttrNetE:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        mttrGrossI:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        mttrNetI:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        stockOnPremise:
+          type: number
+          format: double
+          example: null
+        stockAtSupplier:
+          type: number
+          format: double
+          example: null
+        daysOnHand:
+          type: number
+          format: double
+          example: null
+        deviation:
+          type: string
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+          example: null
+        location:
+          type:
+          - string
+          - 'null'
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+          example: null
+        lastConfirmationDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: null
+        birsInfo:
+          type:
+          - string
+          - 'null'
+          example: null
+        biForced:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        bi:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        biEffE:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        biEffI:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        impact:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
+    HSCode:
+      required:
+      - children
+      - code
+      - level
+      type: object
+      properties:
+        code:
+          type: string
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        numberShipments:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        lastShipment:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        level:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicTargetDTO:
+      required:
+      - collectionFollowing
+      - collectionPath
+      - collectionPaths
+      - ctype
+      - following
+      - foreignSystems
+      - geo
+      - geoShape
+      - hsCode
       - id
-      - isTarget
+      - industries
+      - managed
+      - mergedTargets
+      - name
+      - own
+      - parents
+      - path
+      - scoreAvail
+      - screened
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave target id
+          format: int32
+          example: 102006215
+        name:
+          type: string
+          description: Name of the Prewave target
+          example: Høyanger
+        sname:
+          type:
+          - string
+          - 'null'
+          description: Geonames Id (see https://geonames.org)
+          example: '3191281'
+        logo:
+          type:
+          - string
+          - 'null'
+          description: URL to the logo shown in the target profile
+          example: null
+        backgroundPicture:
+          type:
+          - string
+          - 'null'
+          description: URL to the background picture shown in the target profile
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the Prewave target
+          example: Description shown in the target profile
+        website:
+          type:
+          - string
+          - 'null'
+          description: URL to the website shown in the target profile
+          example: null
+        location:
+          type:
+          - string
+          - 'null'
+          description: Location of the target
+          example: Mistelbach
+        yearFounded:
+          type:
+          - integer
+          - 'null'
+          description: Year the target was founded shown in the target profile
+          format: int32
+          example: 1999
+        size:
+          type:
+          - string
+          - 'null'
+          description: Size of the target shown in the target profile
+          example: Small
+          enum:
+          - Small
+          - Medium
+          - Large
+          - Very large
+        screened:
+          type: boolean
+          description: Whether the target is screened or not
+          example: true
+        screenedStatus:
+          type:
+          - string
+          - 'null'
+          description: Screening status of the target
+          example: Screened
+          enum:
+          - Required
+          - Pending
+          - Screened
+          - NotPossible
+        linkedInId:
+          type:
+          - string
+          - 'null'
+          description: LinkedIn ID of the target
+          example: general-motors
+        type:
+          $ref: '#/components/schemas/PublicTargetTypeDTO'
+        ctype:
+          $ref: '#/components/schemas/PublicTargetCTypeDTO'
+        geo:
+          $ref: '#/components/schemas/Geo'
+        geoShape:
+          $ref: '#/components/schemas/Geo'
+        parents:
+          type: array
+          description: List of parent targets
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/PublicTargetDTO'
+        industries:
+          type: array
+          description: List of industries the target belongs to
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        monitoredSince:
+          type:
+          - string
+          - 'null'
+          description: Date the target was monitored since
+          format: date-time
+          example: null
+        earliestAlert:
+          type:
+          - string
+          - 'null'
+          description: Date of the earliest alert
+          format: date-time
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          description: Ordering of the target
+          format: int32
+          example: null
+        disruptionStatusUpdate:
+          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
+        own:
+          type: boolean
+          description: Whether the target is owned by user customer or not
+          example: null
+        managed:
+          type: boolean
+          description: '`true` if user is target connection contact or target is owned by user customer, `false` otherwise'
+          example: null
+        isPublic:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the target is public or not
+          example: null
+        connectionContactsCount:
+          type:
+          - integer
+          - 'null'
+          description: Number of connection contacts of the target
+          format: int32
+          example: null
+        population:
+          type:
+          - integer
+          - 'null'
+          description: Population of the target. Generally applies to locations
+          format: int32
+          example: null
+        following:
+          type: boolean
+          description: Target resides in "My follows" collection
+          example: null
+        collectionFollowing:
+          type: boolean
+          description: Target resides in any followed collection (including children)
+          example: null
+        tier:
+          type:
+          - integer
+          - 'null'
+          description: Tier of the target (relevant when fetching Tier-N)
+          format: int32
+          example: null
+        path:
+          type: array
+          description: Path of the target (relevant when fetching Tier-N)
+          items:
+            $ref: '#/components/schemas/PublicTargetRefExtended'
+          example: null
+        collectionLevel:
+          type:
+          - integer
+          - 'null'
+          description: How deep the target is in the collection hierarchy
+          format: int32
+          example: null
+        collectionPath:
+          type: array
+          description: Path of the target in the collection hierarchy
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        collectionPaths:
+          type: array
+          description: Paths of the target in the collection hierarchy
+          items:
+            type: array
+            description: Paths of the target in the collection hierarchy
+            items:
+              $ref: '#/components/schemas/CollectionRef'
+            example: null
+          example: null
+        foreignSystems:
+          type: array
+          description: List of foreign systems the target is connected to
+          items:
+            $ref: '#/components/schemas/PublicTargetForeignSystemDTO'
+          example: null
+        scoreAvail:
+          type: string
+          description: Score availability of the target
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        revenue:
+          type:
+          - number
+          - 'null'
+          description: Revenue of the target
+          example: null
+        impact:
+          type:
+          - string
+          - 'null'
+          description: Impact of the target
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        hsCode:
+          type: array
+          description: List of HS Codes of the target
+          items:
+            $ref: '#/components/schemas/PublicHSCode'
+          example: null
+        mergedTargets:
+          type: array
+          description: Target ids of past targets that were merged into this current target
+          items:
+            type: integer
+            description: Target ids of past targets that were merged into this current target
+            format: int32
+            example: null
+          example: null
+        public:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    PerspectiveTypeDTO:
+      required:
+      - displayName
+      - id
+      - ordering
       - type
       type: object
       properties:
@@ -864,50 +1859,213 @@ components:
           format: int32
           example: null
         type:
-          $ref: '#/components/schemas/InfotagTypeDTO'
-        value:
           type: string
-          nullable: true
           example: null
-        svalue:
+        displayName:
           type: string
-          nullable: true
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    CustomerDTO:
+      required:
+      - defaultEdgeType
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        logo:
+          type:
+          - string
+          - 'null'
+          example: null
+        defaultEdgeType:
+          type: string
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        pristine:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        confidentialSticker:
+          type:
+          - string
+          - 'null'
+          example: null
+        forceDefaultConnectionContact:
+          type:
+          - boolean
+          - 'null'
+          example: null
+      example: null
+    TargetForeignSystemDTO:
+      required:
+      - id
+      - system
+      type: object
+      properties:
+        system:
+          type: string
+          example: null
+        id:
+          type: string
+          example: null
+        source:
+          type:
+          - string
+          - 'null'
+          example: null
+      example: null
+    SchemaPublicAlertV2DTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+          example: null
+        totalElements:
+          type: integer
+          format: int64
+          example: null
+        size:
+          type: integer
+          format: int32
+          example: null
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAlertV2DTO'
+          example: null
+        number:
+          type: integer
+          format: int32
+          example: null
+        numberOfElements:
+          type: integer
+          format: int32
+          example: null
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        first:
+          type: boolean
+          example: null
+        last:
+          type: boolean
+          example: null
+        empty:
+          type: boolean
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicAlertLabelDTO:
+      required:
+      - bgColor
+      - name
+      - scope
+      - textColor
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          description: Prewave-internal label id
+          format: int32
+          example: null
+        scope:
+          type: string
+          description: Scope of the label
+          enum:
+          - Public
+          - Customer
+          - User
+          example: null
+        name:
+          type: string
+          description: Name of the label
+          example: null
+        bgColor:
+          type: string
+          description: Background color of the label
+          example: null
+        textColor:
+          type: string
+          description: Text color of the label
+          example: null
+      description: Labels assigned to this alert
+      example: null
+    DisruptionStatus:
+      required:
+      - displayName
+      - icon
+      - id
+      - ordering
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        status:
+          type: string
+          example: null
+        displayName:
+          type: string
           example: null
         icon:
           type: string
-          nullable: true
           example: null
-        numValue:
-          type: number
-          nullable: true
-          example: null
-        priority:
-          type: string
-          description: Obsolete
-          nullable: true
-          deprecated: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        impactScore:
-          type: string
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        isTarget:
-          type: boolean
-          example: null
-        updatedAt:
-          type: string
-          format: date-time
-          nullable: true
+        ordering:
+          type: integer
+          format: int32
           example: null
       example: null
     InfotagGroup:
@@ -929,13 +2087,1722 @@ components:
           type: string
           example: null
         icon:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         ordering:
           type: integer
           format: int32
           example: null
+      example: null
+    PlanDTO:
+      required:
+      - limits
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        planType:
+          allOf:
+          - $ref: '#/components/schemas/PlanTypeDTO'
+          example: null
+        name:
+          type:
+          - string
+          - 'null'
+          example: null
+        pricePerUser:
+          type:
+          - number
+          - 'null'
+          example: null
+        limits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanLimitDTO'
+          example: null
+        validFrom:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        validTo:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+      example: null
+    PublicLinkDTO:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        url:
+          type:
+          - string
+          - 'null'
+          example: null
+        title:
+          type:
+          - string
+          - 'null'
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        pictureUrl:
+          type:
+          - string
+          - 'null'
+          example: null
+        originalLang:
+          type:
+          - string
+          - 'null'
+          example: null
+        originalTitle:
+          type:
+          - string
+          - 'null'
+          example: null
+        originalDescription:
+          type:
+          - string
+          - 'null'
+          example: null
+      description: Source links the alert is based on
+      example: null
+    TierSettingsDTO:
+      required:
+      - logisticsProvider
+      - maxTier
+      - scopePrivate
+      - scopePublic
+      - scopeShared
+      - sourceCustomer
+      - sourceCustoms
+      - sourceMedia
+      - sourcePrewavePrediction
+      - suspectedSuppliers
+      - tier2MinPrio
+      - tier2TargetPrio
+      - tier3PlusMinPrio
+      - tier3PlusTargetPrio
+      type: object
+      properties:
+        maxTier:
+          type: integer
+          format: int32
+          example: null
+        tier2TargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusTargetPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier2MinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        tier3PlusMinPrio:
+          type: string
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        scopePrivate:
+          type: boolean
+          example: null
+        scopeShared:
+          type: boolean
+          example: null
+        scopePublic:
+          type: boolean
+          example: null
+        sourceCustoms:
+          type: boolean
+          example: null
+        sourcePrewavePrediction:
+          type: boolean
+          example: null
+        sourceMedia:
+          type: boolean
+          example: null
+        sourceCustomer:
+          type: boolean
+          example: null
+        minShipments:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        probability:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        lastShipmentsPeriodFrom:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: null
+        lastShipmentsPeriodTo:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: null
+        suspectedSuppliers:
+          type: boolean
+          example: null
+        logisticsProvider:
+          type: boolean
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: string
+          example: null
+        source:
+          type:
+          - string
+          - 'null'
+          example: null
+        existingEdgeId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    PerspectiveDTO:
+      required:
+      - actualImpactT80
+      - actualRiskT80
+      - commodityMissingScore
+      - countryMissingScore
+      - diModel
+      - eventTypes
+      - groups
+      - id
+      - industryMissingScore
+      - insolvencyLoss
+      - isGlobal
+      - massDisruptionFactor
+      - name
+      - riskModel
+      - sname
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        perspective:
+          type:
+          - string
+          - 'null'
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type: string
+          example: null
+        type:
+          $ref: '#/components/schemas/PerspectiveTypeDTO'
+        isGlobal:
+          type: boolean
+          example: null
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagGroup'
+          example: null
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfotagDTO'
+          example: null
+        massDisruptionFactor:
+          type: boolean
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        riskModel:
+          type: string
+          enum:
+          - Sustainability
+          - Disruption
+          example: null
+        diModel:
+          type: string
+          enum:
+          - Direct
+          - Parent
+          - Auto
+          example: null
+        riskT80:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        impactT80:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: null
+        insolvencyLoss:
+          type: boolean
+          example: null
+        industryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        commodityMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        countryMissingScore:
+          type: string
+          enum:
+          - Zero
+          - Skip
+          example: null
+        actualRiskT80:
+          type: integer
+          format: int32
+          example: null
+        actualImpactT80:
+          type: number
+          format: double
+          example: null
+      example: null
+    CollectionRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      description: Paths of the target in the collection hierarchy
+      example: null
+    PermissionDTO:
+      required:
+      - authority
+      - limits
+      type: object
+      properties:
+        authority:
+          type: string
+          example: null
+        limits:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    PublicAlertV2DTO:
+      required:
+      - active
+      - alertTypes
+      - collectionPath
+      - createdAt
+      - event
+      - eventTypeGroups
+      - eventTypes
+      - id
+      - isSituationReport
+      - labels
+      - links
+      - locations
+      - media
+      - mentionedTargets
+      - previousAlerts
+      - primaryTargets
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal alert id
+          format: int32
+          example: null
+        uuid:
+          type: string
+          description: Prewave-internal alert uuid
+          format: uuid
+          example: null
+        title:
+          type:
+          - string
+          - 'null'
+          description: Alert title
+          example: Hurricane happens at Norsk Hydro in Høyanger, NO
+        createdAt:
+          type: string
+          description: When the alert was generated/created at prewave
+          format: date-time
+          example: null
+        predictedAtStart:
+          type:
+          - string
+          - 'null'
+          description: When the event - that this alert is describing - started
+          format: date-time
+          example: null
+        predictedAtEnd:
+          type:
+          - string
+          - 'null'
+          description: When the event - that this alert is describing - ended
+          format: date-time
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          description: Detailed description of alert. Usually an excerpt taken from one of the links
+          example: It's windy in Høyanger
+        isSituationReport:
+          type: boolean
+          description: Whether this alert is a situation report
+          example: null
+        event:
+          $ref: '#/components/schemas/PublicEventDTO'
+        active:
+          type: boolean
+          description: Whether the alert is active
+          example: null
+        relevancy:
+          type:
+          - string
+          - 'null'
+          description: Relevancy of the alert
+          enum:
+          - Relevant
+          - Irrelevant
+          - NotYetAssigned
+          example: null
+        locations:
+          type: array
+          description: Locations where the alert happened
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        links:
+          type: array
+          description: Source links the alert is based on
+          items:
+            $ref: '#/components/schemas/PublicLinkDTO'
+          example: null
+        media:
+          type: array
+          description: Media files attached to the alert
+          items:
+            $ref: '#/components/schemas/PublicMediaDTO'
+          example: null
+        primaryTargets:
+          type: array
+          description: The targets affected by this alert.
+          items:
+            $ref: '#/components/schemas/PublicAlertTargetDTO'
+          example: null
+        mentionedTargets:
+          type: array
+          description: The targets mentioned in this alert.
+          items:
+            $ref: '#/components/schemas/PublicTargetDTO'
+          example: null
+        priority:
+          type:
+          - string
+          - 'null'
+          description: Priority of alert
+          enum:
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+        priorityDetails:
+          allOf:
+          - $ref: '#/components/schemas/PublicPriorityDetailsDTO'
+          example: null
+        previousAlerts:
+          type: array
+          description: Previous alerts related to this alert's event
+          items:
+            $ref: '#/components/schemas/PublicPreviousAlertDTO'
+          example: null
+        flagged:
+          allOf:
+          - $ref: '#/components/schemas/PublicAlertFlaggedDTO'
+          example: null
+        useCaseDetails:
+          allOf:
+          - $ref: '#/components/schemas/PublicUseCaseDetailsDTO'
+          example: null
+        labels:
+          type: array
+          description: Labels assigned to this alert
+          items:
+            $ref: '#/components/schemas/PublicAlertLabelDTO'
+          example: null
+        eventTypes:
+          type: array
+          description: Event types associated with this alert
+          items:
+            $ref: '#/components/schemas/PublicEventTypeDTO'
+          example: null
+        eventTypeGroups:
+          type: array
+          description: Event type groups associated with this alert
+          items:
+            $ref: '#/components/schemas/PublicEventTypeGroupDTO'
+          example: null
+        alertTypes:
+          type: array
+          description: Alert types (e.g. happens, terminates) associated with this alert
+          items:
+            $ref: '#/components/schemas/PublicAlertTypeDTO'
+          example: null
+        collectionPath:
+          type: array
+          description: The collections and their hierarchy for the target
+          items:
+            $ref: '#/components/schemas/PublicCollectionPathRef'
+          example: null
+        geo:
+          $ref: '#/components/schemas/Geo'
+      example: null
+    PublicEventDTO:
+      required:
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Prewave event uuid
+          format: uuid
+          example: null
+      description: Way of grouping alerts that belong to the same event, e.g. Strike announcement, Strike happens, Strike terminates
+      example: null
+    PublicPreviousAlertDTO:
+      required:
+      - alertId
+      - createdAt
+      - eventId
+      type: object
+      properties:
+        alertId:
+          type: integer
+          description: Prewave-internal alert id of the previous alert
+          format: int32
+          example: null
+        eventId:
+          type: integer
+          description: Prewave-internal event id
+          format: int32
+          example: null
+        title:
+          type:
+          - string
+          - 'null'
+          description: Title of the previous alert
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the previous alert
+          example: null
+        createdAt:
+          type: string
+          description: When the previous alert was created
+          format: date-time
+          example: null
+      description: Previous alerts related to this alert's event
+      example: null
+    RoleDTO:
+      required:
+      - id
+      - permissions
+      - roleName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          allOf:
+          - $ref: '#/components/schemas/RoleTypeDTO'
+          example: null
+        roleName:
+          type: string
+          example: null
+        displayName:
+          type:
+          - string
+          - 'null'
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionDTO'
+          example: null
+      example: null
+    Geo:
+      required:
+      - properties
+      - type
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        properties:
+          $ref: '#/components/schemas/GeoProperties'
+        type:
+          type: string
+          example: null
+      description: Geo information for this alert. Only available if includeGeo is set to true.
+      example: null
+    PublicEventTypeGroupDTO:
+      required:
+      - eventTypeIds
+      - id
+      - name
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the event type group
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Name of the event type group
+          example: Natural Disasters
+        sname:
+          type: string
+          description: Technical name of the event type group
+          example: natural_disasters
+        eventTypeIds:
+          type: array
+          description: List of event type IDs in this group
+          items:
+            type: integer
+            description: List of event type IDs in this group
+            format: int32
+            example: null
+          example: null
+      description: Event type groups associated with this alert
+      example: null
+    ComplexDisruptionStatusUpdate:
+      required:
+      - customer
+      - general
+      type: object
+      properties:
+        general:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+        customer:
+          $ref: '#/components/schemas/DisruptionStatusUpdate'
+      description: Disruption status update of the target
+      example: null
+    TargetDTO:
+      required:
+      - children
+      - collectionFollowing
+      - collectionPath
+      - collectionPaths
+      - ctype
+      - edges
+      - followerCount
+      - following
+      - foreignSystems
+      - geo
+      - geoShape
+      - hsCodes
+      - id
+      - industries
+      - isAnonymous
+      - managed
+      - maturityAssessment
+      - name
+      - own
+      - parents
+      - path
+      - paths
+      - sanctionStatus
+      - screened
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        sname:
+          type:
+          - string
+          - 'null'
+          example: null
+        logo:
+          type:
+          - string
+          - 'null'
+          example: null
+        backgroundPicture:
+          type:
+          - string
+          - 'null'
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+        website:
+          type:
+          - string
+          - 'null'
+          example: null
+        location:
+          type:
+          - string
+          - 'null'
+          example: null
+        yearFounded:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        size:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Small
+          - Medium
+          - Large
+          - Very large
+          example: null
+        screened:
+          type: boolean
+          example: null
+        maturityAssessment:
+          type: boolean
+          example: null
+        linkedInId:
+          type:
+          - string
+          - 'null'
+          example: null
+        type:
+          $ref: '#/components/schemas/TargetTypeDTO'
+        ctype:
+          $ref: '#/components/schemas/TargetCTypeDTO'
+        geo:
+          $ref: '#/components/schemas/Geo'
+        geoShape:
+          $ref: '#/components/schemas/Geo'
+        address:
+          type:
+          - string
+          - 'null'
+          example: null
+        muted:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        hierarchyCustomerId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        hierarchyOrganizationId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        level:
+          type:
+          - string
+          - 'null'
+          example: null
+        parents:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        industries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        monitoredSince:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        earliestAlert:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        followerCount:
+          type: integer
+          format: int32
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        disruptionStatusUpdate:
+          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
+        sustainabilityStatus:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NoRisk
+          - AtRisk
+          - RedFlag
+          example: null
+        own:
+          type: boolean
+          example: null
+        managed:
+          type: boolean
+          example: null
+        isPublic:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDTO'
+          example: null
+        connection:
+          allOf:
+          - $ref: '#/components/schemas/Connection'
+          example: null
+        connectionContactsCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        population:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        following:
+          type: boolean
+          example: null
+        collectionFollowing:
+          type: boolean
+          example: null
+        tier:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetRef'
+          example: null
+        paths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/TargetRef'
+            example: null
+          example: null
+        collectionLevel:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        collectionPath:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
+          example: null
+        collectionPaths:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/CollectionRef'
+            example: null
+          example: null
+        foreignSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetForeignSystemDTO'
+          example: null
+        scoreAvail:
+          type:
+          - string
+          - 'null'
+          enum:
+          - None
+          - Peer
+          - Alert
+          - SSA
+          - External
+          example: null
+        revenue:
+          type:
+          - number
+          - 'null'
+          example: null
+        isRevenueEstimated:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        actualRevenue:
+          type:
+          - number
+          - 'null'
+          example: null
+        revenueAvailability:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Unknown
+          - Available
+          example: null
+        hsCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HSCode'
+          example: null
+        grievanceUrl:
+          type:
+          - string
+          - 'null'
+          example: null
+        sanctionStatus:
+          type: string
+          enum:
+          - DIRECT
+          - INDIRECT
+          - NONE
+          example: null
+        countryScoreAvailable:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        industryScoreAvailable:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        commodityScoreAvailable:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        isAnonymous:
+          type: boolean
+          example: null
+        customName:
+          type:
+          - string
+          - 'null'
+          example: null
+        latestRequest:
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        public:
+          type: boolean
+          writeOnly: true
+          example: null
+      example: null
+    PublicTargetRefExtended:
+      required:
+      - foreignSystems
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        customName:
+          type:
+          - string
+          - 'null'
+          example: null
+        latestRequest:
+          allOf:
+          - $ref: '#/components/schemas/TargetRequestInfoDto'
+          example: null
+        foreignSystems:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeNumber'
+          example: null
+      description: Path of the target (relevant when fetching Tier-N)
+      example: null
+    PublicTargetTypeDTO:
+      required:
+      - displayName
+      - id
+      - pluralName
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal ID of the target type
+          format: int32
+          example: null
+        type:
+          type: string
+          description: Machine-readable name of the target type
+          example: null
+        displayName:
+          type: string
+          description: Display name of the target type
+          example: null
+        pluralName:
+          type: string
+          description: Plural name of the target type
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          description: Ordering of the target type
+          format: int32
+          example: null
+        scoring:
+          type:
+          - string
+          - 'null'
+          description: Scoring of the target type
+          enum:
+          - Alert
+          - Peer
+          example: null
+      description: Target types are what is known as "Target Type" in the Prewave system (e.g in Network > Filters). They provide a broad categorization of what the target is. Examples for target types are "poi", "organization" etc.
+      example: null
+    PublicTargetCTypeDTO:
+      required:
+      - bgColor
+      - connectable
+      - ctype
+      - displayName
+      - icon
+      - id
+      - pluralName
+      - priority
+      - targetTypeId
+      - textColor
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal id of the target ctype
+          format: int32
+          example: 1234
+        ctype:
+          type: string
+          description: Name of the target ctype
+          example: mine
+        targetTypeId:
+          type: integer
+          description: Identifier of the target ctype
+          format: int32
+          example: 1234
+        displayName:
+          type: string
+          description: Display name of the target ctype
+          example: Mine
+        pluralName:
+          type: string
+          description: Plural name of the target ctype
+          example: Mines
+        icon:
+          type: string
+          description: Icon of the target ctype. Fontawesome icon name. See https://fontawesome.com/icons for more information
+          example: fas fa-mine
+        ordering:
+          type:
+          - integer
+          - 'null'
+          description: Ordering of the target ctype
+          format: int32
+          example: null
+        priority:
+          type: integer
+          description: Priority of the target ctype
+          format: int32
+          example: null
+        connectable:
+          type: boolean
+          description: Whether it is possible to connect to targets of this type or not
+          example: null
+        bgColor:
+          type: string
+          description: Background color of the target ctype. Valid CSS color value
+          example: '#ff0000'
+        textColor:
+          type: string
+          description: Text color of the target ctype. Valid CSS color value
+          example: '#ffffff'
+      description: CTypes are what is known as "Facility Types" in the Prewave system (e.g in Network > Filters). They provide a slightly more specific categorization of what the target is. Examples for ctypes are "mine", "factory" etc.
+      example: null
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          example: null
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          example: null
+        sort:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+      example: null
+    PublicAlertTypeDTO:
+      required:
+      - id
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal alert type id
+          format: int32
+          example: null
+        value:
+          type: string
+          description: Alert type name
+          example: happens
+        svalue:
+          type:
+          - string
+          - 'null'
+          description: Alert type machine-readable name
+          example: happens
+        icon:
+          type:
+          - string
+          - 'null'
+          description: Icon for the alert type
+          example: null
+      description: Alert types (e.g. happens, terminates) associated with this alert
+      example: null
+    Connection:
+      required:
+      - createdAt
+      - customer1Id
+      - customer2Id
+      - initiatorCustomerId
+      - pending
+      - state
+      - targetCustomerId
+      type: object
+      properties:
+        customer1Id:
+          type: integer
+          format: int32
+          example: null
+        customer2Id:
+          type: integer
+          format: int32
+          example: null
+        initiatorCustomerId:
+          type: integer
+          format: int32
+          example: null
+        state:
+          type: string
+          enum:
+          - Confirmed
+          - Rejected
+          - Failed
+          example: null
+        pending:
+          type: boolean
+          example: null
+        initiatorId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        comment:
+          type:
+          - string
+          - 'null'
+          example: null
+        email:
+          type:
+          - string
+          - 'null'
+          example: null
+        text:
+          type:
+          - string
+          - 'null'
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        targetCustomerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    PublicEventTypeDTO:
+      required:
+      - id
+      - value
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave-internal event type id
+          format: int32
+          example: null
+        value:
+          type: string
+          description: Event type name
+          example: Hurricane
+        svalue:
+          type:
+          - string
+          - 'null'
+          description: Event type machine-readable name
+          example: hurricane
+        icon:
+          type:
+          - string
+          - 'null'
+          description: Icon for the event type
+          example: null
+      description: Event types associated with this alert
+      example: null
+    DisruptionStatusUpdate:
+      required:
+      - assignedAt
+      - assignmentMethod
+      - status
+      - targetId
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        targetId:
+          type: integer
+          format: int32
+          example: null
+        assignedAt:
+          type: string
+          format: date-time
+          example: null
+        assignedBy:
+          $ref: '#/components/schemas/UserDTO'
+        comment:
+          type:
+          - string
+          - 'null'
+          example: null
+        continuity:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        impactedParts:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            example: null
+          example: null
+        forCustomer:
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        status:
+          $ref: '#/components/schemas/DisruptionStatus'
+        assignmentMethod:
+          type: string
+          enum:
+          - MANUAL
+          - AUTOMATIC
+          example: null
+      example: null
+    PublicHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          example: null
+        nShipments:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          writeOnly: true
+          example: null
+        nshipments:
+          type: integer
+          format: int32
+          example: null
+      description: List of HS Codes of the target
+      example: null
+    PublicPriorityDetailsDTO:
+      required:
+      - brandMention
+      - lowPeerRisk
+      - massDisruption
+      - rumour
+      - terminates
+      type: object
+      properties:
+        massDisruption:
+          type: boolean
+          example: null
+        brandMention:
+          type: boolean
+          example: null
+        rumour:
+          type: boolean
+          example: null
+        lowPeerRisk:
+          type: boolean
+          example: null
+        terminates:
+          type: boolean
+          example: null
+      description: Priority details of alert
+      example: null
+    PlanTypeDTO:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        type:
+          type:
+          - string
+          - 'null'
+          example: null
+        displayName:
+          type:
+          - string
+          - 'null'
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    TargetTypeDTO:
+      required:
+      - displayName
+      - id
+      - pluralName
+      - scoring
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        type:
+          type: string
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        scoring:
+          type: string
+          enum:
+          - Alert
+          - Peer
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    TargetCTypeDTO:
+      required:
+      - bgColor
+      - connectable
+      - ctype
+      - displayName
+      - icon
+      - id
+      - pluralName
+      - priority
+      - targetTypeId
+      - textColor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        ctype:
+          type: string
+          example: null
+        targetTypeId:
+          type: integer
+          format: int32
+          example: null
+        displayName:
+          type: string
+          example: null
+        pluralName:
+          type: string
+          example: null
+        icon:
+          type: string
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        priority:
+          type: integer
+          format: int32
+          example: null
+        connectable:
+          type: boolean
+          example: null
+        bgColor:
+          type: string
+          example: null
+        textColor:
+          type: string
+          example: null
+      example: null
+    UserDTO:
+      required:
+      - firstname
+      - id
+      - lastname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          example: null
+        firstname:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          example: null
+        lastname:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          example: null
+        department:
+          type:
+          - string
+          - 'null'
+          example: null
+        position:
+          type:
+          - string
+          - 'null'
+          example: null
+        profilePic:
+          type:
+          - string
+          - 'null'
+          example: null
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/CustomerDTO'
+          example: null
+        userHash:
+          type:
+          - string
+          - 'null'
+          example: null
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/UserSettings'
+          example: null
+        activePlan:
+          allOf:
+          - $ref: '#/components/schemas/PlanDTO'
+          example: null
+        active:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        confirmed:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+          example: null
+        teams:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamDTO'
+          example: null
+        perspective:
+          allOf:
+          - $ref: '#/components/schemas/PerspectiveDTO'
+          example: null
+        organization:
+          $ref: '#/components/schemas/TargetDTO'
+        organizations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TargetDTO'
+          example: null
+        defaultEdgeType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - Supplier
+          - Customer
+          - PrimaryMaterial
+          - SecondaryMaterial
+          - Equipment
+          - Own
+          example: null
+        language:
+          type:
+          - string
+          - 'null'
+          enum:
+          - en
+          - de
+          - fr
+          - it
+          - ch
+          example: null
+        collection:
+          $ref: '#/components/schemas/CollectionDTO'
+        passwordValidUntil:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        riskAnalysis:
+          $ref: '#/components/schemas/RiskAnalysis'
+        phone:
+          type:
+          - string
+          - 'null'
+          example: null
+        wechatId:
+          type:
+          - string
+          - 'null'
+          example: null
+        peerScoreToggle:
+          type:
+          - boolean
+          - 'null'
+          example: null
+        resilienceScoreToggle:
+          type:
+          - boolean
+          - 'null'
+          example: null
+      example: null
+    Geometry:
+      type: object
+      additionalProperties: true
+      description: 'GeoJSON-compatible geometry object. Fields follow the GeoJSON spec (https://geojson.org): a `type` string (e.g. `Point`, `Polygon`) and a `coordinates` array.'
       example: null
     RiskAnalysis:
       required:
@@ -1027,15 +3894,17 @@ components:
             example: null
           example: null
         specificOccasion:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         approvedForReport:
           type: boolean
           example: null
         findings:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         scope:
           type: string
@@ -1050,19 +3919,22 @@ components:
           type: boolean
           example: null
         countryScoreThreshold:
-          type: number
+          type:
+          - number
+          - 'null'
           format: double
-          nullable: true
           example: null
         industryScoreThreshold:
-          type: number
+          type:
+          - number
+          - 'null'
           format: double
-          nullable: true
           example: null
         purchaseVolumeThreshold:
-          type: number
+          type:
+          - number
+          - 'null'
           format: double
-          nullable: true
           example: null
         collectionIds:
           type: array
@@ -1076,224 +3948,235 @@ components:
           format: double
           example: null
       example: null
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-          example: null
-        sorted:
-          type: boolean
-          example: null
-        unsorted:
-          type: boolean
-          example: null
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    RiskAnalysisType:
+    RiskAnalysisLock:
       required:
-      - availablePerspectives
-      - hideDetails
-      - products
-      - recommended
-      - scoping
-      - tierNAnalysisEnabled
+      - locked
       - type
       type: object
       properties:
+        type:
+          type: string
+          enum:
+          - Form
+          - Suppliers
+          - Matrix
+          - Actions
+          - Scoping
+          - Products
+          example: null
+        locked:
+          type: boolean
+          example: null
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        lockedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+      example: null
+    PublicUseCaseDetailsDTO:
+      required:
+      - reason
+      - relevant
+      type: object
+      properties:
+        relevant:
+          type: boolean
+          description: Whether the alert is relevant for the use case
+          example: null
+        reason:
+          type: string
+          description: Reason for the relevance decision
+          example: null
+      description: Use case details for this alert
+      example: null
+    SupplierOnboardingData:
+      required:
+      - customerId
+      - supplierId
+      type: object
+      properties:
+        supplierId:
+          type: integer
+          format: int32
+          example: null
+        customerId:
+          type: integer
+          format: int32
+          example: null
+      example: null
+    UserSettings:
+      required:
+      - _system_
+      - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserAttributes'
+        _system_:
+          $ref: '#/components/schemas/UserSystemAttributes'
+      example: null
+    CollectionDTO:
+      required:
+      - children
+      - collectionTreeFilter
+      - commodityFilter
+      - deliverySettingTypes
+      - id
+      - isMonitored
+      - isParentMonitored
+      - lanes
+      - level
+      - name
+      - own
+      - path
+      - scope
+      - tiersEnabled
+      - type
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        uuid:
+          type: string
+          format: uuid
+          example: null
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
         type:
           type: string
           enum:
           - Default
-          - LkSG
-          - Norwegian Transparancy Act
-          - CSDDD (Beta)
-          - EU Battery Regulation
+          - Commodity
+          - Ariba
           example: null
-        hideDetails:
-          type: boolean
+        collection:
+          type:
+          - string
+          - 'null'
           example: null
-        recommended:
-          type: boolean
-          example: null
-        tierNAnalysisEnabled:
-          type: boolean
-          example: null
-        scoping:
-          type: boolean
-          example: null
-        products:
-          type: boolean
-          example: null
-        component:
+        name:
           type: string
-          nullable: true
-          enum:
-          - PeerScore
-          - AlertScore
-          - SSAScore
-          - ExternalScore
-          - TierNScore
           example: null
-        perspectiveId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        availablePerspectives:
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        deliverySettingTypes:
           type: array
           items:
-            $ref: '#/components/schemas/PerspectiveDTO'
+            $ref: '#/components/schemas/DeliverySettingTypeDTO'
           example: null
-        countryScoreThreshold:
-          type: number
-          format: double
-          nullable: true
+        logo:
+          type:
+          - string
+          - 'null'
           example: null
-        industryScoreThreshold:
-          type: number
-          format: double
-          nullable: true
+        count:
+          type:
+          - integer
+          - 'null'
+          format: int32
           example: null
-        purchaseVolumeThreshold:
-          type: number
-          format: double
-          nullable: true
+        isMonitored:
+          type: boolean
           example: null
-      example: null
-    DeliverySettingTypeDTO:
-      required:
-      - displayName
-      - frequency
-      - inherited
-      - minPriority
-      - ordering
-      - type
-      type: object
-      properties:
-        type:
-          type: string
+        isParentMonitored:
+          type: boolean
+          example: null
+        own:
+          type: boolean
+          example: null
+        lanes:
+          type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        tierSettings:
+          allOf:
+          - $ref: '#/components/schemas/TierSettingsDTO'
+          example: null
+        collectionTreeFilter:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        userId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        customerId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        organizationId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        viewedWithRole:
+          type:
+          - string
+          - 'null'
           enum:
-          - Feed
-          - EmailRealtime
-          - EmailDaily
-          - EmailWeekly
+          - Manager
+          - Editor
           example: null
-        displayName:
-          type: string
+        parentId:
+          type:
+          - integer
+          - 'null'
+          format: int32
           example: null
-        ordering:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionDTO'
+          example: null
+        level:
           type: integer
           format: int32
           example: null
-        frequency:
-          type: string
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionRef'
           example: null
-        minPriority:
-          type: string
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
+        commodityFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommodityFilterId'
           example: null
-        inherited:
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        monitored:
           type: boolean
+          writeOnly: true
           example: null
-      example: null
-    PublicAlertTargetDTO:
-      required:
-      - impactLevel
-      - target
-      type: object
-      properties:
-        target:
-          $ref: '#/components/schemas/PublicTargetDTO'
-        impactLevel:
-          $ref: '#/components/schemas/PublicImpactLevelDTO'
-        impactScore:
-          type: string
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        priority:
-          type: string
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      description: The targets affected by this alert.
-      example: null
-    PublicPriorityDetailsDTO:
-      required:
-      - brandMention
-      - lowPeerRisk
-      - massDisruption
-      - rumour
-      - terminates
-      type: object
-      properties:
-        massDisruption:
+        parentMonitored:
           type: boolean
+          writeOnly: true
           example: null
-        brandMention:
-          type: boolean
-          example: null
-        rumour:
-          type: boolean
-          example: null
-        lowPeerRisk:
-          type: boolean
-          example: null
-        terminates:
-          type: boolean
-          example: null
-      description: Priority details of alert
       example: null
     RoleTypeDTO:
       required:
@@ -1311,578 +4194,6 @@ components:
           example: null
         displayName:
           type: string
-          example: null
-      example: null
-    RoleDTO:
-      required:
-      - id
-      - permissions
-      - roleName
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        type:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/RoleTypeDTO'
-          example: null
-        roleName:
-          type: string
-          example: null
-        displayName:
-          type: string
-          nullable: true
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PermissionDTO'
-          example: null
-      example: null
-    TargetRequestTypeStatusDto:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        customerId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        status:
-          type: string
-          nullable: true
-          enum:
-          - NONE
-          - PENDING
-          - COMPLETED
-          - REJECTED
-          example: null
-        rejectionReason:
-          type: string
-          nullable: true
-          example: null
-      example: null
-    PublicAlertV2DTO:
-      required:
-      - active
-      - alertTypes
-      - collectionPath
-      - createdAt
-      - event
-      - eventTypeGroups
-      - eventTypes
-      - id
-      - isSituationReport
-      - labels
-      - links
-      - locations
-      - media
-      - mentionedTargets
-      - previousAlerts
-      - primaryTargets
-      - uuid
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave-internal alert id
-          format: int32
-          example: null
-        uuid:
-          type: string
-          description: Prewave-internal alert uuid
-          format: uuid
-          example: null
-        title:
-          type: string
-          description: Alert title
-          nullable: true
-          example: Hurricane happens at Norsk Hydro in Høyanger, NO
-        createdAt:
-          type: string
-          description: When the alert was generated/created at prewave
-          format: date-time
-          example: null
-        predictedAtStart:
-          type: string
-          description: When the event - that this alert is describing - started
-          format: date-time
-          nullable: true
-          example: null
-        predictedAtEnd:
-          type: string
-          description: When the event - that this alert is describing - ended
-          format: date-time
-          nullable: true
-          example: null
-        description:
-          type: string
-          description: Detailed description of alert. Usually an excerpt taken from one of the links
-          nullable: true
-          example: It's windy in Høyanger
-        isSituationReport:
-          type: boolean
-          description: Whether this alert is a situation report
-          example: null
-        event:
-          $ref: '#/components/schemas/PublicEventDTO'
-        active:
-          type: boolean
-          description: Whether the alert is active
-          example: null
-        relevancy:
-          type: string
-          description: Relevancy of the alert
-          nullable: true
-          enum:
-          - Relevant
-          - Irrelevant
-          - NotYetAssigned
-          example: null
-        locations:
-          type: array
-          description: Locations where the alert happened
-          items:
-            $ref: '#/components/schemas/PublicTargetDTO'
-          example: null
-        links:
-          type: array
-          description: Source links the alert is based on
-          items:
-            $ref: '#/components/schemas/PublicLinkDTO'
-          example: null
-        media:
-          type: array
-          description: Media files attached to the alert
-          items:
-            $ref: '#/components/schemas/PublicMediaDTO'
-          example: null
-        primaryTargets:
-          type: array
-          description: The targets affected by this alert.
-          items:
-            $ref: '#/components/schemas/PublicAlertTargetDTO'
-          example: null
-        mentionedTargets:
-          type: array
-          description: The targets mentioned in this alert.
-          items:
-            $ref: '#/components/schemas/PublicTargetDTO'
-          example: null
-        priority:
-          type: string
-          description: Priority of alert
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        priorityDetails:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicPriorityDetailsDTO'
-          example: null
-        previousAlerts:
-          type: array
-          description: Previous alerts related to this alert's event
-          items:
-            $ref: '#/components/schemas/PublicPreviousAlertDTO'
-          example: null
-        flagged:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicAlertFlaggedDTO'
-          example: null
-        useCaseDetails:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicUseCaseDetailsDTO'
-          example: null
-        labels:
-          type: array
-          description: Labels assigned to this alert
-          items:
-            $ref: '#/components/schemas/PublicAlertLabelDTO'
-          example: null
-        eventTypes:
-          type: array
-          description: Event types associated with this alert
-          items:
-            $ref: '#/components/schemas/PublicEventTypeDTO'
-          example: null
-        eventTypeGroups:
-          type: array
-          description: Event type groups associated with this alert
-          items:
-            $ref: '#/components/schemas/PublicEventTypeGroupDTO'
-          example: null
-        alertTypes:
-          type: array
-          description: Alert types (e.g. happens, terminates) associated with this alert
-          items:
-            $ref: '#/components/schemas/PublicAlertTypeDTO'
-          example: null
-        collectionPath:
-          type: array
-          description: The collections and their hierarchy for the target
-          items:
-            $ref: '#/components/schemas/PublicCollectionPathRef'
-          example: null
-        geo:
-          $ref: '#/components/schemas/Geo'
-      example: null
-    TeamDTO:
-      required:
-      - id
-      - name
-      - users
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        organizationId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserDTO'
-          example: null
-      example: null
-    TargetDTO:
-      required:
-      - children
-      - collectionFollowing
-      - collectionPath
-      - collectionPaths
-      - ctype
-      - edges
-      - followerCount
-      - following
-      - foreignSystems
-      - geo
-      - geoShape
-      - hsCodes
-      - id
-      - industries
-      - isAnonymous
-      - managed
-      - maturityAssessment
-      - name
-      - own
-      - parents
-      - path
-      - paths
-      - sanctionStatus
-      - screened
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        sname:
-          type: string
-          nullable: true
-          example: null
-        logo:
-          type: string
-          nullable: true
-          example: null
-        backgroundPicture:
-          type: string
-          nullable: true
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        website:
-          type: string
-          nullable: true
-          example: null
-        location:
-          type: string
-          nullable: true
-          example: null
-        yearFounded:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        size:
-          type: string
-          nullable: true
-          enum:
-          - Small
-          - Medium
-          - Large
-          - Very large
-          example: null
-        screened:
-          type: boolean
-          example: null
-        maturityAssessment:
-          type: boolean
-          example: null
-        linkedInId:
-          type: string
-          nullable: true
-          example: null
-        type:
-          $ref: '#/components/schemas/TargetTypeDTO'
-        ctype:
-          $ref: '#/components/schemas/TargetCTypeDTO'
-        geo:
-          $ref: '#/components/schemas/Geo'
-        geoShape:
-          $ref: '#/components/schemas/Geo'
-        address:
-          type: string
-          nullable: true
-          example: null
-        muted:
-          type: boolean
-          nullable: true
-          example: null
-        hierarchyCustomerId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        hierarchyOrganizationId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        level:
-          type: string
-          nullable: true
-          example: null
-        parents:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetDTO'
-          example: null
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetDTO'
-          example: null
-        organization:
-          $ref: '#/components/schemas/TargetDTO'
-        customer:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/CustomerDTO'
-          example: null
-        industries:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetDTO'
-          example: null
-        monitoredSince:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        earliestAlert:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        followerCount:
-          type: integer
-          format: int32
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        disruptionStatusUpdate:
-          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
-        sustainabilityStatus:
-          type: string
-          nullable: true
-          enum:
-          - NoRisk
-          - AtRisk
-          - RedFlag
-          example: null
-        own:
-          type: boolean
-          example: null
-        managed:
-          type: boolean
-          example: null
-        isPublic:
-          type: boolean
-          nullable: true
-          example: null
-        edges:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdgeDTO'
-          example: null
-        connection:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Connection'
-          example: null
-        connectionContactsCount:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        population:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        following:
-          type: boolean
-          example: null
-        collectionFollowing:
-          type: boolean
-          example: null
-        tier:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        path:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetRef'
-          example: null
-        paths:
-          type: array
-          items:
-            type: array
-            items:
-              $ref: '#/components/schemas/TargetRef'
-            example: null
-          example: null
-        collectionLevel:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        collectionPath:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollectionRef'
-          example: null
-        collectionPaths:
-          type: array
-          items:
-            type: array
-            items:
-              $ref: '#/components/schemas/CollectionRef'
-            example: null
-          example: null
-        foreignSystems:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetForeignSystemDTO'
-          example: null
-        scoreAvail:
-          type: string
-          nullable: true
-          enum:
-          - None
-          - Peer
-          - Alert
-          - SSA
-          - External
-          example: null
-        revenue:
-          type: number
-          nullable: true
-          example: null
-        isRevenueEstimated:
-          type: boolean
-          nullable: true
-          example: null
-        actualRevenue:
-          type: number
-          nullable: true
-          example: null
-        revenueAvailability:
-          type: string
-          nullable: true
-          enum:
-          - Unknown
-          - Available
-          example: null
-        hsCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/HSCode'
-          example: null
-        grievanceUrl:
-          type: string
-          nullable: true
-          example: null
-        sanctionStatus:
-          type: string
-          enum:
-          - DIRECT
-          - INDIRECT
-          - NONE
-          example: null
-        countryScoreAvailable:
-          type: boolean
-          nullable: true
-          example: null
-        industryScoreAvailable:
-          type: boolean
-          nullable: true
-          example: null
-        commodityScoreAvailable:
-          type: boolean
-          nullable: true
-          example: null
-        isAnonymous:
-          type: boolean
-          example: null
-        customName:
-          type: string
-          nullable: true
-          example: null
-        latestRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TargetRequestInfoDto'
-          example: null
-        public:
-          type: boolean
-          writeOnly: true
           example: null
       example: null
     EdgeDTO:
@@ -1935,8 +4246,9 @@ components:
           format: int32
           example: null
         scope:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - Private
           - Shared
@@ -1952,24 +4264,28 @@ components:
           - PrewavePrediction
           example: null
         numberShipments:
-          type: integer
+          type:
+          - integer
+          - 'null'
           format: int32
-          nullable: true
           example: null
         numberHSCodes:
-          type: integer
+          type:
+          - integer
+          - 'null'
           format: int32
-          nullable: true
           example: null
         lastShipmentDate:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date
-          nullable: true
           example: null
         probability:
-          type: number
+          type:
+          - number
+          - 'null'
           format: double
-          nullable: true
           example: null
         mediaSources:
           type: array
@@ -1984,13 +4300,13 @@ components:
           type: boolean
           example: null
         impactData:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/EdgeImpactData'
           example: null
         edgeNumbers:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/EdgeNumber'
           example: null
@@ -2000,21 +4316,6 @@ components:
           items:
             type: string
             example: null
-          example: null
-      example: null
-    SupplierOnboardingData:
-      required:
-      - customerId
-      - supplierId
-      type: object
-      properties:
-        supplierId:
-          type: integer
-          format: int32
-          example: null
-        customerId:
-          type: integer
-          format: int32
           example: null
       example: null
     PublicAlertDTO:
@@ -2042,9 +4343,10 @@ components:
           format: uuid
           example: null
         title:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Alert title
-          nullable: true
           example: Hurricane happens at Norsk Hydro in Høyanger, NO
         createdAt:
           type: string
@@ -2052,29 +4354,33 @@ components:
           format: date-time
           example: null
         predictedAtStart:
-          type: string
+          type:
+          - string
+          - 'null'
           description: When the event - that this alert is describing - started
           format: date-time
-          nullable: true
           example: null
         predictedAtEnd:
-          type: string
+          type:
+          - string
+          - 'null'
           description: When the event - that this alert is describing - ended
           format: date-time
-          nullable: true
           example: null
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Detailed description of alert. Usually an excerpt taken from one of the links
-          nullable: true
           example: It's windy in Høyanger
         event:
           $ref: '#/components/schemas/PublicEventDTO'
         statusId:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Replaced with alert-relevancy
           format: int32
-          nullable: true
           deprecated: true
           example: null
         locations:
@@ -2107,9 +4413,10 @@ components:
             $ref: '#/components/schemas/PublicAlertTargetDTO'
           example: null
         priority:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Priority of alert
-          nullable: true
           enum:
           - Low
           - Mid
@@ -2117,7 +4424,6 @@ components:
           - Critical
           example: null
         priorityDetails:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/PublicPriorityDetailsDTO'
           example: null
@@ -2130,343 +4436,36 @@ components:
         geo:
           $ref: '#/components/schemas/Geo'
       example: null
-    ErrorDTO:
+    InfotagTypeDTO:
       required:
-      - code
-      - message
+      - active
+      - display
+      - ordering
+      - type
       type: object
       properties:
-        code:
+        type:
           type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    UserDTO:
-      required:
-      - firstname
-      - id
-      - lastname
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        email:
-          type: string
-          format: email
-          nullable: true
-          example: null
-        firstname:
-          minLength: 1
-          type: string
-          nullable: true
-          example: null
-        lastname:
-          minLength: 1
-          type: string
-          nullable: true
-          example: null
-        department:
-          type: string
-          nullable: true
-          example: null
-        position:
-          type: string
-          nullable: true
-          example: null
-        profilePic:
-          type: string
-          nullable: true
-          example: null
-        customer:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/CustomerDTO'
-          example: null
-        userHash:
-          type: string
-          nullable: true
-          example: null
-        settings:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/UserSettings'
-          example: null
-        activePlan:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PlanDTO'
           example: null
         active:
           type: boolean
-          nullable: true
           example: null
-        confirmed:
+        displayName:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        ordering:
+          type: integer
+          format: int32
+          example: null
+        display:
           type: boolean
-          nullable: true
-          example: null
-        roles:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/RoleDTO'
-          example: null
-        teams:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/TeamDTO'
-          example: null
-        perspective:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PerspectiveDTO'
-          example: null
-        organization:
-          $ref: '#/components/schemas/TargetDTO'
-        organizations:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/TargetDTO'
-          example: null
-        defaultEdgeType:
-          type: string
-          nullable: true
-          enum:
-          - Supplier
-          - Customer
-          - PrimaryMaterial
-          - SecondaryMaterial
-          - Equipment
-          - Own
-          example: null
-        language:
-          type: string
-          nullable: true
-          enum:
-          - en
-          - de
-          - fr
-          - it
-          - ch
-          example: null
-        collection:
-          $ref: '#/components/schemas/CollectionDTO'
-        passwordValidUntil:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        riskAnalysis:
-          $ref: '#/components/schemas/RiskAnalysis'
-        phone:
-          type: string
-          nullable: true
-          example: null
-        wechatId:
-          type: string
-          nullable: true
-          example: null
-        peerScoreToggle:
-          type: boolean
-          nullable: true
-          example: null
-        resilienceScoreToggle:
-          type: boolean
-          nullable: true
-          example: null
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    UserSystemAttributes:
-      required:
-      - incognitoOnboarding
-      - onboardingFlowComplete
-      type: object
-      properties:
-        onboardingFlowComplete:
-          type: boolean
-          example: null
-        incognitoOnboarding:
-          type: boolean
-          example: null
-        joinCustomer:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        supplierOnboardingData:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/SupplierOnboardingData'
-          example: null
-      example: null
-    Connection:
-      required:
-      - createdAt
-      - customer1Id
-      - customer2Id
-      - initiatorCustomerId
-      - pending
-      - state
-      - targetCustomerId
-      type: object
-      properties:
-        customer1Id:
-          type: integer
-          format: int32
-          example: null
-        customer2Id:
-          type: integer
-          format: int32
-          example: null
-        initiatorCustomerId:
-          type: integer
-          format: int32
-          example: null
-        state:
-          type: string
-          enum:
-          - Confirmed
-          - Rejected
-          - Failed
-          example: null
-        pending:
-          type: boolean
-          example: null
-        initiatorId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        comment:
-          type: string
-          nullable: true
-          example: null
-        email:
-          type: string
-          nullable: true
-          example: null
-        text:
-          type: string
-          nullable: true
-          example: null
-        createdAt:
-          type: string
-          format: date-time
-          example: null
-        targetCustomerId:
-          type: integer
-          format: int32
-          example: null
-      example: null
-    PublicMediaDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        url:
-          type: string
-          nullable: true
-          example: null
-        mimeType:
-          type: string
-          nullable: true
-          example: null
-      description: Media files attached to the alert
-      example: null
-    DisruptionStatusUpdate:
-      required:
-      - assignedAt
-      - assignmentMethod
-      - status
-      - targetId
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        targetId:
-          type: integer
-          format: int32
-          example: null
-        assignedAt:
-          type: string
-          format: date-time
-          example: null
-        assignedBy:
-          $ref: '#/components/schemas/UserDTO'
-        comment:
-          type: string
-          nullable: true
-          example: null
-        continuity:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        impactedParts:
-          type: array
-          nullable: true
-          items:
-            type: string
-            example: null
-          example: null
-        forCustomer:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/CustomerDTO'
-          example: null
-        status:
-          $ref: '#/components/schemas/DisruptionStatus'
-        assignmentMethod:
-          type: string
-          enum:
-          - MANUAL
-          - AUTOMATIC
           example: null
       example: null
     PlanLimitDTO:
@@ -2482,1394 +4481,6 @@ components:
           type: integer
           format: int32
           example: null
-      example: null
-    RiskAnalysisLock:
-      required:
-      - locked
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - Form
-          - Suppliers
-          - Matrix
-          - Actions
-          - Scoping
-          - Products
-          example: null
-        locked:
-          type: boolean
-          example: null
-        user:
-          $ref: '#/components/schemas/UserDTO'
-        lockedAt:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-      example: null
-    PublicLinkDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        url:
-          type: string
-          nullable: true
-          example: null
-        title:
-          type: string
-          nullable: true
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        pictureUrl:
-          type: string
-          nullable: true
-          example: null
-        originalLang:
-          type: string
-          nullable: true
-          example: null
-        originalTitle:
-          type: string
-          nullable: true
-          example: null
-        originalDescription:
-          type: string
-          nullable: true
-          example: null
-      description: Source links the alert is based on
-      example: null
-    CollectionRef:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-      description: Paths of the target in the collection hierarchy
-      example: null
-    PublicTargetDTO:
-      required:
-      - collectionFollowing
-      - collectionPath
-      - collectionPaths
-      - ctype
-      - following
-      - foreignSystems
-      - geo
-      - geoShape
-      - hsCode
-      - id
-      - industries
-      - managed
-      - mergedTargets
-      - name
-      - own
-      - parents
-      - path
-      - scoreAvail
-      - screened
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave target id
-          format: int32
-          example: 102006215
-        name:
-          type: string
-          description: Name of the Prewave target
-          example: Høyanger
-        sname:
-          type: string
-          description: Geonames Id (see https://geonames.org)
-          nullable: true
-          example: '3191281'
-        logo:
-          type: string
-          description: URL to the logo shown in the target profile
-          nullable: true
-          example: null
-        backgroundPicture:
-          type: string
-          description: URL to the background picture shown in the target profile
-          nullable: true
-          example: null
-        description:
-          type: string
-          description: Description of the Prewave target
-          nullable: true
-          example: Description shown in the target profile
-        website:
-          type: string
-          description: URL to the website shown in the target profile
-          nullable: true
-          example: null
-        location:
-          type: string
-          description: Location of the target
-          nullable: true
-          example: Mistelbach
-        yearFounded:
-          type: integer
-          description: Year the target was founded shown in the target profile
-          format: int32
-          nullable: true
-          example: 1999
-        size:
-          type: string
-          description: Size of the target shown in the target profile
-          nullable: true
-          example: Small
-          enum:
-          - Small
-          - Medium
-          - Large
-          - Very large
-        screened:
-          type: boolean
-          description: Whether the target is screened or not
-          example: true
-        screenedStatus:
-          type: string
-          description: Screening status of the target
-          nullable: true
-          example: Screened
-          enum:
-          - Required
-          - Pending
-          - Screened
-          - NotPossible
-        linkedInId:
-          type: string
-          description: LinkedIn ID of the target
-          nullable: true
-          example: general-motors
-        type:
-          $ref: '#/components/schemas/PublicTargetTypeDTO'
-        ctype:
-          $ref: '#/components/schemas/PublicTargetCTypeDTO'
-        geo:
-          $ref: '#/components/schemas/Geo'
-        geoShape:
-          $ref: '#/components/schemas/Geo'
-        parents:
-          type: array
-          description: List of parent targets
-          items:
-            $ref: '#/components/schemas/PublicTargetDTO'
-          example: null
-        organization:
-          $ref: '#/components/schemas/PublicTargetDTO'
-        industries:
-          type: array
-          description: List of industries the target belongs to
-          items:
-            $ref: '#/components/schemas/PublicTargetDTO'
-          example: null
-        monitoredSince:
-          type: string
-          description: Date the target was monitored since
-          format: date-time
-          nullable: true
-          example: null
-        earliestAlert:
-          type: string
-          description: Date of the earliest alert
-          format: date-time
-          nullable: true
-          example: null
-        ordering:
-          type: integer
-          description: Ordering of the target
-          format: int32
-          nullable: true
-          example: null
-        disruptionStatusUpdate:
-          $ref: '#/components/schemas/ComplexDisruptionStatusUpdate'
-        own:
-          type: boolean
-          description: Whether the target is owned by user customer or not
-          example: null
-        managed:
-          type: boolean
-          description: '`true` if user is target connection contact or target is owned by user customer, `false` otherwise'
-          example: null
-        isPublic:
-          type: boolean
-          description: Whether the target is public or not
-          nullable: true
-          example: null
-        connectionContactsCount:
-          type: integer
-          description: Number of connection contacts of the target
-          format: int32
-          nullable: true
-          example: null
-        population:
-          type: integer
-          description: Population of the target. Generally applies to locations
-          format: int32
-          nullable: true
-          example: null
-        following:
-          type: boolean
-          description: Target resides in "My follows" collection
-          example: null
-        collectionFollowing:
-          type: boolean
-          description: Target resides in any followed collection (including children)
-          example: null
-        tier:
-          type: integer
-          description: Tier of the target (relevant when fetching Tier-N)
-          format: int32
-          nullable: true
-          example: null
-        path:
-          type: array
-          description: Path of the target (relevant when fetching Tier-N)
-          items:
-            $ref: '#/components/schemas/PublicTargetRefExtended'
-          example: null
-        collectionLevel:
-          type: integer
-          description: How deep the target is in the collection hierarchy
-          format: int32
-          nullable: true
-          example: null
-        collectionPath:
-          type: array
-          description: Path of the target in the collection hierarchy
-          items:
-            $ref: '#/components/schemas/CollectionRef'
-          example: null
-        collectionPaths:
-          type: array
-          description: Paths of the target in the collection hierarchy
-          items:
-            type: array
-            description: Paths of the target in the collection hierarchy
-            items:
-              $ref: '#/components/schemas/CollectionRef'
-            example: null
-          example: null
-        foreignSystems:
-          type: array
-          description: List of foreign systems the target is connected to
-          items:
-            $ref: '#/components/schemas/PublicTargetForeignSystemDTO'
-          example: null
-        scoreAvail:
-          type: string
-          description: Score availability of the target
-          enum:
-          - None
-          - Peer
-          - Alert
-          - SSA
-          - External
-          example: null
-        revenue:
-          type: number
-          description: Revenue of the target
-          nullable: true
-          example: null
-        impact:
-          type: string
-          description: Impact of the target
-          nullable: true
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        hsCode:
-          type: array
-          description: List of HS Codes of the target
-          items:
-            $ref: '#/components/schemas/PublicHSCode'
-          example: null
-        mergedTargets:
-          type: array
-          description: Target ids of past targets that were merged into this current target
-          items:
-            type: integer
-            description: Target ids of past targets that were merged into this current target
-            format: int32
-            example: null
-          example: null
-        public:
-          type: boolean
-          writeOnly: true
-          example: null
-      example: null
-    PublicInfotagDTO:
-      required:
-      - id
-      - type
-      - value
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        type:
-          $ref: '#/components/schemas/PublicInfotagTypeDTO'
-        value:
-          type: string
-          example: null
-        svalue:
-          type: string
-          nullable: true
-          example: null
-        icon:
-          type: string
-          nullable: true
-          example: null
-        numValue:
-          type: number
-          nullable: true
-          example: null
-        priority:
-          type: string
-          nullable: true
-          deprecated: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        impactScore:
-          type: string
-          nullable: true
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      example: null
-    TargetCTypeDTO:
-      required:
-      - bgColor
-      - connectable
-      - ctype
-      - displayName
-      - icon
-      - id
-      - pluralName
-      - priority
-      - targetTypeId
-      - textColor
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        ctype:
-          type: string
-          example: null
-        targetTypeId:
-          type: integer
-          format: int32
-          example: null
-        displayName:
-          type: string
-          example: null
-        pluralName:
-          type: string
-          example: null
-        icon:
-          type: string
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        priority:
-          type: integer
-          format: int32
-          example: null
-        connectable:
-          type: boolean
-          example: null
-        bgColor:
-          type: string
-          example: null
-        textColor:
-          type: string
-          example: null
-      example: null
-    PerspectiveDTO:
-      required:
-      - actualImpactT80
-      - actualRiskT80
-      - commodityMissingScore
-      - countryMissingScore
-      - diModel
-      - eventTypes
-      - groups
-      - id
-      - industryMissingScore
-      - insolvencyLoss
-      - isGlobal
-      - massDisruptionFactor
-      - name
-      - riskModel
-      - sname
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        perspective:
-          type: string
-          nullable: true
-          example: null
-        name:
-          type: string
-          example: null
-        sname:
-          type: string
-          example: null
-        type:
-          $ref: '#/components/schemas/PerspectiveTypeDTO'
-        isGlobal:
-          type: boolean
-          example: null
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfotagGroup'
-          example: null
-        eventTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfotagDTO'
-          example: null
-        massDisruptionFactor:
-          type: boolean
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        riskModel:
-          type: string
-          enum:
-          - Sustainability
-          - Disruption
-          example: null
-        diModel:
-          type: string
-          enum:
-          - Direct
-          - Parent
-          - Auto
-          example: null
-        riskT80:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        impactT80:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        insolvencyLoss:
-          type: boolean
-          example: null
-        industryMissingScore:
-          type: string
-          enum:
-          - Zero
-          - Skip
-          example: null
-        commodityMissingScore:
-          type: string
-          enum:
-          - Zero
-          - Skip
-          example: null
-        countryMissingScore:
-          type: string
-          enum:
-          - Zero
-          - Skip
-          example: null
-        actualRiskT80:
-          type: integer
-          format: int32
-          example: null
-        actualImpactT80:
-          type: number
-          format: double
-          example: null
-      example: null
-    TargetRequestInfoDto:
-      required:
-      - targetId
-      type: object
-      properties:
-        targetId:
-          type: integer
-          format: int32
-          example: null
-        validationRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
-          example: null
-        screeningRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
-          example: null
-        reportedTargetRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TargetRequestTypeStatusDto'
-          example: null
-      example: null
-    PublicEventTypeGroupDTO:
-      required:
-      - eventTypeIds
-      - id
-      - name
-      - sname
-      type: object
-      properties:
-        id:
-          type: integer
-          description: ID of the event type group
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Name of the event type group
-          example: Natural Disasters
-        sname:
-          type: string
-          description: Technical name of the event type group
-          example: natural_disasters
-        eventTypeIds:
-          type: array
-          description: List of event type IDs in this group
-          items:
-            type: integer
-            description: List of event type IDs in this group
-            format: int32
-            example: null
-          example: null
-      description: Event type groups associated with this alert
-      example: null
-    GeoProperties:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: true
-          example: null
-        countryCode:
-          type: string
-          nullable: true
-          example: null
-        alertCount:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        boundingBox:
-          type: array
-          nullable: true
-          items:
-            type: integer
-            format: int32
-            example: null
-          example: null
-      example: null
-    TargetTypeDTO:
-      required:
-      - displayName
-      - id
-      - pluralName
-      - scoring
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        type:
-          type: string
-          example: null
-        displayName:
-          type: string
-          example: null
-        pluralName:
-          type: string
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        scoring:
-          type: string
-          enum:
-          - Alert
-          - Peer
-          example: null
-      example: null
-    PlanDTO:
-      required:
-      - limits
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        planType:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PlanTypeDTO'
-          example: null
-        name:
-          type: string
-          nullable: true
-          example: null
-        pricePerUser:
-          type: number
-          nullable: true
-          example: null
-        limits:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlanLimitDTO'
-          example: null
-        validFrom:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        validTo:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-      example: null
-    PublicHSCode:
-      required:
-      - code
-      type: object
-      properties:
-        code:
-          type: string
-          example: null
-        nShipments:
-          type: integer
-          format: int32
-          nullable: true
-          writeOnly: true
-          example: null
-        nshipments:
-          type: integer
-          format: int32
-          example: null
-      description: List of HS Codes of the target
-      example: null
-    EdgeImpactData:
-      required:
-      - causalContribution
-      - coc
-      - daysOnHand
-      - deviation
-      - edgeId
-      - stockAtSupplier
-      - stockOnPremise
-      - validFrom
-      - validTo
-      type: object
-      properties:
-        edgeId:
-          type: integer
-          format: int32
-          example: null
-        validFrom:
-          type: string
-          format: date-time
-          example: null
-        validTo:
-          type: string
-          format: date-time
-          example: null
-        purchase:
-          type: number
-          nullable: true
-          example: null
-        actualPurchase:
-          type: number
-          nullable: true
-          example: null
-        diForced:
-          type: string
-          nullable: true
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        di:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        causalContribution:
-          type: boolean
-          example: null
-        bi12:
-          type: number
-          nullable: true
-          example: null
-        coc:
-          type: boolean
-          example: null
-        mttrGrossE:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        mttrNetE:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        mttrGrossI:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        mttrNetI:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        stockOnPremise:
-          type: number
-          format: double
-          example: null
-        stockAtSupplier:
-          type: number
-          format: double
-          example: null
-        daysOnHand:
-          type: number
-          format: double
-          example: null
-        deviation:
-          type: string
-          enum:
-          - NotApplicable
-          - OnTarget
-          - Below
-          - Above
-          example: null
-        location:
-          type: string
-          nullable: true
-          enum:
-          - SameBuilding
-          - DifferentFireSection
-          - DifferentBuilding
-          - NotApplicable
-          example: null
-        lastConfirmationDate:
-          type: string
-          format: date
-          nullable: true
-          example: null
-        birsInfo:
-          type: string
-          nullable: true
-          example: null
-        biForced:
-          type: string
-          nullable: true
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        bi:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        biEffE:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        biEffI:
-          type: number
-          format: double
-          nullable: true
-          example: null
-        impact:
-          type: string
-          nullable: true
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      example: null
-    EdgeNumber:
-      required:
-      - number
-      type: object
-      properties:
-        number:
-          type: string
-          example: null
-        source:
-          type: string
-          nullable: true
-          example: null
-        existingEdgeId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-      example: null
-    PublicCollectionPathRef:
-      required:
-      - id
-      - name
-      - path
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        path:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollectionRef'
-          example: null
-      description: The collections and their hierarchy for the target
-      example: null
-    PublicTargetCTypeDTO:
-      required:
-      - bgColor
-      - connectable
-      - ctype
-      - displayName
-      - icon
-      - id
-      - pluralName
-      - priority
-      - targetTypeId
-      - textColor
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave-internal id of the target ctype
-          format: int32
-          example: 1234
-        ctype:
-          type: string
-          description: Name of the target ctype
-          example: mine
-        targetTypeId:
-          type: integer
-          description: Identifier of the target ctype
-          format: int32
-          example: 1234
-        displayName:
-          type: string
-          description: Display name of the target ctype
-          example: Mine
-        pluralName:
-          type: string
-          description: Plural name of the target ctype
-          example: Mines
-        icon:
-          type: string
-          description: Icon of the target ctype. Fontawesome icon name. See https://fontawesome.com/icons for more information
-          example: fas fa-mine
-        ordering:
-          type: integer
-          description: Ordering of the target ctype
-          format: int32
-          nullable: true
-          example: null
-        priority:
-          type: integer
-          description: Priority of the target ctype
-          format: int32
-          example: null
-        connectable:
-          type: boolean
-          description: Whether it is possible to connect to targets of this type or not
-          example: null
-        bgColor:
-          type: string
-          description: Background color of the target ctype. Valid CSS color value
-          example: '#ff0000'
-        textColor:
-          type: string
-          description: Text color of the target ctype. Valid CSS color value
-          example: '#ffffff'
-      description: CTypes are what is known as "Facility Types" in the Prewave system (e.g in Network > Filters). They provide a slightly more specific categorization of what the target is. Examples for ctypes are "mine", "factory" etc.
-      example: null
-    UserAttributes:
-      required:
-      - scenarioWelcomeScreenShown
-      type: object
-      properties:
-        scenarioWelcomeScreenShown:
-          type: boolean
-          example: null
-      example: null
-    TierSettingsDTO:
-      required:
-      - logisticsProvider
-      - maxTier
-      - scopePrivate
-      - scopePublic
-      - scopeShared
-      - sourceCustomer
-      - sourceCustoms
-      - sourceMedia
-      - sourcePrewavePrediction
-      - suspectedSuppliers
-      - tier2MinPrio
-      - tier2TargetPrio
-      - tier3PlusMinPrio
-      - tier3PlusTargetPrio
-      type: object
-      properties:
-        maxTier:
-          type: integer
-          format: int32
-          example: null
-        tier2TargetPrio:
-          type: string
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        tier3PlusTargetPrio:
-          type: string
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        tier2MinPrio:
-          type: string
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        tier3PlusMinPrio:
-          type: string
-          enum:
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-        scopePrivate:
-          type: boolean
-          example: null
-        scopeShared:
-          type: boolean
-          example: null
-        scopePublic:
-          type: boolean
-          example: null
-        sourceCustoms:
-          type: boolean
-          example: null
-        sourcePrewavePrediction:
-          type: boolean
-          example: null
-        sourceMedia:
-          type: boolean
-          example: null
-        sourceCustomer:
-          type: boolean
-          example: null
-        minShipments:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        probability:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        lastShipmentsPeriodFrom:
-          type: string
-          format: date
-          nullable: true
-          example: null
-        lastShipmentsPeriodTo:
-          type: string
-          format: date
-          nullable: true
-          example: null
-        suspectedSuppliers:
-          type: boolean
-          example: null
-        logisticsProvider:
-          type: boolean
-          example: null
-      example: null
-    DisruptionStatus:
-      required:
-      - displayName
-      - icon
-      - id
-      - ordering
-      - status
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        status:
-          type: string
-          example: null
-        displayName:
-          type: string
-          example: null
-        icon:
-          type: string
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          example: null
-      example: null
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-          example: null
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-          example: null
-        sort:
-          type: array
-          items:
-            type: string
-            example: null
-          example: null
-      example: null
-    SchemaPublicAlertV2DTO:
-      type: object
-      properties:
-        totalPages:
-          type: integer
-          format: int32
-          example: null
-        totalElements:
-          type: integer
-          format: int64
-          example: null
-        size:
-          type: integer
-          format: int32
-          example: null
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAlertV2DTO'
-          example: null
-        number:
-          type: integer
-          format: int32
-          example: null
-        numberOfElements:
-          type: integer
-          format: int32
-          example: null
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageable:
-          $ref: '#/components/schemas/Pageable'
-        first:
-          type: boolean
-          example: null
-        last:
-          type: boolean
-          example: null
-        empty:
-          type: boolean
-          example: null
-      example: null
-    PublicUseCaseDetailsDTO:
-      required:
-      - reason
-      - relevant
-      type: object
-      properties:
-        relevant:
-          type: boolean
-          description: Whether the alert is relevant for the use case
-          example: null
-        reason:
-          type: string
-          description: Reason for the relevance decision
-          example: null
-      description: Use case details for this alert
-      example: null
-    PublicAlertTypeDTO:
-      required:
-      - id
-      - value
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave-internal alert type id
-          format: int32
-          example: null
-        value:
-          type: string
-          description: Alert type name
-          example: happens
-        svalue:
-          type: string
-          description: Alert type machine-readable name
-          nullable: true
-          example: happens
-        icon:
-          type: string
-          description: Icon for the alert type
-          nullable: true
-          example: null
-      description: Alert types (e.g. happens, terminates) associated with this alert
-      example: null
-    HSCode:
-      required:
-      - children
-      - code
-      - level
-      type: object
-      properties:
-        code:
-          type: string
-          example: null
-        description:
-          type: string
-          nullable: true
-          example: null
-        numberShipments:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        lastShipment:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/HSCode'
-          example: null
-        level:
-          type: integer
-          format: int32
-          example: null
-      example: null
-    ComplexDisruptionStatusUpdate:
-      required:
-      - customer
-      - general
-      type: object
-      properties:
-        general:
-          $ref: '#/components/schemas/DisruptionStatusUpdate'
-        customer:
-          $ref: '#/components/schemas/DisruptionStatusUpdate'
-      description: Disruption status update of the target
-      example: null
-    PlanTypeDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        type:
-          type: string
-          nullable: true
-          example: null
-        displayName:
-          type: string
-          nullable: true
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-      example: null
-    PublicTargetTypeDTO:
-      required:
-      - displayName
-      - id
-      - pluralName
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave-internal ID of the target type
-          format: int32
-          example: null
-        type:
-          type: string
-          description: Machine-readable name of the target type
-          example: null
-        displayName:
-          type: string
-          description: Display name of the target type
-          example: null
-        pluralName:
-          type: string
-          description: Plural name of the target type
-          example: null
-        ordering:
-          type: integer
-          description: Ordering of the target type
-          format: int32
-          nullable: true
-          example: null
-        scoring:
-          type: string
-          description: Scoring of the target type
-          nullable: true
-          enum:
-          - Alert
-          - Peer
-          example: null
-      description: Target types are what is known as "Target Type" in the Prewave system (e.g in Network > Filters). They provide a broad categorization of what the target is. Examples for target types are "poi", "organization" etc.
-      example: null
-    PublicTargetRefExtended:
-      required:
-      - foreignSystems
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        customName:
-          type: string
-          nullable: true
-          example: null
-        latestRequest:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TargetRequestInfoDto'
-          example: null
-        foreignSystems:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdgeNumber'
-          example: null
-      description: Path of the target (relevant when fetching Tier-N)
-      example: null
-    PublicAlertFlaggedDTO:
-      required:
-      - flaggedAt
-      - reason
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Reason why the alert was flagged
-          example: null
-        comment:
-          type: string
-          description: Optional comment on the flagging
-          nullable: true
-          example: null
-        flaggedAt:
-          type: string
-          description: When the alert was flagged
-          format: date-time
-          example: null
-      description: Flagging information for this alert
       example: null
     CommodityFilterId:
       required:
@@ -3894,85 +4505,6 @@ components:
             example: null
           example: null
       example: null
-    PublicEventTypeDTO:
-      required:
-      - id
-      - value
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave-internal event type id
-          format: int32
-          example: null
-        value:
-          type: string
-          description: Event type name
-          example: Hurricane
-        svalue:
-          type: string
-          description: Event type machine-readable name
-          nullable: true
-          example: hurricane
-        icon:
-          type: string
-          description: Icon for the event type
-          nullable: true
-          example: null
-      description: Event types associated with this alert
-      example: null
-    CustomerDTO:
-      required:
-      - defaultEdgeType
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        logo:
-          type: string
-          nullable: true
-          example: null
-        defaultEdgeType:
-          type: string
-          enum:
-          - Supplier
-          - Customer
-          - PrimaryMaterial
-          - SecondaryMaterial
-          - Equipment
-          - Own
-          example: null
-        pristine:
-          type: boolean
-          nullable: true
-          example: null
-        confidentialSticker:
-          type: string
-          nullable: true
-          example: null
-        forceDefaultConnectionContact:
-          type: boolean
-          nullable: true
-          example: null
-      example: null
-    UserSettings:
-      required:
-      - _system_
-      - user
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/UserAttributes'
-        _system_:
-          $ref: '#/components/schemas/UserSystemAttributes'
-      example: null
     PublicTargetForeignSystemDTO:
       required:
       - id
@@ -3988,228 +4520,12 @@ components:
           description: The id in the foreign system
           example: '1234'
         source:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name of the foreign system
-          nullable: true
           example: SAP_ARIBA
       description: List of foreign systems the target is connected to
-      example: null
-    PublicEventDTO:
-      required:
-      - uuid
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: Prewave event uuid
-          format: uuid
-          example: null
-      description: Way of grouping alerts that belong to the same event, e.g. Strike announcement, Strike happens, Strike terminates
-      example: null
-    CollectionDTO:
-      required:
-      - children
-      - collectionTreeFilter
-      - commodityFilter
-      - deliverySettingTypes
-      - id
-      - isMonitored
-      - isParentMonitored
-      - lanes
-      - level
-      - name
-      - own
-      - path
-      - scope
-      - tiersEnabled
-      - type
-      - uuid
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        uuid:
-          type: string
-          format: uuid
-          example: null
-        scope:
-          type: string
-          enum:
-          - User
-          - Customer
-          - Featured
-          example: null
-        type:
-          type: string
-          enum:
-          - Default
-          - Commodity
-          - Ariba
-          example: null
-        collection:
-          type: string
-          nullable: true
-          example: null
-        name:
-          type: string
-          example: null
-        user:
-          $ref: '#/components/schemas/UserDTO'
-        deliverySettingTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeliverySettingTypeDTO'
-          example: null
-        logo:
-          type: string
-          nullable: true
-          example: null
-        count:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        isMonitored:
-          type: boolean
-          example: null
-        isParentMonitored:
-          type: boolean
-          example: null
-        own:
-          type: boolean
-          example: null
-        lanes:
-          type: boolean
-          example: null
-        tiersEnabled:
-          type: boolean
-          example: null
-        tierSettings:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/TierSettingsDTO'
-          example: null
-        collectionTreeFilter:
-          type: array
-          items:
-            type: integer
-            format: int32
-            example: null
-          example: null
-        userId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        customerId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        organizationId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        viewedWithRole:
-          type: string
-          nullable: true
-          enum:
-          - Manager
-          - Editor
-          example: null
-        parentId:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollectionDTO'
-          example: null
-        level:
-          type: integer
-          format: int32
-          example: null
-        path:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollectionRef'
-          example: null
-        commodityFilter:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommodityFilterId'
-          example: null
-        updatedAt:
-          type: string
-          format: date-time
-          nullable: true
-          example: null
-        monitored:
-          type: boolean
-          writeOnly: true
-          example: null
-        parentMonitored:
-          type: boolean
-          writeOnly: true
-          example: null
-      example: null
-    PublicInfotagTypeDTO:
-      required:
-      - active
-      - display
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: null
-        active:
-          type: boolean
-          example: null
-        displayName:
-          type: string
-          nullable: true
-          example: null
-        icon:
-          type: string
-          nullable: true
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          nullable: true
-          example: null
-        display:
-          type: boolean
-          example: null
-      example: null
-    PerspectiveTypeDTO:
-      required:
-      - displayName
-      - id
-      - ordering
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        type:
-          type: string
-          example: null
-        displayName:
-          type: string
-          example: null
-        ordering:
-          type: integer
-          format: int32
-          example: null
       example: null
     TargetRef:
       required:
@@ -4226,11 +4542,11 @@ components:
           type: string
           example: null
         customName:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: null
         latestRequest:
-          nullable: true
           allOf:
           - $ref: '#/components/schemas/TargetRequestInfoDto'
           example: null
@@ -4240,119 +4556,8 @@ components:
             $ref: '#/components/schemas/EdgeDTO'
           example: null
       example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    Geo:
-      required:
-      - properties
-      - type
-      type: object
-      properties:
-        geometry:
-          $ref: '#/components/schemas/Geometry'
-        properties:
-          $ref: '#/components/schemas/GeoProperties'
-        type:
-          type: string
-          example: null
-      description: Geo information for this alert. Only available if includeGeo is set to true.
-      example: null
-    Geometry:
-      type: object
-      additionalProperties: true
-      description: 'GeoJSON-compatible geometry object. Fields follow the GeoJSON spec (https://geojson.org): a `type` string (e.g. `Point`, `Polygon`) and a `coordinates` array.'
-      example: null
-    PublicPreviousAlertDTO:
-      required:
-      - alertId
-      - createdAt
-      - eventId
-      type: object
-      properties:
-        alertId:
-          type: integer
-          description: Prewave-internal alert id of the previous alert
-          format: int32
-          example: null
-        eventId:
-          type: integer
-          description: Prewave-internal event id
-          format: int32
-          example: null
-        title:
-          type: string
-          description: Title of the previous alert
-          nullable: true
-          example: null
-        description:
-          type: string
-          description: Description of the previous alert
-          nullable: true
-          example: null
-        createdAt:
-          type: string
-          description: When the previous alert was created
-          format: date-time
-          example: null
-      description: Previous alerts related to this alert's event
-      example: null
-    SchemaPublicAlertDTO:
-      type: object
-      properties:
-        totalPages:
-          type: integer
-          format: int32
-          example: null
-        totalElements:
-          type: integer
-          format: int64
-          example: null
-        size:
-          type: integer
-          format: int32
-          example: null
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAlertDTO'
-          example: null
-        number:
-          type: integer
-          format: int32
-          example: null
-        numberOfElements:
-          type: integer
-          format: int32
-          example: null
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageable:
-          $ref: '#/components/schemas/Pageable'
-        first:
-          type: boolean
-          example: null
-        last:
-          type: boolean
-          example: null
-        empty:
-          type: boolean
-          example: null
-      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

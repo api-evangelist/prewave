@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions EUDR - Suppliers API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave EUDR - Suppliers API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,26 @@ paths:
       tags:
       - EUDR - Suppliers
       summary: Answer supplier origin request with supplier DDS
-      description: "\nAnswer an origin request by providing supplier Due Diligence Statement (DDS) information.\n\nThis endpoint allows suppliers to respond to origin requests by submitting one or more supplier DDS\nentries. Each payload must contain the reference number, verification number, HS code, and product\ndescription as stated in the TracesNT system.\n\n**Use Cases**:\n- Respond to customer origin requests\n- Provide origin information via supplier DDS\n- Submit compliance data for requested products\n\n**Required permission:** `access_public_eudr_suppliers`\n        "
+      description: 'Answer an origin request by providing supplier Due Diligence Statement (DDS) information.
+
+
+        This endpoint allows suppliers to respond to origin requests by submitting one or more supplier DDS
+
+        entries. Each payload must contain the reference number, verification number, HS code, and product
+
+        description as stated in the TracesNT system.
+
+
+        **Use Cases**:
+
+        - Respond to customer origin requests
+
+        - Provide origin information via supplier DDS
+
+        - Submit compliance data for requested products
+
+
+        **Required permission:** `access_public_eudr_suppliers`'
       operationId: answerOriginRequestWithDDS
       parameters:
       - name: originRequestId
@@ -258,7 +138,33 @@ paths:
       tags:
       - EUDR - Suppliers
       summary: Fetch supplier origin requests
-      description: "\nRetrieve a paginated list of origin requests received by the supplier.\n\nThis endpoint returns all origin requests that have been sent to the supplier's organization,\nwith optional filtering by customer ID, reference, and status. Each item includes the linked\nproduct, references, supplier DDS references when answered, and origins when available.\n\n**Use Cases**:\n- View all origin requests received\n- Filter requests by customer or status\n- Track request status and responses\n\n**Pagination**:\n- Results are paginated (default: 10 items per page)\n- Use `page` and `size` query parameters to control pagination\n\n**Required permission:** `access_public_eudr_suppliers`\n        "
+      description: 'Retrieve a paginated list of origin requests received by the supplier.
+
+
+        This endpoint returns all origin requests that have been sent to the supplier''s organization,
+
+        with optional filtering by customer ID, reference, and status. Each item includes the linked
+
+        product, references, supplier DDS references when answered, and origins when available.
+
+
+        **Use Cases**:
+
+        - View all origin requests received
+
+        - Filter requests by customer or status
+
+        - Track request status and responses
+
+
+        **Pagination**:
+
+        - Results are paginated (default: 10 items per page)
+
+        - Use `page` and `size` query parameters to control pagination
+
+
+        **Required permission:** `access_public_eudr_suppliers`'
       operationId: findSupplierOriginRequests
       parameters:
       - name: page
@@ -395,7 +301,24 @@ paths:
       tags:
       - EUDR - Suppliers
       summary: Fetch supplier customers
-      description: "\nRetrieve a list of all customers that have products associated with this supplier.\n\nThis endpoint returns all customers that have inbound products linked to the supplier's organization.\nThis information is useful for understanding which customers are requesting origin information.\n\n**Use Cases**:\n- View all customers that have products from this supplier\n- Understand customer relationships\n- Identify active customer connections\n\n**Required permission:** `access_public_eudr_suppliers`\n        "
+      description: 'Retrieve a list of all customers that have products associated with this supplier.
+
+
+        This endpoint returns all customers that have inbound products linked to the supplier''s organization.
+
+        This information is useful for understanding which customers are requesting origin information.
+
+
+        **Use Cases**:
+
+        - View all customers that have products from this supplier
+
+        - Understand customer relationships
+
+        - Identify active customer connections
+
+
+        **Required permission:** `access_public_eudr_suppliers`'
       operationId: findSupplierCustomers
       responses:
         '200':
@@ -447,66 +370,60 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicFeatureCollection:
+    PublicFeature:
       required:
-      - features
+      - geometry
+      - properties
       type: object
       properties:
-        features:
+        geometry:
+          $ref: '#/components/schemas/PublicGeometrySchema'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
           type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
           items:
-            $ref: '#/components/schemas/PublicFeature'
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
           example: null
-      description: Plot of the origin
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
+        currentTime:
           type: string
-          nullable: true
-          example: null
-        code:
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
           type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
     PublicMinimalProduct:
       required:
@@ -527,15 +444,17 @@ components:
           format: int32
           example: 456
         supplierId:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Supplier ID
           format: int32
-          nullable: true
           example: 789
         reference:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Product reference label
-          nullable: true
           example: REF-001
         type:
           type: string
@@ -549,6 +468,84 @@ components:
           description: Product name
           example: Wooden Table
       description: Origin Request Product.
+      example: null
+    PublicFeatureCollection:
+      required:
+      - features
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFeature'
+          example: null
+      description: Plot of the origin
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicOriginRequestReference:
+      required:
+      - referenceType
+      type: object
+      properties:
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Reference label.
+          example: PO-2025-001
+        referenceType:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: Reference for an origin request, including label and type.
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
       example: null
     PublicSupplierOriginRequest:
       required:
@@ -588,26 +585,30 @@ components:
           format: date-time
           example: null
         closedAt:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Closed timestamp (UTC), related to origin requests with weight or time range set.
           format: date-time
-          nullable: true
           example: null
         endDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: End date, related to origin requests with time range set.
           format: date
-          nullable: true
           example: '2025-09-30'
         requestedWeight:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Requested Weight, related to origin requests with weight set.
-          nullable: true
           example: null
         providedWeight:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Provided Weight, related to origin requests with weight set.
-          nullable: true
           example: null
         references:
           $ref: '#/components/schemas/PublicOriginRequestReference'
@@ -670,79 +671,79 @@ components:
           description: Description of the product in the supplier DDS, as stated in the TracesNT system
           example: Wood product
       example: null
-    PublicOriginRequestReference:
+    PublicSupplierOrigin:
       required:
-      - referenceType
+      - active
+      - countryName
+      - createdAt
+      - id
+      - plot
+      - plotAreaHa
+      - updatedAt
       type: object
       properties:
-        reference:
-          type: string
-          description: Reference label.
-          nullable: true
-          example: PO-2025-001
-        referenceType:
-          type: string
-          description: Public product reference type.
-          example: PurchaseOrder
-          enum:
-          - PurchaseOrder
-          - ShipmentNumber
-          - Other
-      description: Reference for an origin request, including label and type.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
+        id:
           type: integer
-          description: Maximum number of requests allowed in this time window
+          description: Origin Id
           format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
           example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
+        name:
+          type:
+          - string
+          - 'null'
+          description: Origin name
+          example: null
+        active:
+          type: boolean
+          description: Origin active status
+          example: null
+        producedAtStart:
+          type:
+          - string
+          - 'null'
+          description: Starting Timestamp at which origin was produced
           format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
+          example: null
+        producedAtEnd:
+          type:
+          - string
+          - 'null'
+          description: Ending Timestamp at which origin was produced
           format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
+          example: null
+        producerName:
+          type:
+          - string
+          - 'null'
+          description: Producer name of the origin
+          example: null
+        countryName:
+          type: string
+          description: Origin country name
+          example: null
+        plot:
+          $ref: '#/components/schemas/PublicFeatureCollection'
+        plotAreaHa:
+          type: number
+          description: Origin plot area
+          example: null
+        weight:
+          type:
+          - number
+          - 'null'
+          description: Origin weight, if requested weight from origin request is present
+          example: null
+        createdAt:
+          type: string
+          description: Origin creation timestamp
+          format: date-time
+          example: null
+        updatedAt:
+          type: string
+          description: Origin last update timestamp
+          format: date-time
+          example: null
+      description: List of origin request origins
       example: null
     PublicGeometrySchema:
       required:
@@ -773,93 +774,30 @@ components:
           example: null
       description: Geometry plot object
       example: null
-    PublicFeature:
+    ErrorDTO:
       required:
-      - geometry
-      - properties
+      - code
+      - message
       type: object
       properties:
-        geometry:
-          $ref: '#/components/schemas/PublicGeometrySchema'
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          example: null
-      example: null
-    PublicSupplierOrigin:
-      required:
-      - active
-      - countryName
-      - createdAt
-      - id
-      - plot
-      - plotAreaHa
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Origin Id
-          format: int32
-          example: null
-        name:
+        code:
           type: string
-          description: Origin name
-          nullable: true
+          description: Error code
           example: null
-        active:
-          type: boolean
-          description: Origin active status
-          example: null
-        producedAtStart:
+        message:
           type: string
-          description: Starting Timestamp at which origin was produced
-          format: date-time
-          nullable: true
+          description: Error message
           example: null
-        producedAtEnd:
-          type: string
-          description: Ending Timestamp at which origin was produced
-          format: date-time
-          nullable: true
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
           example: null
-        producerName:
-          type: string
-          description: Producer name of the origin
-          nullable: true
-          example: null
-        countryName:
-          type: string
-          description: Origin country name
-          example: null
-        plot:
-          $ref: '#/components/schemas/PublicFeatureCollection'
-        plotAreaHa:
-          type: number
-          description: Origin plot area
-          example: null
-        weight:
-          type: number
-          description: Origin weight, if requested weight from origin request is present
-          nullable: true
-          example: null
-        createdAt:
-          type: string
-          description: Origin creation timestamp
-          format: date-time
-          example: null
-        updatedAt:
-          type: string
-          description: Origin last update timestamp
-          format: date-time
-          example: null
-      description: List of origin request origins
+      description: Error response
       example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

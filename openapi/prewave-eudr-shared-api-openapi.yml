@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions EUDR - Shared API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave EUDR - Shared API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,26 @@ paths:
       tags:
       - EUDR - Shared
       summary: Get a list of EUDR related HS Codes
-      description: "\nRetrieve a list of Harmonized System (HS) codes relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all HS codes that are applicable for EUDR products.\nHS codes are used to classify products for customs and compliance purposes. Each entry includes\nthe code, description, and linked commodity ID when available.\n\n**Use Cases**:\n- Get HS code reference data for products\n- Populate HS code selection dropdowns\n- Validate product classifications\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        "
+      description: 'Retrieve a list of Harmonized System (HS) codes relevant for EUDR compliance.
+
+
+        This endpoint returns reference data containing all HS codes that are applicable for EUDR products.
+
+        HS codes are used to classify products for customs and compliance purposes. Each entry includes
+
+        the code, description, and linked commodity ID when available.
+
+
+        **Use Cases**:
+
+        - Get HS code reference data for products
+
+        - Populate HS code selection dropdowns
+
+        - Validate product classifications
+
+
+        **Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`'
       operationId: findHSCodes
       responses:
         '200':
@@ -207,7 +87,24 @@ paths:
       tags:
       - EUDR - Shared
       summary: Get a list of countries
-      description: "\nRetrieve a list of all available countries for EUDR compliance.\n\nThis endpoint returns reference data containing all countries that can be used in EUDR workflows,\nsuch as product origins, supplier locations, and compliance reporting.\n\n**Use Cases**:\n- Get country reference data for product origins\n- Populate country selection dropdowns\n- Validate country codes\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        "
+      description: 'Retrieve a list of all available countries for EUDR compliance.
+
+
+        This endpoint returns reference data containing all countries that can be used in EUDR workflows,
+
+        such as product origins, supplier locations, and compliance reporting.
+
+
+        **Use Cases**:
+
+        - Get country reference data for product origins
+
+        - Populate country selection dropdowns
+
+        - Validate country codes
+
+
+        **Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`'
       operationId: findCountries
       responses:
         '200':
@@ -258,7 +155,26 @@ paths:
       tags:
       - EUDR - Shared
       summary: Get a list of EUDR related commodities
-      description: "\nRetrieve a list of commodities relevant for EUDR compliance.\n\nThis endpoint returns reference data containing all commodities that are applicable for EUDR products.\nOnly commodities whose names start with \"EUDR \" are included. Commodities are used to categorize\nproducts for compliance and reporting purposes.\n\n**Use Cases**:\n- Get commodity reference data for products\n- Populate commodity selection dropdowns\n- Validate product categorizations\n\n**Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`\n        "
+      description: 'Retrieve a list of commodities relevant for EUDR compliance.
+
+
+        This endpoint returns reference data containing all commodities that are applicable for EUDR products.
+
+        Only commodities whose names start with "EUDR " are included. Commodities are used to categorize
+
+        products for compliance and reporting purposes.
+
+
+        **Use Cases**:
+
+        - Get commodity reference data for products
+
+        - Populate commodity selection dropdowns
+
+        - Validate product categorizations
+
+
+        **Required permissions (one of):** `access_public_products` or `access_public_eudr_suppliers`'
       operationId: findCommodities
       responses:
         '200':
@@ -306,137 +222,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicProductHSCode:
-      required:
-      - code
-      type: object
-      properties:
-        code:
-          type: string
-          description: HS code
-          example: '440799'
-        description:
-          type: string
-          description: HS code description
-          nullable: true
-          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
-        commodityId:
-          type: integer
-          description: Commodity ID for the HS code
-          format: int32
-          nullable: true
-          example: 1
-      description: List of HS codes associated with this DDS unit
-      example: null
-    PublicCommodity:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Commodity ID
-          format: int32
-          example: 1
-        name:
-          type: string
-          description: Commodity name
-          example: Timber
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicCountry:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Country ID
-          format: int32
-          example: 14
-        name:
-          type: string
-          description: Country name
-          example: Austria
-        countryCode:
-          maxLength: 2
-          minLength: 2
-          type: string
-          description: Country code in form of ISO 3166-1 alpha-2 code
-          nullable: true
-          example: AT
-        bounds:
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/PublicGeometrySchema'
-          example: null
-      description: Country where the economic activity is taking place
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -476,6 +261,80 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    PublicCountry:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Country ID
+          format: int32
+          example: 14
+        name:
+          type: string
+          description: Country name
+          example: Austria
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type:
+          - string
+          - 'null'
+          description: Country code in form of ISO 3166-1 alpha-2 code
+          example: AT
+        bounds:
+          allOf:
+          - $ref: '#/components/schemas/PublicGeometrySchema'
+          example: null
+      description: Country where the economic activity is taking place
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
     PublicGeometrySchema:
       required:
       - coordinates
@@ -505,8 +364,70 @@ components:
           example: null
       description: Geometry plot object
       example: null
+    PublicProductHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: HS code
+          example: '440799'
+        description:
+          type:
+          - string
+          - 'null'
+          description: HS code description
+          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
+        commodityId:
+          type:
+          - integer
+          - 'null'
+          description: Commodity ID for the HS code
+          format: int32
+          example: 1
+      description: List of HS codes associated with this DDS unit
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicCommodity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Commodity ID
+          format: int32
+          example: 1
+        name:
+          type: string
+          description: Commodity name
+          example: Timber
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token

@@ -1,31 +1,7 @@
 {
   "provider": "prewave",
   "sources": [
-    "prewave-actions-api-openapi.yml",
-    "prewave-alerts-api-openapi.yml",
-    "prewave-collections-management-api-openapi.yml",
-    "prewave-collections-network-api-openapi.yml",
-    "prewave-collections-targets-api-openapi.yml",
-    "prewave-collections-tier-n-api-openapi.yml",
-    "prewave-disruptions-api-openapi.yml",
-    "prewave-eudr-customers-dds-api-openapi.yml",
-    "prewave-eudr-customers-origin-requests-api-openapi.yml",
-    "prewave-eudr-customers-products-api-openapi.yml",
-    "prewave-eudr-customers-suppliers-api-openapi.yml",
-    "prewave-eudr-shared-api-openapi.yml",
-    "prewave-eudr-suppliers-api-openapi.yml",
-    "prewave-exposure-api-openapi.yml",
-    "prewave-infotags-api-openapi.yml",
-    "prewave-scores-enterprise-export-api-openapi.yml",
-    "prewave-scores-externals-api-openapi.yml",
-    "prewave-scores-target-api-openapi.yml",
-    "prewave-suppliers-connection-contacts-api-openapi.yml",
-    "prewave-suppliers-management-api-openapi.yml",
-    "prewave-suppliers-sites-api-openapi.yml",
-    "prewave-suppliers-sites-upsert-api-openapi.yml",
-    "prewave-suppliers-supplier-graph-api-openapi.yml",
-    "prewave-users-api-openapi.yml",
-    "prewave-users-roles-api-openapi.yml"
+    "_original/prewave-openapi-original.json"
   ],
   "outputs": [
     "prewave-actions-api-openapi.yml",
@@ -56,10 +32,40 @@
   ],
   "archived": [],
   "errors": [
-    "prewave-scores-enterprise-export-api-openapi.yml: dangling $ref: #/components/schemas/PublicScoreDataEntry",
-    "prewave-suppliers-sites-api-openapi.yml: dangling $ref: #/components/schemas/PublicSupplierV2DTO"
+    "prewave-openapi-original.json: dangling $ref: #/components/schemas/PublicScoreDataEntry",
+    "prewave-openapi-original.json: dangling $ref: #/components/schemas/PublicSupplierV2DTO"
   ],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "prewave-openapi-original.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0; renamed 1 component key(s) illegal in 3.x (e.g. Token authentication)",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "prewave-actions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-alerts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-collections-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-collections-network-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-collections-targets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-collections-tier-n-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-disruptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-customers-dds-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-customers-origin-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-customers-products-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-customers-suppliers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-shared-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-eudr-suppliers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-exposure-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-infotags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-scores-enterprise-export-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-scores-externals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-scores-target-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-suppliers-connection-contacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-suppliers-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-suppliers-sites-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-suppliers-sites-upsert-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-suppliers-supplier-graph-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prewave-users-roles-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

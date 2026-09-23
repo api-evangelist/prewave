@@ -1,146 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Public Prewave Actions Suppliers - Connection Contacts API
-  description: 'Documentation of the Public Prewave API.
-
-
-    ## What''s New
-
-
-    ### Q1 2026 — Supplier Management, User Management, Actions and Feed
-
-
-    This quarter introduces major v2 upgrades, expanded administrative capabilities, and the new Actions API.
-
-
-    - **Core Releases:** Deployed Supplier Management API v2 and Feed API v2, alongside the all-new Actions API.
-
-    - **Enhanced Functionality:** Added robust identifier management, granular user and role configuration, and endpoints for managing supplier connection contacts.
-
-    - ⚠️ **Required Migration:** Legacy v1 endpoints for Suppliers and Sites Upsert have been deprecated. Developers must migrate existing integrations to v2 by **May 31, 2027** (original deadline was December 31, 2026).
-
-
-    📖 **[Read the Q1 2026 changelog](https://docs.prewave.com/en/articles/699847-q1-2026-public-api-updates)**
-
-
-    ### Q2 2026 — Supplier Screening and External Scores
-
-
-    We have expanded our v2 documentation to include comprehensive integration guidance for supplier screening and validation workflows and identifier-based external score ingestion.
-
-
-    - **New Capabilities:** Added support for optional post-onboarding screening and validation during the create event.
-
-    - **External Scores:** Batch POST for multiple supplier sites, per-site history GET, and event-type discovery GET (`/public/v1/scores/externals` and `/public/v1/scores/externals/event-types`). Documented in OpenAPI when enabled for your organization.
-
-    - **Developer Resources:** Published new integration examples and detailed identifier validation rules to streamline your implementation process.
-
-
-    📖 **[Read the Q2 2026 changelog](https://docs.prewave.com/en/articles/699849-q2-2026-public-api-updates)**
-
-
-    ### Q3 2026 — Scores Webhooks
-
-
-    To support event-driven architectures and eliminate the need for continuous API polling, we are introducing webhooks for score state changes later this year.
-
-
-    - **Event-Driven Architecture:** Register webhook URLs to receive real-time HTTP payloads whenever a supplier''s score updates, so you can drive immediate mitigation responses without polling the API.
-
-    - **Availability:** Comprehensive OpenAPI specifications and payload schemas will be published closer to the release date.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to general availability.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ### Q4 2026 — Feed V2
-
-
-    We are enhancing Feed API v2 with additional capabilities on top of the existing `GET /public/v2/feed` contract (see Q1 changelog and OpenAPI for the current Feed v2 integration).
-
-
-    - **Availability:** Details will be announced before release.
-
-    - **Note:** Schemas and behaviors are subject to refinement prior to the official release.
-
-
-    Documentation updates will be provided prior to release.
-
-
-    ---
-
-
-    ## Authentication
-
-    Prewave’s public api uses *API tokens* to authenticate against our RESTful service. We’ll provide you an *API-token* that each
-
-    endpoint needs present as a http header.
-
-
-    To pass the token in a request, simply add it as a header-parameter with
-
-    * key = X-Auth-Token
-
-    * value = api-token
-
-
-    See an example in curl below where the api-token would be 12345678-90ab-cdef-1234-567890abcdef
-
-    ```
-
-    curl --request GET \
-
-    --url https://REPLACE_WITH_SERVER/public/v1/target/prewave/3975230/alerts \
-
-    --header ''X-Auth-Token: 12345678-90ab-cdef-1234-567890abcdef''
-
-    ```
-
-
-    ---
-
-
-    ## Manage API Tokens
-
-
-    Before you can obtain your API token, you''ll need the credentials for your API user. These credentials will be
-
-    sent to you as part of the company-onboarding. If you haven''t got your credentials yet, please reach out to
-
-    your sales-contact at Prewave or contact us via info@prewave.ai
-
-
-    To generate an API Token, navigate to https://www.prewave.com/management/api and log in with the
-
-    credentials of your API user. Then click at the button "Create New" and use your new api-token authentication as a header parameter.
-
-
-    You can create multiple API tokens and also remove existing API tokens on https://www.prewave.com/management/api.
-
-    API tokens do not expire, therefore you have to maintain the list of API tokens you are using manually.
-
-
-    ---
-
-
-    ## Default Rate Limits
-
-
-    We have two types of default rate limits. For increased access, please contact customer success.
-
-
-    | Type                              | Requests per 10 seconds | Requests per Minute |
-
-    |-----------------------------------|-------------------------|---------------------|
-
-    | GET requests                      | 100                     | 500                 |
-
-    | POST, PUT, PATCH, DELETE requests | 20                      | 100                 |
-
-
-    '
+  title: Public Prewave Suppliers - Connection Contacts API
+  description: Documentation of the Public Prewave API.
   version: '1.0'
 servers:
 - url: https://api.prewave.com
@@ -156,7 +17,35 @@ paths:
       tags:
       - Suppliers - Connection Contacts
       summary: Find supplier connection contacts by identifier
-      description: "\n### Overview\nRetrieve all connection contacts for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).\n\nConnection contacts are contact persons associated with suppliers that can be used for communication and relationship management. This endpoint returns contacts that are accessible to your organization.\n\n### Search Behavior\n- Provide at least one identifier parameter.\n- The identifiers must resolve to **exactly one** supplier.\n- If multiple suppliers are found, a `400 Bad Request` is returned.\n\n### Related Operations\n- **Create Contact**: [POST /public/v2/suppliers/connection-contacts](#operations-Suppliers_-_Connection_Contacts-createConnectionContactByIdentifier)\n- **Delete Contact**: [DELETE /public/v2/suppliers/connection-contacts/{contactId}](#operations-Suppliers_-_Connection_Contacts-deleteConnectionContact)\n- **Find Suppliers**: [GET /public/v2/suppliers/sites/find-by-identifier](#operations-Suppliers_-_Sites-findSuppliers)\n\n### Required Permission\n`access_public_suppliers` and `access_public_conn_contacts`\n        "
+      description: '### Overview
+
+        Retrieve all connection contacts for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).
+
+
+        Connection contacts are contact persons associated with suppliers that can be used for communication and relationship management. This endpoint returns contacts that are accessible to your organization.
+
+
+        ### Search Behavior
+
+        - Provide at least one identifier parameter.
+
+        - The identifiers must resolve to **exactly one** supplier.
+
+        - If multiple suppliers are found, a `400 Bad Request` is returned.
+
+
+        ### Related Operations
+
+        - **Create Contact**: POST /public/v2/suppliers/connection-contacts
+
+        - **Delete Contact**: DELETE /public/v2/suppliers/connection-contacts/{contactId}
+
+        - **Find Suppliers**: GET /public/v2/suppliers/sites/find-by-identifier
+
+
+        ### Required Permission
+
+        `access_public_suppliers` and `access_public_conn_contacts`'
       operationId: findConnectionContactsByIdentifier
       parameters:
       - name: supplierId
@@ -265,7 +154,31 @@ paths:
       tags:
       - Suppliers - Connection Contacts
       summary: Create connection contact for a supplier by identifier
-      description: "\n### Overview\nCreate a new connection contact for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).\n\nThis endpoint allows you to add contact persons to suppliers for relationship management. If your organization is not yet connected to the identified target, it will be automatically connected as a supplier.\n\n### Auto-Connection Logic\n- If the identified target is not yet connected to your organization, an edge of type 'Supplier' will be created automatically.\n- This requires the additional internal permission `access_public_mng_customer_conn`.\n\n### Related Operations\n- **List Contacts**: [GET /public/v2/suppliers/connection-contacts](#operations-Suppliers_-_Connection_Contacts-findConnectionContactsByIdentifier)\n- **Delete Contact**: [DELETE /public/v2/suppliers/connection-contacts/{contactId}](#operations-Suppliers_-_Connection_Contacts-deleteConnectionContact)\n\n### Required Permission\n`access_public_suppliers` and `access_public_mng_conn_contacts`\n        "
+      description: '### Overview
+
+        Create a new connection contact for a supplier identified by any of its identifiers (supplierId, customerId, ownId, or prewaveId).
+
+
+        This endpoint allows you to add contact persons to suppliers for relationship management. If your organization is not yet connected to the identified target, it will be automatically connected as a supplier.
+
+
+        ### Auto-Connection Logic
+
+        - If the identified target is not yet connected to your organization, an edge of type ''Supplier'' will be created automatically.
+
+        - This requires the additional internal permission `access_public_mng_customer_conn`.
+
+
+        ### Related Operations
+
+        - **List Contacts**: GET /public/v2/suppliers/connection-contacts
+
+        - **Delete Contact**: DELETE /public/v2/suppliers/connection-contacts/{contactId}
+
+
+        ### Required Permission
+
+        `access_public_suppliers` and `access_public_mng_conn_contacts`'
       operationId: createConnectionContactByIdentifier
       parameters:
       - name: supplierId
@@ -384,7 +297,26 @@ paths:
       tags:
       - Suppliers - Connection Contacts
       summary: Get a connection contact
-      description: "\n### Overview\nRetrieve a connection contact by its unique Prewave identifier.\n\n### Identification\nThe `{contactId}` is a unique numerical identifier of the connection contact.\n\n### Getting contactId\n- From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.\n- From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.\n\n### Required Permission\n`access_public_suppliers` and `access_public_conn_contacts`\n        "
+      description: '### Overview
+
+        Retrieve a connection contact by its unique Prewave identifier.
+
+
+        ### Identification
+
+        The `{contactId}` is a unique numerical identifier of the connection contact.
+
+
+        ### Getting contactId
+
+        - From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.
+
+        - From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.
+
+
+        ### Required Permission
+
+        `access_public_suppliers` and `access_public_conn_contacts`'
       operationId: getConnectionContact
       parameters:
       - name: contactId
@@ -452,7 +384,26 @@ paths:
       tags:
       - Suppliers - Connection Contacts
       summary: Delete a connection contact
-      description: "\n### Overview\nDelete a connection contact by its unique Prewave identifier.\n\n### Identification\nThe `{contactId}` is a unique numerical identifier of the connection contact.\n\n### Getting contactId\n- From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.\n- From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.\n\n### Required Permission\n`access_public_suppliers` and `access_public_mng_conn_contacts`\n        "
+      description: '### Overview
+
+        Delete a connection contact by its unique Prewave identifier.
+
+
+        ### Identification
+
+        The `{contactId}` is a unique numerical identifier of the connection contact.
+
+
+        ### Getting contactId
+
+        - From the list of contacts returned by `GET /public/v2/suppliers/connection-contacts`.
+
+        - From the response body or `Location` header when creating a contact via `POST /public/v2/suppliers/connection-contacts`.
+
+
+        ### Required Permission
+
+        `access_public_suppliers` and `access_public_mng_conn_contacts`'
       operationId: deleteConnectionContact
       parameters:
       - name: contactId
@@ -509,88 +460,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type: string
-          nullable: true
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type: string
-          description: Possible solution to the error
-          nullable: true
-          example: null
-      description: Error response
-      example: null
-    PublicSupplierConnectionContact:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the connection contact.
-          format: int32
-          example: 42
-        email:
-          type: string
-          description: Email address of the connection contact. May be null if not provided.
-          format: email
-          nullable: true
-          example: contact@example.com
-      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -630,6 +499,51 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
     PublicConnectionContactPayload:
       required:
       - email
@@ -642,8 +556,49 @@ components:
           example: contact@example.com
       description: Payload for creating or updating a connection contact. Contains the contact's email address.
       example: null
+    PublicSupplierConnectionContact:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the connection contact.
+          format: int32
+          example: 42
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address of the connection contact. May be null if not provided.
+          format: email
+          example: contact@example.com
+      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
   securitySchemes:
-    Token authentication:
+    Token_authentication:
       type: apiKey
       description: Generate an API token at https://www.prewave.com/management/api and paste it in here.
       name: X-Auth-Token
