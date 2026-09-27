@@ -201,72 +201,6 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicInfotagGroup:
-      required:
-      - id
-      - name
-      - sname
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Id of the infotag group
-          format: int32
-          example: null
-        name:
-          type: string
-          description: Name of the infotag group
-          example: null
-        sname:
-          type: string
-          description: Short name/code of the infotag group
-          example: null
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
     PublicSimplifiedInfotagDTO:
       required:
       - id
@@ -315,6 +249,72 @@ components:
           description: Possible solution to the error
           example: null
       description: Error response
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicInfotagGroup:
+      required:
+      - id
+      - name
+      - sname
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the infotag group
+          format: int32
+          example: null
+        name:
+          type: string
+          description: Name of the infotag group
+          example: null
+        sname:
+          type: string
+          description: Short name/code of the infotag group
+          example: null
       example: null
   securitySchemes:
     Token_authentication:

@@ -451,7 +451,7 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicOriginRequestRefPayload:
+    PublicOriginRequestReference:
       required:
       - referenceType
       type: object
@@ -471,84 +471,6 @@ components:
           - ShipmentNumber
           - Other
       description: Reference for an origin request, including label and type.
-      example: null
-    PublicOriginRequest:
-      required:
-      - createdAt
-      - id
-      - productId
-      - status
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Origin Request ID.
-          format: int32
-          example: 1001
-        productId:
-          type: integer
-          description: Product ID of the origin request.
-          format: int32
-          example: 123
-        createdAt:
-          type: string
-          description: Creation date of the origin request.
-          format: date-time
-          example: null
-        status:
-          type: string
-          description: Public origin request status.
-          example: Requested
-          enum:
-          - Requested
-          - Answered
-          - Rejected
-          - Canceled
-          - Delayed
-        references:
-          allOf:
-          - $ref: '#/components/schemas/PublicOriginRequestRefPayload'
-          example: null
-      description: Origin request details, including ID, product, creation date, status, and references.
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
     PublicOriginRequestRejectReason:
       required:
@@ -604,6 +526,286 @@ components:
         code: origin_request_product_unsupported
         message: 'Products are not accessible for origin requests, please check if products are available and type of ''Inbound'': 1, 2, 3'
         solution: Please verify the product details and ensure it is supported.
+    PublicCreateOriginRequestPayload:
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          $ref: '#/components/schemas/PublicOriginRequestItemPayload'
+      description: Payload for creating a new origin request. Contains a list of origin request items.
+      example: null
+    PublicOriginRequestItemPayload:
+      required:
+      - productId
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: ID of the product for which the origin request is made.
+          format: int32
+          example: 123
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: 'End date for the origin request (format: yyyy-MM-dd).'
+          format: date
+          example: '2025-09-30'
+        requestedWeight:
+          type:
+          - number
+          - 'null'
+          description: Requested weight in kg, related to origin requests with weight.
+          example: null
+        connectionContactIds:
+          type:
+          - array
+          - 'null'
+          description: List of connection contact IDs of the supplier. Contacts can be retrieved and managed by the connection-contact endpoints.
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+            description: List of connection contact IDs of the supplier. Contacts can be retrieved and managed by the connection-contact endpoints.
+            format: int32
+            example: null
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Additional notification comment.
+          example: Please process urgently.
+        references:
+          allOf:
+          - $ref: '#/components/schemas/PublicOriginRequestRefPayload'
+          example: null
+      description: Payload for a single origin request item. Contains product, date, contacts, comment, and references.
+      example: null
+    BulkResultFailedPublicOriginRequestItemPayload:
+      required:
+      - value
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/PublicOriginRequestItemPayload'
+        message:
+          type:
+          - string
+          - 'null'
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicOriginRequestResult:
+      required:
+      - failed
+      - status
+      - succeeded
+      type: object
+      properties:
+        succeeded:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicOriginRequest'
+          example: null
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResultFailedPublicOriginRequestItemPayload'
+          example: null
+        status:
+          type: string
+          enum:
+          - Succeeded
+          - PartlySucceeded
+          - Failed
+          example: null
+      description: Bulk result for origin request creation. Contains succeeded and failed items.
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicOriginRequest:
+      required:
+      - createdAt
+      - id
+      - productId
+      - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin Request ID.
+          format: int32
+          example: 1001
+        productId:
+          type: integer
+          description: Product ID of the origin request.
+          format: int32
+          example: 123
+        createdAt:
+          type: string
+          description: Creation date of the origin request.
+          format: date-time
+          example: null
+        status:
+          type: string
+          description: Public origin request status.
+          example: Requested
+          enum:
+          - Requested
+          - Answered
+          - Rejected
+          - Canceled
+          - Delayed
+        references:
+          allOf:
+          - $ref: '#/components/schemas/PublicOriginRequestRefPayload'
+          example: null
+      description: Origin request details, including ID, product, creation date, status, and references.
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicUpdateOriginRequestPayload:
+      type: object
+      properties:
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: 'End date for the origin request (format: yyyy-MM-dd).'
+          format: date
+          example: '2025-09-30'
+        requestedWeight:
+          type:
+          - number
+          - 'null'
+          description: Requested weight in kg, related to origin requests with weight.
+          example: null
+      example: null
+    PublicOriginRequestRefPayload:
+      required:
+      - referenceType
+      type: object
+      properties:
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Reference label.
+          example: PO-2025-001
+        referenceType:
+          type: string
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: Reference for an origin request, including label and type.
+      example: null
     PublicCustomerOriginRequestAnsweredStatusDetails:
       required:
       - originIds
@@ -632,42 +834,6 @@ components:
             description: List of supplier DDS references.
             example: '["DDS-REF-1","DDS-REF-2"]'
       description: Details for an answered origin request, including origin IDs and supplier DDS references.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicOriginRequestReference:
-      required:
-      - referenceType
-      type: object
-      properties:
-        reference:
-          type:
-          - string
-          - 'null'
-          description: Reference label.
-          example: PO-2025-001
-        referenceType:
-          type: string
-          description: Public product reference type.
-          example: PurchaseOrder
-          enum:
-          - PurchaseOrder
-          - ShipmentNumber
-          - Other
-      description: Reference for an origin request, including label and type.
       example: null
     PublicCustomerOriginRequest:
       required:
@@ -745,107 +911,6 @@ components:
           example: null
       description: Customer-facing view of an origin request, including status, timestamps, references, and status details for answered, delayed, or rejected requests.
       example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    PublicOriginRequestItemPayload:
-      required:
-      - productId
-      type: object
-      properties:
-        productId:
-          type: integer
-          description: ID of the product for which the origin request is made.
-          format: int32
-          example: 123
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: 'End date for the origin request (format: yyyy-MM-dd).'
-          format: date
-          example: '2025-09-30'
-        requestedWeight:
-          type:
-          - number
-          - 'null'
-          description: Requested weight in kg, related to origin requests with weight.
-          example: null
-        connectionContactIds:
-          type:
-          - array
-          - 'null'
-          description: List of connection contact IDs of the supplier. Contacts can be retrieved and managed by the connection-contact endpoints.
-          example:
-          - 1
-          - 2
-          - 3
-          items:
-            type: integer
-            description: List of connection contact IDs of the supplier. Contacts can be retrieved and managed by the connection-contact endpoints.
-            format: int32
-            example: null
-        comment:
-          type:
-          - string
-          - 'null'
-          description: Additional notification comment.
-          example: Please process urgently.
-        references:
-          allOf:
-          - $ref: '#/components/schemas/PublicOriginRequestRefPayload'
-          example: null
-      description: Payload for a single origin request item. Contains product, date, contacts, comment, and references.
-      example: null
-    BulkResultFailedPublicOriginRequestItemPayload:
-      required:
-      - value
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/PublicOriginRequestItemPayload'
-        message:
-          type:
-          - string
-          - 'null'
-          example: null
-      example: null
-    PublicCreateOriginRequestPayload:
-      required:
-      - items
-      type: object
-      properties:
-        items:
-          $ref: '#/components/schemas/PublicOriginRequestItemPayload'
-      description: Payload for creating a new origin request. Contains a list of origin request items.
-      example: null
     PublicOriginRequestDelayStatusDetails:
       required:
       - code
@@ -877,71 +942,6 @@ components:
           format: date-time
           example: null
       description: Delay status details for a delayed origin request, including code, reason, comment, and delayed until timestamp.
-      example: null
-    PublicOriginRequestResult:
-      required:
-      - failed
-      - status
-      - succeeded
-      type: object
-      properties:
-        succeeded:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicOriginRequest'
-          example: null
-        failed:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResultFailedPublicOriginRequestItemPayload'
-          example: null
-        status:
-          type: string
-          enum:
-          - Succeeded
-          - PartlySucceeded
-          - Failed
-          example: null
-      description: Bulk result for origin request creation. Contains succeeded and failed items.
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    PublicUpdateOriginRequestPayload:
-      type: object
-      properties:
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: 'End date for the origin request (format: yyyy-MM-dd).'
-          format: date
-          example: '2025-09-30'
-        requestedWeight:
-          type:
-          - number
-          - 'null'
-          description: Requested weight in kg, related to origin requests with weight.
-          example: null
       example: null
   securitySchemes:
     Token_authentication:

@@ -715,69 +715,6 @@ components:
           type: boolean
           example: null
       example: null
-    PublicActionDTO:
-      required:
-      - actionId
-      - assignees
-      - createdAt
-      - status
-      - target
-      - teams
-      - title
-      - type
-      - updatedAt
-      type: object
-      properties:
-        actionId:
-          type: integer
-          description: Public-facing action key
-          format: int32
-          example: 12345
-        title:
-          type: string
-          description: Action title
-          example: Review supplier compliance
-        type:
-          $ref: '#/components/schemas/PublicActionTypeDTO'
-        status:
-          $ref: '#/components/schemas/PublicActionStatusDTO'
-        target:
-          $ref: '#/components/schemas/PublicTargetRef'
-        assignees:
-          type: array
-          description: Assigned users
-          items:
-            $ref: '#/components/schemas/PublicUserRefDTO'
-          example: null
-        teams:
-          type: array
-          description: Assigned teams
-          items:
-            $ref: '#/components/schemas/PublicTeamRefDTO'
-          example: null
-        organization:
-          allOf:
-          - $ref: '#/components/schemas/PublicTargetRef'
-          example: null
-        dueDate:
-          type:
-          - string
-          - 'null'
-          description: Due date (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-12-31T23:59:59Z'
-        createdAt:
-          type: string
-          description: Creation timestamp (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-01-15T10:30:00Z'
-        updatedAt:
-          type: string
-          description: Last update timestamp (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-01-20T14:45:00Z'
-      description: Public API v1 DTO for action list item
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -817,52 +754,27 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
-    PublicActionSkipDTO:
+    ErrorDTO:
       required:
-      - reason
+      - code
+      - message
       type: object
       properties:
-        reason:
+        code:
           type: string
-          description: Skip reason
-          example: NotApplicable
-        otherText:
-          type:
-          - string
-          - 'null'
-          description: Additional reason text
-          example: Supplier no longer active
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: End date for skip (ISO 8601 timestamp)
-          format: date-time
-          example: '2024-12-31T23:59:59Z'
-      description: Action skip information
-      example: null
-    PublicUserRefDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: User ID
-          format: int32
-          example: 100
-        name:
+          description: Error code
+          example: null
+        message:
           type: string
-          description: User full name
-          example: John Doe
-        email:
+          description: Error message
+          example: null
+        solution:
           type:
           - string
           - 'null'
-          description: User email
-          example: john.doe@example.com
-      description: User reference information
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
     ApiRateLimitTimeRequestLimit:
       type: object
@@ -879,22 +791,22 @@ components:
           example: 10
       description: Rate limit configuration for a specific time window
       example: null
-    PublicActionTypeDTO:
+    PublicTargetRef:
       required:
-      - displayName
       - id
+      - name
       type: object
       properties:
         id:
           type: integer
-          description: Action type ID
+          description: Prewave Target ID
           format: int32
-          example: 5
-        displayName:
+          example: 102006215
+        name:
           type: string
-          description: Action type display name
-          example: Incident Review
-      description: Action type information
+          description: Target name
+          example: Acme Corporation
+      description: Reference to a target (supplier/site)
       example: null
     AccessDeniedErrorDTO:
       required:
@@ -925,67 +837,6 @@ components:
           - 'null'
           description: Possible solution to the error
           example: null
-      example: null
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-          example: null
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-          example: null
-        sort:
-          type: array
-          items:
-            type: string
-            example: null
-          example: null
-      example: null
-    PublicActionItemDTO:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Item ID
-          format: int32
-          example: 1001
-        type:
-          type: string
-          description: Item type
-          example: Alert
-        entityId:
-          type:
-          - integer
-          - 'null'
-          description: Entity ID this item references
-          format: int32
-          example: 5001
-      description: Action item information
-      example: null
-    PublicTeamRefDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Team ID
-          format: int32
-          example: 10
-        name:
-          type: string
-          description: Team name
-          example: Compliance Team
-      description: Team reference information
       example: null
     PublicActionDetailDTO:
       required:
@@ -1078,66 +929,105 @@ components:
           example: null
       description: Public API v1 DTO for detailed action response
       example: null
-    PublicActionStatusDTO:
+    PublicActionDTO:
       required:
-      - id
-      - state
+      - actionId
+      - assignees
+      - createdAt
+      - status
+      - target
+      - teams
       - title
+      - type
+      - updatedAt
       type: object
       properties:
-        id:
+        actionId:
           type: integer
-          description: Status ID
+          description: Public-facing action key
           format: int32
-          example: 3
+          example: 12345
         title:
           type: string
-          description: Status title
-          example: In Progress
-        state:
-          type: string
-          description: Status state
-          example: InProgress
-      description: Action status information
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
+          description: Action title
+          example: Review supplier compliance
+        type:
+          $ref: '#/components/schemas/PublicActionTypeDTO'
+        status:
+          $ref: '#/components/schemas/PublicActionStatusDTO'
+        target:
+          $ref: '#/components/schemas/PublicTargetRef'
+        assignees:
+          type: array
+          description: Assigned users
+          items:
+            $ref: '#/components/schemas/PublicUserRefDTO'
           example: null
-        message:
-          type: string
-          description: Error message
+        teams:
+          type: array
+          description: Assigned teams
+          items:
+            $ref: '#/components/schemas/PublicTeamRefDTO'
           example: null
-        solution:
+        organization:
+          allOf:
+          - $ref: '#/components/schemas/PublicTargetRef'
+          example: null
+        dueDate:
           type:
           - string
           - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
+          description: Due date (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-12-31T23:59:59Z'
+        createdAt:
+          type: string
+          description: Creation timestamp (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          description: Last update timestamp (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-01-20T14:45:00Z'
+      description: Public API v1 DTO for action list item
       example: null
-    PublicTargetRef:
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          example: null
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          example: null
+        sort:
+          type: array
+          items:
+            type: string
+            example: null
+          example: null
+      example: null
+    PublicActionTypeDTO:
       required:
+      - displayName
       - id
-      - name
       type: object
       properties:
         id:
           type: integer
-          description: Prewave Target ID
+          description: Action type ID
           format: int32
-          example: 102006215
-        name:
+          example: 5
+        displayName:
           type: string
-          description: Target name
-          example: Acme Corporation
-      description: Reference to a target (supplier/site)
+          description: Action type display name
+          example: Incident Review
+      description: Action type information
       example: null
     SchemaPublicActionDTO:
       type: object
@@ -1180,6 +1070,116 @@ components:
         empty:
           type: boolean
           example: null
+      example: null
+    PublicUserRefDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+          format: int32
+          example: 100
+        name:
+          type: string
+          description: User full name
+          example: John Doe
+        email:
+          type:
+          - string
+          - 'null'
+          description: User email
+          example: john.doe@example.com
+      description: User reference information
+      example: null
+    PublicTeamRefDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Team ID
+          format: int32
+          example: 10
+        name:
+          type: string
+          description: Team name
+          example: Compliance Team
+      description: Team reference information
+      example: null
+    PublicActionStatusDTO:
+      required:
+      - id
+      - state
+      - title
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Status ID
+          format: int32
+          example: 3
+        title:
+          type: string
+          description: Status title
+          example: In Progress
+        state:
+          type: string
+          description: Status state
+          example: InProgress
+      description: Action status information
+      example: null
+    PublicActionSkipDTO:
+      required:
+      - reason
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Skip reason
+          example: NotApplicable
+        otherText:
+          type:
+          - string
+          - 'null'
+          description: Additional reason text
+          example: Supplier no longer active
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: End date for skip (ISO 8601 timestamp)
+          format: date-time
+          example: '2024-12-31T23:59:59Z'
+      description: Action skip information
+      example: null
+    PublicActionItemDTO:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Item ID
+          format: int32
+          example: 1001
+        type:
+          type: string
+          description: Item type
+          example: Alert
+        entityId:
+          type:
+          - integer
+          - 'null'
+          description: Entity ID this item references
+          format: int32
+          example: 5001
+      description: Action item information
       example: null
   securitySchemes:
     Token_authentication:

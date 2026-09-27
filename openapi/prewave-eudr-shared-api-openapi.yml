@@ -222,6 +222,22 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
+    PublicCommodity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Commodity ID
+          format: int32
+          example: 1
+        name:
+          type: string
+          description: Commodity name
+          example: Timber
+      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -289,6 +305,28 @@ components:
           - $ref: '#/components/schemas/PublicGeometrySchema'
           example: null
       description: Country where the economic activity is taking place
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
     ApiRateLimitTimeRequestLimit:
       type: object
@@ -387,44 +425,6 @@ components:
           format: int32
           example: 1
       description: List of HS codes associated with this DDS unit
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    PublicCommodity:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Commodity ID
-          format: int32
-          example: 1
-        name:
-          type: string
-          description: Commodity name
-          example: Timber
       example: null
   securitySchemes:
     Token_authentication:

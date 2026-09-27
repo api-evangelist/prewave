@@ -481,6 +481,40 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    PublicConnectionContactPayload:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the connection contact.
+          format: email
+          example: contact@example.com
+      description: Payload for creating or updating a connection contact. Contains the contact's email address.
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
     ApiRateLimitTimeRequestLimit:
       type: object
       properties:
@@ -495,6 +529,78 @@ components:
           format: int32
           example: 10
       description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicSupplierConnectionContact:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the connection contact.
+          format: int32
+          example: 42
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address of the connection contact. May be null if not provided.
+          format: email
+          example: contact@example.com
+      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
+      example: null
+    PublicEUDROrganization:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Organization ID
+          format: int32
+          example: 201
+        name:
+          type: string
+          description: Organization name
+          example: Global Supplies Inc.
+        location:
+          type:
+          - string
+          - 'null'
+          description: Organization location
+          example: New York
+      description: Organization information for a supplier. Contains organization ID, name, and location.
       example: null
     PublicEUDRTarget:
       required:
@@ -528,58 +634,27 @@ components:
           example: null
       description: Public representation of a target. Contains basic target information and associated organization if available.
       example: null
-    PublicEUDROrganization:
-      required:
-      - id
-      - name
+    PublicSupplierMaturity:
       type: object
       properties:
-        id:
-          type: integer
-          description: Organization ID
-          format: int32
-          example: 201
-        name:
-          type: string
-          description: Organization name
-          example: Global Supplies Inc.
-        location:
+        answerStatus:
           type:
           - string
           - 'null'
-          description: Organization location
-          example: New York
-      description: Organization information for a supplier. Contains organization ID, name, and location.
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
+          description: Enum representing possible statuses for a supplier's questionnaire answer in the public API.
+          enum:
+          - Requested
+          - InProgress
+          - Good
+          - Critical
           example: null
-        permission:
+        answerHidden:
           type:
-          - string
+          - boolean
           - 'null'
+          description: True if the answer is hidden due to permission status (e.g., denied or not requested), otherwise false.
           example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
+      description: Public API payload representing the status of a supplier maturity assessment
       example: null
     PublicEUDRSupplier:
       required:
@@ -637,81 +712,6 @@ components:
           - $ref: '#/components/schemas/PublicSupplierMaturity'
           example: null
       description: Public representation of a supplier. Contains detailed supplier information, screening status, references, and connection contacts.
-      example: null
-    PublicConnectionContactPayload:
-      required:
-      - email
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address of the connection contact.
-          format: email
-          example: contact@example.com
-      description: Payload for creating or updating a connection contact. Contains the contact's email address.
-      example: null
-    PublicSupplierMaturity:
-      type: object
-      properties:
-        answerStatus:
-          type:
-          - string
-          - 'null'
-          description: Enum representing possible statuses for a supplier's questionnaire answer in the public API.
-          enum:
-          - Requested
-          - InProgress
-          - Good
-          - Critical
-          example: null
-        answerHidden:
-          type:
-          - boolean
-          - 'null'
-          description: True if the answer is hidden due to permission status (e.g., denied or not requested), otherwise false.
-          example: null
-      description: Public API payload representing the status of a supplier maturity assessment
-      example: null
-    PublicSupplierConnectionContact:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the connection contact.
-          format: int32
-          example: 42
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address of the connection contact. May be null if not provided.
-          format: email
-          example: contact@example.com
-      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
       example: null
   securitySchemes:
     Token_authentication:
