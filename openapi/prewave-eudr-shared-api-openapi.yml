@@ -222,21 +222,35 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicCommodity:
+    AccessDeniedErrorDTO:
       required:
-      - id
-      - name
+      - code
+      - loggedIn
+      - message
       type: object
       properties:
-        id:
-          type: integer
-          description: Commodity ID
-          format: int32
-          example: 1
-        name:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
           type: string
-          description: Commodity name
-          example: Timber
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
       example: null
     ApiRateLimitResponse:
       type: object
@@ -277,6 +291,52 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicProductHSCode:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: HS code
+          example: '440799'
+        description:
+          type:
+          - string
+          - 'null'
+          description: HS code description
+          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
+        commodityId:
+          type:
+          - integer
+          - 'null'
+          description: Commodity ID for the HS code
+          format: int32
+          example: 1
+      description: List of HS codes associated with this DDS unit
+      example: null
     PublicCountry:
       required:
       - id
@@ -305,73 +365,6 @@ components:
           - $ref: '#/components/schemas/PublicGeometrySchema'
           example: null
       description: Country where the economic activity is taking place
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
       example: null
     PublicGeometrySchema:
       required:
@@ -402,29 +395,36 @@ components:
           example: null
       description: Geometry plot object
       example: null
-    PublicProductHSCode:
+    PublicCommodity:
       required:
-      - code
+      - id
+      - name
       type: object
       properties:
-        code:
-          type: string
-          description: HS code
-          example: '440799'
-        description:
-          type:
-          - string
-          - 'null'
-          description: HS code description
-          example: Wood sawn or chipped lengthwise, sliced or peeled, of oak
-        commodityId:
-          type:
-          - integer
-          - 'null'
-          description: Commodity ID for the HS code
+        id:
+          type: integer
+          description: Commodity ID
           format: int32
           example: 1
-      description: List of HS codes associated with this DDS unit
+        name:
+          type: string
+          description: Commodity name
+          example: Timber
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
       example: null
   securitySchemes:
     Token_authentication:

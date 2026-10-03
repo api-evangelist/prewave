@@ -751,18 +751,66 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicCollectionUpdatePayload:
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicCollectionPayload:
       required:
       - lanes
       - name
+      - scope
+      - tiersEnabled
       type: object
       properties:
+        scope:
+          type: string
+          enum:
+          - User
+          - Customer
+          - Featured
+          example: null
         name:
           minLength: 1
           type: string
           example: null
         lanes:
           type: boolean
+          example: null
+        tiersEnabled:
+          type: boolean
+          example: null
+        parentId:
+          type:
+          - integer
+          - 'null'
+          format: int32
           example: null
       example: null
     ApiRateLimitResponse:
@@ -893,6 +941,20 @@ components:
           format: date-time
           example: null
       example: null
+    PublicCollectionUpdatePayload:
+      required:
+      - lanes
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          example: null
+        lanes:
+          type: boolean
+          example: null
+      example: null
     ApiRateLimitTimeRequestLimit:
       type: object
       properties:
@@ -907,68 +969,6 @@ components:
           format: int32
           example: 10
       description: Rate limit configuration for a specific time window
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    PublicCollectionPayload:
-      required:
-      - lanes
-      - name
-      - scope
-      - tiersEnabled
-      type: object
-      properties:
-        scope:
-          type: string
-          enum:
-          - User
-          - Customer
-          - Featured
-          example: null
-        name:
-          minLength: 1
-          type: string
-          example: null
-        lanes:
-          type: boolean
-          example: null
-        tiersEnabled:
-          type: boolean
-          example: null
-        parentId:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
       example: null
   securitySchemes:
     Token_authentication:

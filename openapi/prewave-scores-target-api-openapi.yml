@@ -966,6 +966,233 @@ paths:
       deprecated: true
 components:
   schemas:
+    PublicInfotagTypeDTO:
+      required:
+      - active
+      - display
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: null
+        active:
+          type: boolean
+          example: null
+        displayName:
+          type:
+          - string
+          - 'null'
+          example: null
+        icon:
+          type:
+          - string
+          - 'null'
+          example: null
+        ordering:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        display:
+          type: boolean
+          example: null
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicGroupScore:
+      required:
+      - group
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/PublicInfotagGroup'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      description: List of group scores
+      example: null
+    PublicScore:
+      type: object
+      properties:
+        value:
+          type:
+          - integer
+          - 'null'
+          description: Score value
+          format: int32
+          example: null
+        risk:
+          type:
+          - string
+          - 'null'
+          description: Score risk level
+          example: Mid
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+      description: Score of the target subcomponent
+      example: null
+    PublicTargetScoreSubcomponent:
+      required:
+      - subcomponent
+      type: object
+      properties:
+        subcomponent:
+          type: string
+          description: Score subcomponent of the target
+          enum:
+          - CountryScore
+          - IndustryScore
+          - CommodityScore
+          - PublicAlertScore
+          - CustomerAlertScore
+          - InternalScore
+          - TierNIndustryScore
+          - TierNCommodityScore
+          - TargetScore
+          example: null
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      description: List of target score subcomponents
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicEventTypeScore:
+      required:
+      - eventType
+      type: object
+      properties:
+        eventType:
+          $ref: '#/components/schemas/PublicInfotagDTO'
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+      example: null
+    PublicTargetScoreComponents:
+      required:
+      - subcomponents
+      type: object
+      properties:
+        component:
+          type:
+          - string
+          - 'null'
+          description: Score component of the target
+          enum:
+          - PeerScore
+          - AlertScore
+          - SSAScore
+          - ExternalScore
+          - TierNScore
+          example: null
+        score:
+          allOf:
+          - $ref: '#/components/schemas/PublicScore'
+          example: null
+        subcomponents:
+          type: array
+          description: List of target score subcomponents
+          items:
+            $ref: '#/components/schemas/PublicTargetScoreSubcomponent'
+          example: null
+      example: null
     PublicTargetScoreHistory:
       required:
       - max
@@ -1013,56 +1240,6 @@ components:
           description: Minimum score in the past year
           format: int32
           example: null
-      example: null
-    PublicTargetScoreSubcomponent:
-      required:
-      - subcomponent
-      type: object
-      properties:
-        subcomponent:
-          type: string
-          description: Score subcomponent of the target
-          enum:
-          - CountryScore
-          - IndustryScore
-          - CommodityScore
-          - PublicAlertScore
-          - CustomerAlertScore
-          - InternalScore
-          - TierNIndustryScore
-          - TierNCommodityScore
-          - TargetScore
-          example: null
-        score:
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
-      description: List of target score subcomponents
-      example: null
-    PublicScore:
-      type: object
-      properties:
-        value:
-          type:
-          - integer
-          - 'null'
-          description: Score value
-          format: int32
-          example: null
-        risk:
-          type:
-          - string
-          - 'null'
-          description: Score risk level
-          example: Mid
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-      description: Score of the target subcomponent
       example: null
     PublicTargetScore:
       required:
@@ -1132,172 +1309,20 @@ components:
           - Critical
           example: null
       example: null
-    PublicTargetScoreComponents:
+    PublicTargetScoreHistoryData:
       required:
-      - subcomponents
+      - date
+      - score
       type: object
       properties:
-        component:
-          type:
-          - string
-          - 'null'
-          description: Score component of the target
-          enum:
-          - PeerScore
-          - AlertScore
-          - SSAScore
-          - ExternalScore
-          - TierNScore
+        date:
+          type: string
+          description: Date of the score
+          format: date-time
           example: null
         score:
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
-        subcomponents:
-          type: array
-          description: List of target score subcomponents
-          items:
-            $ref: '#/components/schemas/PublicTargetScoreSubcomponent'
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    PublicInfotagTypeDTO:
-      required:
-      - active
-      - display
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: null
-        active:
-          type: boolean
-          example: null
-        displayName:
-          type:
-          - string
-          - 'null'
-          example: null
-        icon:
-          type:
-          - string
-          - 'null'
-          example: null
-        ordering:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
-        display:
-          type: boolean
-          example: null
+          $ref: '#/components/schemas/PublicScore'
+      description: List of monthly scores
       example: null
     PublicInfotagGroup:
       required:
@@ -1320,45 +1345,20 @@ components:
           description: Short name/code of the infotag group
           example: null
       example: null
-    PublicGroupScore:
-      required:
-      - group
+    ApiRateLimitTimeRequestLimit:
       type: object
       properties:
-        group:
-          $ref: '#/components/schemas/PublicInfotagGroup'
-        score:
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
-      description: List of group scores
-      example: null
-    PublicTargetScoreHistoryData:
-      required:
-      - date
-      - score
-      type: object
-      properties:
-        date:
-          type: string
-          description: Date of the score
-          format: date-time
-          example: null
-        score:
-          $ref: '#/components/schemas/PublicScore'
-      description: List of monthly scores
-      example: null
-    PublicEventTypeScore:
-      required:
-      - eventType
-      type: object
-      properties:
-        eventType:
-          $ref: '#/components/schemas/PublicInfotagDTO'
-        score:
-          allOf:
-          - $ref: '#/components/schemas/PublicScore'
-          example: null
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
       example: null
   securitySchemes:
     Token_authentication:

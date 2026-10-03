@@ -370,26 +370,272 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    PublicOriginRequestReference:
+    AccessDeniedErrorDTO:
       required:
-      - referenceType
+      - code
+      - loggedIn
+      - message
       type: object
       properties:
-        reference:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
           type:
           - string
           - 'null'
-          description: Reference label.
-          example: PO-2025-001
-        referenceType:
+          example: null
+        code:
           type: string
-          description: Public product reference type.
-          example: PurchaseOrder
-          enum:
-          - PurchaseOrder
-          - ShipmentNumber
-          - Other
-      description: Reference for an origin request, including label and type.
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicFeature:
+      required:
+      - geometry
+      - properties
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/PublicGeometrySchema'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicFeatureCollection:
+      required:
+      - features
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFeature'
+          example: null
+      description: Plot of the origin
+      example: null
+    PublicSupplierOrigin:
+      required:
+      - active
+      - countryName
+      - createdAt
+      - id
+      - plot
+      - plotAreaHa
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Origin Id
+          format: int32
+          example: null
+        name:
+          type:
+          - string
+          - 'null'
+          description: Origin name
+          example: null
+        active:
+          type: boolean
+          description: Origin active status
+          example: null
+        producedAtStart:
+          type:
+          - string
+          - 'null'
+          description: Starting Timestamp at which origin was produced
+          format: date-time
+          example: null
+        producedAtEnd:
+          type:
+          - string
+          - 'null'
+          description: Ending Timestamp at which origin was produced
+          format: date-time
+          example: null
+        producerName:
+          type:
+          - string
+          - 'null'
+          description: Producer name of the origin
+          example: null
+        countryName:
+          type: string
+          description: Origin country name
+          example: null
+        plot:
+          $ref: '#/components/schemas/PublicFeatureCollection'
+        plotAreaHa:
+          type: number
+          description: Origin plot area
+          example: null
+        weight:
+          type:
+          - number
+          - 'null'
+          description: Origin weight, if requested weight from origin request is present
+          example: null
+        createdAt:
+          type: string
+          description: Origin creation timestamp
+          format: date-time
+          example: null
+        updatedAt:
+          type: string
+          description: Origin last update timestamp
+          format: date-time
+          example: null
+      description: List of origin request origins
+      example: null
+    PublicSupplierDDSPayload:
+      required:
+      - hsCode
+      - productDescription
+      - referenceNumber
+      - verificationNumber
+      type: object
+      properties:
+        referenceNumber:
+          type: string
+          description: Reference number for the supplier DDS
+          example: EU-REF-12345
+        verificationNumber:
+          maxLength: 40
+          type: string
+          description: Verification number for the supplier DDS
+          example: VER-987654
+        hsCode:
+          maxLength: 8
+          type: string
+          description: HS Code of the product in the supplier DDS, as stated in the TracesNT system
+          example: '441510'
+        productDescription:
+          maxLength: 150
+          type: string
+          description: Description of the product in the supplier DDS, as stated in the TracesNT system
+          example: Wood product
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicSupplierCustomer:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the customer.
+          format: int32
+          example: 123
+        name:
+          type: string
+          description: Name of the customer.
+          example: Acme GmbH
+      description: Public representation of a supplier's customer. Contains the unique customer ID and the customer's name.
+      example: null
+    PublicGeometrySchema:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
+          example: null
+        coordinates:
+          type: array
+          description: Geometry coordinates
+          items:
+            type: array
+            description: Geometry coordinates
+            items:
+              type: array
+              description: Geometry coordinates
+              items:
+                type: number
+                description: Geometry coordinates
+                format: double
+                example: null
+              example: null
+            example: null
+          example: null
+      description: Geometry plot object
       example: null
     PublicSupplierOriginRequest:
       required:
@@ -470,271 +716,26 @@ components:
           example: null
       description: Supplier-facing view of an origin request, including status, timestamps, references, and product details.
       example: null
-    PublicSupplierCustomer:
+    PublicOriginRequestReference:
       required:
-      - id
-      - name
+      - referenceType
       type: object
       properties:
-        id:
-          type: integer
-          description: Unique identifier of the customer.
-          format: int32
-          example: 123
-        name:
-          type: string
-          description: Name of the customer.
-          example: Acme GmbH
-      description: Public representation of a supplier's customer. Contains the unique customer ID and the customer's name.
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
+        reference:
           type:
           - string
           - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
+          description: Reference label.
+          example: PO-2025-001
+        referenceType:
           type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    PublicSupplierOrigin:
-      required:
-      - active
-      - countryName
-      - createdAt
-      - id
-      - plot
-      - plotAreaHa
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Origin Id
-          format: int32
-          example: null
-        name:
-          type:
-          - string
-          - 'null'
-          description: Origin name
-          example: null
-        active:
-          type: boolean
-          description: Origin active status
-          example: null
-        producedAtStart:
-          type:
-          - string
-          - 'null'
-          description: Starting Timestamp at which origin was produced
-          format: date-time
-          example: null
-        producedAtEnd:
-          type:
-          - string
-          - 'null'
-          description: Ending Timestamp at which origin was produced
-          format: date-time
-          example: null
-        producerName:
-          type:
-          - string
-          - 'null'
-          description: Producer name of the origin
-          example: null
-        countryName:
-          type: string
-          description: Origin country name
-          example: null
-        plot:
-          $ref: '#/components/schemas/PublicFeatureCollection'
-        plotAreaHa:
-          type: number
-          description: Origin plot area
-          example: null
-        weight:
-          type:
-          - number
-          - 'null'
-          description: Origin weight, if requested weight from origin request is present
-          example: null
-        createdAt:
-          type: string
-          description: Origin creation timestamp
-          format: date-time
-          example: null
-        updatedAt:
-          type: string
-          description: Origin last update timestamp
-          format: date-time
-          example: null
-      description: List of origin request origins
-      example: null
-    PublicFeatureCollection:
-      required:
-      - features
-      type: object
-      properties:
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicFeature'
-          example: null
-      description: Plot of the origin
-      example: null
-    PublicSupplierDDSPayload:
-      required:
-      - hsCode
-      - productDescription
-      - referenceNumber
-      - verificationNumber
-      type: object
-      properties:
-        referenceNumber:
-          type: string
-          description: Reference number for the supplier DDS
-          example: EU-REF-12345
-        verificationNumber:
-          maxLength: 40
-          type: string
-          description: Verification number for the supplier DDS
-          example: VER-987654
-        hsCode:
-          maxLength: 8
-          type: string
-          description: HS Code of the product in the supplier DDS, as stated in the TracesNT system
-          example: '441510'
-        productDescription:
-          maxLength: 150
-          type: string
-          description: Description of the product in the supplier DDS, as stated in the TracesNT system
-          example: Wood product
-      example: null
-    PublicGeometrySchema:
-      required:
-      - coordinates
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
-          example: null
-        coordinates:
-          type: array
-          description: Geometry coordinates
-          items:
-            type: array
-            description: Geometry coordinates
-            items:
-              type: array
-              description: Geometry coordinates
-              items:
-                type: number
-                description: Geometry coordinates
-                format: double
-                example: null
-              example: null
-            example: null
-          example: null
-      description: Geometry plot object
+          description: Public product reference type.
+          example: PurchaseOrder
+          enum:
+          - PurchaseOrder
+          - ShipmentNumber
+          - Other
+      description: Reference for an origin request, including label and type.
       example: null
     PublicMinimalProduct:
       required:
@@ -780,21 +781,20 @@ components:
           example: Wooden Table
       description: Origin Request Product.
       example: null
-    PublicFeature:
-      required:
-      - geometry
-      - properties
+    ApiRateLimitTimeRequestLimit:
       type: object
       properties:
-        geometry:
-          $ref: '#/components/schemas/PublicGeometrySchema'
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-            description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          description: "Value map with available keys:\n            - ProducerName (String)\n            - ProducerCountry (Country code in form of ISO 3166-1 alpha-2 code)\n            - ProductionPlace (String)\n            - Area (Double)\n            "
-          example: null
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
       example: null
   securitySchemes:
     Token_authentication:

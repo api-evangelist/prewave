@@ -532,6 +532,227 @@ components:
           format: date-time
           example: null
       example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    PublicUpdateUserRequest:
+      type: object
+      properties:
+        firstname:
+          type:
+          - string
+          - 'null'
+          example: null
+        lastname:
+          type:
+          - string
+          - 'null'
+          example: null
+        planId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        active:
+          type:
+          - boolean
+          - 'null'
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    PublicUserResponseCustomerDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      example: null
+    PublicCreateUserRequest:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          minLength: 1
+          type: string
+          format: email
+          example: null
+        firstname:
+          type:
+          - string
+          - 'null'
+          example: null
+        lastname:
+          type:
+          - string
+          - 'null'
+          example: null
+        teamIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+            example: null
+          example: null
+        roleNames:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            example: null
+          example: null
+        planId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+      example: null
+    PublicUserRoleDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+        description:
+          type:
+          - string
+          - 'null'
+          example: null
+      example: null
+    PublicUserResponseOrganizationDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      example: null
+    PublicUserResponseTeamDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: null
+        name:
+          type: string
+          example: null
+      example: null
     PublicUserResponse:
       required:
       - active
@@ -588,144 +809,6 @@ components:
             $ref: '#/components/schemas/PublicUserRoleDTO'
           example: null
       example: null
-    PublicUserResponseOrganizationDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    PublicCreateUserRequest:
-      required:
-      - email
-      type: object
-      properties:
-        email:
-          minLength: 1
-          type: string
-          format: email
-          example: null
-        firstname:
-          type:
-          - string
-          - 'null'
-          example: null
-        lastname:
-          type:
-          - string
-          - 'null'
-          example: null
-        teamIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-            example: null
-          example: null
-        roleNames:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            example: null
-          example: null
-        planId:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    PublicUserRoleDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-        description:
-          type:
-          - string
-          - 'null'
-          example: null
-      example: null
     ApiRateLimitTimeRequestLimit:
       type: object
       properties:
@@ -740,89 +823,6 @@ components:
           format: int32
           example: 10
       description: Rate limit configuration for a specific time window
-      example: null
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    PublicUserResponseCustomerDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
-      example: null
-    PublicUpdateUserRequest:
-      type: object
-      properties:
-        firstname:
-          type:
-          - string
-          - 'null'
-          example: null
-        lastname:
-          type:
-          - string
-          - 'null'
-          example: null
-        planId:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
-        active:
-          type:
-          - boolean
-          - 'null'
-          example: null
-      example: null
-    PublicUserResponseTeamDTO:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: null
-        name:
-          type: string
-          example: null
       example: null
   securitySchemes:
     Token_authentication:
