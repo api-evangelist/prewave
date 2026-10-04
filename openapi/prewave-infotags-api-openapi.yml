@@ -162,36 +162,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -231,28 +201,6 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
     PublicSimplifiedInfotagDTO:
       required:
       - id
@@ -280,6 +228,51 @@ components:
           description: Name of the infotag
           example: null
       example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
     PublicInfotagGroup:
       required:
       - id
@@ -301,20 +294,27 @@ components:
           description: Short name/code of the infotag group
           example: null
       example: null
-    ApiRateLimitTimeRequestLimit:
+    ErrorDTO:
+      required:
+      - code
+      - message
       type: object
       properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
   securitySchemes:
     Token_authentication:

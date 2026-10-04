@@ -425,35 +425,22 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
+    PublicSupplierReference:
       required:
-      - code
-      - loggedIn
-      - message
+      - id
       type: object
       properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
+        id:
+          type: string
+          description: Reference ID
+          example: REF-001
+        source:
           type:
           - string
           - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
+          description: Source of the reference
+          example: SAP
+      description: Reference information for a supplier. Contains reference ID and source.
       example: null
     ApiRateLimitResponse:
       type: object
@@ -494,6 +481,82 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicConnectionContactPayload:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the connection contact.
+          format: email
+          example: contact@example.com
+      description: Payload for creating or updating a connection contact. Contains the contact's email address.
+      example: null
+    PublicSupplierConnectionContact:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the connection contact.
+          format: int32
+          example: 42
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address of the connection contact. May be null if not provided.
+          format: email
+          example: contact@example.com
+      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
+      example: null
     PublicSupplierMaturity:
       type: object
       properties:
@@ -515,87 +578,6 @@ components:
           description: True if the answer is hidden due to permission status (e.g., denied or not requested), otherwise false.
           example: null
       description: Public API payload representing the status of a supplier maturity assessment
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    PublicSupplierConnectionContact:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the connection contact.
-          format: int32
-          example: 42
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address of the connection contact. May be null if not provided.
-          format: email
-          example: contact@example.com
-      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
-      example: null
-    PublicSupplierReference:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: Reference ID
-          example: REF-001
-        source:
-          type:
-          - string
-          - 'null'
-          description: Source of the reference
-          example: SAP
-      description: Reference information for a supplier. Contains reference ID and source.
-      example: null
-    PublicEUDROrganization:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Organization ID
-          format: int32
-          example: 201
-        name:
-          type: string
-          description: Organization name
-          example: Global Supplies Inc.
-        location:
-          type:
-          - string
-          - 'null'
-          description: Organization location
-          example: New York
-      description: Organization information for a supplier. Contains organization ID, name, and location.
       example: null
     PublicEUDRSupplier:
       required:
@@ -654,18 +636,6 @@ components:
           example: null
       description: Public representation of a supplier. Contains detailed supplier information, screening status, references, and connection contacts.
       example: null
-    PublicConnectionContactPayload:
-      required:
-      - email
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address of the connection contact.
-          format: email
-          example: contact@example.com
-      description: Payload for creating or updating a connection contact. Contains the contact's email address.
-      example: null
     PublicEUDRTarget:
       required:
       - id
@@ -698,20 +668,50 @@ components:
           example: null
       description: Public representation of a target. Contains basic target information and associated organization if available.
       example: null
-    ApiRateLimitTimeRequestLimit:
+    PublicEUDROrganization:
+      required:
+      - id
+      - name
       type: object
       properties:
-        requestLimit:
+        id:
           type: integer
-          description: Maximum number of requests allowed in this time window
+          description: Organization ID
           format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
+          example: 201
+        name:
+          type: string
+          description: Organization name
+          example: Global Supplies Inc.
+        location:
+          type:
+          - string
+          - 'null'
+          description: Organization location
+          example: New York
+      description: Organization information for a supplier. Contains organization ID, name, and location.
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
   securitySchemes:
     Token_authentication:

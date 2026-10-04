@@ -348,35 +348,37 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
+    PublicExternalScoreCreationRequest:
       required:
-      - code
-      - loggedIn
-      - message
+      - data
       type: object
       properties:
-        loggedIn:
-          type: boolean
+        data:
+          maxItems: 100
+          minItems: 0
+          type: array
+          description: Suppliers and their scores. At most 100 suppliers per request.
+          items:
+            $ref: '#/components/schemas/PublicExternalTargetScoreCollection'
           example: null
-        permission:
-          type:
-          - string
-          - 'null'
+      example: null
+    PublicExternalTargetScoreCollection:
+      required:
+      - identifier
+      - scores
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
+        scores:
+          maxItems: 50
+          minItems: 0
+          type: array
+          description: Scores for this supplier, one per event type. At most 50 per supplier.
+          items:
+            $ref: '#/components/schemas/PublicExternalTargetScore'
           example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
+      description: Suppliers and their scores. At most 100 suppliers per request.
       example: null
     ApiRateLimitResponse:
       type: object
@@ -435,105 +437,6 @@ components:
           type: string
           example: null
       example: null
-    PublicExternalTargetScore:
-      required:
-      - eventTypeKey
-      - scoreValue
-      type: object
-      properties:
-        eventTypeKey:
-          minLength: 1
-          type: string
-          example: null
-        scoreValue:
-          maximum: 100
-          minimum: 1
-          type: integer
-          format: int32
-          example: null
-        comment:
-          type:
-          - string
-          - 'null'
-          example: null
-      description: Scores for this supplier, one per event type. At most 50 per supplier.
-      example: null
-    Score:
-      required:
-      - risk
-      - value
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-          example: null
-        risk:
-          type: string
-          enum:
-          - NA
-          - 'No'
-          - Low
-          - Mid
-          - High
-          - Critical
-          example: null
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    PublicExternalTargetScoreCollection:
-      required:
-      - identifier
-      - scores
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
-        scores:
-          maxItems: 50
-          minItems: 0
-          type: array
-          description: Scores for this supplier, one per event type. At most 50 per supplier.
-          items:
-            $ref: '#/components/schemas/PublicExternalTargetScore'
-          example: null
-      description: Suppliers and their scores. At most 100 suppliers per request.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
     PublicExternalScoreCreationResponse:
       required:
       - errors
@@ -574,6 +477,27 @@ components:
             $ref: '#/components/schemas/PublicExternalScoreCreationError'
           example: null
       example: null
+    Score:
+      required:
+      - risk
+      - value
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+          example: null
+        risk:
+          type: string
+          enum:
+          - NA
+          - 'No'
+          - Low
+          - Mid
+          - High
+          - Critical
+          example: null
+      example: null
     PublicExternalTargetIdentifier:
       type: object
       properties:
@@ -610,6 +534,36 @@ components:
           example: SAP
       description: Supplier site identifier. At least one lookup key (`supplierId`, `customerId`, `ownId`, or `prewaveId`) should be set; `source` optionally narrows text identifiers.
       example: swagger.example.external-score.target-identifier
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
     PublicExternalScoreResponse:
       required:
       - identifier
@@ -624,19 +578,82 @@ components:
             $ref: '#/components/schemas/PublicExtScoreHistory'
           example: null
       example: null
-    PublicExternalScoreCreationRequest:
+    PublicExternalScoreCreationError:
       required:
-      - data
+      - entryIndex
+      - identifier
+      - message
+      - reason
       type: object
       properties:
-        data:
-          maxItems: 100
-          minItems: 0
-          type: array
-          description: Suppliers and their scores. At most 100 suppliers per request.
-          items:
-            $ref: '#/components/schemas/PublicExternalTargetScoreCollection'
+        entryIndex:
+          type: integer
+          format: int32
           example: null
+        scoreIndex:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
+        identifier:
+          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
+        eventTypeKey:
+          type:
+          - string
+          - 'null'
+          example: null
+        reason:
+          type: string
+          enum:
+          - INVALID_IDENTIFIER
+          - TARGET_NOT_FOUND
+          - MULTIPLE_TARGETS_MATCHED
+          - UNKNOWN_EVENT_TYPE
+          - PERSIST_ERROR
+          - UNEXPECTED_ERROR
+          example: null
+        message:
+          type: string
+          example: null
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    PublicExternalTargetScore:
+      required:
+      - eventTypeKey
+      - scoreValue
+      type: object
+      properties:
+        eventTypeKey:
+          minLength: 1
+          type: string
+          example: null
+        scoreValue:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+          example: null
+        comment:
+          type:
+          - string
+          - 'null'
+          example: null
+      description: Scores for this supplier, one per event type. At most 50 per supplier.
       example: null
     PublicExtScoreHistory:
       required:
@@ -705,44 +722,27 @@ components:
           description: Short name/code of the infotag group
           example: null
       example: null
-    PublicExternalScoreCreationError:
+    ErrorDTO:
       required:
-      - entryIndex
-      - identifier
+      - code
       - message
-      - reason
       type: object
       properties:
-        entryIndex:
-          type: integer
-          format: int32
-          example: null
-        scoreIndex:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
-        identifier:
-          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
-        eventTypeKey:
-          type:
-          - string
-          - 'null'
-          example: null
-        reason:
+        code:
           type: string
-          enum:
-          - INVALID_IDENTIFIER
-          - TARGET_NOT_FOUND
-          - MULTIPLE_TARGETS_MATCHED
-          - UNKNOWN_EVENT_TYPE
-          - PERSIST_ERROR
-          - UNEXPECTED_ERROR
+          description: Error code
           example: null
         message:
           type: string
+          description: Error message
           example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
   securitySchemes:
     Token_authentication:

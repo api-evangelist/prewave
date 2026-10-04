@@ -662,39 +662,11 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
+    SitesUpsertDryRunDTO:
       required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    SitesUpsertRequestCreatedResponse:
-      required:
+      - dryRunId
       - requestId
+      - time
       type: object
       properties:
         requestId:
@@ -702,170 +674,15 @@ components:
           description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
           format: uuid
           example: null
-      example: null
-    EdgeNumber:
-      required:
-      - number
-      type: object
-      properties:
-        number:
+        dryRunId:
           type: string
+          description: The ID of the dry run. This ID can be used to retrieve the dry run results.
+          format: uuid
           example: null
-        source:
-          type:
-          - string
-          - 'null'
-          example: null
-        existingEdgeId:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: null
-      example: null
-    PublicDeltaSitesUpsertPayload:
-      required:
-      - dryRun
-      - siteData
-      type: object
-      properties:
-        siteData:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
-          example: null
-        dryRun:
-          type: boolean
-          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
-          example: null
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    SitesUpsertRequestStatusResponse:
-      required:
-      - sites
-      - status
-      type: object
-      properties:
-        status:
+        time:
           type: string
-          enum:
-          - Work in progress
-          - Done
-          - Failed
-          - Cancelled
-          example: null
-        reason:
-          type:
-          - string
-          - 'null'
-          example: null
-        sites:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitesUpsertSiteStatusEntry'
-          example: null
-      example: null
-    SitesUpsertSafetyStockPayload:
-      type: object
-      properties:
-        onPremiseStockLevelMonths:
-          type:
-          - integer
-          - 'null'
-          description: Safety stocks on premise of goods purchased from this supplier
-          format: int32
-          example: 2
-        atSupplierLocation:
-          type:
-          - string
-          - 'null'
-          description: The supplier location
-          example: SameBuilding
-          enum:
-          - SameBuilding
-          - DifferentFireSection
-          - DifferentBuilding
-          - NotApplicable
-        atSupplierDeviation:
-          type:
-          - string
-          - 'null'
-          description: Deviation from the agreed upon Safety Stock
-          example: OnTarget
-          enum:
-          - NotApplicable
-          - OnTarget
-          - Below
-          - Above
-        atSupplierStockLevelMonths:
-          type:
-          - integer
-          - 'null'
-          description: Agreed upon safety stock at the supplier
-          format: int32
-          example: 4
-        atSupplierLastConfirmedDate:
-          type:
-          - string
-          - 'null'
-          description: Date on which the safety stock level was last confirmed by the supplier.
-          format: date
-          example: '2023-11-23'
-        inLogisticChainDaysOnHand:
-          type:
-          - integer
-          - 'null'
-          description: Stock Level currently on the logistics chain to the production facilities.
-          format: int32
-          example: 40
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
-    SitesUpsertValidationErrorEntry:
-      required:
-      - error
-      - yourReference
-      type: object
-      properties:
-        yourReference:
-          type: string
-          example: null
-        error:
-          type: string
+          description: The time when the dry run was created.
+          format: date-time
           example: null
       example: null
     SitesUpsertPayloadSiteEntry:
@@ -1024,22 +841,9 @@ components:
           - $ref: '#/components/schemas/SitesUpsertSafetyStockPayload'
           example: null
       example: null
-    SitesUpsertValidationFailedResponse:
+    SitesUpsertRequestCreatedResponse:
       required:
-      - validationErrors
-      type: object
-      properties:
-        validationErrors:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitesUpsertValidationErrorEntry'
-          example: null
-      example: null
-    SitesUpsertDryRunDTO:
-      required:
-      - dryRunId
       - requestId
-      - time
       type: object
       properties:
         requestId:
@@ -1047,71 +851,36 @@ components:
           description: The ID of a sites upsert request. Use this ID to check the status of the request and to retrieve dry-run ids.
           format: uuid
           example: null
-        dryRunId:
-          type: string
-          description: The ID of the dry run. This ID can be used to retrieve the dry run results.
-          format: uuid
-          example: null
-        time:
-          type: string
-          description: The time when the dry run was created.
-          format: date-time
-          example: null
       example: null
-    ApiRateLimitResponse:
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
       type: object
       properties:
-        error:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
           type: string
-          description: Error type identifier
-          example: RateLimitExceeded
+          description: Error code
+          example: null
         message:
           type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          description: Error message
           example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    SitesUpsertIndustryDefinitionPayload:
-      required:
-      - industry
-      - industryStandard
-      type: object
-      properties:
-        industry:
-          type: string
-          description: The industry identifier based on the standard
-          example: I_AUTOMOTIVE
-        industryStandard:
-          type: string
-          description: The industry standard used
-          example: MOCK-ISO-42
-      description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
       example: null
     SitesUpsertSiteStatusEntry:
       required:
@@ -1153,6 +922,198 @@ components:
           format: int32
           example: null
       example: null
+    PublicDeltaSitesUpsertPayload:
+      required:
+      - dryRun
+      - siteData
+      type: object
+      properties:
+        siteData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
+          example: null
+        dryRun:
+          type: boolean
+          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+          example: null
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
+      example: null
+    ApiRateLimitResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
+          type: array
+          description: All rate limits that apply to this endpoint, showing different time windows
+          items:
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
+          example: null
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
+      example: null
+    SitesUpsertValidationErrorEntry:
+      required:
+      - error
+      - yourReference
+      type: object
+      properties:
+        yourReference:
+          type: string
+          example: null
+        error:
+          type: string
+          example: null
+      example: null
+    PublicFullSitesUpsertPayload:
+      required:
+      - dryRun
+      - siteData
+      type: object
+      properties:
+        siteData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
+          example: null
+        dryRun:
+          type: boolean
+          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+          example: null
+      example: null
+    SitesUpsertSafetyStockPayload:
+      type: object
+      properties:
+        onPremiseStockLevelMonths:
+          type:
+          - integer
+          - 'null'
+          description: Safety stocks on premise of goods purchased from this supplier
+          format: int32
+          example: 2
+        atSupplierLocation:
+          type:
+          - string
+          - 'null'
+          description: The supplier location
+          example: SameBuilding
+          enum:
+          - SameBuilding
+          - DifferentFireSection
+          - DifferentBuilding
+          - NotApplicable
+        atSupplierDeviation:
+          type:
+          - string
+          - 'null'
+          description: Deviation from the agreed upon Safety Stock
+          example: OnTarget
+          enum:
+          - NotApplicable
+          - OnTarget
+          - Below
+          - Above
+        atSupplierStockLevelMonths:
+          type:
+          - integer
+          - 'null'
+          description: Agreed upon safety stock at the supplier
+          format: int32
+          example: 4
+        atSupplierLastConfirmedDate:
+          type:
+          - string
+          - 'null'
+          description: Date on which the safety stock level was last confirmed by the supplier.
+          format: date
+          example: '2023-11-23'
+        inLogisticChainDaysOnHand:
+          type:
+          - integer
+          - 'null'
+          description: Stock Level currently on the logistics chain to the production facilities.
+          format: int32
+          example: 40
+      example: null
+    SitesUpsertIndustryDefinitionPayload:
+      required:
+      - industry
+      - industryStandard
+      type: object
+      properties:
+        industry:
+          type: string
+          description: The industry identifier based on the standard
+          example: I_AUTOMOTIVE
+        industryStandard:
+          type: string
+          description: The industry standard used
+          example: MOCK-ISO-42
+      description: Can be used to define industries for a site. This helps to assign the site to a specific industry.
+      example: null
+    SitesUpsertYourReference:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: A textual identifier that uniquely identifies a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
+          example: ERP-ID-123
+        source:
+          type:
+          - string
+          - 'null'
+          description: An identifier that determines which system the “your_reference” originates. The source could be any ERP system or any internal tool you use to maintain your data
+          example: erp
+      example: null
     SitesUpsertExternalReferencePayload:
       required:
       - externalId
@@ -1168,6 +1129,21 @@ components:
           description: The external identifier type
           example: duns
       description: External identifiers that uniquely identify a Site. Prewave allows multiple identifier types.
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
       example: null
     SitesUpsertImpactDataPayload:
       required:
@@ -1266,36 +1242,60 @@ components:
           format: date-time
           example: null
       example: null
-    SitesUpsertYourReference:
+    SitesUpsertValidationFailedResponse:
       required:
-      - id
+      - validationErrors
       type: object
       properties:
-        id:
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitesUpsertValidationErrorEntry'
+          example: null
+      example: null
+    EdgeNumber:
+      required:
+      - number
+      type: object
+      properties:
+        number:
           type: string
-          description: A textual identifier that uniquely identifies a Site connected to your organization. Your reference can be a Supplier ID, ERP ID, or any other unique identifier for a site.
-          example: ERP-ID-123
+          example: null
         source:
           type:
           - string
           - 'null'
-          description: An identifier that determines which system the “your_reference” originates. The source could be any ERP system or any internal tool you use to maintain your data
-          example: erp
+          example: null
+        existingEdgeId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: null
       example: null
-    PublicFullSitesUpsertPayload:
+    SitesUpsertRequestStatusResponse:
       required:
-      - dryRun
-      - siteData
+      - sites
+      - status
       type: object
       properties:
-        siteData:
+        status:
+          type: string
+          enum:
+          - Work in progress
+          - Done
+          - Failed
+          - Cancelled
+          example: null
+        reason:
+          type:
+          - string
+          - 'null'
+          example: null
+        sites:
           type: array
           items:
-            $ref: '#/components/schemas/SitesUpsertPayloadSiteEntry'
-          example: null
-        dryRun:
-          type: boolean
-          description: "If set to true, the request will be processed without actually writing to the database.This is useful for testing purposes.\n            |Use endpoints `{requestId}/dry-runs` and `dry-run/{id}` to get the status and the results of your dry-runs."
+            $ref: '#/components/schemas/SitesUpsertSiteStatusEntry'
           example: null
       example: null
   securitySchemes:

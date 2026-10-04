@@ -460,36 +460,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 20,\n        \"requestCount\": 20,\n        \"limits\": [\n            {\n                \"requestLimit\": 20,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
     ApiRateLimitResponse:
       type: object
       properties:
@@ -529,6 +499,82 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicConnectionContactPayload:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the connection contact.
+          format: email
+          example: contact@example.com
+      description: Payload for creating or updating a connection contact. Contains the contact's email address.
+      example: null
+    PublicSupplierConnectionContact:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the connection contact.
+          format: int32
+          example: 42
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address of the connection contact. May be null if not provided.
+          format: email
+          example: contact@example.com
+      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
+      example: null
     ErrorDTO:
       required:
       - code
@@ -550,52 +596,6 @@ components:
           description: Possible solution to the error
           example: null
       description: Error response
-      example: null
-    PublicSupplierConnectionContact:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the connection contact.
-          format: int32
-          example: 42
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address of the connection contact. May be null if not provided.
-          format: email
-          example: contact@example.com
-      description: Public representation of a supplier's connection contact. Contains the unique contact ID and the contact's email address.
-      example: null
-    PublicConnectionContactPayload:
-      required:
-      - email
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address of the connection contact.
-          format: email
-          example: contact@example.com
-      description: Payload for creating or updating a connection contact. Contains the contact's email address.
-      example: null
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
       example: null
   securitySchemes:
     Token_authentication:

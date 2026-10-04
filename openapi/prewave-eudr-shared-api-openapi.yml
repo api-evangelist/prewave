@@ -222,97 +222,6 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
-    AccessDeniedErrorDTO:
-      required:
-      - code
-      - loggedIn
-      - message
-      type: object
-      properties:
-        loggedIn:
-          type: boolean
-          example: null
-        permission:
-          type:
-          - string
-          - 'null'
-          example: null
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      example: null
-    ApiRateLimitResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier
-          example: RateLimitExceeded
-        message:
-          type: string
-          description: Human-readable error message explaining the rate limit violation
-          example: API rate limit exceeded. Please reduce your request rate.
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in the current time window
-          format: int32
-          example: 100
-        requestCount:
-          type: integer
-          description: Number of requests made in the current time window
-          format: int32
-          example: 101
-        limits:
-          type: array
-          description: All rate limits that apply to this endpoint, showing different time windows
-          items:
-            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
-          example: null
-        currentTime:
-          type: string
-          description: Current server time in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:00'
-        nextResetAt:
-          type: string
-          description: Time when the rate limit will reset in ISO 8601 format
-          format: date-time
-          example: '2026-01-19T10:30:10'
-      description: Response returned when API rate limit is exceeded (HTTP 429)
-      example: null
-    ErrorDTO:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-          example: null
-        message:
-          type: string
-          description: Error message
-          example: null
-        solution:
-          type:
-          - string
-          - 'null'
-          description: Possible solution to the error
-          example: null
-      description: Error response
-      example: null
     PublicProductHSCode:
       required:
       - code
@@ -366,34 +275,44 @@ components:
           example: null
       description: Country where the economic activity is taking place
       example: null
-    PublicGeometrySchema:
-      required:
-      - coordinates
-      - type
+    ApiRateLimitResponse:
       type: object
       properties:
-        type:
+        error:
           type: string
-          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
-          example: null
-        coordinates:
+          description: Error type identifier
+          example: RateLimitExceeded
+        message:
+          type: string
+          description: Human-readable error message explaining the rate limit violation
+          example: API rate limit exceeded. Please reduce your request rate.
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in the current time window
+          format: int32
+          example: 100
+        requestCount:
+          type: integer
+          description: Number of requests made in the current time window
+          format: int32
+          example: 101
+        limits:
           type: array
-          description: Geometry coordinates
+          description: All rate limits that apply to this endpoint, showing different time windows
           items:
-            type: array
-            description: Geometry coordinates
-            items:
-              type: array
-              description: Geometry coordinates
-              items:
-                type: number
-                description: Geometry coordinates
-                format: double
-                example: null
-              example: null
-            example: null
+            $ref: '#/components/schemas/ApiRateLimitTimeRequestLimit'
           example: null
-      description: Geometry plot object
+        currentTime:
+          type: string
+          description: Current server time in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:00'
+        nextResetAt:
+          type: string
+          description: Time when the rate limit will reset in ISO 8601 format
+          format: date-time
+          example: '2026-01-19T10:30:10'
+      description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
     PublicCommodity:
       required:
@@ -425,6 +344,87 @@ components:
           format: int32
           example: 10
       description: Rate limit configuration for a specific time window
+      example: null
+    AccessDeniedErrorDTO:
+      required:
+      - code
+      - loggedIn
+      - message
+      type: object
+      properties:
+        loggedIn:
+          type: boolean
+          example: null
+        permission:
+          type:
+          - string
+          - 'null'
+          example: null
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      example: null
+    PublicGeometrySchema:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Geometry available types: Point, MultiPoint, Polygon, MultiPolygon'
+          example: null
+        coordinates:
+          type: array
+          description: Geometry coordinates
+          items:
+            type: array
+            description: Geometry coordinates
+            items:
+              type: array
+              description: Geometry coordinates
+              items:
+                type: number
+                description: Geometry coordinates
+                format: double
+                example: null
+              example: null
+            example: null
+          example: null
+      description: Geometry plot object
+      example: null
+    ErrorDTO:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: null
+        message:
+          type: string
+          description: Error message
+          example: null
+        solution:
+          type:
+          - string
+          - 'null'
+          description: Possible solution to the error
+          example: null
+      description: Error response
       example: null
   securitySchemes:
     Token_authentication:

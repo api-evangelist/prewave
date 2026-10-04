@@ -2122,6 +2122,22 @@ paths:
                   value: "{\n        \"error\": \"API rate limit exceeded\",\n        \"message\": \"You have reached the maximum allowed requests. Please try again later or upgrade your plan for increased access\",\n        \"requestLimit\": 100,\n        \"requestCount\": 100,\n        \"limits\": [\n            {\n                \"requestLimit\": 100,\n                \"timeInSeconds\": 10\n            },\n            {\n                \"requestLimit\": 500,\n                \"timeInSeconds\": 60\n            }\n        ],\n        \"currentTime\": \"2026-01-15T10:30:00\",\n        \"nextResetAt\": \"2026-01-15T10:30:10\"\n    }"
 components:
   schemas:
+    PublicScreeningOptionsV2:
+      required:
+      - periodInYears
+      type: object
+      properties:
+        periodInYears:
+          type: integer
+          description: 'Screening window length in **years**. Supported values: 2, 5, 10. Note: screening requests may incur additional costs.'
+          format: int32
+          example: 2
+          enum:
+          - 2
+          - 5
+          - 10
+      description: Screening parameters to apply
+      example: null
     AccessDeniedErrorDTO:
       required:
       - code
@@ -2152,163 +2168,6 @@ components:
           description: Possible solution to the error
           example: null
       example: null
-    PublicValidationStatusV2DTO:
-      required:
-      - prewaveTargetId
-      - requestId
-      - status
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: UUID of the validation request
-          format: uuid
-          example: 550e8400-e29b-41d4-a716-446655440000
-        status:
-          type: string
-          description: Current status of the validation request
-          example: PENDING
-          enum:
-          - PENDING
-          - COMPLETED
-          - REJECTED
-          - PENDING
-          - COMPLETED
-          - REJECTED
-        prewaveTargetId:
-          type: integer
-          description: Prewave target ID of the supplier for which validation was requested
-          format: int32
-          example: 102006215
-        outcomeTargetId:
-          type:
-          - integer
-          - 'null'
-          description: Prewave target ID of the outcome site (set when status is COMPLETED)
-          format: int32
-          example: 102006220
-        rejectionReason:
-          type:
-          - string
-          - 'null'
-          description: Reason for rejection (set when status is REJECTED)
-          example: Address could not be validated
-        rejectionReasonNotes:
-          type:
-          - string
-          - 'null'
-          description: Additional notes on the rejection reason (set when status is REJECTED)
-          example: The provided address does not match any known location
-        createdAt:
-          type:
-          - string
-          - 'null'
-          description: Timestamp when the validation request was created (ISO-8601, no timezone offset)
-          format: date-time
-          example: null
-        resolvedAt:
-          type:
-          - string
-          - 'null'
-          description: Timestamp when the validation request was resolved (ISO-8601, no timezone offset; set when status is COMPLETED or REJECTED)
-          format: date-time
-          example: null
-      example: null
-    PublicScreeningOptionsV2:
-      required:
-      - periodInYears
-      type: object
-      properties:
-        periodInYears:
-          type: integer
-          description: 'Screening window length in **years**. Supported values: 2, 5, 10. Note: screening requests may incur additional costs.'
-          format: int32
-          example: 2
-          enum:
-          - 2
-          - 5
-          - 10
-      description: Screening parameters to apply
-      example: null
-    PublicScreeningCreatedResponseV2:
-      required:
-      - message
-      - screeningRequestIds
-      type: object
-      properties:
-        screeningRequestIds:
-          type: array
-          description: IDs of the created screening requests. One ID per resolved target. Empty if all targets were already screened or otherwise ineligible.
-          example:
-          - 10042
-          - 10043
-          items:
-            type: integer
-            description: IDs of the created screening requests. One ID per resolved target. Empty if all targets were already screened or otherwise ineligible.
-            format: int32
-            example: null
-        message:
-          type: string
-          description: Human-readable confirmation message.
-          example: Screening request submitted successfully
-      description: Response returned when a screening request is successfully submitted
-      example: null
-    PublicIdentifierCreatePayloadV2:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/IdentifierType'
-        id:
-          minLength: 1
-          type: string
-          description: The identifier value
-          example: SUP-12345
-        source:
-          type:
-          - string
-          - 'null'
-          description: Source system of the identifier (e.g., 'SAP', 'Excel', 'Coupa'). Optional - defaults to 'PUBLIC_API' when not provided.
-          example: SAP
-      description: Payload for creating a new identifier (supplier ID, customer ID, or own site ID)
-      example:
-        type: SUPPLIER_ID
-        id: SUP-12345
-        source: SAP
-    ApiRateLimitTimeRequestLimit:
-      type: object
-      properties:
-        requestLimit:
-          type: integer
-          description: Maximum number of requests allowed in this time window
-          format: int32
-          example: 100
-        timeInSeconds:
-          type: integer
-          description: Time window duration in seconds
-          format: int32
-          example: 10
-      description: Rate limit configuration for a specific time window
-      example: null
-    PublicTargetRef:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Prewave Target ID
-          format: int32
-          example: 102006215
-        name:
-          type: string
-          description: Target name
-          example: Acme Corporation
-      description: Reference to a target (supplier/site)
-      example: null
     ErrorDTO:
       required:
       - code
@@ -2330,18 +2189,6 @@ components:
           description: Possible solution to the error
           example: null
       description: Error response
-      example: null
-    PublicScreeningRequestPayloadV2:
-      required:
-      - identifier
-      - options
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
-        options:
-          $ref: '#/components/schemas/PublicScreeningOptionsV2'
-      description: Payload for requesting screening for a supplier site
       example: null
     PublicValidationRequestPayloadV2:
       required:
@@ -2391,111 +2238,45 @@ components:
           example: '2026-01-19T10:30:10'
       description: Response returned when API rate limit is exceeded (HTTP 429)
       example: null
-    PublicValidationRequestResponseV2:
+    PublicScreeningRequestPayloadV2:
       required:
-      - message
-      - requestId
+      - identifier
+      - options
       type: object
       properties:
-        requestId:
-          type: string
-          description: UUID of the validation request, used to track the status via the GET endpoint
-          format: uuid
-          example: 550e8400-e29b-41d4-a716-446655440000
-        message:
-          type: string
-          description: Success message
-          example: Validation request submitted successfully
+        identifier:
+          $ref: '#/components/schemas/PublicExternalTargetIdentifier'
+        options:
+          $ref: '#/components/schemas/PublicScreeningOptionsV2'
+      description: Payload for requesting screening for a supplier site
       example: null
-    PublicSupplierIdentifierId:
+    PublicScreeningStatusResponseV2:
       required:
       - id
+      - periodInYears
+      - status
       type: object
       properties:
         id:
-          minLength: 1
-          type: string
-          description: The supplier ID identifier
-          example: SUP-12345
-        source:
-          type:
-          - string
-          - 'null'
-          description: Source system of the supplier ID (e.g., 'SAP', 'Excel', 'Coupa'). Optional - omitted when null (legacy supplier IDs). Defaults to 'Public API' when creating suppliers via Public API v2.
-          example: SAP
-      description: Supplier ID identifying a supplier in an external system. Supplier IDs are identifiers from external systems (e.g., SAP, Coupa, DNB) that link suppliers to your organization's systems.
-      example:
-        id: SUP-12345
-        source: SAP
-    PublicSupplierCreateResponseV2:
-      required:
-      - message
-      - pendingEndpoint
-      - uuid
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: UUID of the created batch request target that can be used to track the supplier creation request
-          format: uuid
-          example: 550e8400-e29b-41d4-a716-446655440000
-        message:
-          type: string
-          description: Success message
-          example: Supplier creation request submitted successfully
-        pendingEndpoint:
-          type: string
-          description: Information about where to find pending suppliers
-          example: Pending suppliers can be found at GET /public/v2/suppliers/sites/pending
-      example: null
-    PublicPendingSupplierV2DTO:
-      required:
-      - status
-      - supplierId
-      - uuid
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: Batch request target UUID
-          format: uuid
-          example: 550e8400-e29b-41d4-a716-446655440000
-        supplierId:
-          $ref: '#/components/schemas/PublicSupplierIdentifierId'
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of the supplier
-          example: Acme Corporation
-        countryCode:
-          type:
-          - string
-          - 'null'
-          description: ISO country code
-          example: AT
-        city:
-          type:
-          - string
-          - 'null'
-          description: City
-          example: Vienna
-        address:
-          type:
-          - string
-          - 'null'
-          description: Address
-          example: 123 Main St, Vienna, Austria
+          type: integer
+          description: The screening request ID.
+          format: int32
+          example: 10042
         status:
           type: string
-          description: Status of the batch request target
-          example: Pending
-        reason:
-          type:
-          - string
-          - 'null'
-          description: Reason for the current status
-          example: Awaiting processing
+          description: 'Current status of the screening request: New (in progress), Finished (findings found), NoFindings (no findings), Aborted (failed or rejected).'
+          example: Finished
+          enum:
+          - New
+          - Finished
+          - NoFindings
+          - Aborted
+        periodInYears:
+          type: integer
+          description: Screening window length in years (as requested).
+          format: int32
+          example: 2
+      description: Status and outcome of a screening request
       example: null
     IdentifierType:
       type: string
@@ -2505,6 +2286,68 @@ components:
       - SUPPLIER_ID
       - CUSTOMER_ID
       - OWN_ID
+    PublicIdentifierResponseV2:
+      required:
+      - id
+      - prewaveTargetId
+      - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/IdentifierType'
+        id:
+          type: string
+          description: The identifier value
+          example: SUP-12345
+        source:
+          type:
+          - string
+          - 'null'
+          description: Source system of the identifier
+          example: SAP
+        prewaveTargetId:
+          type: integer
+          description: Prewave target ID of the supplier this identifier was added to
+          format: int32
+          example: 101266998
+      description: Response for identifier creation
+      example:
+        type: SUPPLIER_ID
+        id: SUP-12345
+        source: SAP
+        prewaveTargetId: 101266998
+    PublicTargetRef:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Prewave Target ID
+          format: int32
+          example: 102006215
+        name:
+          type: string
+          description: Target name
+          example: Acme Corporation
+      description: Reference to a target (supplier/site)
+      example: null
+    ApiRateLimitTimeRequestLimit:
+      type: object
+      properties:
+        requestLimit:
+          type: integer
+          description: Maximum number of requests allowed in this time window
+          format: int32
+          example: 100
+        timeInSeconds:
+          type: integer
+          description: Time window duration in seconds
+          format: int32
+          example: 10
+      description: Rate limit configuration for a specific time window
+      example: null
     PublicSupplierCreatePayloadV2:
       required:
       - address
@@ -2577,16 +2420,147 @@ components:
           example: true
       description: Payload for creating a new supplier via Public API v2
       example: null
-    PublicIdentifierResponseV2:
+    PublicSupplierIdentifierId:
       required:
       - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The supplier ID identifier
+          example: SUP-12345
+        source:
+          type:
+          - string
+          - 'null'
+          description: Source system of the supplier ID (e.g., 'SAP', 'Excel', 'Coupa'). Optional - omitted when null (legacy supplier IDs). Defaults to 'Public API' when creating suppliers via Public API v2.
+          example: SAP
+      description: Supplier ID identifying a supplier in an external system. Supplier IDs are identifiers from external systems (e.g., SAP, Coupa, DNB) that link suppliers to your organization's systems.
+      example:
+        id: SUP-12345
+        source: SAP
+    PublicValidationStatusV2DTO:
+      required:
       - prewaveTargetId
+      - requestId
+      - status
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: UUID of the validation request
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        status:
+          type: string
+          description: Current status of the validation request
+          example: PENDING
+          enum:
+          - PENDING
+          - COMPLETED
+          - REJECTED
+          - PENDING
+          - COMPLETED
+          - REJECTED
+        prewaveTargetId:
+          type: integer
+          description: Prewave target ID of the supplier for which validation was requested
+          format: int32
+          example: 102006215
+        outcomeTargetId:
+          type:
+          - integer
+          - 'null'
+          description: Prewave target ID of the outcome site (set when status is COMPLETED)
+          format: int32
+          example: 102006220
+        rejectionReason:
+          type:
+          - string
+          - 'null'
+          description: Reason for rejection (set when status is REJECTED)
+          example: Address could not be validated
+        rejectionReasonNotes:
+          type:
+          - string
+          - 'null'
+          description: Additional notes on the rejection reason (set when status is REJECTED)
+          example: The provided address does not match any known location
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: Timestamp when the validation request was created (ISO-8601, no timezone offset)
+          format: date-time
+          example: null
+        resolvedAt:
+          type:
+          - string
+          - 'null'
+          description: Timestamp when the validation request was resolved (ISO-8601, no timezone offset; set when status is COMPLETED or REJECTED)
+          format: date-time
+          example: null
+      example: null
+    PublicPendingSupplierV2DTO:
+      required:
+      - status
+      - supplierId
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Batch request target UUID
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        supplierId:
+          $ref: '#/components/schemas/PublicSupplierIdentifierId'
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the supplier
+          example: Acme Corporation
+        countryCode:
+          type:
+          - string
+          - 'null'
+          description: ISO country code
+          example: AT
+        city:
+          type:
+          - string
+          - 'null'
+          description: City
+          example: Vienna
+        address:
+          type:
+          - string
+          - 'null'
+          description: Address
+          example: 123 Main St, Vienna, Austria
+        status:
+          type: string
+          description: Status of the batch request target
+          example: Pending
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Reason for the current status
+          example: Awaiting processing
+      example: null
+    PublicIdentifierCreatePayloadV2:
+      required:
+      - id
       - type
       type: object
       properties:
         type:
           $ref: '#/components/schemas/IdentifierType'
         id:
+          minLength: 1
           type: string
           description: The identifier value
           example: SUP-12345
@@ -2594,19 +2568,52 @@ components:
           type:
           - string
           - 'null'
-          description: Source system of the identifier
+          description: Source system of the identifier (e.g., 'SAP', 'Excel', 'Coupa'). Optional - defaults to 'PUBLIC_API' when not provided.
           example: SAP
-        prewaveTargetId:
-          type: integer
-          description: Prewave target ID of the supplier this identifier was added to
-          format: int32
-          example: 101266998
-      description: Response for identifier creation
+      description: Payload for creating a new identifier (supplier ID, customer ID, or own site ID)
       example:
         type: SUPPLIER_ID
         id: SUP-12345
         source: SAP
-        prewaveTargetId: 101266998
+    PublicScreeningCreatedResponseV2:
+      required:
+      - message
+      - screeningRequestIds
+      type: object
+      properties:
+        screeningRequestIds:
+          type: array
+          description: IDs of the created screening requests. One ID per resolved target. Empty if all targets were already screened or otherwise ineligible.
+          example:
+          - 10042
+          - 10043
+          items:
+            type: integer
+            description: IDs of the created screening requests. One ID per resolved target. Empty if all targets were already screened or otherwise ineligible.
+            format: int32
+            example: null
+        message:
+          type: string
+          description: Human-readable confirmation message.
+          example: Screening request submitted successfully
+      description: Response returned when a screening request is successfully submitted
+      example: null
+    PublicValidationRequestResponseV2:
+      required:
+      - message
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: UUID of the validation request, used to track the status via the GET endpoint
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        message:
+          type: string
+          description: Success message
+          example: Validation request submitted successfully
+      example: null
     PublicExternalTargetIdentifier:
       type: object
       properties:
@@ -2643,33 +2650,26 @@ components:
           example: SAP
       description: Supplier site identifier. At least one lookup key (`supplierId`, `customerId`, `ownId`, or `prewaveId`) should be set; `source` optionally narrows text identifiers.
       example: swagger.example.external-score.target-identifier
-    PublicScreeningStatusResponseV2:
+    PublicSupplierCreateResponseV2:
       required:
-      - id
-      - periodInYears
-      - status
+      - message
+      - pendingEndpoint
+      - uuid
       type: object
       properties:
-        id:
-          type: integer
-          description: The screening request ID.
-          format: int32
-          example: 10042
-        status:
+        uuid:
           type: string
-          description: 'Current status of the screening request: New (in progress), Finished (findings found), NoFindings (no findings), Aborted (failed or rejected).'
-          example: Finished
-          enum:
-          - New
-          - Finished
-          - NoFindings
-          - Aborted
-        periodInYears:
-          type: integer
-          description: Screening window length in years (as requested).
-          format: int32
-          example: 2
-      description: Status and outcome of a screening request
+          description: UUID of the created batch request target that can be used to track the supplier creation request
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        message:
+          type: string
+          description: Success message
+          example: Supplier creation request submitted successfully
+        pendingEndpoint:
+          type: string
+          description: Information about where to find pending suppliers
+          example: Pending suppliers can be found at GET /public/v2/suppliers/sites/pending
       example: null
     PublicSupplierDetailV2DTO:
       required:
