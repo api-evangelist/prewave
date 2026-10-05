@@ -1,0 +1,12 @@
+{
+ "url": "https://api.prewave.com/v3/api-docs",
+ "requested_url": "https://api.prewave.com/v3/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 982978,
+ "sha256": "64e6664ac3e75b49198f8ddb4c5efd03b7d822042d1fd5852d786a4230c5eaf8",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.91), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
