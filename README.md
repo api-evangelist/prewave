@@ -64,6 +64,174 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Prewave is a company surfaced as a portfolio company of creandum, speedinvest and added to the API Evangelist network as a stub for enrichment. Sector: saas. This profile is a lead awaiting the enrichment pipeline.
+Prewave is a Vienna-based AI-powered supply-chain risk intelligence platform that monitors millions of risk events across languages and networks to give enterprises proactive resilience, multi-tier supplier transparency, and sustainability-compliance automation (EU Deforestation Regulation, LkSG, and CSDDD). The Public Prewave API is a REST API at api.prewave.com covering suppliers and sites, collections and the Tier-N supplier graph, alerts and the risk feed, disruptions, risk scores (target, external, and enterprise export), exposure graphs, EUDR products / origin requests / Due Diligence Statements, actions, and user and role management. It authenticates with an X-Auth-Token API key.
 
-Backed by: creandum, speedinvest — https://www.prewave.com/
+**Areas:** Company · Software-as-a-Service · Supply Chain · Risk Intelligence · Sustainability · Compliance · EUDR · Supplier Management
+
+## Prewave on APIs.io
+
+Everything profiled for Prewave is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/prewave/](https://apis.io/providers/prewave/)** — or go straight to one of the APIs or properties below.
+
+### APIs (25)
+
+- [Prewave Actions API](https://apis.io/apis/prewave/prewave-actions-api/) — 🆕 NEW - Retrieve actions (tasks/work items), action types, and action statuses for supplier relationships, compliance reviews, and operational activities.…
+- [Prewave Alerts API](https://apis.io/apis/prewave/prewave-alerts-api/) — Endpoints for retrieving alert information from user feeds, disruption maps, and specific targets. Supports filtering by collections, dates, priorities,…
+- [Prewave Collections - Management API](https://apis.io/apis/prewave/prewave-collections-management-api/) — Public API for managing collections in Prewave's supply chain network. Collections are used to organize and group suppliers (targets) in your supply chain.
+- [Prewave Collections - Network API](https://apis.io/apis/prewave/prewave-collections-network-api/) — Allows you to retrieve network information. Like tree-graph and commodity-graph.
+- [Prewave Collections - Targets API](https://apis.io/apis/prewave/prewave-collections-targets-api/) — Public API for managing targets within collections in Prewave's supply chain network.
+- [Prewave Collections - Tier-N API](https://apis.io/apis/prewave/prewave-collections-tier-n-api/) — Public API for retrieving supplier relationship graphs from tier-n enabled collections.
+- [Prewave Disruptions API](https://apis.io/apis/prewave/prewave-disruptions-api/) — Endpoints for retrieving alerts from the disruption map. Supports filtering by geographic region, collections, countries, and other criteria.
+- [Prewave EUDR - Customers - DDS API](https://apis.io/apis/prewave/prewave-eudr-customers-dds-api/) — 🆕 NEW - Allows you to manage customer Due Diligence Statements (DDS), including creating, updating, submitting, withdrawing customer DDS, and viewing…
+- [Prewave EUDR - Customers - Origin Requests API](https://apis.io/apis/prewave/prewave-eudr-customers-origin-requests-api/) — Allows you to manage customer origin requests for products, including creating, updating, closing requests, and viewing requests per product.
+- [Prewave EUDR - Customers - Products API](https://apis.io/apis/prewave/prewave-eudr-customers-products-api/) — Allows you to manage customer products, including creating, updating, linking/unlinking products, and deactivating products.
+- [Prewave EUDR - Customers - Suppliers API](https://apis.io/apis/prewave/prewave-eudr-customers-suppliers-api/) — Allows you to search for suppliers, find suppliers by IDs or references, and manage supplier connection contacts.
+- [Prewave EUDR - Shared API](https://apis.io/apis/prewave/prewave-eudr-shared-api/) — Shared reference data for EUDR, including countries, HS codes, and commodities. Available to both customers and suppliers.
+- [Prewave EUDR - Suppliers API](https://apis.io/apis/prewave/prewave-eudr-suppliers-api/) — Allows suppliers to manage their origin requests, view their customers, and answer origin requests with supplier DDS.
+- [Prewave Exposure API](https://apis.io/apis/prewave/prewave-exposure-api/) — Get exposure analysis graph and targets
+- [Prewave Infotags API](https://apis.io/apis/prewave/prewave-infotags-api/) — Allows you to retrieve information about infotags and groups.
+- [Prewave Scores - Enterprise Export API](https://apis.io/apis/prewave/prewave-scores-enterprise-export-api/) — Public API for managing enterprise export configurations and retrieving score data in Prewave's supply chain network.
+- [Prewave Scores - Externals API](https://apis.io/apis/prewave/prewave-scores-externals-api/) — Upload and read custom supplier scores from your systems (e.g. SAP). Bulk upload, list event types, and view history per supplier. Available from June 2026.
+- [Prewave Scores - Target API](https://apis.io/apis/prewave/prewave-scores-target-api/) — ⚠️ **DEPRECATED** - Target score endpoints. These endpoints are deprecated and will be removed at the end of December 2026. Use…
+- [Prewave Suppliers - Connection Contacts API](https://apis.io/apis/prewave/prewave-suppliers-connection-contacts-api/) — 🆕 NEW - Supplier connection contact management endpoints. Available from February 2026.
+- [Prewave Suppliers - Management API](https://apis.io/apis/prewave/prewave-suppliers-management-api/) — Supplier management endpoints for listing, retrieving, updating supplier data, and bulk operations.
+- [Prewave Suppliers - Sites API](https://apis.io/apis/prewave/prewave-suppliers-sites-api/) — 🆕 NEW - Supplier and site management endpoints. Available from January 2026.
+- [Prewave Suppliers - Sites Upsert API](https://apis.io/apis/prewave/prewave-suppliers-sites-upsert-api/) — Allows you to create or update sites.
+- [Prewave Suppliers - Supplier Graph API](https://apis.io/apis/prewave/prewave-suppliers-supplier-graph-api/) — ⚠️ **DEPRECATED** - This API is deprecated and will be removed at the end of December 2026.
+- [Prewave Users API](https://apis.io/apis/prewave/prewave-users-api/) — 🆕 NEW - API to manage users in the public network. Available from February 2026.
+- [Prewave Users - Roles API](https://apis.io/apis/prewave/prewave-users-roles-api/) — 🆕 NEW - API to manage user roles in the public network. Available from February 2026.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Arazzo workflows (2)
+
+Multi-step workflows that chain operations into a business task.
+
+- [Submit an EUDR Due Diligence Statement](https://apis.io/arazzos/prewave/prewave-eudr-dds-submission/)
+- [Onboard and monitor a supplier](https://apis.io/arazzos/prewave/prewave-onboard-and-monitor-supplier/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [prewave](https://apis.io/servers/prewave/prewave/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Prewave Agentic Access](https://apis.io/agentic-access/prewave/prewave-agentic-access/)
+
+#### Collections (25)
+
+Postman and Open Collection request collections.
+
+- [Public Prewave Actions API](https://apis.io/collections/prewave/open-prewave-actions-api/)
+- [Public Prewave Actions Alerts API](https://apis.io/collections/prewave/open-prewave-alerts-api/)
+- [Public Prewave Actions Collections - Management API](https://apis.io/collections/prewave/open-prewave-collections-management-api/)
+- [Public Prewave Actions Collections - Network API](https://apis.io/collections/prewave/open-prewave-collections-network-api/)
+- [Public Prewave Actions Collections - Targets API](https://apis.io/collections/prewave/open-prewave-collections-targets-api/)
+- [Public Prewave Actions Collections - Tier-N API](https://apis.io/collections/prewave/open-prewave-collections-tier-n-api/)
+- [Public Prewave Actions Disruptions API](https://apis.io/collections/prewave/open-prewave-disruptions-api/)
+- [Public Prewave Actions EUDR - Customers - DDS API](https://apis.io/collections/prewave/open-prewave-eudr-customers-dds-api/)
+- [Public Prewave Actions EUDR - Customers - Origin Requests API](https://apis.io/collections/prewave/open-prewave-eudr-customers-origin-requests-api/)
+- [Public Prewave Actions EUDR - Customers - Products API](https://apis.io/collections/prewave/open-prewave-eudr-customers-products-api/)
+- [Public Prewave Actions EUDR - Customers - Suppliers API](https://apis.io/collections/prewave/open-prewave-eudr-customers-suppliers-api/)
+- [Public Prewave Actions EUDR - Shared API](https://apis.io/collections/prewave/open-prewave-eudr-shared-api/)
+- [Public Prewave Actions EUDR - Suppliers API](https://apis.io/collections/prewave/open-prewave-eudr-suppliers-api/)
+- [Public Prewave Actions Exposure API](https://apis.io/collections/prewave/open-prewave-exposure-api/)
+- [Public Prewave Actions Infotags API](https://apis.io/collections/prewave/open-prewave-infotags-api/)
+- [Public Prewave Actions Scores - Enterprise Export API](https://apis.io/collections/prewave/open-prewave-scores-enterprise-export-api/)
+- [Public Prewave Actions Scores - Externals API](https://apis.io/collections/prewave/open-prewave-scores-externals-api/)
+- [Public Prewave Actions Scores - Target API](https://apis.io/collections/prewave/open-prewave-scores-target-api/)
+- [Public Prewave Actions Suppliers - Connection Contacts API](https://apis.io/collections/prewave/open-prewave-suppliers-connection-contacts-api/)
+- [Public Prewave Actions Suppliers - Management API](https://apis.io/collections/prewave/open-prewave-suppliers-management-api/)
+- [Public Prewave Actions Suppliers - Sites API](https://apis.io/collections/prewave/open-prewave-suppliers-sites-api/)
+- [Public Prewave Actions Suppliers - Sites Upsert API](https://apis.io/collections/prewave/open-prewave-suppliers-sites-upsert-api/)
+- [Public Prewave Actions Suppliers - Supplier Graph API](https://apis.io/collections/prewave/open-prewave-suppliers-supplier-graph-api/)
+- [Public Prewave Actions Users API](https://apis.io/collections/prewave/open-prewave-users-api/)
+- [Public Prewave Actions Users - Roles API](https://apis.io/collections/prewave/open-prewave-users-roles-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Prewave Openapi Overlay](https://apis.io/overlays/prewave/prewave-openapi-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Prewave Authentication](https://apis.io/security/prewave/prewave-authentication/)
+- [Prewave Domain Security](https://apis.io/security/prewave/prewave-domain-security/)
+- [Prewave Trust Center](https://apis.io/security/prewave/prewave-trust-center/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.prewave.com/)
+- [Documentation](https://docs.prewave.com/)
+- [API reference](https://dev.prewave.com)
+- [Blog](https://www.prewave.com/resources/blog/)
+- [Trust centre](https://trust.prewave.com/)
+- [Terms of service](https://www.prewave.com/terms-of-service)
+- [Privacy policy](https://www.prewave.com/privacy-policy)
+- [GitHub](https://github.com/prewave)
+- [Status](https://status.prewave.com/)
+
+## API Evangelist rating
+
+**Kin Score 44.5** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 52.7 |
+| Contract governance | 4.5 |
+| Operational transparency | 34.2 |
+| Developer ergonomics | 42.3 |
+| Access clarity | 28.9 |
+
+**Agent readiness 31.1** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | yes |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | mostly |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/prewave/](https://apis.io/providers/prewave/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Prewave: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/prewave/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
